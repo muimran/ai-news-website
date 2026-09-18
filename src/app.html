@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="%gt.lang%">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230B5CE8'/%3E%3Crect x='6' y='13' width='20' height='6' fill='%23FF8A1F'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Latin faces. Archivo and Newsreader have no Bengali coverage at all. -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..600&family=DM+Mono:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Bengali faces. Google's CSS2 endpoint emits a `unicode-range` descriptor
+         per subset (Bengali is U+0980–U+09FF), so a reader who only ever sees
+         English pages never downloads these files — the browser fetches them
+         lazily, and only once Bengali codepoints actually appear on a page. -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400..800&family=Tiro+Bangla:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="description" content="Ground Truth — AI, reported from wherever it lands. Independent global reporting on artificial intelligence and the people it reaches." />
+    <meta name="theme-color" content="#0B5CE8" />
+    %sveltekit.head%
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents">%sveltekit.body%</div>
+  </body>
+</html>

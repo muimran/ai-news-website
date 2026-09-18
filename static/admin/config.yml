@@ -1,0 +1,306 @@
+# Sveltia CMS — git-backed bilingual newsroom.
+#
+# Local editing (no login, writes straight into your working tree):
+#   npm run dev  ->  http://localhost:5177/admin/  ->  "Work with Local Repository"
+#
+# Production: point backend.repo at your GitHub repo and deploy. Editors sign in
+# with GitHub and every save becomes a commit.
+#
+# STRUCTURE NOTE: the two desks repeat their field definitions rather than
+# sharing a YAML anchor. That is deliberate. `- *anchor` splices a list in as
+# ONE nested element instead of flattening it, which silently corrupts the
+# field list and breaks the admin. Explicit duplication is the right trade.
+# If you add a field, add it to BOTH collections.
+
+backend:
+  name: github
+  repo: muimran/ai-news-website
+  branch: main
+media_folder: static/uploads
+public_folder: /uploads
+publish_mode: editorial_workflow
+collections:
+- name: articles_en
+  label: Articles — English
+  label_singular: English article
+  folder: content/articles/en
+  create: true
+  slug: '{{slug}}'
+  identifier_field: title
+  summary: '{{title}} — {{author}} ({{date}})'
+  sortable_fields:
+  - date
+  - title
+  - section
+  - author
+  view_filters:
+  - label: Investigations
+    field: kind
+    pattern: Investigation
+  fields:
+  - name: title
+    label: Headline
+    widget: string
+  - name: dek
+    label: Dek (standfirst)
+    widget: text
+    hint: One or two sentences. This runs under the headline on the front page.
+  - name: author
+    label: Byline
+    widget: string
+  - name: tags
+    label: Tags
+    widget: list
+    allow_add: true
+    hint: Lowercase English. These generate topic pages and search filters.
+  - name: kind
+    label: Story type
+    widget: select
+    default: Report
+    options:
+    - Investigation
+    - Report
+    - Analysis
+    - Explainer
+    - Feature
+    - Dispatch
+    - Interview
+    - Q&A
+  - name: section
+    label: Section
+    widget: select
+    options: &id001
+    - The AI Race
+    - AI & Everyday Life
+    - Work After Automation
+    - Machines and Power
+    - AI in the Global South
+    - The Human Dataset
+    - Climate, Chips & Infrastructure
+    - Culture, Media & Synthetic Reality
+    - Open Source and the Commons
+    hint: Section keys stay in English in the file even on the Bangla desk — the site shows the Bangla
+      label. Sharing keys is what lets a topic page span both editions.
+  - name: image
+    label: Lead photograph
+    widget: image
+    required: false
+    hint: Leave empty and the story falls back to its generated artwork.
+  - name: imageAlt
+    label: Alt text
+    widget: string
+    required: false
+    hint: What a screen-reader user hears instead of the photo. Describe what is shown, not that it is
+      a photo. Fill this in whenever an image is set.
+  - name: imageCredit
+    label: Photo credit
+    widget: string
+    required: false
+    hint: Photographer or agency. An uncredited photo is a rights problem.
+  - name: video
+    label: Video URL
+    widget: string
+    required: false
+    hint: Leave empty for a text story. Video is a format, not a section — file it to the beat it covers.
+  - name: duration
+    label: Video length (minutes)
+    widget: number
+    value_type: int
+    required: false
+    hint: Real runtime. Shown instead of the estimated read time.
+  - name: authorTitle
+    label: Author role
+    widget: string
+    required: false
+  - name: location
+    label: Dateline
+    widget: string
+    required: false
+  - name: date
+    label: Published
+    widget: datetime
+    format: YYYY-MM-DD
+  - name: readTime
+    label: Read time (minutes)
+    widget: number
+    value_type: int
+    min: 1
+  - name: weight
+    label: Order within section
+    widget: number
+    value_type: int
+    default: 5
+    hint: 1 is the section lead. Lower numbers run higher.
+  - name: featured
+    label: Front-page lead
+    widget: boolean
+    default: false
+    hint: One per edition. Each language picks its own lead independently.
+  - name: secondary
+    label: Front-page secondary
+    widget: boolean
+    default: false
+  - name: template
+    label: Layout
+    widget: select
+    default: standard
+    options:
+    - label: Standard — prose column with sidebar
+      value: standard
+    - label: Wide — full width, for visual pieces
+      value: wide
+    - label: Immersive — dark ground, for data investigations
+      value: immersive
+  - name: route
+    label: Custom page URL
+    widget: string
+    required: false
+    hint: Leave blank for normal stories. For a hand-built page (a scrollytelling investigation, an interactive
+      map), put its path here. This record then acts as the index entry so the piece still appears in
+      feeds and search.
+  - name: body
+    label: Story
+    widget: markdown
+- name: articles_bn
+  label: প্রতিবেদন — বাংলা
+  label_singular: বাংলা প্রতিবেদন
+  folder: content/articles/bn
+  create: true
+  slug: '{{slug}}'
+  identifier_field: title
+  summary: '{{title}} — {{author}} ({{date}})'
+  sortable_fields:
+  - date
+  - title
+  - section
+  - author
+  view_filters:
+  - label: অনুসন্ধান
+    field: kind
+    pattern: Investigation
+  fields:
+  - name: title
+    label: শিরোনাম
+    widget: string
+  - name: dek
+    label: সূচনা
+    widget: text
+  - name: author
+    label: প্রতিবেদক
+    widget: string
+  - name: tags
+    label: বিষয়
+    widget: list
+    allow_add: true
+    hint: বাংলায় লিখুন। এগুলো থেকেই বিষয়ভিত্তিক পাতা তৈরি হয়।
+  - name: translationOf
+    label: ইংরেজি মূল প্রতিবেদন
+    widget: relation
+    collection: articles_en
+    search_fields:
+    - title
+    value_field: '{{slug}}'
+    display_fields:
+    - title
+    required: false
+    hint: অনুবাদ হলে মূল ইংরেজি প্রতিবেদনটি বেছে নিন — তাহলে পাঠক দুই ভাষার মধ্যে সরাসরি যেতে পারবেন।
+      মৌলিক প্রতিবেদন হলে খালি রাখুন।
+  - name: kind
+    label: ধরন
+    widget: select
+    default: Report
+    options:
+    - Investigation
+    - Report
+    - Analysis
+    - Explainer
+    - Feature
+    - Dispatch
+    - Interview
+    - Q&A
+  - name: section
+    label: বিভাগ
+    widget: select
+    options: *id001
+    hint: Section keys stay in English in the file even on the Bangla desk — the site shows the Bangla
+      label. Sharing keys is what lets a topic page span both editions.
+  - name: image
+    label: ছবি
+    widget: image
+    required: false
+    hint: Leave empty and the story falls back to its generated artwork.
+  - name: imageAlt
+    label: ছবির বিকল্প লেখা
+    widget: string
+    required: false
+    hint: What a screen-reader user hears instead of the photo. Describe what is shown, not that it is
+      a photo. Fill this in whenever an image is set.
+  - name: imageCredit
+    label: ছবির কৃতিত্ব
+    widget: string
+    required: false
+    hint: Photographer or agency. An uncredited photo is a rights problem.
+  - name: video
+    label: ভিডিও লিংক
+    widget: string
+    required: false
+    hint: Leave empty for a text story. Video is a format, not a section — file it to the beat it covers.
+  - name: duration
+    label: ভিডিওর দৈর্ঘ্য (মিনিট)
+    widget: number
+    value_type: int
+    required: false
+    hint: Real runtime. Shown instead of the estimated read time.
+  - name: authorTitle
+    label: পদবি
+    widget: string
+    required: false
+  - name: location
+    label: স্থান
+    widget: string
+    required: false
+  - name: date
+    label: প্রকাশের তারিখ
+    widget: datetime
+    format: YYYY-MM-DD
+  - name: readTime
+    label: পাঠের সময় (মিনিট)
+    widget: number
+    value_type: int
+    min: 1
+  - name: weight
+    label: বিভাগে ক্রম
+    widget: number
+    value_type: int
+    default: 5
+    hint: 1 is the section lead. Lower numbers run higher.
+  - name: featured
+    label: প্রচ্ছদের প্রধান
+    widget: boolean
+    default: false
+    hint: One per edition. Each language picks its own lead independently.
+  - name: secondary
+    label: প্রচ্ছদের দ্বিতীয়
+    widget: boolean
+    default: false
+  - name: template
+    label: বিন্যাস
+    widget: select
+    default: standard
+    options:
+    - label: Standard — prose column with sidebar
+      value: standard
+    - label: Wide — full width, for visual pieces
+      value: wide
+    - label: Immersive — dark ground, for data investigations
+      value: immersive
+  - name: route
+    label: নিজস্ব পাতার ঠিকানা
+    widget: string
+    required: false
+    hint: Leave blank for normal stories. For a hand-built page (a scrollytelling investigation, an interactive
+      map), put its path here. This record then acts as the index entry so the piece still appears in
+      feeds and search.
+  - name: body
+    label: প্রতিবেদন
+    widget: markdown

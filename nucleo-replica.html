@@ -1,0 +1,1245 @@
+<title>SINAL — Jornalismo e comunidade</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@300;400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap');
+
+  :root {
+    --purple: #6B3FA0;
+    --purple-light: #F0EBFA;
+    --purple-hover: #5A3488;
+    --purple-muted: #9B7DC4;
+    --bg: #FFFFFF;
+    --bg-alt: #FAFAFA;
+    --bg-panel: #FFFFFF;
+    --text: #1A1A1A;
+    --text-secondary: #6B6B6B;
+    --text-muted: #9A9A9A;
+    --border: #E8E8E8;
+    --border-strong: #D0D0D0;
+    --cat-red: #C0392B;
+    --cat-orange: #D4740E;
+    --cat-teal: #0F8B6E;
+    --cat-blue: #2E6EC7;
+    --ig-bg: #FBEEF5;
+    --ig-text: #8B2252;
+    --bs-bg: #E8F4FD;
+    --bs-text: #1565A7;
+    --dc-bg: #EDE8F5;
+    --dc-text: #5539A0;
+    --site-bg: #E8F5E9;
+    --site-text: #2E7D32;
+    --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'DM Mono', 'SF Mono', 'Menlo', monospace;
+    --font-serif: 'Source Serif 4', Georgia, serif;
+    --sidebar-w: 210px;
+    --pubbar-w: 300px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141414;
+      --bg-alt: #1A1A1A;
+      --bg-panel: #1A1A1A;
+      --text: #E8E8E8;
+      --text-secondary: #9A9A9A;
+      --text-muted: #6B6B6B;
+      --border: #2A2A2A;
+      --border-strong: #3A3A3A;
+      --purple-light: #2A1F3A;
+      --ig-bg: #2A1A22;
+      --ig-text: #E89ABF;
+      --bs-bg: #1A2530;
+      --bs-text: #7ABADD;
+      --dc-bg: #221D30;
+      --dc-text: #B09FD8;
+      --site-bg: #1A2A1C;
+      --site-text: #6BBF70;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #141414;
+    --bg-alt: #1A1A1A;
+    --bg-panel: #1A1A1A;
+    --text: #E8E8E8;
+    --text-secondary: #9A9A9A;
+    --text-muted: #6B6B6B;
+    --border: #2A2A2A;
+    --border-strong: #3A3A3A;
+    --purple-light: #2A1F3A;
+    --ig-bg: #2A1A22;
+    --ig-text: #E89ABF;
+    --bs-bg: #1A2530;
+    --bs-text: #7ABADD;
+    --dc-bg: #221D30;
+    --dc-text: #B09FD8;
+    --site-bg: #1A2A1C;
+    --site-text: #6BBF70;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  .shell {
+    display: flex;
+    height: 100vh;
+    position: relative;
+  }
+
+  /* ── LEFT NAV PANEL ── */
+  .nav-panel {
+    width: var(--sidebar-w);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-panel);
+    flex-shrink: 0;
+    transition: width 0.25s ease, opacity 0.2s ease;
+    overflow: hidden;
+  }
+  .nav-panel.collapsed {
+    width: 0;
+    opacity: 0;
+    border-right: none;
+  }
+  .nav-panel.collapsed .nav-inner { display: none; }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    height: 36px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    background: var(--bg-alt);
+  }
+  .panel-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+  }
+  .panel-toggle {
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--border-strong);
+    background: var(--bg);
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+  }
+  .panel-toggle:hover { background: var(--purple-light); color: var(--purple); border-color: var(--purple-muted); }
+
+  .nav-inner {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 0;
+  }
+
+  .brand {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 0.04em;
+    color: var(--text);
+    padding: 0 16px 14px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 6px;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 16px;
+    font-size: 13.5px;
+    color: var(--text);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.12s;
+  }
+  .nav-link:hover { background: var(--purple-light); }
+  .nav-link .chevron {
+    font-size: 10px;
+    color: var(--text-muted);
+    transition: transform 0.2s;
+  }
+  .nav-link.expanded .chevron { transform: rotate(90deg); }
+
+  .nav-sub {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.25s ease;
+  }
+  .nav-sub.open { max-height: 300px; }
+  .nav-sub a {
+    display: block;
+    padding: 5px 16px 5px 28px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .nav-sub a:hover { background: var(--purple-light); color: var(--text); }
+
+  .nav-section-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    padding: 18px 16px 6px;
+    text-transform: uppercase;
+  }
+
+  .social-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 6px 16px 12px;
+  }
+  .social-icon {
+    width: 22px;
+    height: 22px;
+    background: var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  .social-icon:hover { background: var(--purple-light); color: var(--purple); }
+
+  .nav-bottom {
+    padding: 10px 12px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .btn-primary {
+    display: block;
+    text-align: center;
+    padding: 8px;
+    background: var(--purple);
+    color: #fff;
+    border: none;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    text-decoration: none;
+  }
+  .btn-primary:hover { background: var(--purple-hover); }
+  .btn-outline {
+    display: block;
+    text-align: center;
+    padding: 7px;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    text-decoration: none;
+  }
+  .btn-outline:hover { background: var(--purple-light); border-color: var(--purple-muted); }
+
+  /* ── VERTICAL COLLAPSED TAB ── */
+  .collapsed-tab {
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 28px;
+    background: var(--purple);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 12px 0;
+    user-select: none;
+  }
+  .collapsed-tab .expand-icon {
+    writing-mode: horizontal-tb;
+    font-size: 11px;
+  }
+  .nav-panel.collapsed + .collapsed-tab,
+  .pub-panel.collapsed ~ .collapsed-tab-pub {
+    display: flex;
+  }
+
+  /* ── PUBLICATIONS PANEL ── */
+  .pub-panel {
+    width: var(--pubbar-w);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-panel);
+    flex-shrink: 0;
+    transition: width 0.25s ease, opacity 0.2s ease;
+    overflow: hidden;
+  }
+  .pub-panel.collapsed {
+    width: 0;
+    opacity: 0;
+    border-right: none;
+  }
+  .pub-panel.collapsed .pub-inner { display: none; }
+
+  .pub-filter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .pub-filter select {
+    flex: 1;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    padding: 4px 8px;
+    border: 1px solid var(--border-strong);
+    background: var(--bg);
+    color: var(--text);
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .filter-icons {
+    display: flex;
+    gap: 4px;
+  }
+  .filter-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .filter-icon.fire { background: #FDE8D0; color: #D4740E; }
+  .filter-icon.clock { background: var(--border); color: var(--text-muted); }
+
+  .pub-inner {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .pub-item {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .pub-item:hover { background: var(--bg-alt); }
+  .pub-item.featured {
+    background: var(--purple-light);
+    border-left: 3px solid var(--purple);
+  }
+  .pub-item .cat {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+  }
+  .pub-item .cat .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .pub-item .title {
+    font-size: 13.5px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--text);
+  }
+  .pub-item .meta {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: var(--bg);
+  }
+
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 6px 16px;
+    border-bottom: 1px solid var(--border);
+    height: 36px;
+    background: var(--bg-alt);
+  }
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 10px;
+    flex: 0 1 220px;
+  }
+  .search-box .search-icon { font-size: 12px; color: var(--text-muted); }
+  .search-box input {
+    border: none;
+    background: transparent;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--text);
+    outline: none;
+    width: 100%;
+  }
+  .search-box input::placeholder { color: var(--text-muted); }
+  .top-btn {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 3px;
+    cursor: pointer;
+    text-decoration: none;
+    border: 1px solid var(--border-strong);
+    background: var(--bg);
+    color: var(--text);
+  }
+  .top-btn:hover { background: var(--purple-light); }
+  .top-btn.accent {
+    background: var(--purple);
+    color: #fff;
+    border-color: var(--purple);
+  }
+  .top-btn.accent:hover { background: var(--purple-hover); }
+
+  .main-scroll {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HERO SECTION (logged-out) ── */
+  .hero {
+    padding: 40px 32px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero h1 {
+    font-family: var(--font-serif);
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    color: var(--text);
+    text-wrap: balance;
+  }
+  .hero p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    max-width: 380px;
+    margin: 0 auto 20px;
+    line-height: 1.55;
+  }
+  .hero-art {
+    width: 120px;
+    height: 100px;
+    margin: 0 auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pixel-char {
+    image-rendering: pixelated;
+    width: 80px;
+    height: 80px;
+  }
+  .hero-socials {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+
+  .newsletter-signup {
+    padding: 20px 32px 24px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+  .newsletter-signup .prompt {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+  }
+  .signup-row {
+    display: flex;
+    gap: 0;
+    max-width: 360px;
+    margin: 0 auto 12px;
+  }
+  .signup-row input {
+    flex: 1;
+    padding: 9px 12px;
+    border: 1px solid var(--border-strong);
+    border-right: none;
+    font-size: 13px;
+    font-family: var(--font-sans);
+    color: var(--text);
+    background: var(--bg);
+    outline: none;
+  }
+  .signup-row input::placeholder { color: var(--text-muted); }
+  .signup-row button {
+    padding: 9px 18px;
+    background: var(--purple);
+    color: #fff;
+    border: 1px solid var(--purple);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .signup-row button:hover { background: var(--purple-hover); }
+  .signup-links {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    font-size: 12px;
+  }
+  .signup-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .signup-links a:hover { color: var(--purple); }
+  .signup-links a::after {
+    content: ' ›';
+    color: var(--text-muted);
+  }
+
+  /* ── TABS ── */
+  .tabs-bar {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    padding: 14px 20px 0;
+  }
+  .tab-btn {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    border: 1px solid var(--border-strong);
+    background: var(--bg);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tab-btn:first-child { border-radius: 4px 0 0 4px; }
+  .tab-btn:last-child { border-radius: 0 4px 4px 0; }
+  .tab-btn + .tab-btn { border-left: none; }
+  .tab-btn.active {
+    background: var(--purple);
+    color: #fff;
+    border-color: var(--purple);
+  }
+  .tab-btn .tab-icon { font-size: 11px; }
+
+  /* ── FEED ── */
+  .feed-area {
+    display: flex;
+    flex: 1;
+    padding: 14px 16px;
+    gap: 14px;
+    min-height: 0;
+  }
+
+  .platform-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+  .pf-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 12px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: var(--font-sans);
+    white-space: nowrap;
+    transition: background 0.12s;
+  }
+  .pf-btn:hover { background: var(--bg-alt); }
+  .pf-btn.active { background: var(--bg-alt); color: var(--text); font-weight: 500; }
+  .pf-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 600;
+  }
+
+  .feed-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    overflow-y: auto;
+    min-width: 0;
+  }
+
+  .comment-card {
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 0;
+    margin-bottom: -1px;
+    background: var(--bg);
+    transition: background 0.12s;
+  }
+  .comment-card:first-child { border-radius: 6px 6px 0 0; }
+  .comment-card:last-child { border-radius: 0 0 6px 6px; }
+  .comment-card:hover { background: var(--bg-alt); }
+  .comment-card.highlighted { border-color: #E24B4A; border-left: 3px solid #E24B4A; }
+
+  .cc-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .cc-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+  .cc-avatar.a1 { background: var(--ig-bg); color: var(--ig-text); }
+  .cc-avatar.a2 { background: var(--bs-bg); color: var(--bs-text); }
+  .cc-avatar.a3 { background: var(--dc-bg); color: var(--dc-text); }
+  .cc-avatar.a4 { background: var(--site-bg); color: var(--site-text); }
+
+  .cc-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .cc-platform {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+  .cc-platform.ig { background: var(--ig-bg); color: var(--ig-text); }
+  .cc-platform.bs { background: var(--bs-bg); color: var(--bs-text); }
+  .cc-platform.dc { background: var(--dc-bg); color: var(--dc-text); }
+  .cc-platform.st { background: var(--site-bg); color: var(--site-text); }
+
+  .cc-date {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: auto;
+  }
+
+  .cc-body {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  .cc-ref {
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .cc-ref-text {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 70%;
+  }
+  .cc-ref-text em { font-style: normal; color: var(--text-secondary); }
+  .cc-ref-link {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--purple);
+    text-decoration: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+  .cc-ref-link:hover { text-decoration: underline; }
+
+  /* ── KEYBOARD HINT ── */
+  .kbd-hint {
+    position: fixed;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 4px;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .kbd-hint.show { opacity: 1; }
+
+  /* ── SCROLLBAR ── */
+  .nav-inner::-webkit-scrollbar,
+  .pub-inner::-webkit-scrollbar,
+  .feed-list::-webkit-scrollbar,
+  .main-scroll::-webkit-scrollbar {
+    width: 4px;
+  }
+  .nav-inner::-webkit-scrollbar-thumb,
+  .pub-inner::-webkit-scrollbar-thumb,
+  .feed-list::-webkit-scrollbar-thumb,
+  .main-scroll::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 2px;
+  }
+  .nav-inner::-webkit-scrollbar-track,
+  .pub-inner::-webkit-scrollbar-track,
+  .feed-list::-webkit-scrollbar-track,
+  .main-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+</style>
+
+<div class="shell">
+
+  <!-- ═══ [1] NAVEGAÇÃO ═══ -->
+  <div class="nav-panel" id="navPanel">
+    <div class="panel-header">
+      <span class="panel-label">[1] Navegação</span>
+      <button class="panel-toggle" onclick="togglePanel('nav')" title="Colapsar (tecla [)">−</button>
+    </div>
+    <div class="nav-inner">
+      <div class="brand">SINAL</div>
+
+      <a class="nav-link" href="#">Newsletters</a>
+      <a class="nav-link" href="#">Jogo Rápido</a>
+
+      <div class="nav-link" onclick="toggleSub(this)">
+        Comunidade <span class="chevron">›</span>
+      </div>
+      <div class="nav-sub">
+        <a href="#">Fórum</a>
+        <a href="#">Eventos</a>
+        <a href="#">Colaboradores</a>
+      </div>
+
+      <div class="nav-link" onclick="toggleSub(this)">
+        Investigações <span class="chevron">›</span>
+      </div>
+      <div class="nav-sub">
+        <a href="#">Em andamento</a>
+        <a href="#">Arquivo</a>
+      </div>
+
+      <div class="nav-link" onclick="toggleSub(this)">
+        Análise <span class="chevron">›</span>
+      </div>
+      <div class="nav-sub">
+        <a href="#">Opinião</a>
+        <a href="#">Dados</a>
+      </div>
+
+      <div class="nav-link expanded" onclick="toggleSub(this)">
+        Institucional <span class="chevron" style="transform:rotate(90deg)">›</span>
+      </div>
+      <div class="nav-sub open">
+        <a href="#">Sobre</a>
+        <a href="#">Equipe</a>
+        <a href="#">Transparência</a>
+        <a href="#">Novidades</a>
+        <a href="#">Política de republicação</a>
+        <a href="#">Pedidos acadêmicos</a>
+      </div>
+
+      <div class="nav-link" onclick="toggleSub(this)">
+        Apps <span class="chevron">›</span>
+      </div>
+      <div class="nav-sub">
+        <a href="#">Monitor</a>
+        <a href="#">Radar</a>
+      </div>
+
+      <a class="nav-link" href="#">Atelier</a>
+      <a class="nav-link" href="#">Impacto</a>
+      <a class="nav-link" href="#">Republique</a>
+
+      <div class="nav-section-label">// Redes sociais</div>
+      <div class="social-icons">
+        <div class="social-icon">𝕏</div>
+        <div class="social-icon">◎</div>
+        <div class="social-icon">◉</div>
+        <div class="social-icon">in</div>
+        <div class="social-icon">▲</div>
+        <div class="social-icon">⬡</div>
+        <div class="social-icon">✈</div>
+        <div class="social-icon">◯</div>
+        <div class="social-icon">⊞</div>
+      </div>
+    </div>
+
+    <div class="nav-bottom">
+      <a class="btn-primary" href="#">Assine</a>
+      <a class="btn-outline" href="#">Entrar</a>
+    </div>
+  </div>
+
+  <div class="collapsed-tab" onclick="togglePanel('nav')">
+    <span class="expand-icon">+</span>
+    Navegação
+  </div>
+
+  <!-- ═══ [2] PUBLICAÇÕES ═══ -->
+  <div class="pub-panel" id="pubPanel">
+    <div class="panel-header">
+      <span class="panel-label">[2] Publicações</span>
+      <button class="panel-toggle" onclick="togglePanel('pub')" title="Colapsar">−</button>
+    </div>
+
+    <div class="pub-filter">
+      <select>
+        <option>Todos os assuntos</option>
+        <option>Reportagens</option>
+        <option>Análise</option>
+        <option>Institucional</option>
+        <option>Opinião</option>
+      </select>
+      <div class="filter-icons">
+        <button class="filter-icon fire" title="Em alta">🔥</button>
+        <button class="filter-icon clock" title="Recentes">⏱</button>
+      </div>
+    </div>
+
+    <div class="pub-inner">
+      <div class="pub-item featured">
+        <div class="title">Oficina aberta: como construir futuros com ferramentas analógicas</div>
+        <div class="meta">14.ago.2026 · 3 min de leitura</div>
+      </div>
+
+      <div class="pub-item">
+        <div class="cat"><span class="dot" style="background: var(--cat-orange)"></span> Garimpo</div>
+        <div class="title">Bom dia, passageiros do futuro</div>
+        <div class="meta">16.ago.2026 11:11 · 6 min de leitura</div>
+      </div>
+
+      <div class="pub-item">
+        <div class="cat"><span class="dot" style="background: var(--cat-red)"></span> Linha Fina</div>
+        <div class="title">A opinião das crianças vale mais do que os dados mostram</div>
+        <div class="meta">13.ago.2026 20:08 · 3 min de leitura</div>
+      </div>
+
+      <div class="pub-item">
+        <div class="cat"><span class="dot" style="background: var(--cat-teal)"></span> Ferramentaria</div>
+        <div class="title">Kit de ferramentas digitais #13</div>
+        <div class="meta">13.ago.2026 19:50 · 2 min de leitura</div>
+      </div>
+
+      <div class="pub-item">
+        <div class="cat"><span class="dot" style="background: var(--cat-blue)"></span> Institucional</div>
+        <div class="title">Monitor 2026: metodologia ampliada para plataformas</div>
+        <div class="meta">13.ago.2026 17:00 · 2 min de leitura</div>
+      </div>
+
+      <div class="pub-item">
+        <div class="cat"><span class="dot" style="background: var(--cat-blue)"></span> Institucional</div>
+        <div class="title">Coalizão para investigar desinformação nos processos eleitorais</div>
+        <div class="meta">12.ago.2026 12:02 · 2 min de leitura</div>
+      </div>
+
+      <div class="pub-item">
+        <div class="cat"><span class="dot" style="background: var(--cat-red)"></span> Reportagens</div>
+        <div class="title">Sistemas de segurança automatizados falham em escala</div>
+        <div class="meta">12.ago.2026 19:12 · 5 min de leitura</div>
+      </div>
+
+      <div class="pub-item">
+        <div class="cat"><span class="dot" style="background: var(--cat-teal)"></span> Segue o Fio</div>
+        <div class="title">Toda IA do mundo é pouca IA</div>
+        <div class="meta">12.ago.2026 14:40 · 2 min de leitura</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="collapsed-tab collapsed-tab-pub" onclick="togglePanel('pub')" style="display:none">
+    <span class="expand-icon">+</span>
+    Publicações
+  </div>
+
+  <!-- ═══ MAIN CONTENT ═══ -->
+  <div class="main">
+    <div class="top-bar">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Buscar...">
+      </div>
+      <a class="top-btn accent" href="#">Assine</a>
+    </div>
+
+    <div class="main-scroll">
+
+      <!-- Hero -->
+      <div class="hero">
+        <div class="hero-art">
+          <canvas id="pixelCanvas" width="80" height="80" class="pixel-char"></canvas>
+        </div>
+        <h1>Jornalismo para um futuro aberto</h1>
+        <p>Uma organização de jornalismo e comunidade que investiga o impacto da tecnologia na vida das pessoas.</p>
+        <div class="hero-socials">
+          <div class="social-icon">𝕏</div>
+          <div class="social-icon">◎</div>
+          <div class="social-icon">◉</div>
+          <div class="social-icon">in</div>
+          <div class="social-icon">▲</div>
+          <div class="social-icon">⬡</div>
+          <div class="social-icon">✈</div>
+          <div class="social-icon">◯</div>
+        </div>
+      </div>
+
+      <div class="newsletter-signup">
+        <div class="prompt">Receba as newsletters e faça parte da comunidade, 100% de graça</div>
+        <div class="signup-row">
+          <input type="email" placeholder="seu@email.com">
+          <button>Receber</button>
+        </div>
+        <div class="signup-links">
+          <a href="#">Conheça as newsletters</a>
+          <a href="#">Faça login</a>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs-bar">
+        <button class="tab-btn active" onclick="switchTab(this, 'conversas')">
+          <span class="tab-icon">💬</span> Conversas
+        </button>
+        <button class="tab-btn" onclick="switchTab(this, 'destaques')">
+          <span class="tab-icon">✦</span> Destaques
+        </button>
+        <button class="tab-btn" onclick="switchTab(this, 'rapido')">
+          <span class="tab-icon">⚡</span> Jogo rápido
+        </button>
+      </div>
+
+      <!-- Feed -->
+      <div class="feed-area">
+        <div class="platform-filter">
+          <button class="pf-btn active" onclick="filterPlatform(this, 'all')">
+            <span class="pf-icon" style="background: var(--border); color: var(--text-muted);">≡</span> Tudo
+          </button>
+          <button class="pf-btn" onclick="filterPlatform(this, 'site')">
+            <span class="pf-icon" style="background: var(--site-bg); color: var(--site-text);">S</span> Site
+          </button>
+          <button class="pf-btn" onclick="filterPlatform(this, 'bluesky')">
+            <span class="pf-icon" style="background: var(--bs-bg); color: var(--bs-text);">B</span> Bluesky
+          </button>
+          <button class="pf-btn" onclick="filterPlatform(this, 'discord')">
+            <span class="pf-icon" style="background: var(--dc-bg); color: var(--dc-text);">D</span> Discord
+          </button>
+          <button class="pf-btn" onclick="filterPlatform(this, 'instagram')">
+            <span class="pf-icon" style="background: var(--ig-bg); color: var(--ig-text);">I</span> Instagram
+          </button>
+        </div>
+
+        <div class="feed-list" id="feedList">
+          <div class="comment-card" data-platform="instagram">
+            <div class="cc-header">
+              <div class="cc-avatar a1">RA</div>
+              <span class="cc-name">renata.alves</span>
+              <span class="cc-platform ig">Instagram</span>
+              <span class="cc-date">16.ago.2026 00:59</span>
+            </div>
+            <div class="cc-body">Exatamente isso. Concordo totalmente com a análise, o problema é estrutural e não pontual.</div>
+            <div class="cc-ref">
+              <span class="cc-ref-text">resp. a: <em>Sistemas automatizados não calibraram adequadamente para detec...</em></span>
+              <a class="cc-ref-link" href="#">Ver original ↗</a>
+            </div>
+          </div>
+
+          <div class="comment-card" data-platform="instagram">
+            <div class="cc-header">
+              <div class="cc-avatar a1">ML</div>
+              <span class="cc-name">marcos.lima</span>
+              <span class="cc-platform ig">Instagram</span>
+              <span class="cc-date">15.ago.2026 21:39</span>
+            </div>
+            <div class="cc-body">Tratar conteúdo sensível como opinião virou tendência. Como se qualquer coisa pudesse ser relativizada dessa forma.</div>
+            <div class="cc-ref">
+              <span class="cc-ref-text">resp. a: <em>O direito de expressão e o uso responsável de plataforma...</em></span>
+              <a class="cc-ref-link" href="#">Ver original ↗</a>
+            </div>
+          </div>
+
+          <div class="comment-card highlighted" data-platform="instagram">
+            <div class="cc-header">
+              <div class="cc-avatar a1">PT</div>
+              <span class="cc-name">pedro.tech</span>
+              <span class="cc-platform ig">Instagram</span>
+              <span class="cc-date">15.ago.2026 20:14</span>
+            </div>
+            <div class="cc-body">Nada contra, mas que coisa burocrática. Mais uma iniciativa que só atinge a própria bolha, enquanto a desinformação corre solta por todos os cantos.</div>
+            <div class="cc-ref">
+              <span class="cc-ref-text">resp. a: <em>Coalizão para investigar desinformação nos processos...</em></span>
+              <a class="cc-ref-link" href="#">Ver original ↗</a>
+            </div>
+          </div>
+
+          <div class="comment-card" data-platform="bluesky">
+            <div class="cc-header">
+              <div class="cc-avatar a2">CF</div>
+              <span class="cc-name">carla.fontes</span>
+              <span class="cc-platform bs">Bluesky</span>
+              <span class="cc-date">15.ago.2026 18:22</span>
+            </div>
+            <div class="cc-body">Boa análise. Vale complementar com os dados do relatório do observatório de mídia que saiu na semana passada.</div>
+            <div class="cc-ref">
+              <span class="cc-ref-text">resp. a: <em>Monitor 2026: metodologia ampliada para plataformas...</em></span>
+              <a class="cc-ref-link" href="#">Ver original ↗</a>
+            </div>
+          </div>
+
+          <div class="comment-card" data-platform="discord">
+            <div class="cc-header">
+              <div class="cc-avatar a3">JR</div>
+              <span class="cc-name">joana.ramos</span>
+              <span class="cc-platform dc">Discord</span>
+              <span class="cc-date">15.ago.2026 16:05</span>
+            </div>
+            <div class="cc-body">Alguém tem o dataset original? Queria cruzar com os dados de audiência que coletei no meu TCC.</div>
+            <div class="cc-ref">
+              <span class="cc-ref-text">resp. a: <em>A opinião das crianças vale mais do que os dados mostram...</em></span>
+              <a class="cc-ref-link" href="#">Ver original ↗</a>
+            </div>
+          </div>
+
+          <div class="comment-card" data-platform="site">
+            <div class="cc-header">
+              <div class="cc-avatar a4">LN</div>
+              <span class="cc-name">lucas.neto</span>
+              <span class="cc-platform st">Site</span>
+              <span class="cc-date">15.ago.2026 14:30</span>
+            </div>
+            <div class="cc-body">Reportagem fundamental. Precisamos de mais investigações nessa direção, especialmente com as eleições chegando.</div>
+            <div class="cc-ref">
+              <span class="cc-ref-text">resp. a: <em>Coalizão para investigar desinformação nos processos...</em></span>
+              <a class="cc-ref-link" href="#">Ver original ↗</a>
+            </div>
+          </div>
+
+          <div class="comment-card" data-platform="bluesky">
+            <div class="cc-header">
+              <div class="cc-avatar a2">AM</div>
+              <span class="cc-name">ana.moreira</span>
+              <span class="cc-platform bs">Bluesky</span>
+              <span class="cc-date">15.ago.2026 11:48</span>
+            </div>
+            <div class="cc-body">Sempre muito bom o conteúdo. Assino há dois anos e não me arrependo.</div>
+            <div class="cc-ref">
+              <span class="cc-ref-text">resp. a: <em>Bom dia, passageiros do futuro...</em></span>
+              <a class="cc-ref-link" href="#">Ver original ↗</a>
+            </div>
+          </div>
+
+          <div class="comment-card" data-platform="discord">
+            <div class="cc-header">
+              <div class="cc-avatar a3">FG</div>
+              <span class="cc-name">felipe.gomes</span>
+              <span class="cc-platform dc">Discord</span>
+              <span class="cc-date">14.ago.2026 22:17</span>
+            </div>
+            <div class="cc-body">O kit #13 é ótimo. A ferramenta de visualização de dados que indicaram mudou meu fluxo de trabalho completamente.</div>
+            <div class="cc-ref">
+              <span class="cc-ref-text">resp. a: <em>Kit de ferramentas digitais #13...</em></span>
+              <a class="cc-ref-link" href="#">Ver original ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="kbd-hint" id="kbdHint">Pressione <kbd>[</kbd> para colapsar · <kbd>]</kbd> para expandir</div>
+
+<script>
+  // Draw pixel art character
+  const canvas = document.getElementById('pixelCanvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    const p = '#6B3FA0';
+    const d = '#4A2A70';
+    const w = '#FFFFFF';
+    const t = 'transparent';
+    const grid = [
+      [t,t,t,p,p,p,p,t,t,t],
+      [t,t,p,p,p,p,p,p,t,t],
+      [t,p,p,w,p,p,w,p,p,t],
+      [t,p,p,d,p,p,d,p,p,t],
+      [t,p,p,p,p,p,p,p,p,t],
+      [t,t,p,p,d,d,p,p,t,t],
+      [t,t,t,p,p,p,p,t,t,t],
+      [t,p,p,p,p,p,p,p,p,t],
+      [p,t,p,p,p,p,p,p,t,p],
+      [p,t,p,t,t,t,t,p,t,p],
+    ];
+    const s = 8;
+    grid.forEach((row, y) => {
+      row.forEach((c, x) => {
+        if (c !== t) {
+          ctx.fillStyle = c;
+          ctx.fillRect(x * s, y * s, s, s);
+        }
+      });
+    });
+  }
+
+  // Panel toggle
+  function togglePanel(which) {
+    const panel = which === 'nav' ? document.getElementById('navPanel') : document.getElementById('pubPanel');
+    panel.classList.toggle('collapsed');
+    showKbdHint();
+  }
+
+  // Nav sub-menu toggle
+  function toggleSub(el) {
+    const sub = el.nextElementSibling;
+    const isOpen = sub.classList.contains('open');
+    sub.classList.toggle('open');
+    el.classList.toggle('expanded');
+    const chev = el.querySelector('.chevron');
+    if (chev) chev.style.transform = isOpen ? '' : 'rotate(90deg)';
+  }
+
+  // Tab switch
+  function switchTab(el, tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // Platform filter
+  function filterPlatform(el, platform) {
+    document.querySelectorAll('.pf-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('.comment-card').forEach(card => {
+      if (platform === 'all' || card.dataset.platform === platform) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  // Keyboard shortcuts
+  let hintTimeout;
+  function showKbdHint() {
+    const hint = document.getElementById('kbdHint');
+    hint.classList.add('show');
+    clearTimeout(hintTimeout);
+    hintTimeout = setTimeout(() => hint.classList.remove('show'), 2000);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === '[') {
+      const nav = document.getElementById('navPanel');
+      const pub = document.getElementById('pubPanel');
+      if (!nav.classList.contains('collapsed')) {
+        nav.classList.add('collapsed');
+      } else if (!pub.classList.contains('collapsed')) {
+        pub.classList.add('collapsed');
+      }
+      showKbdHint();
+    }
+    if (e.key === ']') {
+      const pub = document.getElementById('pubPanel');
+      const nav = document.getElementById('navPanel');
+      if (pub.classList.contains('collapsed')) {
+        pub.classList.remove('collapsed');
+      } else if (nav.classList.contains('collapsed')) {
+        nav.classList.remove('collapsed');
+      }
+      showKbdHint();
+    }
+  });
+</script>
