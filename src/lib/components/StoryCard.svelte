@@ -10,7 +10,10 @@
     showDek = true,
     showArt = true,
     index = null,
-    lang = 'en'
+    lang = 'en',
+    /* inside a section block the section name is already the heading, so the
+       card says what KIND of story it is instead, quietly */
+    inSection = false
   } = $props();
 
   const L = $derived(t(lang));
@@ -61,7 +64,7 @@
             </svg>
           </span>
         {/if}
-        <span class="kind label">{kindLabel(story.kind, lang)}</span>
+        {#if !inSection}<span class="kind label">{kindLabel(story.kind, lang)}</span>{/if}
       </div>
     {/if}
 
@@ -70,14 +73,14 @@
         <span class="index label">{String(index).padStart(2, '0')}</span>
       {/if}
 
-      <span class="section label">
+      <span class="section label" class:quiet={inSection}>
         {#if isVideo}
           <!-- compact and list rows have no art box, so the format cue has to
                live in the text or those readers cannot tell it is a video -->
           <svg class="vmark" viewBox="0 0 24 24" width="11" height="11" aria-hidden="true">
             <path d="M8 5.5v13l11-6.5z" fill="currentColor" />
           </svg>
-        {/if}{sectionLabel(story.section, lang)}
+        {/if}{inSection ? kindLabel(story.kind, lang) : sectionLabel(story.section, lang)}
       </span>
 
       <h3 class="title"><span class="headline-link">{story.title}</span></h3>
@@ -102,6 +105,30 @@
   .card {
     position: relative;
   }
+
+  /* cards settle into place as they scroll in. Scroll-driven, so no JS and
+     nothing to observe; browsers without view timelines just show them. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .card {
+        animation: card-in linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 55%;
+      }
+    }
+  }
+  @keyframes card-in {
+    from {
+      opacity: 0;
+      translate: 0 14px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .art img,
+    .art :global(.halftone) {
+      transition: none;
+    }
+  }
   .hit {
     display: block;
   }
@@ -117,6 +144,15 @@
   .art {
     position: relative;
     margin-bottom: 1.1rem;
+    overflow: hidden;
+  }
+  .art img,
+  .art :global(.halftone) {
+    transition: transform 0.9s var(--ease);
+  }
+  a:hover .art img,
+  a:hover .art :global(.halftone) {
+    transform: scale(1.035);
   }
   .art img {
     width: 100%;
@@ -166,6 +202,9 @@
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
+  }
+  .section.quiet {
+    color: var(--mist);
   }
   .vmark {
     color: var(--ember);

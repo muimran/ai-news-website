@@ -10,6 +10,8 @@
   --navy: #062446;
   --ember: #ff8a1f;
   --peach: #ffc2a8;
+  /* ember deepened until it passes 4.5:1 on paper, for text */
+  --head-hover: #b4470c;
 
   /* ---- light theme ---- */
   --paper: #f7f7f2;
@@ -83,6 +85,7 @@
     --rule-strong: rgba(242, 242, 236, 0.3);
 
     --electric: #4d93ff;
+    --head-hover: var(--ember);
     --accent: #4d93ff;
     --accent-ink: #04162b;
     --band: #072035;
@@ -109,6 +112,7 @@
   --rule-strong: rgba(242, 242, 236, 0.3);
 
   --electric: #4d93ff;
+  --head-hover: var(--ember);
   --accent: #4d93ff;
   --accent-ink: #04162b;
   --band: #072035;
@@ -268,24 +272,52 @@ input {
 .byline strong {
   font-weight: 500;
   color: var(--slate);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.02em;
 }
 .byline .sep {
   color: var(--rule-strong);
 }
 
-/* headline link: ember underline grows from the left on hover */
+/* headline link: no underline. On hover the colour flows through the words
+   in reading order. The span is inline, so its background is laid out as one
+   strip across all its lines — the sweep finishes line one before starting
+   line two. text-fill-color (not color) goes transparent, so currentColor in
+   the gradient still resolves to the headline's real resting colour, which is
+   what lets the same rule work on paper and on the navy band. */
 .headline-link {
-  background-image: linear-gradient(var(--ember), var(--ember));
-  background-repeat: no-repeat;
-  background-position: 0 100%;
-  background-size: 0% 0.09em;
-  transition: background-size 0.4s var(--ease);
+  --sweep: var(--head-hover);
+  transition: color 0.3s var(--ease);
 }
 a:hover .headline-link,
 a:focus-visible .headline-link {
-  background-size: 100% 0.09em;
+  color: var(--sweep);
+}
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  .headline-link {
+    /* 250% wide: the visible window is 40% of the strip, so rest (60–100%)
+       and hover (0–40%) are both pure colour and only the 40–60% blend moves
+       through the words */
+    background-image: linear-gradient(90deg, var(--sweep) 0 40%, currentColor 60% 100%);
+    background-size: 250% 100%;
+    background-position: 100% 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: background-position 0.7s var(--ease);
+  }
+  a:hover .headline-link,
+  a:focus-visible .headline-link {
+    color: inherit;
+    background-position: 0 0;
+  }
+  .headline-link::selection {
+    -webkit-text-fill-color: currentColor;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .headline-link {
+    transition-duration: 0.01s;
+  }
 }
 
 /* ============================================================

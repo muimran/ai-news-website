@@ -108,7 +108,7 @@
         <h2 class="rel-h" id="rel-h">{L.moreFrom} {sectionLabel(story.section, lang)}</h2>
         <div class="rel-grid">
           {#each data.related as s}
-            <StoryCard story={s} variant="standard" {lang} />
+            <StoryCard story={s} variant="standard" {lang} inSection />
           {/each}
         </div>
       </section>

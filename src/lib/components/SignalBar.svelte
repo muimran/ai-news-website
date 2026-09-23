@@ -99,6 +99,27 @@
      interaction — hovering one tells you which story it is */
   .encoded {
     gap: 3px;
+    /* the hover lift grows upward past the bar's own height */
+    overflow: visible;
+  }
+
+  /* the rule draws itself in from the left as the section arrives */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .signal {
+        animation: draw linear both;
+        animation-timeline: view();
+        animation-range: entry 10% cover 30%;
+      }
+    }
+  }
+  @keyframes draw {
+    from {
+      clip-path: inset(-12px 100% 0 0);
+    }
+    to {
+      clip-path: inset(-12px 0 0 0);
+    }
   }
   .encoded .seg {
     transition: transform 0.18s var(--ease);

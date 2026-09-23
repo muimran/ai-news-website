@@ -17,7 +17,7 @@
 
 <section class="topic p-{pattern}" id={slug} aria-labelledby="{slug}-h">
   <div class="shell">
-    <SignalBar seed={title} height={6} muted={pattern === 'c'} {stories} {lang} />
+    <SignalBar seed={title} height={4} muted={pattern === 'c'} {stories} {lang} />
 
     <div class="grid">
       <header class="spine">
@@ -34,24 +34,24 @@
       {#if pattern === 'b'}
         <div class="across">
           {#each stories.slice(0, 3) as story}
-            <StoryCard {story} variant="standard" {lang} />
+            <StoryCard {story} variant="standard" {lang} inSection />
           {/each}
         </div>
       {:else if pattern === 'c'}
         <div class="band">
-          {#if lead}<StoryCard story={lead} variant="feature" {lang} />{/if}
+          {#if lead}<StoryCard story={lead} variant="feature" {lang} inSection />{/if}
           <div class="band-rest">
             {#each rest.slice(0, 3) as story}
-              <StoryCard {story} variant="compact" showDek={false} {lang} />
+              <StoryCard {story} variant="compact" showDek={false} {lang} inSection />
             {/each}
           </div>
         </div>
       {:else}
         <div class="flow">
-          {#if lead}<StoryCard story={lead} variant="feature" {lang} />{/if}
+          {#if lead}<StoryCard story={lead} variant="feature" {lang} inSection />{/if}
           <div class="supporting">
             {#each rest.slice(0, 3) as story, i}
-              <StoryCard {story} variant="compact" showDek={i === 0} {lang} />
+              <StoryCard {story} variant="compact" showDek={i === 0} {lang} inSection />
             {/each}
           </div>
         </div>
@@ -122,7 +122,7 @@
   .supporting {
     display: flex;
     flex-direction: column;
-    gap: 1.35rem;
+    gap: 1.65rem;
   }
 
   /* ---- pattern b: three across ---- */
@@ -141,6 +141,12 @@
   }
   .p-c :global(.section) {
     color: var(--peach);
+  }
+  .p-c :global(.section.quiet) {
+    color: color-mix(in srgb, var(--peach) 62%, transparent);
+  }
+  .p-c :global(.headline-link) {
+    --sweep: var(--ember);
   }
   .p-c :global(.dek) {
     color: color-mix(in srgb, var(--peach) 78%, #fff);
@@ -176,7 +182,7 @@
   .band-rest {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1.6rem;
   }
 
   /* ---- reflow ---- */
