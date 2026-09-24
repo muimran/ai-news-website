@@ -17,7 +17,7 @@
 
 <section class="topic p-{pattern}" id={slug} aria-labelledby="{slug}-h">
   <div class="shell">
-    <SignalBar seed={title} height={4} muted={pattern === 'c'} {stories} {lang} />
+    <SignalBar seed={title} height={4} {stories} {lang} />
 
     <div class="grid">
       <header class="spine">
@@ -34,12 +34,12 @@
       {#if pattern === 'b'}
         <div class="across">
           {#each stories.slice(0, 3) as story}
-            <StoryCard {story} variant="standard" {lang} inSection />
+            <StoryCard {story} variant="standard" showDek={false} {lang} inSection />
           {/each}
         </div>
       {:else if pattern === 'c'}
         <div class="band">
-          {#if lead}<StoryCard story={lead} variant="feature" {lang} inSection />{/if}
+          {#if lead}<StoryCard story={lead} variant="feature" showDek={false} {lang} inSection />{/if}
           <div class="band-rest">
             {#each rest.slice(0, 3) as story}
               <StoryCard {story} variant="compact" showDek={false} {lang} inSection />
@@ -48,10 +48,10 @@
         </div>
       {:else}
         <div class="flow">
-          {#if lead}<StoryCard story={lead} variant="feature" {lang} inSection />{/if}
+          {#if lead}<StoryCard story={lead} variant="feature" showDek={false} {lang} inSection />{/if}
           <div class="supporting">
             {#each rest.slice(0, 3) as story, i}
-              <StoryCard {story} variant="compact" showDek={i === 0} {lang} inSection />
+              <StoryCard {story} variant="compact" showDek={false} {lang} inSection />
             {/each}
           </div>
         </div>
@@ -67,7 +67,9 @@
 
   .grid {
     display: grid;
-    grid-template-columns: var(--spine) minmax(0, 1fr);
+    /* wider than the article spine: the section name is now the biggest type
+       in the block and needs the room */
+    grid-template-columns: 17rem minmax(0, 1fr);
     gap: clamp(1.5rem, 3.5vw, 3.5rem);
     padding-top: clamp(1.5rem, 2.5vw, 2.25rem);
   }
@@ -80,9 +82,13 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    container-type: inline-size;
   }
+  /* Capped against the column's own width (cqi) so the longest single word in
+     any section name — "Infrastructure" — never overflows the column, navy
+     padding included. */
   .s-title {
-    font-size: clamp(1.5rem, 2.1vw, 2rem);
+    font-size: min(clamp(1.375rem, 1rem + 1.1vw, 1.75rem), 11.5cqi);
     line-height: var(--lh-display);
   }
   .s-title a {
@@ -104,7 +110,7 @@
   }
   .s-blurb {
     font-family: var(--font-serif);
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     line-height: var(--lh-prose);
     color: var(--slate);
     max-width: 26ch;
@@ -132,38 +138,18 @@
     gap: clamp(1.25rem, 2.5vw, 2.25rem);
   }
 
-  /* ---- pattern c: inverted band ---- */
-  .p-c {
-    background: var(--navy);
-    color: var(--paper);
-    margin-top: var(--stack-lg);
-    padding-block: clamp(2.5rem, 5vw, 4.5rem);
-  }
-  .p-c :global(.section) {
-    color: var(--peach);
-  }
-  .p-c :global(.section.quiet) {
-    color: color-mix(in srgb, var(--peach) 62%, transparent);
-  }
-  .p-c :global(.headline-link) {
-    --sweep: var(--ember);
-  }
-  .p-c :global(.dek) {
-    color: color-mix(in srgb, var(--peach) 78%, #fff);
-  }
-  .p-c :global(.byline strong) {
-    color: var(--peach);
-  }
-  .p-c :global(.byline) {
-    color: color-mix(in srgb, var(--peach) 58%, transparent);
-  }
-  .p-c :global(.compact),
-  .p-c :global(.list) {
-    border-top-color: rgba(255, 194, 168, 0.28);
-  }
-  .p-c :global(.kind) {
-    background: var(--ember);
-    color: var(--navy);
+  /* ---- pattern c: the navy spine ----
+     This used to be a full-bleed navy band. Now only the title column is
+     navy, inside the page margins, running the full height of the section;
+     the stories sit on paper beside it. Still marks the section as the
+     special one, without a wall of colour across the screen. --band and
+     --band-ink resolve per theme. */
+  .p-c .spine {
+    background: var(--band);
+    color: var(--band-ink);
+    padding: 1.25rem;
+    align-self: stretch;
+    position: static;
   }
   .p-c .s-blurb {
     color: var(--peach);
@@ -203,6 +189,10 @@
     .s-blurb {
       max-width: none;
       flex: 1 1 18rem;
+    }
+    .p-c .spine {
+      border-bottom: none;
+      padding: 1rem 1.1rem;
     }
     .across {
       grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));

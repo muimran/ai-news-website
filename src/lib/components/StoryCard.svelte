@@ -30,7 +30,7 @@
   const timeValue = $derived(isVideo ? story.duration || story.readTime : story.readTime);
 </script>
 
-<article class="card {variant}">
+<article class="card {variant}" class:in-section={inSection}>
   <a href={storyUrl(story)} class="hit">
     {#if showArt && variant !== 'compact' && variant !== 'list'}
       <!-- the spine only renders on small screens (CSS-gated), where the full
@@ -226,16 +226,18 @@
   }
 
   /* ---- lead ----
-     Deliberately smaller than --t-mega: the hero column is ~640px, and the
-     full mega scale pushes the dek and byline below the fold. */
+     The page runs on a short scale — lead 40 / hero second 24 / section name
+     28 / section headlines 21 and 18 / byline 12 (desktop; ~28/19/22/19/17/12
+     on phones). Which story leads is carried by position and image, not by
+     a giant type jump, so keep new sizes on this ladder. */
   .lead .title {
-    font-size: clamp(2.375rem, 4.6vw, 4rem);
+    font-size: clamp(1.75rem, 1.2rem + 2.2vw, 2.5rem);
     font-stretch: 104%;
     letter-spacing: var(--track-display);
     line-height: var(--lh-display);
   }
   .lead .dek {
-    font-size: clamp(1.125rem, 1.65vw, 1.5rem);
+    font-size: clamp(1rem, 0.9rem + 0.4vw, 1.125rem);
     max-width: 44ch;
   }
   .lead .text {
@@ -252,12 +254,39 @@
   }
 
   /* ---- standard ---- */
+  /* only the lead and feature headlines keep the extra-heavy, extended cut;
+     everything smaller steps down so it doesn't compete with them */
+  .standard .title,
+  .compact .title,
+  .list .title {
+    font-weight: 700;
+    font-stretch: 100%;
+  }
   .standard .title {
-    font-size: var(--t-lg);
+    font-size: clamp(1.1875rem, 1rem + 0.6vw, 1.5rem);
   }
   .standard .dek {
     font-size: var(--t-sm);
     max-width: 40ch;
+  }
+
+  /* ---- inside a section block ----
+     The section name is the loudest thing in the block, so every headline
+     under it — the featured one included — sits clearly below it: bold, normal
+     width, modest size. Only section names and the front-page lead keep the
+     heavy extended cut. */
+  .in-section .title {
+    font-weight: 700;
+    font-stretch: 100%;
+    line-height: var(--lh-display-sm);
+    letter-spacing: var(--track-display);
+  }
+  .in-section.feature .title {
+    font-size: clamp(1.1875rem, 1rem + 0.35vw, 1.3125rem);
+  }
+  .in-section.standard .title,
+  .in-section.compact .title {
+    font-size: clamp(1.0625rem, 1rem + 0.15vw, 1.125rem);
   }
 
   /* ---- compact: no art, rule above ---- */
@@ -286,15 +315,13 @@
   .list .title {
     font-size: 1.0625rem;
     line-height: var(--lh-display-sm);
-    font-weight: 700;
-    font-stretch: 104%;
     letter-spacing: var(--track-display);
   }
   .list .text {
     gap: 0.42rem;
   }
   .list .byline {
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
   }
   @media (max-width: 860px) {
     .list .byline {

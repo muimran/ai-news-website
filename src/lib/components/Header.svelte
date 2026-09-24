@@ -310,10 +310,10 @@
     gap: clamp(0.9rem, 1.8vw, 1.75rem);
   }
   .nav a {
-    font-family: var(--font-mono);
-    font-size: var(--t-label);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-stretch: 100%;
     color: var(--slate);
     padding-block: 0.3rem;
     border-bottom: 1.5px solid transparent;
@@ -380,6 +380,12 @@
   }
 
   .cta {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    line-height: 1.2;
     background: var(--ink);
     color: var(--paper);
     padding: 0.6rem 1.05rem 0.55rem;

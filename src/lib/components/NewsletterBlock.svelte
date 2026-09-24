@@ -42,16 +42,35 @@
   }));
 </script>
 
+<!-- One slim row inside the page margins. It used to be a full-bleed navy
+     panel with the lattice filling half of it; the lattice survives as a
+     small mark beside the kicker. -->
 <section class="news" id="newsletter" aria-labelledby="news-h">
-  <div class="shell inner">
-    <div class="copy">
-      <span class="label kicker">{L.nlKicker}</span>
-      <h2 class="h" id="news-h">{L.nlHead}</h2>
-      <p class="sub">{L.nlSub}</p>
+  <div class="shell">
+    <div class="inner">
+      <div class="copy">
+        <div class="kick-row">
+          <svg class="viz" viewBox="0 0 8 6" aria-hidden="true">
+            {#each cells as c}
+              <rect
+                x={c.x + 0.16}
+                y={c.y + 0.16}
+                width="0.68"
+                height="0.68"
+                style="--d:{c.delay}s"
+                class={(c.x + c.y) % 3 === 0 ? 'e' : (c.x * c.y) % 4 === 0 ? 'p' : 'b'}
+              />
+            {/each}
+          </svg>
+          <span class="label kicker">{L.nlKicker}</span>
+        </div>
+        <h2 class="h" id="news-h">{L.nlHead}</h2>
+        <p class="sub">{L.nlSub}</p>
+      </div>
 
-      <form class="form" onsubmit={submit} novalidate>
-        <div class="field">
-          <label class="label f-label" for="email">{L.nlEmail}</label>
+      <div class="act">
+        <form class="form" onsubmit={submit} novalidate>
+          <label class="sr-only" for="email">{L.nlEmail}</label>
           <input
             id="email"
             type="email"
@@ -62,112 +81,88 @@
             aria-describedby="news-msg"
             oninput={() => { if (status === 'error') { status = 'idle'; message = ''; } }}
           />
-        </div>
-        <button class="submit label" type="submit" disabled={status === 'working'}>
-          {status === 'working' ? L.nlWorking : status === 'done' ? L.nlDone : L.nlSignUp}
-        </button>
-      </form>
+          <button class="submit" type="submit" disabled={status === 'working'}>
+            {status === 'working' ? L.nlWorking : status === 'done' ? L.nlDone : L.nlSignUp}
+          </button>
+        </form>
 
-      <p
-        class="msg"
-        id="news-msg"
-        class:err={status === 'error'}
-        class:ok={status === 'done'}
-        role="status"
-        aria-live="polite"
-      >
-        {message || L.nlRest}
-      </p>
-    </div>
-
-    <div class="viz" aria-hidden="true">
-      <svg viewBox="0 0 8 6" preserveAspectRatio="xMidYMid meet">
-        {#each cells as c}
-          <rect
-            x={c.x + 0.16}
-            y={c.y + 0.16}
-            width="0.68"
-            height="0.68"
-            style="--d:{c.delay}s"
-            class={(c.x + c.y) % 3 === 0 ? 'e' : (c.x * c.y) % 4 === 0 ? 'p' : 'b'}
-          />
-        {/each}
-      </svg>
+        <p
+          class="msg"
+          id="news-msg"
+          class:err={status === 'error'}
+          class:ok={status === 'done'}
+          role="status"
+          aria-live="polite"
+        >
+          {message || L.nlRest}
+        </p>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
   .news {
-    background: var(--navy);
-    color: var(--paper);
-    padding-block: clamp(3rem, 6.5vw, 6rem);
     margin-top: var(--stack-lg);
   }
   .inner {
     display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
-    gap: clamp(2rem, 5vw, 5rem);
-    align-items: center;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 4rem);
+    align-items: end;
+    border-top: 3px solid var(--ink);
+    padding-top: clamp(1.25rem, 2vw, 1.75rem);
   }
 
+  .kick-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
   .kicker {
-    color: var(--ember);
-    display: block;
-    margin-bottom: 1rem;
+    color: var(--head-hover);
   }
   .h {
-    font-size: clamp(2rem, 5vw, 4rem);
-    color: var(--paper);
-    max-width: 18ch;
+    font-size: clamp(1.5rem, 2.4vw, 2.125rem);
+    max-width: 22ch;
   }
   .sub {
     font-family: var(--font-serif);
-    font-size: var(--t-md);
+    font-size: var(--t-sm);
     line-height: var(--lh-prose);
-    color: var(--peach);
+    color: var(--slate);
     max-width: 52ch;
-    margin-top: 1.1rem;
-    font-weight: 350;
+    margin-top: 0.6rem;
   }
 
   .form {
     display: flex;
-    align-items: flex-end;
-    gap: 0.75rem;
-    margin-top: 2rem;
-    flex-wrap: wrap;
-  }
-  .field {
-    flex: 1 1 18rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  .f-label {
-    color: rgba(255, 194, 168, 0.75);
+    align-items: stretch;
+    gap: 0.6rem;
   }
   input {
-    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: var(--tap);
     background: transparent;
     border: none;
-    border-bottom: 2px solid rgba(255, 194, 168, 0.5);
-    color: var(--paper);
+    border-bottom: 2px solid var(--rule-strong);
+    color: var(--ink);
     font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 1.25rem;
-    padding: 0.5rem 0 0.6rem;
+    font-size: 1.0625rem;
+    padding: 0.4rem 0;
     outline: none;
     transition: border-color 0.2s;
   }
   input::placeholder {
-    color: rgba(255, 194, 168, 0.45);
+    color: var(--mist);
   }
   input:focus {
     border-bottom-color: var(--ember);
   }
   input[aria-invalid='true'] {
-    border-bottom-color: #ff6b5e;
+    border-bottom-color: #d93a2b;
   }
 
   .submit {
@@ -176,7 +171,10 @@
     min-height: var(--tap);
     background: var(--ember);
     color: var(--navy);
-    padding: 0.95rem 1.65rem 0.85rem;
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    padding: 0 1.35rem;
     transition: background 0.2s, transform 0.15s;
     white-space: nowrap;
   }
@@ -192,28 +190,28 @@
   }
 
   .msg {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.04em;
-    color: rgba(255, 194, 168, 0.65);
-    margin-top: 1rem;
+    font-size: 0.8125rem;
+    color: var(--mist);
+    margin-top: 0.6rem;
   }
   .msg.err {
-    color: #ff9c92;
+    color: #d93a2b;
   }
   .msg.ok {
-    color: var(--ember);
+    color: var(--head-hover);
   }
 
-  /* ---- lattice ---- */
-  .viz svg {
-    width: 100%;
+  /* ---- lattice, now a small mark ---- */
+  .viz {
+    width: 2.75rem;
     height: auto;
+    flex-shrink: 0;
   }
   .viz rect {
     animation: breathe 4.2s ease-in-out infinite;
     animation-delay: var(--d);
     transform-origin: center;
+    transform-box: fill-box;
   }
   .viz .e {
     fill: var(--ember);
@@ -222,12 +220,12 @@
     fill: var(--peach);
   }
   .viz .b {
-    fill: #0b5ce8;
+    fill: var(--electric);
   }
   @keyframes breathe {
     0%,
     100% {
-      opacity: 0.28;
+      opacity: 0.35;
       transform: scale(0.72);
     }
     50% {
@@ -238,17 +236,14 @@
   @media (prefers-reduced-motion: reduce) {
     .viz rect {
       animation: none;
-      opacity: 0.75;
+      opacity: 0.8;
     }
   }
 
   @media (max-width: 900px) {
     .inner {
       grid-template-columns: 1fr;
-    }
-    .viz {
-      order: -1;
-      max-width: 15rem;
+      align-items: start;
     }
   }
 </style>

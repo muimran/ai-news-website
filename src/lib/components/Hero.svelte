@@ -27,7 +27,7 @@
 
   <!-- right: secondary + a contrasting block -->
   <div class="side">
-    {#if secondary}<StoryCard story={secondary} variant="standard" {lang} />{/if}
+    {#if secondary}<StoryCard story={secondary} variant="standard" showDek={false} {lang} />{/if}
 
     <div class="promo">
       <Halftone seed="promo-block-gt" ratio={0.44} />

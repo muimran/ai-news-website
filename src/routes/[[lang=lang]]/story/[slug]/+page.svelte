@@ -108,7 +108,7 @@
         <h2 class="rel-h" id="rel-h">{L.moreFrom} {sectionLabel(story.section, lang)}</h2>
         <div class="rel-grid">
           {#each data.related as s}
-            <StoryCard story={s} variant="standard" {lang} inSection />
+            <StoryCard story={s} variant="standard" showDek={false} {lang} inSection />
           {/each}
         </div>
       </section>
@@ -148,7 +148,7 @@
   }
   .lede {
     margin-top: 1.1rem;
-    font-size: clamp(1.125rem, 1.7vw, 1.5rem);
+    font-size: clamp(1.125rem, 1rem + 0.35vw, 1.25rem);
     max-width: 48ch;
   }
 
@@ -242,17 +242,14 @@
   .prose {
     max-width: 38rem;
     font-family: var(--font-serif);
-    font-size: 1.1875rem;
+    /* 19 on desktop, 18 on phones where 19 makes lines too short */
+    font-size: clamp(1.125rem, 1.05rem + 0.2vw, 1.1875rem);
     line-height: var(--lh-body);
     color: var(--ink);
   }
   .prose :global(p) {
     margin-bottom: 1.35rem;
     text-wrap: pretty;
-  }
-  .prose :global(p:first-of-type) {
-    font-size: 1.3125rem;
-    line-height: var(--lh-body);
   }
   .prose :global(p:first-of-type::first-letter) {
     float: left;
@@ -265,7 +262,7 @@
   }
   .prose :global(h2) {
     font-family: var(--font-display);
-    font-size: 1.5rem;
+    font-size: 1.375rem;
     margin: 2.5rem 0 0.9rem;
     padding-top: 1.25rem;
     border-top: 1px solid var(--rule);
@@ -274,7 +271,7 @@
     margin: 2rem 0;
     padding-left: 1.25rem;
     border-left: 3px solid var(--ember);
-    font-size: 1.4375rem;
+    font-size: 1.375rem;
     line-height: 1.38;
     font-style: italic;
     color: var(--slate);
