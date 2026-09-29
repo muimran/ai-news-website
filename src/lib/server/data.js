@@ -4,7 +4,8 @@
 import { marked } from 'marked';
 import { base } from '$app/paths';
 import { LANGS, inLang, sibling, sections } from '$lib/content.js';
-import { photo, topicUrl } from '$lib/site/reel.js';
+import { FORMATS } from '$lib/labels.js';
+import { photo, topicUrl, formatUrl } from '$lib/site/reel.js';
 import { writerFor, writerUrl } from './authors.js';
 
 /* Reels are for what's new: the front reel runs the latest 24, a topic reel
@@ -20,6 +21,7 @@ const summary = (s) => ({
   section: s.section,
   date: s.date,
   readTime: s.readTime,
+  kind: s.kind,
   author: s.author,
   translationOf: s.translationOf,
   image: s.image
@@ -35,6 +37,9 @@ export const order = (lang, section = null) =>
 export const indexUrl = (lang, section) =>
   section ? `${topicUrl(section, lang)}/all` : `${base}/${lang}/all`;
 
+/** One format's stories (every interview, say), newest first. */
+export const ofKind = (lang, kind) => inLang(lang).filter((s) => s.kind === kind).sort(newestFirst);
+
 const DAY = 86400000;
 
 /** Monday 00:00 UTC of the week a date falls in. */
@@ -45,7 +50,15 @@ const weekStart = (d) => new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 
     are several stories a day, weeks once stories are sparser than that. */
 export function reelFor(lang, section = null) {
   const all = order(lang, section);
-  const slice = all.slice(0, section ? REEL.topic : REEL.front);
+  return reelOf(all, section ? REEL.topic : REEL.front, indexUrl(lang, section));
+}
+
+/** A format's reel: its latest 12, like a topic's. */
+export const formatReel = (lang, kind) =>
+  reelOf(ofKind(lang, kind), REEL.topic, `${formatUrl(kind, lang)}/all`);
+
+function reelOf(all, size, index) {
+  const slice = all.slice(0, size);
   const days = new Set(slice.map((s) => s.dateISO.slice(0, 10))).size;
   const byWeek = days > slice.length * 0.6;
 
@@ -64,11 +77,12 @@ export function reelFor(lang, section = null) {
     mark = key;
     items.push({ type: 'story', key: s.slug, story: summary(s), n: i + 1 });
   });
-  return { items, total: all.length, from: all.at(-1).date, to: all[0].date, index: indexUrl(lang, section) };
+  return { items, total: all.length, from: all.at(-1).date, to: all[0].date, index };
 }
 
 /** Every story in a topic (or everything), newest first, for an index page. */
 export const listFor = (lang, section = null) => order(lang, section).map(row);
+export const formatList = (lang, kind) => ofKind(lang, kind).map(row);
 
 /* Every story from both desks, newest first — a writer's page spans both. */
 const everything = () => [...order('en'), ...order('bn')].sort(newestFirst);
@@ -135,6 +149,25 @@ export function storyPage(s) {
     writer: writerFor(s.author) ? writerUrl(writerFor(s.author)) : null
   };
 }
+
+/** Formats with at least one story in this edition, for the menu. */
+export const formatsFor = (lang) =>
+  Object.keys(FORMATS)
+    .map((key) => {
+      const list = ofKind(lang, key);
+      return { key, count: list.length, thumbs: list.slice(0, 4).map((s) => photo(s)?.thumb ?? null) };
+    })
+    .filter((f) => f.count);
+
+/** The language switch from a format page: the same format if the other
+    edition has any, otherwise its front reel. */
+export const altForFormat = (kind, index = false) =>
+  Object.fromEntries(
+    LANGS.map((l) => {
+      if (!ofKind(l, kind).length) return [l, `${base}/${l}`];
+      return [l, `${formatUrl(kind, l)}${index ? '/all' : ''}`];
+    })
+  );
 
 /** The topic index in the top bar: every section with its count and the
     first few photos, for previews. */

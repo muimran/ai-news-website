@@ -1,11 +1,11 @@
 ---
 title: "A union contract that treats a model as a piece of equipment"
-dek: "Port workers in Valparaíso negotiated language that other unions are already copying."
+dek: "Port workers in Chattogram negotiated language that other unions are already copying."
 section: "Work After Automation"
 kind: "Report"
 author: "Rifat Ahmed"
 authorTitle: "Reporter"
-location: "Dhaka"
+location: "Chattogram"
 tags: ["unions", "labour"]
 date: 2026-09-11
 readTime: 9
@@ -16,7 +16,7 @@ weight: 3
 featured: false
 secondary: false
 ---
-Port workers in Valparaíso negotiated language that other unions are already copying.
+Port workers in Chattogram negotiated language that other unions are already copying.
 
 ## What we found
 

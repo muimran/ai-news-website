@@ -1,11 +1,11 @@
 ---
 title: "The school that banned AI, then quietly unbanned it"
-dek: "Teachers in Kraków spent a year arguing. The compromise they reached is stranger than either position."
+dek: "Teachers in Cumilla spent a year arguing. The compromise they reached is stranger than either position."
 section: "AI & Everyday Life"
 kind: "Report"
-author: "Petra Kovač"
-authorTitle: "Europe contributor"
-location: "Zagreb"
+author: "Farzana Haque"
+authorTitle: "Public policy reporter"
+location: "Cumilla"
 tags: ["education"]
 date: 2026-09-10
 readTime: 8
@@ -13,7 +13,7 @@ weight: 4
 featured: false
 secondary: false
 ---
-Teachers in Kraków spent a year arguing. The compromise they reached is stranger than either position.
+Teachers in Cumilla spent a year arguing. The compromise they reached is stranger than either position.
 
 ## What we found
 

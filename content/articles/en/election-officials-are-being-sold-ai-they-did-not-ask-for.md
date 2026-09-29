@@ -4,8 +4,8 @@ dek: "Vendors are bundling detection tools into contracts for ordinary voter rol
 section: "Machines and Power"
 kind: "Report"
 author: "Naima Siddiqui"
-authorTitle: "Africa contributor"
-location: "Nairobi"
+authorTitle: "Elections and labour reporter"
+location: "Dhaka"
 tags: ["elections", "procurement"]
 date: 2026-09-12
 readTime: 9

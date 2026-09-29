@@ -17,8 +17,10 @@
   lang="en"
   stories={data.stories}
   title={w.name}
-  subtitle={w.name_bn}
   intro={w.bio}
+  portrait
+  photo={w.photo}
+  links={w.links}
   kicker={w.role || L.reporter}
   back={{ href: `${base}/en/authors`, label: L.reporters }}
   placeholder={L.searchBy}

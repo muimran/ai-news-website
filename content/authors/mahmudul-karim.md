@@ -1,4 +1,4 @@
 ---
 name: "Mahmudul Karim"
-role: "Asia correspondent"
+role: "Technology policy correspondent"
 ---

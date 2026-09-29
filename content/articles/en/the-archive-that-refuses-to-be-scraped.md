@@ -1,11 +1,11 @@
 ---
 title: "The archive that refuses to be scraped"
-dek: "A Lisbon photo collection built a licence that machines cannot quietly ignore."
+dek: "An Old Dhaka photo collection built a licence that machines cannot quietly ignore."
 section: "AI & Everyday Life"
 kind: "Dispatch"
-author: "Ana Ferreira"
-authorTitle: "Culture contributor"
-location: "Lisbon"
+author: "Maliha Chowdhury"
+authorTitle: "Culture reporter"
+location: "Dhaka"
 tags: ["archives", "licensing"]
 date: 2026-09-07
 readTime: 7
@@ -13,7 +13,7 @@ weight: 4
 featured: false
 secondary: false
 ---
-A Lisbon photo collection built a licence that machines cannot quietly ignore.
+An Old Dhaka photo collection built a licence that machines cannot quietly ignore.
 
 ## What we found
 

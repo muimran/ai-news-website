@@ -1,10 +1,10 @@
 ---
 title: "Chinese open-weight models are winning on price, not benchmarks"
-dek: "Developers across Southeast Asia are switching for reasons that have little to do with capability."
+dek: "Developers in Dhaka are switching for reasons that have little to do with capability."
 section: "The AI Race"
 kind: "Analysis"
 author: "Mahmudul Karim"
-authorTitle: "Asia correspondent"
+authorTitle: "Technology policy correspondent"
 location: "Dhaka"
 tags: ["open weights", "china", "pricing"]
 date: 2026-09-13
@@ -16,7 +16,7 @@ weight: 3
 featured: false
 secondary: false
 ---
-Developers across Southeast Asia are switching for reasons that have little to do with capability.
+Developers in Dhaka are switching for reasons that have little to do with capability.
 
 ## What we found
 

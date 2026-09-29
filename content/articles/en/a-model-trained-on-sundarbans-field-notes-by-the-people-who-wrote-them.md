@@ -1,22 +1,19 @@
 ---
-title: "Lagos built an AI cluster. Then the power went out."
-dek: "The generators cost more than the GPUs. Nobody budgeted for that."
-section: "AI in the Global South"
+title: "A model trained on Sundarbans field notes, by the people who wrote them"
+dek: "Researchers in Khulna kept the data and licensed the outputs. It took four years."
+section: "AI Across Bangladesh"
 kind: "Feature"
-author: "Tanvir Hasan"
-authorTitle: "Senior reporter"
-location: "Dhaka"
-tags: ["infrastructure", "energy"]
-date: 2026-09-13
-readTime: 12
-image: "/uploads/test-photo.svg"
-imageAlt: "Placeholder — replace with the real photograph"
-imageCredit: "Test / Ground Truth"
-weight: 1
+author: "Sabrina Rahman"
+authorTitle: "Platforms and policy reporter"
+location: "Khulna"
+tags: ["research", "data sovereignty"]
+date: 2026-09-08
+readTime: 14
+weight: 4
 featured: false
 secondary: false
 ---
-The generators cost more than the GPUs. Nobody budgeted for that.
+Researchers in Khulna kept the data and licensed the outputs. It took four years.
 
 ## What we found
 

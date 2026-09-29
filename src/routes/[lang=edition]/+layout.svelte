@@ -4,14 +4,14 @@
   import { page } from '$app/state';
   import { base } from '$app/paths';
   import { afterNavigate } from '$app/navigation';
-  import { sectionLabel, formatNumber } from '$lib/labels.js';
+  import { sectionLabel, formatLabel, formatNumber } from '$lib/labels.js';
   import Row from '$lib/site/Row.svelte';
-  import { matches, topicUrl, two, STR } from '$lib/site/reel.js';
+  import { matches, topicUrl, formatUrl, two, STR } from '$lib/site/reel.js';
 
   let { data, children } = $props();
   const lang = $derived(data.lang);
   const L = $derived(STR[lang]);
-  const current = $derived(page.data.section ?? null);
+  const current = $derived(page.data.section ?? page.data.format ?? null);
 
   /* The language switch keeps your place: each page says where its
      counterpart is (a story's translation, the same topic), in `alt`. */
@@ -95,7 +95,7 @@
 <div class="gtr" {lang}>
   <div class="veil" class:on={scrolled} aria-hidden="true"></div>
   <!-- Blended with `difference`, so it stays legible over paper, ink and photos alike. -->
-  <header class="bar">
+  <header class="bar" class:onpanel={open === 'menu'}>
     <a class="name" href="{base}/{lang}">Ground Truth</a>
     <div class="right">
       <button
@@ -170,7 +170,28 @@
           {/each}
         </ol>
       </nav>
-      <footer class="house" style="--i:{data.topics.length + 1}">
+      <!-- Formats cut across the topics, so they sit apart and go unnumbered. -->
+      {#if data.formats.length}
+        <nav class="formats" aria-label={L.formats}>
+          <ol>
+            {#each data.formats as f, i (f.key)}
+              <li style="--i:{data.topics.length + 1 + i}">
+                <a href={formatUrl(f.key, lang)} aria-current={current === f.key ? 'page' : undefined}>
+                  <span class="i"></span>
+                  <span class="nm">{formatLabel(f.key, lang)}</span>
+                  <span class="ct">{formatNumber(f.count, lang)}</span>
+                  <span class="thumbs" aria-hidden="true">
+                    {#each f.thumbs as src, k (k)}
+                      {#if src}<img {src} alt="" loading="lazy" />{:else}<i></i>{/if}
+                    {/each}
+                  </span>
+                </a>
+              </li>
+            {/each}
+          </ol>
+        </nav>
+      {/if}
+      <footer class="house" style="--i:{data.topics.length + data.formats.length + 1}">
         <p>{L.blurb}</p>
         <nav aria-label="Ground Truth">
           <a href="{base}/en/authors" hreflang="en">{L.reporters}</a>
@@ -184,19 +205,22 @@
 
 <style>
   :global(:root:has(.gtr)) {
-    --bg: #efeee9;
-    --card: #dedcd5;
-    --ink: #121211;
-    --mute: #6b6962;
-    --line: #d3d0c8;
+    /* cool grey paper: keeps the orange hot and sits with the indigo */
+    --bg: #e9ebee;
+    --card: #d5d9de;
+    --ink: #111318;
+    --mute: #636873;
+    --line: #cdd1d7;
     /* One accent, one meaning: a way in. Full strength for surfaces (the
        opening and topic cards) and large type; --accent-text, a deeper
        shade that passes 4.5:1 on paper, for anything small set on paper. */
     --accent: #e8430d;
     --accent-text: #b8340a;
-    /* the second tone for type posters (the first is ink) */
-    --stone: #cfcac0;
-    --stone-text: #121211;
+    /* the second surface for cards without a photo (the first is ink):
+       indigo, the cool opposite of the orange, with white text (5.9:1) */
+    --indigo: #5f5e9c;
+    --indigo-text: #ffffff;
+    --indigo-ink: #5f5e9c; /* indigo as type on paper: 5.1:1 */
     color-scheme: light;
     background: var(--bg);
   }
@@ -204,13 +228,14 @@
     :global(:root:has(.gtr)) {
       --bg: #0b0b0c;
       --card: #1a1a1c;
-      --ink: #efeee9;
-      --mute: #8d8b85;
+      --ink: #eceef1;
+      --mute: #8b9099;
       --line: #2a2a2d;
       --accent: #ff6a33;
       --accent-text: #ff6a33; /* already 6.9:1 on the dark page */
-      --stone: #2b2a27;
-      --stone-text: #efeee9;
+      --indigo: #4b4a8c;
+      --indigo-text: #ffffff;
+      --indigo-ink: #a9a8e0; /* lighter for type on the dark page: 8.7:1 */
       color-scheme: dark;
     }
   }
@@ -303,6 +328,11 @@
     color: inherit;
     font: inherit;
     cursor: pointer;
+  }
+  /* Over the indigo Menu the inverting blend would turn khaki: plain white. */
+  .bar.onpanel {
+    mix-blend-mode: normal;
+    color: #fff;
   }
   .lang {
     padding: 0.4rem 0.7rem;
@@ -460,6 +490,10 @@
     opacity: 1;
   }
 
+  .formats {
+    margin-top: 2rem;
+  }
+
   /* Under the topics: who we are, and the standing pages. */
   .house {
     display: flex;
@@ -493,6 +527,45 @@
   .house a:focus-visible {
     color: var(--accent-text);
     outline: none;
+  }
+
+  /* The Menu is the newsroom's own space: indigo, with the type in white.
+     (Orange on indigo is unreadable, so the two never sit on each other.) */
+  #menu {
+    --line: rgb(255 255 255 / 0.25);
+    background: var(--indigo);
+    color: #fff;
+  }
+  #menu li a {
+    color: #fff;
+  }
+  #menu .i,
+  #menu .ct,
+  #menu .house p {
+    color: rgb(255 255 255 / 0.72);
+  }
+  /* No underlines here — the rows already have rules. The current page is
+     marked by an orange square in place of its number (orange as a mark,
+     never as type on indigo, where it vibrates and can't be read). */
+  #menu li a:hover .nm,
+  #menu li a:focus-visible .nm,
+  #menu li a[aria-current='page'] .nm {
+    color: #fff;
+  }
+  #menu li a[aria-current='page'] .i {
+    width: 0.7rem;
+    height: 0.7rem;
+    overflow: hidden;
+    background: var(--accent);
+    color: transparent;
+  }
+  #menu .house a {
+    color: rgb(255 255 255 / 0.8);
+    transition: color 0.15s;
+  }
+  #menu .house a:hover,
+  #menu .house a:focus-visible {
+    color: #fff;
   }
 
   @media (max-width: 759px) {

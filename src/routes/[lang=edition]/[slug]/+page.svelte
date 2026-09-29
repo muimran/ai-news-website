@@ -13,7 +13,7 @@
   const pic = $derived(photo(s));
   const tones = $derived.by(() => {
     let k = 0;
-    return next.map((it) => (photo(it.story) ? 'ink' : k++ % 2 ? 'stone' : 'ink'));
+    return next.map((it) => (photo(it.story) ? 'ink' : k++ % 2 ? 'indigo' : 'ink'));
   });
 
   /* Only one element may hold the `hero` name at a time: this page's photo,
@@ -213,6 +213,7 @@
     font-weight: 620;
     font-stretch: 80%;
     line-height: 1.1;
+    color: var(--indigo-ink);
   }
   .body :global(a) {
     color: inherit;

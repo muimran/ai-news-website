@@ -21,7 +21,7 @@ const AREAS = [
   ['AI & Everyday Life', 2300, -120],
   ['Work After Automation', 4600, 40],
   ['Machines and Power', 1150, 1700],
-  ['AI in the Global South', 3450, 1620],
+  ['AI Across Bangladesh', 3450, 1620],
   ['Climate, Chips & Infrastructure', 5750, 1740]
 ];
 

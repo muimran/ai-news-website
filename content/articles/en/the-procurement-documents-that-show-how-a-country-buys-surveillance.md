@@ -1,6 +1,6 @@
 ---
 title: "The procurement documents that show how a country buys surveillance"
-dek: "Contracts obtained from four ministries reveal a standard template circulating between governments."
+dek: "Contracts obtained from four ministries reveal a standard template circulating between departments."
 section: "Machines and Power"
 kind: "Investigation"
 author: "Nusrat Jahan Rima"
@@ -16,7 +16,7 @@ weight: 2
 featured: false
 secondary: false
 ---
-Contracts obtained from four ministries reveal a standard template circulating between governments.
+Contracts obtained from four ministries reveal a standard template circulating between departments.
 
 ## What we found
 

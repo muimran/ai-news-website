@@ -1,11 +1,11 @@
 ---
 title: "The consent form nobody could read"
-dek: "A clinic in Amman collected scans for research. The terms were four screens of English."
+dek: "A clinic in Mymensingh collected scans for research. The terms were four screens of English."
 section: "Machines and Power"
 kind: "Report"
-author: "Yusuf El-Amin"
-authorTitle: "Gulf contributor"
-location: "Cairo"
+author: "Kamrul Islam"
+authorTitle: "Media and health reporter"
+location: "Mymensingh"
 tags: ["health", "consent"]
 date: 2026-09-10
 readTime: 9
@@ -16,7 +16,7 @@ weight: 3
 featured: false
 secondary: false
 ---
-A clinic in Amman collected scans for research. The terms were four screens of English.
+A clinic in Mymensingh collected scans for research. The terms were four screens of English.
 
 ## What we found
 

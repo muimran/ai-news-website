@@ -1,6 +1,6 @@
 ---
 title: "Marriage brokers, matchmakers, and the model in between"
-dek: "Families in three Indian cities describe outsourcing the first conversation."
+dek: "Families in Dhaka, Sylhet and Rajshahi describe outsourcing the first conversation."
 section: "AI & Everyday Life"
 kind: "Feature"
 author: "Shireen Akhtar"
@@ -16,7 +16,7 @@ weight: 2
 featured: false
 secondary: false
 ---
-Families in three Indian cities describe outsourcing the first conversation.
+Families in Dhaka, Sylhet and Rajshahi describe outsourcing the first conversation.
 
 ## What we found
 

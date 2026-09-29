@@ -1,11 +1,11 @@
 ---
 title: "The grid operator who says no"
-dek: "A utility in Ireland began refusing connection requests. Others are watching what happens."
+dek: "A power distributor in the north began refusing connection requests. Others are watching what happens."
 section: "Climate, Chips & Infrastructure"
-kind: "Q&A"
-author: "Petra Kovač"
-authorTitle: "Europe contributor"
-location: "Zagreb"
+kind: "Interview"
+author: "Farzana Haque"
+authorTitle: "Public policy reporter"
+location: "Rangpur"
 tags: ["grid", "energy"]
 date: 2026-09-08
 readTime: 8
@@ -16,7 +16,7 @@ weight: 4
 featured: false
 secondary: false
 ---
-A utility in Ireland began refusing connection requests. Others are watching what happens.
+A power distributor in the north began refusing connection requests. Others are watching what happens.
 
 ## What we found
 

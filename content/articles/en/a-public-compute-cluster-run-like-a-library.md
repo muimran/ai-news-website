@@ -1,11 +1,11 @@
 ---
 title: "A public compute cluster, run like a library"
-dek: "Researchers in Ljubljana built shared infrastructure with a lending model. It is fully booked."
+dek: "Researchers in Rajshahi built shared infrastructure with a lending model. It is fully booked."
 section: "The AI Race"
 kind: "Feature"
-author: "Petra Kovač"
-authorTitle: "Europe contributor"
-location: "Zagreb"
+author: "Farzana Haque"
+authorTitle: "Public policy reporter"
+location: "Rajshahi"
 tags: ["compute", "public infrastructure"]
 date: 2026-09-08
 readTime: 12
@@ -16,7 +16,7 @@ weight: 4
 featured: false
 secondary: false
 ---
-Researchers in Ljubljana built shared infrastructure with a lending model. It is fully booked.
+Researchers in Rajshahi built shared infrastructure with a lending model. It is fully booked.
 
 ## What we found
 

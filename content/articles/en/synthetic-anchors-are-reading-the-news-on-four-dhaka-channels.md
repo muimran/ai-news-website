@@ -1,26 +1,23 @@
 ---
-title: "The Nairobi annotators who unionised, and what happened next"
-dek: "Two years after the first contract, the work has moved and the union is following it."
-section: "AI in the Global South"
-kind: "Report"
-author: "Naima Siddiqui"
-authorTitle: "Africa contributor"
-location: "Nairobi"
-tags: ["labour", "unions"]
-date: 2026-09-11
+title: "Synthetic anchors are reading the news on four Dhaka channels"
+dek: "Most audiences can tell. Broadcasters are running them anyway, and explaining why."
+section: "AI & Everyday Life"
+kind: "Feature"
+author: "Kamrul Islam"
+authorTitle: "Media and health reporter"
+location: "Dhaka"
+tags: ["broadcast", "synthetic media"]
+date: 2026-09-09
 readTime: 11
-image: "/uploads/test-photo.svg"
-imageAlt: "Placeholder — replace with the real photograph"
-imageCredit: "Test / Ground Truth"
-weight: 2
+weight: 3
 featured: false
 secondary: false
 ---
-Two years after the first contract, the work has moved and the union is following it.
+Most audiences can tell. Broadcasters are running them anyway, and explaining why.
 
 ## What we found
 
-Reporting for this report began with a single question and a
+Reporting for this feature began with a single question and a
 records request that took four months to answer. The documents that came back
 described a process nobody involved was willing to explain on the record — so we
 went to the people it affected instead.

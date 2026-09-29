@@ -1,6 +1,6 @@
 ---
 title: "The film industry that decided to label everything"
-dek: "Nigeria's producers agreed on disclosure rules before any regulator asked."
+dek: "Dhallywood's producers agreed on disclosure rules before any regulator asked."
 section: "AI & Everyday Life"
 kind: "Report"
 author: "Tanvir Hasan"
@@ -16,7 +16,7 @@ weight: 1
 featured: false
 secondary: false
 ---
-Nigeria's producers agreed on disclosure rules before any regulator asked.
+Dhallywood's producers agreed on disclosure rules before any regulator asked.
 
 ## What we found
 

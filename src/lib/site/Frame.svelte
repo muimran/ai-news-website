@@ -1,15 +1,16 @@
 <script>
   /* One story in the reel: a photo with the headline over it, or, when there
-     is no photo, a plain card in one of two tones (`tone`: 'ink' or 'stone',
+     is no photo, a plain card in one of two tones (`tone`: 'ink' or 'indigo',
      alternated by the parent so two never sit side by side in the same
      tone). Headlines sit at the same size and place on every card, so they
      line up along the reel. Width comes from the parent. The section in the
-     code line is its own link. */
+     code line is its own link, and so is the format pill (Investigation,
+     Interview), except on that topic's or format's own page. */
   import { base } from '$app/paths';
-  import { sectionLabel, formatNumber } from '$lib/labels.js';
-  import { photo, topicUrl, two, SHORT_DATE, STR } from './reel.js';
+  import { sectionLabel, kindLabel, formatNumber, FORMATS } from '$lib/labels.js';
+  import { photo, topicUrl, formatUrl, two, SHORT_DATE, STR } from './reel.js';
 
-  let { story: s, n, tone = 'ink', named = false, sizes = '100vw', topic = null, onpick } = $props();
+  let { story: s, n, tone = 'ink', named = false, sizes = '100vw', topic = null, format = null, onpick } = $props();
 
   const lang = $derived(s.lang);
   const pic = $derived(photo(s));
@@ -19,7 +20,7 @@
   class="frame"
   class:pic={!!pic}
   class:text={!pic}
-  class:stone={!pic && tone === 'stone'}
+  class:indigo={!pic && tone === 'indigo'}
   data-n={n}
 >
   <span class="code">
@@ -31,26 +32,36 @@
     {/if}
     <span class="when">{SHORT_DATE[lang].format(s.date)} · {formatNumber(s.readTime, lang)} {STR[lang].min}</span>
   </span>
-  <a class="box" href="{base}/{s.lang}/{s.slug}" draggable="false" onclick={() => onpick?.(s.slug)}>
-    <span class="media" style:view-transition-name={named ? 'hero' : null}>
-      {#if pic}
-        <img
-          src={pic.src}
-          srcset={pic.srcset}
-          sizes="(max-width: 759px) 84vw, {sizes}"
-          alt=""
-          loading={n <= 6 ? 'eager' : 'lazy'}
-          draggable="false"
-        />
+  <div class="card">
+    <a class="box" href="{base}/{s.lang}/{s.slug}" draggable="false" onclick={() => onpick?.(s.slug)}>
+      <span class="media" style:view-transition-name={named ? 'hero' : null}>
+        {#if pic}
+          <img
+            src={pic.src}
+            srcset={pic.srcset}
+            sizes="(max-width: 759px) 84vw, {sizes}"
+            alt=""
+            loading={n <= 6 ? 'eager' : 'lazy'}
+            draggable="false"
+          />
+        {/if}
+      </span>
+      <span class="cap">
+        <span class="title">{s.title}</span>
+        {#if s.dek}<span class="dek">{s.dek}</span>{/if}
+        {#if s.author}<span class="by">{s.author}</span>{/if}
+        <span class="go">{STR[lang].read} →</span>
+      </span>
+    </a>
+    <!-- outside the story link, since a link can't hold another -->
+    {#if FORMATS[s.kind]}
+      {#if format === s.kind}
+        <span class="tag">{kindLabel(s.kind, lang)}</span>
+      {:else}
+        <a class="tag" href={formatUrl(s.kind, lang)} draggable="false">{kindLabel(s.kind, lang)}</a>
       {/if}
-    </span>
-    <span class="cap">
-      <span class="title">{s.title}</span>
-      {#if s.dek}<span class="dek">{s.dek}</span>{/if}
-      {#if s.author}<span class="by">{s.author}</span>{/if}
-      <span class="go">{STR[lang].read} →</span>
-    </span>
-  </a>
+    {/if}
+  </div>
 </div>
 
 <style>
@@ -110,6 +121,11 @@
 
   /* Type inside the card is sized off the card (cqi = 1% of its width), so a
      card looks the same whether the window is wide, tall or a phone. */
+  .card {
+    position: relative;
+    display: flex;
+    flex: 1;
+  }
   .box {
     container-type: inline-size;
     position: relative;
@@ -129,8 +145,8 @@
   .text .media {
     background: var(--ink);
   }
-  .stone .media {
-    background: var(--stone);
+  .indigo .media {
+    background: var(--indigo);
   }
   img {
     display: block;
@@ -144,6 +160,33 @@
     transform: scale(1.045);
   }
 
+  /* Formats worth browsing carry an indigo pill that opens all of them. */
+  .tag {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1;
+    padding: 0.4rem 0.6rem;
+    border-radius: 999px;
+    background: var(--indigo);
+    color: #fff;
+    font: 500 calc(0.6875rem * var(--k))/1 var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition:
+      background 0.15s,
+      color 0.15s;
+  }
+  .indigo .tag {
+    background: #111;
+  }
+  a.tag:hover,
+  a.tag:focus-visible {
+    background: #fff;
+    color: #111;
+    outline: none;
+  }
   .cap {
     position: absolute;
     left: 0;
@@ -161,8 +204,8 @@
   .text .cap {
     color: var(--bg);
   }
-  .stone .cap {
-    color: var(--stone-text);
+  .indigo .cap {
+    color: var(--indigo-text);
   }
 
   .title {

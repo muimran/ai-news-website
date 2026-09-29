@@ -1,6 +1,6 @@
 <script>
-  /* Everyone who writes for Ground Truth, both desks: name (and the Bangla
-     spelling their Bangla bylines use), role, how many stories. */
+  /* Everyone who writes for Ground Truth, both desks: photo (an empty frame
+     until there is one), name, role, how many stories. */
   import { base } from '$app/paths';
   import { formatNumber } from '$lib/labels.js';
   import { STR } from '$lib/site/reel.js';
@@ -23,8 +23,9 @@
     {#each data.authors as a (a.slug)}
       <li>
         <a href="{base}/en/author/{a.slug}">
-          <span class="nm">{a.name}{#if a.name_bn}<span class="bn" lang="bn">{a.name_bn}</span>{/if}</span>
-          <span class="role">{a.title}</span>
+          <span class="photo">{#if a.photo}<img src={a.photo} alt="" loading="lazy" />{/if}</span>
+          <span class="nm">{a.name}</span>
+          <span class="role">{a.role}</span>
           <span class="ct">{L.count(num(a.count))}</span>
         </a>
       </li>
@@ -78,13 +79,27 @@
   }
   li a {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
-    align-items: baseline;
+    grid-template-columns: 2.75rem minmax(0, 1fr) minmax(0, 1fr) auto;
+    align-items: center;
     gap: 1.5rem;
     padding: 0.9rem 0;
     color: var(--ink);
     text-decoration: none;
     outline: none;
+  }
+  .photo {
+    width: 2.75rem;
+    aspect-ratio: 5 / 7;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+  }
+  .photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1);
   }
   .nm {
     font-size: clamp(1.3rem, 0.9rem + 1.3vw, 2.2rem);
@@ -92,15 +107,6 @@
     font-stretch: 78%;
     line-height: 1.05;
     transition: color 0.15s;
-  }
-  .bn {
-    display: block;
-    margin-top: 0.25rem;
-    color: var(--mute);
-    font-family: 'Noto Sans Bengali', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 500;
-    font-stretch: 100%;
   }
   .role {
     color: var(--mute);
@@ -119,11 +125,15 @@
 
   @media (max-width: 759px) {
     li a {
-      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-columns: 2.5rem minmax(0, 1fr) auto;
       gap: 0.3rem 1rem;
     }
+    .photo {
+      grid-row: 1 / span 2;
+      width: 2.5rem;
+    }
     .role {
-      grid-column: 1;
+      grid-column: 2;
       grid-row: 2;
     }
   }

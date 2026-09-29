@@ -1,6 +1,6 @@
 ---
 title: "What happens when a chatbot becomes your co-worker?"
-dek: "At a Manila outsourcing firm, an assistant was introduced to help. Eighteen months on, staff describe negotiating with it for their own shifts."
+dek: "At a Dhaka outsourcing firm, an assistant was introduced to help. Eighteen months on, staff describe negotiating with it for their own shifts."
 section: "Work After Automation"
 kind: "Report"
 author: "Farhana Akter"
@@ -13,7 +13,7 @@ weight: 1
 featured: false
 secondary: false
 ---
-At a Manila outsourcing firm, an assistant was introduced to help. Eighteen months on, staff describe negotiating with it for their own shifts.
+At a Dhaka outsourcing firm, an assistant was introduced to help. Eighteen months on, staff describe negotiating with it for their own shifts.
 
 ## What we found
 

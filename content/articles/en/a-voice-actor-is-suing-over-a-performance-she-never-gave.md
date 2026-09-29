@@ -3,9 +3,9 @@ title: "A voice actor is suing over a performance she never gave"
 dek: "The case turns on whether a voice is a work or a person."
 section: "AI & Everyday Life"
 kind: "Report"
-author: "Ana Ferreira"
-authorTitle: "Culture contributor"
-location: "Lisbon"
+author: "Maliha Chowdhury"
+authorTitle: "Culture reporter"
+location: "Dhaka"
 tags: ["copyright", "voice"]
 date: 2026-09-11
 readTime: 10

@@ -3,9 +3,9 @@ title: "Translators did not disappear. Their rates did."
 dek: "The work is still there. What changed is who sets the price and how fast it must be delivered."
 section: "Work After Automation"
 kind: "Report"
-author: "Ana Ferreira"
-authorTitle: "Culture contributor"
-location: "Lisbon"
+author: "Maliha Chowdhury"
+authorTitle: "Culture reporter"
+location: "Dhaka"
 tags: ["labour", "translation"]
 date: 2026-09-13
 readTime: 10

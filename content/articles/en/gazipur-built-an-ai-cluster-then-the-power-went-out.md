@@ -1,19 +1,22 @@
 ---
-title: "Synthetic anchors are reading the news in twelve countries"
-dek: "Most audiences can tell. Broadcasters are running them anyway, and explaining why."
-section: "AI & Everyday Life"
+title: "Gazipur built an AI cluster. Then the power went out."
+dek: "The generators cost more than the GPUs. Nobody budgeted for that."
+section: "AI Across Bangladesh"
 kind: "Feature"
-author: "Yusuf El-Amin"
-authorTitle: "Gulf contributor"
-location: "Cairo"
-tags: ["broadcast", "synthetic media"]
-date: 2026-09-09
-readTime: 11
-weight: 3
+author: "Tanvir Hasan"
+authorTitle: "Senior reporter"
+location: "Gazipur"
+tags: ["infrastructure", "energy"]
+date: 2026-09-13
+readTime: 12
+image: "/uploads/test-photo.svg"
+imageAlt: "Placeholder — replace with the real photograph"
+imageCredit: "Test / Ground Truth"
+weight: 1
 featured: false
 secondary: false
 ---
-Most audiences can tell. Broadcasters are running them anyway, and explaining why.
+The generators cost more than the GPUs. Nobody budgeted for that.
 
 ## What we found
 

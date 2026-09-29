@@ -1,23 +1,23 @@
 ---
-title: "Indonesia is writing AI rules for a market it does not control"
-dek: "Regulators describe drafting law for systems they cannot inspect."
-section: "AI in the Global South"
-kind: "Analysis"
-author: "Mahmudul Karim"
-authorTitle: "Asia correspondent"
-location: "Dhaka"
-tags: ["regulation", "policy"]
-date: 2026-09-09
-readTime: 8
+title: "Chip makers are chasing cheap power to Bangladesh's economic zones"
+dek: "Mirsarai, Mongla and Bhola are competing for the same three customers."
+section: "Climate, Chips & Infrastructure"
+kind: "Report"
+author: "Zubair Alam"
+authorTitle: "Chips and compute reporter"
+location: "Chattogram"
+tags: ["chips", "energy"]
+date: 2026-09-10
+readTime: 10
 weight: 3
 featured: false
 secondary: false
 ---
-Regulators describe drafting law for systems they cannot inspect.
+Mirsarai, Mongla and Bhola are competing for the same three customers.
 
 ## What we found
 
-Reporting for this analysis began with a single question and a
+Reporting for this report began with a single question and a
 records request that took four months to answer. The documents that came back
 described a process nobody involved was willing to explain on the record — so we
 went to the people it affected instead.

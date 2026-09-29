@@ -1,4 +1,4 @@
 ---
 name: "Naima Siddiqui"
-role: "Africa contributor"
+role: "Elections and labour reporter"
 ---

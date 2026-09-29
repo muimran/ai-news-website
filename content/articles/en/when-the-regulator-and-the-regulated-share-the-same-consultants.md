@@ -1,11 +1,11 @@
 ---
 title: "When the regulator and the regulated share the same consultants"
-dek: "A review of disclosure filings in three jurisdictions found the same six firms on both sides."
+dek: "A review of disclosure filings to three regulators found the same six firms on both sides."
 section: "Machines and Power"
 kind: "Investigation"
-author: "Petra Kovač"
-authorTitle: "Europe contributor"
-location: "Zagreb"
+author: "Farzana Haque"
+authorTitle: "Public policy reporter"
+location: "Dhaka"
 tags: ["regulation", "lobbying"]
 date: 2026-09-10
 readTime: 13
@@ -16,7 +16,7 @@ weight: 4
 featured: false
 secondary: false
 ---
-A review of disclosure filings in three jurisdictions found the same six firms on both sides.
+A review of disclosure filings to three regulators found the same six firms on both sides.
 
 ## What we found
 

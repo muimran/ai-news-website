@@ -1,46 +1,50 @@
 <script>
-  /* The reel: the latest stories, or one section's when `section` is set,
-     in which case it opens on a title card for that topic. It always ends on
-     a doorway to the full index. */
+  /* The reel: the latest stories, or one section's when `section` is set
+     (one format's when `format` is), in which case it opens on a title card
+     for it. It always ends on a doorway to the full index. */
   import { onMount, untrack } from 'svelte';
   import { base } from '$app/paths';
   import { page } from '$app/state';
-  import { formatNumber, sectionLabel } from '$lib/labels.js';
+  import { formatNumber, sectionLabel, formatLabel } from '$lib/labels.js';
   import Frame from './Frame.svelte';
   import Odometer from './Odometer.svelte';
   import { lastRead, photo, range, topicUrl, two, DAY_DATE, STR } from './reel.js';
 
   /* `opener`: the front reel opens on the issue card — the latest stories,
      who we are, and every topic. Every story card after it is the same size. */
-  let { lang, reel, section = null, opener = false } = $props();
+  let { lang, reel, section = null, format = null, opener = false } = $props();
   const L = $derived(STR[lang]);
   const items = $derived(reel.items);
   const stories = $derived(items.filter((i) => i.type === 'story'));
-  const titled = $derived(!!section);
-  const opens = $derived(!!opener && !section);
+  const titled = $derived(!!(section || format));
+  const opens = $derived(!!opener && !titled);
+  const heading = $derived(format ? formatLabel(format, lang) : section && sectionLabel(section, lang));
 
   const DAY_MS = 86400000;
   const weekStart = (d) =>
     new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - ((d.getUTCDay() + 6) % 7)));
   const weekEnd = (d) => new Date(weekStart(d).getTime() + 6 * DAY_MS);
 
-  /* The issue: the five newest stories (three on a phone, which leaves the
+  /* The issue: the five newest stories, three on a phone (which leaves the
      card room for who we are). Titled "This week" when they all ran this
-     calendar week, "Latest" when they reach further back. */
-  const issue = $derived.by(() => {
-    const items = stories.slice(0, mobile ? 3 : 5);
+     calendar week, "Latest" when they reach further back. Both versions are
+     in the page and CSS picks one, so a phone never shows five first. */
+  function issueOf(count) {
+    const items = stories.slice(0, count);
     if (!items.length) return { items, from: null, to: null, thisWeek: false };
     const to = new Date(items[0].story.date);
     const from = new Date(items.at(-1).story.date);
     return { items, from, to, thisWeek: from >= weekStart(to) };
-  });
+  }
+  const issue = $derived(issueOf(5));
+  const issueShort = $derived(issueOf(3));
 
-  /* Poster (no-photo) cards alternate ink and stone, counted across posters
-     only, so two never sit side by side in the same tone. */
+  /* Cards without a photo alternate ink and indigo, counted across those
+     cards only, so two never sit side by side in the same tone. */
   const tones = $derived.by(() => {
     const m = new Map();
     let k = 0;
-    for (const it of stories) if (!photo(it.story)) m.set(it.story.slug, k++ % 2 ? 'stone' : 'ink');
+    for (const it of stories) if (!photo(it.story)) m.set(it.story.slug, k++ % 2 ? 'indigo' : 'ink');
     return m;
   });
   const num = (n) => formatNumber(n, lang);
@@ -232,11 +236,11 @@
           <span class="spacer"></span>
           <div class="card">
             <p class="kick">
-              {L.topic} · {L.count(num(reel.total))}
+              {format ? L.format : L.topic} · {L.count(num(reel.total))}
             </p>
-            <h1>{sectionLabel(section, lang)}</h1>
+            <h1>{heading}</h1>
             <a href="{base}/{lang}">← {L.latest}</a>
-            <span class="vlabel" aria-hidden="true">{sectionLabel(section, lang)}</span>
+            <span class="vlabel" aria-hidden="true">{heading}</span>
             <button type="button" class="spine" onclick={toStart} tabindex="-1" aria-hidden="true"></button>
           </div>
         </div>
@@ -245,13 +249,22 @@
         <div class="opener">
           <span class="spacer"></span>
           <div class="card issuecard">
+            <div class="issue-news">
               <div class="issue-head">
-                <p class="kick">{range(issue.from, issue.to, lang)}</p>
-                <p class="issue-title">{issue.thisWeek ? L.thisWeek : L.latest}</p>
+                <p class="kick">
+                  <span class="wide">{range(issue.from, issue.to, lang)}</span><span class="narrow"
+                    >{range(issueShort.from, issueShort.to, lang)}</span
+                  >
+                </p>
+                <p class="issue-title">
+                  <span class="wide">{issue.thisWeek ? L.thisWeek : L.latest}</span><span class="narrow"
+                    >{issueShort.thisWeek ? L.thisWeek : L.latest}</span
+                  >
+                </p>
               </div>
               <ol class="issue">
-                {#each issue.items as it (it.story.slug)}
-                  <li>
+                {#each issue.items as it, i (it.story.slug)}
+                  <li class:extra={i >= 3}>
                     <a href="{base}/{lang}/{it.story.slug}" draggable="false" onclick={(e) => jump(e, it.n)}>
                       <span class="issue-n">{two(it.n, lang)}</span>
                       <span class="issue-h">{it.story.title}</span>
@@ -259,7 +272,6 @@
                   </li>
                 {/each}
               </ol>
-              <p class="motto">{L.blurb}</p>
               <div class="issue-foot">
                 <p class="issue-label">{L.topics}</p>
                 <nav class="issue-topics" aria-label={L.topics}>
@@ -271,6 +283,8 @@
                   {/each}
                 </nav>
               </div>
+            </div>
+            <p class="motto">{L.blurb}</p>
           </div>
         </div>
       {/if}
@@ -287,6 +301,7 @@
             sizes="calc((88vh - 8rem) * 5 / 7)"
             named={hero === item.story.slug}
             topic={section}
+            {format}
             onpick={(slug) => (hero = slug)}
           />
         {/if}
@@ -527,9 +542,23 @@
     line-height: 1.4;
   }
 
-  /* The issue: this week's headlines as a contents list. */
+  /* The issue: this week's headlines as a contents list, five when the card
+     is tall enough and three when it isn't (a phone, a short laptop screen).
+     The card measures itself, so it's the same rule everywhere. */
   .issuecard {
-    container-type: inline-size;
+    container-type: size;
+  }
+  .narrow {
+    display: none;
+  }
+  @container (max-height: 44rem) {
+    .wide,
+    .issue li.extra {
+      display: none;
+    }
+    .narrow {
+      display: inline;
+    }
   }
   .issue-title {
     margin: 0.75rem 0 0;
@@ -542,8 +571,16 @@
   .issue-title:lang(bn) {
     line-height: 1.2;
   }
-  /* Three blocks — heading, the five, topics — with the card's spare height
-     shared evenly between them (the card is space-between). */
+  /* Two parts. The news, on orange: heading, the five and every topic, with
+     the spare height shared evenly between them. Then who we are, on the
+     newsroom's indigo, below a thin white line. */
+  .issue-news {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
   .issue {
     margin: 0;
     padding: 0;
@@ -579,14 +616,8 @@
     font: 500 calc(0.6875rem * var(--k))/1 var(--mono);
     letter-spacing: 0.06em;
   }
-  /* Every topic, one tap away, on a black strip across the foot of the card:
-     the names run as one wrapping line, never broken mid-name. */
-  .issue-foot {
-    margin: 0 -1.25rem -1.25rem;
-    padding: 0.9rem 1.25rem 1.1rem;
-    background: #111;
-    color: var(--accent);
-  }
+  /* Every topic, one tap away: the names run as one wrapping line, never
+     broken mid-name. */
   .issue-label {
     margin: 0 0 0.5rem;
     font: 500 calc(0.625rem * var(--k))/1 var(--mono);
@@ -610,20 +641,26 @@
     white-space: nowrap;
   }
   .issue-topics a {
-    color: inherit;
+    color: #111;
     text-decoration: none;
     outline: none;
   }
   .issue-topics a:hover,
   .issue-topics a:focus-visible {
-    color: var(--bg);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
   }
   .sep {
     margin: 0 0.4em;
     opacity: 0.45;
   }
   .issuecard .motto {
-    min-height: 0;
+    max-width: none;
+    margin: 1.25rem -1.25rem -1.25rem;
+    padding: 1rem 1.25rem 1.15rem;
+    border-top: 1px solid #fff;
+    background: var(--indigo);
+    color: #fff;
     font-size: 0.875rem;
   }
 
@@ -743,6 +780,28 @@
     }
     .day {
       width: 12vw;
+    }
+    /* A phone card is short: both parts close up so all of it fits. */
+    .issue-news {
+      gap: 0.9rem;
+    }
+    .issue-title {
+      margin-top: 0.5rem;
+    }
+    .issue a {
+      padding: 0.5em 0;
+    }
+    .issue-label {
+      margin-bottom: 0.35rem;
+    }
+    .issue-topics {
+      font-size: 0.875rem;
+    }
+    .issuecard .motto {
+      margin-top: 0.9rem;
+      padding: 0.7rem 1.25rem 0.8rem;
+      font-size: 0.8125rem;
+      line-height: 1.35;
     }
     /* Held flush with the screen edge (past the track's 4vw padding), showing
        only the spine. */

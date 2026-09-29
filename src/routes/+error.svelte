@@ -21,12 +21,12 @@
 <style>
   :global(body:has(.err)) {
     margin: 0;
-    background: #efeee9;
+    background: #e9ebee;
   }
   .err {
     max-width: 40rem;
     padding: 20vh 6vw;
-    color: #121211;
+    color: #111318;
     font-family: 'Instrument Sans', 'Noto Sans Bengali', system-ui, sans-serif;
   }
   .code {
@@ -50,7 +50,7 @@
       background: #0b0b0c;
     }
     .err {
-      color: #efeee9;
+      color: #eceef1;
     }
     .code {
       color: #ff6a33;

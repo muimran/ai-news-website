@@ -1,23 +1,23 @@
 ---
-title: "A model trained on Amazonian field notes, by the people who wrote them"
-dek: "Researchers in Manaus kept the data and licensed the outputs. It took four years."
-section: "AI in the Global South"
-kind: "Feature"
-author: "Sabrina Rahman"
-authorTitle: "Platforms and policy reporter"
+title: "Bangladesh is writing AI rules for a market it does not control"
+dek: "Regulators describe drafting law for systems they cannot inspect."
+section: "AI Across Bangladesh"
+kind: "Analysis"
+author: "Mahmudul Karim"
+authorTitle: "Technology policy correspondent"
 location: "Dhaka"
-tags: ["research", "data sovereignty"]
-date: 2026-09-08
-readTime: 14
-weight: 4
+tags: ["regulation", "policy"]
+date: 2026-09-09
+readTime: 8
+weight: 3
 featured: false
 secondary: false
 ---
-Researchers in Manaus kept the data and licensed the outputs. It took four years.
+Regulators describe drafting law for systems they cannot inspect.
 
 ## What we found
 
-Reporting for this feature began with a single question and a
+Reporting for this analysis began with a single question and a
 records request that took four months to answer. The documents that came back
 described a process nobody involved was willing to explain on the record — so we
 went to the people it affected instead.

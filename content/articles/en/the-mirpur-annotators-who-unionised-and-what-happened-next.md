@@ -1,19 +1,22 @@
 ---
-title: "Chip fabs are chasing cold air and cheap power to strange places"
-dek: "Northern Sweden, northern Japan, and a valley in Chile are competing for the same three customers."
-section: "Climate, Chips & Infrastructure"
+title: "The Mirpur annotators who unionised, and what happened next"
+dek: "Two years after the first contract, the work has moved and the union is following it."
+section: "AI Across Bangladesh"
 kind: "Report"
-author: "Zubair Alam"
-authorTitle: "Chips and compute reporter"
+author: "Naima Siddiqui"
+authorTitle: "Elections and labour reporter"
 location: "Dhaka"
-tags: ["chips", "energy"]
-date: 2026-09-10
-readTime: 10
-weight: 3
+tags: ["labour", "unions"]
+date: 2026-09-11
+readTime: 11
+image: "/uploads/test-photo.svg"
+imageAlt: "Placeholder — replace with the real photograph"
+imageCredit: "Test / Ground Truth"
+weight: 2
 featured: false
 secondary: false
 ---
-Northern Sweden, northern Japan, and a valley in Chile are competing for the same three customers.
+Two years after the first contract, the work has moved and the union is following it.
 
 ## What we found
 

@@ -1,6 +1,6 @@
 ---
 title: "The hidden workers teaching machines how to see"
-dek: "Annotation work moved from Nairobi to smaller cities where wages are lower and contracts shorter. The labellers describe a job that keeps getting faster."
+dek: "Annotation work moved from Dhaka to smaller cities where wages are lower and contracts shorter. The labellers describe a job that keeps getting faster."
 section: "Machines and Power"
 kind: "Investigation"
 author: "Tanvir Hasan"
@@ -13,7 +13,7 @@ weight: 1
 featured: false
 secondary: false
 ---
-Annotation work moved from Nairobi to smaller cities where wages are lower and contracts shorter. The labellers describe a job that keeps getting faster.
+Annotation work moved from Dhaka to smaller cities where wages are lower and contracts shorter. The labellers describe a job that keeps getting faster.
 
 ## What we found
 

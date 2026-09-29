@@ -2,7 +2,7 @@
    strings. The stories themselves come from data.server.js, per page. */
 
 import { base } from '$app/paths';
-import { sectionSlug, sectionLabel } from '$lib/labels.js';
+import { sectionSlug, sectionLabel, kindLabel, FORMATS } from '$lib/labels.js';
 
 /** A writer's address, from their English name: accents dropped, spaces
     and punctuation made hyphens, so it stays plain wherever it's pasted.
@@ -16,6 +16,7 @@ export const authorSlug = (name) =>
     .replace(/^-+|-+$/g, '');
 
 export const topicUrl = (key, lang) => `${base}/${lang}/topic/${sectionSlug(key)}`;
+export const formatUrl = (key, lang) => `${base}/${lang}/${FORMATS[key].slug}`;
 
 /* Free-licensed Unsplash photos standing in for the reporters' own, keyed by
    English slug (the same set the v2 mock used). A translation shows its
@@ -26,14 +27,13 @@ const PHOTOS = {
   'election-officials-are-being-sold-ai-they-did-not-ask-for': 'photo-1782998307726-f93ec14eda24',
   'who-owns-the-data-generated-by-ordinary-life': 'photo-1583429891508-015ef9cd958e',
   'what-happens-when-a-chatbot-becomes-your-co-worker': 'photo-1560264280-88b68371db39',
-  'a-union-contract-that-treats-a-model-as-a-piece-of-equipment': 'photo-1741176505800-caaa3a52631a',
   'the-rise-of-the-prompt-supervisor': 'photo-1712159018726-4564d92f3ec2',
   'the-hidden-workers-teaching-machines-how-to-see': 'photo-1629904853716-f0bc54eea481',
   'the-consent-form-nobody-could-read': 'photo-1728334445894-1e2e649cd0db',
   'every-photo-you-posted-in-2011-is-still-working': 'photo-1727334291061-fd29582ef9dc',
   'the-water-bill-a-data-centre-does-not-have-to-publish': 'photo-1506399558188-acca6f8cbf41',
   'the-next-ai-race-may-be-about-electricity-not-models': 'photo-1473341304170-971dccb5ac1e',
-  'chip-fabs-are-chasing-cold-air-and-cheap-power-to-strange-places': 'photo-1746893737268-81fe686e6a51'
+  'chip-makers-are-chasing-cheap-power-to-bangladeshs-economic-zones': 'photo-1746893737268-81fe686e6a51'
 };
 
 const unsplash = (id, w) => `https://images.unsplash.com/${id}?w=${w}&q=80&auto=format&fit=crop`;
@@ -60,7 +60,8 @@ export function photo(s) {
 export function matches(s, query) {
   const words = query.toLowerCase().split(/\s+/).filter(Boolean);
   if (!words.length) return true;
-  const hay = [s.title, s.dek, s.author, sectionLabel(s.section, s.lang), ...(s.tags || [])]
+  const kind = FORMATS[s.kind] ? kindLabel(s.kind, s.lang) : '';
+  const hay = [s.title, s.dek, s.author, sectionLabel(s.section, s.lang), kind, ...(s.tags || [])]
     .join(' ')
     .toLowerCase();
   return words.every((w) => hay.includes(w));
@@ -98,7 +99,7 @@ export const DAY_DATE = {
 export const STR = {
   en: {
     tagline: 'AI, reported from wherever it lands.',
-    blurb: 'A nonprofit newsroom reporting on AI and the technology around it across South Asia, and on the people it reaches first.',
+    blurb: 'A nonprofit newsroom reporting on AI and the technology around it in Bangladesh, and on the people it reaches first.',
     read: 'Read',
     min: 'min',
     scroll: 'Scroll',
@@ -121,13 +122,15 @@ export const STR = {
     menu: 'Menu',
     soon: 'This page is being written.',
     topic: 'Topic',
+    format: 'Format',
+    formats: 'Formats',
     close: 'Close',
     all: 'All stories',
     count: (n) => `${n} ${n === '1' ? 'story' : 'stories'}`
   },
   bn: {
     tagline: 'এআই যেখানেই পৌঁছায়, সেখান থেকেই প্রতিবেদন।',
-    blurb: 'একটি অলাভজনক সংবাদমাধ্যম, যা দক্ষিণ এশিয়াজুড়ে কৃত্রিম বুদ্ধিমত্তা ও তাকে ঘিরে থাকা প্রযুক্তি, আর সবার আগে যাঁদের কাছে তা পৌঁছায় তাঁদের নিয়ে কাজ করে।',
+    blurb: 'একটি অলাভজনক সংবাদমাধ্যম, যা বাংলাদেশে কৃত্রিম বুদ্ধিমত্তা ও তাকে ঘিরে থাকা প্রযুক্তি, আর সবার আগে যাঁদের কাছে তা পৌঁছায় তাঁদের নিয়ে কাজ করে।',
     read: 'পড়ুন',
     min: 'মিনিট',
     scroll: 'স্ক্রল করুন',
@@ -150,6 +153,8 @@ export const STR = {
     menu: 'মেনু',
     soon: 'এই পাতাটি লেখা হচ্ছে।',
     topic: 'বিষয়',
+    format: 'ধরন',
+    formats: 'ধরন',
     close: 'বন্ধ',
     all: 'সব প্রতিবেদন',
     count: (n) => `${n}টি প্রতিবেদন`

@@ -1,6 +1,6 @@
 ---
 title: "The water bill a data centre does not have to publish"
-dek: "In five of seven jurisdictions we checked, consumption figures are exempt from disclosure."
+dek: "In five of seven city corporations we checked, consumption figures are exempt from disclosure."
 section: "Climate, Chips & Infrastructure"
 kind: "Investigation"
 author: "Arif Hossain"
@@ -16,7 +16,7 @@ weight: 2
 featured: false
 secondary: false
 ---
-In five of seven jurisdictions we checked, consumption figures are exempt from disclosure.
+In five of seven city corporations we checked, consumption figures are exempt from disclosure.
 
 ## What we found
 

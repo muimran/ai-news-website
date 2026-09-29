@@ -9,7 +9,7 @@ export const SECTION_ORDER = [
   'AI & Everyday Life',
   'Work After Automation',
   'Machines and Power',
-  'AI in the Global South',
+  'AI Across Bangladesh',
   'Climate, Chips & Infrastructure'
 ];
 
@@ -18,7 +18,7 @@ const SECTION_BN = {
   'AI & Everyday Life': 'দৈনন্দিন জীবনে এআই',
   'Work After Automation': 'স্বয়ংক্রিয়তার পরে কাজ',
   'Machines and Power': 'যন্ত্র ও ক্ষমতা',
-  'AI in the Global South': 'গ্লোবাল সাউথে এআই',
+  'AI Across Bangladesh': 'সারা দেশে এআই',
   'Climate, Chips & Infrastructure': 'জলবায়ু, চিপ ও অবকাঠামো'
 };
 
@@ -29,9 +29,19 @@ const KIND_BN = {
   Analysis: 'বিশ্লেষণ',
   Explainer: 'ব্যাখ্যা',
   Feature: 'ফিচার',
-  Dispatch: 'সরেজমিন',
-  'Q&A': 'সাক্ষাৎকার'
+  Dispatch: 'সরেজমিন'
 };
+
+/* Formats a reader can browse as well as topics. A topic is what a story is
+   about, a format what kind of piece it is; the two cross, so an interview
+   about jobs is in Work After Automation and in Interviews. Only these get a
+   pill on their cards and a page of their own; the other kinds stay
+   newsroom labels. */
+export const FORMATS = {
+  Investigation: { slug: 'investigations', en: 'Investigations', bn: 'অনুসন্ধান' },
+  Interview: { slug: 'interviews', en: 'Interviews', bn: 'সাক্ষাৎকার' }
+};
+export const formatLabel = (key, lang) => FORMATS[key]?.[lang] ?? key;
 
 export const sectionLabel = (key, lang) =>
   lang === 'bn' ? SECTION_BN[key] || key : key;

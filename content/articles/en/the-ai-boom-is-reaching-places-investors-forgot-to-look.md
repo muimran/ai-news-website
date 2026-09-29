@@ -1,6 +1,6 @@
 ---
 title: "The AI boom is reaching places investors forgot to look"
-dek: "Data centre money is landing in towns that were promised fibre optics a decade ago and never got them. Six months of records requests across four countries show who is actually being paid — and who is paying."
+dek: "Data centre money is landing in towns that were promised fibre optics a decade ago and never got them. Six months of records requests across four divisions show who is actually being paid — and who is paying."
 section: "The AI Race"
 kind: "Investigation"
 author: "Nusrat Jahan Rima"
@@ -16,7 +16,7 @@ weight: 1
 featured: true
 secondary: false
 ---
-Data centre money is landing in towns that were promised fibre optics a decade ago and never got them. Six months of records requests across four countries show who is actually being paid — and who is paying.
+Data centre money is landing in towns that were promised fibre optics a decade ago and never got them. Six months of records requests across four divisions show who is actually being paid — and who is paying.
 
 ## What we found
 
