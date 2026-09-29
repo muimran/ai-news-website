@@ -10,10 +10,7 @@ export const SECTION_ORDER = [
   'Work After Automation',
   'Machines and Power',
   'AI in the Global South',
-  'The Human Dataset',
-  'Climate, Chips & Infrastructure',
-  'Culture, Media & Synthetic Reality',
-  'Open Source and the Commons'
+  'Climate, Chips & Infrastructure'
 ];
 
 const SECTION_BN = {
@@ -22,10 +19,7 @@ const SECTION_BN = {
   'Work After Automation': 'স্বয়ংক্রিয়তার পরে কাজ',
   'Machines and Power': 'যন্ত্র ও ক্ষমতা',
   'AI in the Global South': 'গ্লোবাল সাউথে এআই',
-  'The Human Dataset': 'মানুষের তথ্যভান্ডার',
-  'Climate, Chips & Infrastructure': 'জলবায়ু, চিপ ও অবকাঠামো',
-  'Culture, Media & Synthetic Reality': 'সংস্কৃতি, গণমাধ্যম ও কৃত্রিম বাস্তবতা',
-  'Open Source and the Commons': 'ওপেন সোর্স ও সর্বজনীন সম্পদ'
+  'Climate, Chips & Infrastructure': 'জলবায়ু, চিপ ও অবকাঠামো'
 };
 
 const KIND_BN = {

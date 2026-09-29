@@ -1,10 +1,9 @@
 <script>
   import { onNavigate } from '$app/navigation';
 
-  /* app.css is imported by the classic routes, not here, so /new starts
-     from a blank stylesheet.
+  /* No global stylesheet: each part of the site carries its own styles.
 
-     No theme JS. Dark mode follows the device: app.css keys off
+     No theme JS. Dark mode follows the device: each part keys off
      prefers-color-scheme, so there is nothing to store, stamp or hydrate. */
   let { children } = $props();
 

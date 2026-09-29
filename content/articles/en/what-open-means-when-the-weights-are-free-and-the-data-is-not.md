@@ -1,7 +1,7 @@
 ---
 title: "What \"open\" means when the weights are free and the data is not"
 dek: "A field guide to the licences now competing for the word."
-section: "Open Source and the Commons"
+section: "The AI Race"
 kind: "Explainer"
 author: "Ground Truth staff"
 authorTitle: "Newsroom"

@@ -1,7 +1,7 @@
 ---
 title: "নির্বাচনে ভুয়া কনটেন্ট কোথায় তৈরি হয়"
 dek: "কয়েকটি পেজ থেকে ছড়ানো ভিডিওর উৎস খুঁজতে গিয়ে আমরা একই ধরনের কাজের ধারা পেয়েছি।"
-section: "Culture, Media & Synthetic Reality"
+section: "AI & Everyday Life"
 kind: "Investigation"
 author: "নুসরাত জাহান"
 authorTitle: "অনুসন্ধান সম্পাদক"

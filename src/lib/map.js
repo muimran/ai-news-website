@@ -14,18 +14,15 @@ export const CELL = { w: 330, h: 230 };
 const COL = 400;
 const ROW = 280;
 
-/* Area centres. Rows are offset like a honeycomb, and neighbouring areas are
-   neighbouring beats. */
+/* Area centres. Two rows offset like a honeycomb, neighbouring areas are
+   neighbouring beats, spaced for up to two rings of stories each. */
 const AREAS = [
-  ['The Human Dataset', 0, 0],
-  ['AI & Everyday Life', 1650, -110],
-  ['Work After Automation', 3300, 30],
-  ['Open Source and the Commons', 830, 1260],
-  ['The AI Race', 2480, 1180],
-  ['Machines and Power', 4120, 1300],
-  ['AI in the Global South', 20, 2520],
-  ['Climate, Chips & Infrastructure', 1660, 2440],
-  ['Culture, Media & Synthetic Reality', 3300, 2560]
+  ['The AI Race', 0, 0],
+  ['AI & Everyday Life', 2300, -120],
+  ['Work After Automation', 4600, 40],
+  ['Machines and Power', 1150, 1700],
+  ['AI in the Global South', 3450, 1620],
+  ['Climate, Chips & Infrastructure', 5750, 1740]
 ];
 
 /* Axial hex cells spiralling out from the centre, clockwise from the top-left. */

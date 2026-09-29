@@ -4,13 +4,23 @@
     {
       "name": "ground-truth",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
       "port": 5177
     },
     {
       "name": "ground-truth-5178",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["vite", "dev", "--port", "5178", "--strictPort"],
+      "runtimeArgs": [
+        "vite",
+        "dev",
+        "--port",
+        "5178",
+        "--strictPort",
+        "--host"
+      ],
       "port": 5178
     }
   ]

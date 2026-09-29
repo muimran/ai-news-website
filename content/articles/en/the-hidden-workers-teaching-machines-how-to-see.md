@@ -1,7 +1,7 @@
 ---
 title: "The hidden workers teaching machines how to see"
 dek: "Annotation work moved from Nairobi to smaller cities where wages are lower and contracts shorter. The labellers describe a job that keeps getting faster."
-section: "The Human Dataset"
+section: "Machines and Power"
 kind: "Investigation"
 author: "Tanvir Hasan"
 authorTitle: "Senior reporter"

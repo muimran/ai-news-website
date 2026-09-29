@@ -1,7 +1,7 @@
 ---
 title: "A public compute cluster, run like a library"
 dek: "Researchers in Ljubljana built shared infrastructure with a lending model. It is fully booked."
-section: "Open Source and the Commons"
+section: "The AI Race"
 kind: "Feature"
 author: "Petra Kovač"
 authorTitle: "Europe contributor"

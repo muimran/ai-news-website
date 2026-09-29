@@ -1,7 +1,7 @@
 ---
 title: "The maintainer burnout behind half the AI stack"
 dek: "Four people maintain libraries that almost every model depends on. Three want out."
-section: "Open Source and the Commons"
+section: "The AI Race"
 kind: "Investigation"
 author: "Imran Chowdhury"
 authorTitle: "Open source reporter"

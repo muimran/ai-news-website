@@ -1,7 +1,7 @@
 ---
 title: "The commons is not a licence. It is a maintenance budget."
 dek: "Why the money keeps arriving for models and never for the plumbing."
-section: "Open Source and the Commons"
+section: "The AI Race"
 kind: "Analysis"
 author: "Imran Chowdhury"
 authorTitle: "Open source reporter"

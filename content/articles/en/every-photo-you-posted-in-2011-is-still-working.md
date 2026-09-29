@@ -1,7 +1,7 @@
 ---
 title: "Every photo you posted in 2011 is still working"
 dek: "Researchers traced a single archive through eleven downstream training sets."
-section: "The Human Dataset"
+section: "Machines and Power"
 kind: "Investigation"
 author: "Nusrat Jahan Rima"
 authorTitle: "Investigations editor"

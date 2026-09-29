@@ -1,7 +1,7 @@
 ---
 title: "The film industry that decided to label everything"
 dek: "Nigeria's producers agreed on disclosure rules before any regulator asked."
-section: "Culture, Media & Synthetic Reality"
+section: "AI & Everyday Life"
 kind: "Report"
 author: "Tanvir Hasan"
 authorTitle: "Senior reporter"

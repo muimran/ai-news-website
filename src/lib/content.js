@@ -19,7 +19,7 @@ import { SECTION_ORDER } from './labels.js';
 
 /* Labels live in labels.js so pages can use them without importing every
    article; re-exported here so existing imports keep working. */
-export { SECTION_ORDER, sectionLabel, kindLabel, sectionSlug, formatNumber } from './labels.js';
+export { sectionLabel, kindLabel, sectionSlug, formatNumber } from './labels.js';
 
 const modules = import.meta.glob('/content/articles/*/*.md', {
   query: '?raw',
@@ -116,24 +116,8 @@ export const inLang = (lang) => stories.filter((s) => s.lang === lang);
 export const sections = (lang) =>
   SECTION_ORDER.filter((name) => inLang(lang).some((s) => s.section === name));
 
-export const allTags = (lang) =>
-  [...new Set(inLang(lang).flatMap((s) => s.tags))].sort();
-
 export const getStory = (slug, lang) =>
   stories.find((s) => s.slug === slug && s.lang === lang) || null;
-
-/** Canonical URL — carries the language, so a shared link always opens in the
-    language it was written in, regardless of the reader's stored preference. */
-export const storyUrl = (s) =>
-  base +
-  (s.route || (s.lang === DEFAULT_LANG ? `/story/${s.slug}` : `/${s.lang}/story/${s.slug}`));
-
-export const homeUrl = (lang) => base + (lang === DEFAULT_LANG ? '/' : `/${lang}`);
-export const topicUrl = (tag, lang) =>
-  base +
-  (lang === DEFAULT_LANG
-    ? `/topic/${encodeURIComponent(tag)}`
-    : `/${lang}/topic/${encodeURIComponent(tag)}`);
 
 /** The same story in the other language, or null. Works in both directions:
     a Bangla story names its English original, and an English story is found
@@ -146,81 +130,3 @@ export function sibling(story, otherLang) {
   }
   return stories.find((s) => s.lang === otherLang && s.translationOf === story.slug) || null;
 }
-
-export const featured = (lang) => inLang(lang).find((s) => s.featured) || inLang(lang)[0] || null;
-
-export const secondary = (lang) => {
-  const lead = featured(lang);
-  const pool = inLang(lang).filter((s) => s.slug !== lead?.slug);
-  return pool.find((s) => s.secondary) || pool[0] || null;
-};
-
-export const justIn = (lang) => {
-  const lead = featured(lang);
-  const sec = secondary(lang);
-  return inLang(lang)
-    .filter((s) => s.slug !== lead?.slug && s.slug !== sec?.slug)
-    .slice(0, 7);
-};
-
-export const bySection = (name, lang) =>
-  inLang(lang)
-    .filter((s) => s.section === name)
-    .sort((a, b) => a.weight - b.weight);
-
-/** Section list with that language's hero picks removed, so a front page
-    never runs the same story twice. */
-export const sectionFeed = (name, lang) => {
-  const lead = featured(lang);
-  const sec = secondary(lang);
-  return bySection(name, lang).filter((s) => s.slug !== lead?.slug && s.slug !== sec?.slug);
-};
-
-export const byTag = (tag, lang) =>
-  inLang(lang).filter((s) => s.tags.some((t) => t.toLowerCase() === String(tag).toLowerCase()));
-
-/* ---- search, scoped to one desk ---- */
-export function search(query, { tags = [], lang = DEFAULT_LANG } = {}) {
-  const q = query.trim().toLowerCase();
-  let out = inLang(lang);
-  if (tags.length) out = out.filter((s) => tags.every((t) => s.tags.includes(t)));
-  if (q) {
-    out = out.filter((s) =>
-      [s.title, s.dek, s.author, s.section, ...s.tags].join(' ').toLowerCase().includes(q)
-    );
-  }
-  return out;
-}
-
-/* ---- Signal board ---- */
-const DAY = 86400000;
-const now = Date.now();
-
-export const RADAR_FILTERS = [
-  { id: 'today', en: 'Today', bn: 'আজ', test: (s) => now - s.date.getTime() < DAY * 1.5 },
-  { id: 'week', en: 'This week', bn: 'এ সপ্তাহে', test: (s) => now - s.date.getTime() < DAY * 7 },
-  { id: 'investigations', en: 'Investigations', bn: 'অনুসন্ধান', test: (s) => s.kind === 'Investigation' },
-  {
-    id: 'explainers',
-    en: 'Explainers',
-    bn: 'ব্যাখ্যা',
-    test: (s) => s.kind === 'Explainer' || s.kind === 'Analysis'
-  },
-  /* This is how video stays findable without needing a section of its own:
-     a format filter over every beat, rather than a shelf off to one side. */
-  { id: 'watch', en: 'Watch', bn: 'দেখুন', test: (s) => !!s.video }
-];
-
-export const radar = (filterId, lang) => {
-  const f = RADAR_FILTERS.find((x) => x.id === filterId);
-  const pool = inLang(lang);
-  return f ? pool.filter(f.test) : pool;
-};
-
-/** Sections the front page actually renders: those with at least one story
-    left after the hero picks are pulled out. The footer and the homepage must
-    both read this, or the footer links to anchors that were never rendered —
-    which is exactly what happens on the Bangla desk, where a section's only
-    story is often the front-page lead. */
-export const liveSections = (lang) =>
-  sections(lang).filter((name) => sectionFeed(name, lang).length > 0);

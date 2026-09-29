@@ -1,7 +1,7 @@
 ---
 title: "The archive that refuses to be scraped"
 dek: "A Lisbon photo collection built a licence that machines cannot quietly ignore."
-section: "Culture, Media & Synthetic Reality"
+section: "AI & Everyday Life"
 kind: "Dispatch"
 author: "Ana Ferreira"
 authorTitle: "Culture contributor"

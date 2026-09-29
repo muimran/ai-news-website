@@ -1,7 +1,7 @@
 ---
 title: "Synthetic anchors are reading the news in twelve countries"
 dek: "Most audiences can tell. Broadcasters are running them anyway, and explaining why."
-section: "Culture, Media & Synthetic Reality"
+section: "AI & Everyday Life"
 kind: "Feature"
 author: "Yusuf El-Amin"
 authorTitle: "Gulf contributor"

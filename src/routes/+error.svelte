@@ -1,66 +1,59 @@
 <script>
-  /* SvelteKit loads the root error page on every route, so a plain import
-     would push the classic stylesheet onto /new too. Linked only while shown. */
-  import appCss from '../app.css?url';
+  /* Sits above the edition layout, so it carries its own colours and reads
+     the language off the path. */
   import { page } from '$app/state';
-  import SignalBar from '$lib/components/SignalBar.svelte';
-  import { t } from '$lib/i18n.js';
   import { base } from '$app/paths';
-  /* Not homeUrl from content.js: SvelteKit fetches this page's code on every
-     visit, and content.js carries every article with it. */
-  const homeUrl = (l) => base + (l === 'bn' ? '/bn' : '/');
 
-  /* The error page sits above the language segment, so it reads the language
-     off the path rather than from layout data. */
-  const lang = $derived(page.url.pathname.split('/')[1] === 'bn' ? 'bn' : 'en');
-  const L = $derived(t(lang));
+  const bn = $derived(page.url.pathname.split('/').includes('bn'));
+  const lang = $derived(bn ? 'bn' : 'en');
 </script>
 
 <svelte:head>
   <title>{page.status} — Ground Truth</title>
-  <link rel="stylesheet" href={appCss} />
 </svelte:head>
 
-<section class="err shell">
-  <SignalBar seed="error-{page.status}" height={10} />
-  <p class="code label">{page.status}</p>
-  <h1>{page.status === 404 ? L.err404 : L.errOther}</h1>
-  <p class="body">{L.errBody}</p>
-  <a class="back label" href={homeUrl(lang)}>{L.errBack}</a>
-</section>
+<main class="err" {lang}>
+  <p class="code">{page.status}</p>
+  <h1>{page.status === 404 ? (bn ? 'এই পাতাটি পাওয়া যায়নি।' : 'This page isn’t here.') : bn ? 'কিছু একটা ভুল হয়েছে।' : 'Something went wrong.'}</h1>
+  <a href="{base}/{lang}">← Ground Truth</a>
+</main>
 
 <style>
+  :global(body:has(.err)) {
+    margin: 0;
+    background: #efeee9;
+  }
   .err {
-    padding-block: clamp(3rem, 8vw, 7rem) var(--stack-lg);
-    max-width: 52rem;
+    max-width: 40rem;
+    padding: 20vh 6vw;
+    color: #121211;
+    font-family: 'Instrument Sans', 'Noto Sans Bengali', system-ui, sans-serif;
   }
   .code {
-    color: var(--ember);
-    margin-top: 2rem;
+    margin: 0 0 1rem;
+    color: #b8340a;
+    font: 500 0.75rem/1 ui-monospace, monospace;
+    letter-spacing: 0.08em;
   }
   h1 {
-    font-size: var(--t-mega);
-    margin-top: 1rem;
+    margin: 0 0 2rem;
+    font-size: clamp(2rem, 1rem + 4vw, 4rem);
+    font-weight: 620;
+    line-height: 1;
   }
-  .body {
-    font-family: var(--font-serif);
-    font-size: var(--t-md);
-    color: var(--slate);
-    margin-top: 1.25rem;
-    max-width: 46ch;
-    line-height: 1.5;
+  a {
+    color: inherit;
+    font: 500 0.8125rem/1 ui-monospace, monospace;
   }
-  .back {
-    display: inline-flex;
-    align-items: center;
-    min-height: var(--tap);
-    margin-top: 2rem;
-    background: var(--ink);
-    color: var(--paper);
-    padding: 0 1.35rem;
-    transition: background 0.2s;
-  }
-  .back:hover {
-    background: var(--electric);
+  @media (prefers-color-scheme: dark) {
+    :global(body:has(.err)) {
+      background: #0b0b0c;
+    }
+    .err {
+      color: #efeee9;
+    }
+    .code {
+      color: #ff6a33;
+    }
   }
 </style>

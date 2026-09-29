@@ -9,7 +9,7 @@
    Runs at build time for every prerendered page. */
 
 export async function handle({ event, resolve }) {
-  /* Any `bn` segment: /bn/... on the classic site, /new/bn/... on the new one. */
+  /* Any `bn` segment: /bn/..., and /map/bn/... for the map. */
   const lang = event.url.pathname.split('/').includes('bn') ? 'bn' : 'en';
 
   return resolve(event, {

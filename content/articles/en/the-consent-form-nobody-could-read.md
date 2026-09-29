@@ -1,7 +1,7 @@
 ---
 title: "The consent form nobody could read"
 dek: "A clinic in Amman collected scans for research. The terms were four screens of English."
-section: "The Human Dataset"
+section: "Machines and Power"
 kind: "Report"
 author: "Yusuf El-Amin"
 authorTitle: "Gulf contributor"

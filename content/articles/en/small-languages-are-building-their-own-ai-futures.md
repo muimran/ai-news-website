@@ -1,7 +1,7 @@
 ---
 title: "Small languages are building their own AI futures"
 dek: "Speakers of languages the big models handle badly have stopped waiting to be included. What they are building instead looks nothing like a frontier lab."
-section: "Open Source and the Commons"
+section: "The AI Race"
 kind: "Feature"
 author: "Imran Chowdhury"
 authorTitle: "Open source reporter"

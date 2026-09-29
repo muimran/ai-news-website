@@ -1,7 +1,7 @@
 ---
 title: "ওপেন সোর্সে বাংলা তথ্যের অভাব"
 dek: "যে তথ্যভান্ডারগুলো দিয়ে মডেল তৈরি হয়, সেখানে বাংলার অংশ এক শতাংশেরও কম।"
-section: "Open Source and the Commons"
+section: "The AI Race"
 kind: "Explainer"
 author: "গ্রাউন্ড ট্রুথ ডেস্ক"
 authorTitle: "সম্পাদকীয় বিভাগ"

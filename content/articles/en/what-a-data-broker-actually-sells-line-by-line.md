@@ -1,7 +1,7 @@
 ---
 title: "What a data broker actually sells, line by line"
 dek: "We bought a sample. Here is what was in it."
-section: "The Human Dataset"
+section: "Machines and Power"
 kind: "Explainer"
 author: "Ground Truth staff"
 authorTitle: "Newsroom"

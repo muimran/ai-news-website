@@ -75,10 +75,7 @@ collections:
     - Work After Automation
     - Machines and Power
     - AI in the Global South
-    - The Human Dataset
     - Climate, Chips & Infrastructure
-    - Culture, Media & Synthetic Reality
-    - Open Source and the Commons
     hint: Section keys stay in English in the file even on the Bangla desk — the site shows the Bangla
       label. Sharing keys is what lets a topic page span both editions.
   - name: image
