@@ -31,7 +31,7 @@
   }
   .code {
     margin: 0 0 1rem;
-    color: #b8340a;
+    color: #a8471a;
     font: 500 0.75rem/1 ui-monospace, monospace;
     letter-spacing: 0.08em;
   }
@@ -53,7 +53,7 @@
       color: #eceef1;
     }
     .code {
-      color: #ff6a33;
+      color: #f08a4f;
     }
   }
 </style>

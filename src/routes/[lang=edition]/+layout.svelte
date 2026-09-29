@@ -211,11 +211,12 @@
     --ink: #111318;
     --mute: #636873;
     --line: #cdd1d7;
-    /* One accent, one meaning: a way in. Full strength for surfaces (the
-       opening and topic cards) and large type; --accent-text, a deeper
-       shade that passes 4.5:1 on paper, for anything small set on paper. */
-    --accent: #e8430d;
-    --accent-text: #b8340a;
+    /* One accent, one meaning: a way in. A soft apricot orange, full
+       strength for surfaces (the opening and topic cards, where dark text on
+       it is 6.3:1) and marks; --accent-text, a burnt shade that passes
+       4.5:1 on paper (4.9:1), for anything small set on paper. */
+    --accent: #e07a3f;
+    --accent-text: #a8471a;
     /* the second surface for cards without a photo (the first is ink):
        indigo, the cool opposite of the orange, with white text (5.9:1) */
     --indigo: #5f5e9c;
@@ -231,8 +232,8 @@
       --ink: #eceef1;
       --mute: #8b9099;
       --line: #2a2a2d;
-      --accent: #ff6a33;
-      --accent-text: #ff6a33; /* already 6.9:1 on the dark page */
+      --accent: #f08a4f;
+      --accent-text: #f08a4f; /* already 7.9:1 on the dark page */
       --indigo: #4b4a8c;
       --indigo-text: #ffffff;
       --indigo-ink: #a9a8e0; /* lighter for type on the dark page: 8.7:1 */
