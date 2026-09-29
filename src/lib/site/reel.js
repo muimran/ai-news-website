@@ -4,6 +4,17 @@
 import { base } from '$app/paths';
 import { sectionSlug, sectionLabel } from '$lib/labels.js';
 
+/** A writer's address, from their English name: accents dropped, spaces
+    and punctuation made hyphens, so it stays plain wherever it's pasted.
+    A name with no Latin letters gives an empty slug. */
+export const authorSlug = (name) =>
+  name
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
 export const topicUrl = (key, lang) => `${base}/${lang}/topic/${sectionSlug(key)}`;
 
 /* Free-licensed Unsplash photos standing in for the reporters' own, keyed by
@@ -93,6 +104,10 @@ export const STR = {
     scroll: 'Scroll',
     reel: 'The reel',
     thisWeek: 'This week',
+    reporter: 'Reporter',
+    reporters: 'Reporters',
+    people: (n) => `${n} ${n === '1' ? 'reporter' : 'reporters'}`,
+    searchBy: 'Search these stories',
     latest: 'Latest',
     search: 'Search',
     searchAll: 'Search every story',
@@ -118,6 +133,10 @@ export const STR = {
     scroll: 'স্ক্রল করুন',
     reel: 'রিল',
     thisWeek: 'এই সপ্তাহে',
+    reporter: 'প্রতিবেদক',
+    reporters: 'প্রতিবেদকেরা',
+    people: (n) => `${n} জন প্রতিবেদক`,
+    searchBy: 'এই প্রতিবেদনগুলোতে খুঁজুন',
     latest: 'সর্বশেষ',
     search: 'খুঁজুন',
     searchAll: 'সব প্রতিবেদনে খুঁজুন',

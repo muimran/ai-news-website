@@ -5,6 +5,7 @@ import { marked } from 'marked';
 import { base } from '$app/paths';
 import { LANGS, inLang, sibling, sections } from '$lib/content.js';
 import { photo, topicUrl } from '$lib/site/reel.js';
+import { writerFor, writerUrl } from './authors.js';
 
 /* Reels are for what's new: the front reel runs the latest 24, a topic reel
    its latest 12. Everything older is in the topic's index. */
@@ -69,6 +70,29 @@ export function reelFor(lang, section = null) {
 /** Every story in a topic (or everything), newest first, for an index page. */
 export const listFor = (lang, section = null) => order(lang, section).map(row);
 
+/* Every story from both desks, newest first — a writer's page spans both. */
+const everything = () => [...order('en'), ...order('bn')].sort(newestFirst);
+
+/** Everyone who writes for Ground Truth, most stories first, with their
+    count across both desks. */
+export function writers() {
+  const bySlug = new Map();
+  for (const s of everything()) {
+    const w = writerFor(s.author);
+    if (!w) continue;
+    const e = bySlug.get(w.slug) ?? { ...w, count: 0 };
+    e.count++;
+    bySlug.set(w.slug, e);
+  }
+  return [...bySlug.values()].sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+}
+
+export const writerBySlug = (slug) => writers().find((w) => w.slug === slug) || null;
+export const storiesByWriter = (w) =>
+  everything()
+    .filter((s) => writerFor(s.author)?.slug === w.slug)
+    .map(row);
+
 /** The search list: headlines and summaries only, fetched when search opens. */
 export const searchIndex = (lang) => order(lang).map(row);
 
@@ -107,7 +131,8 @@ export function storyPage(s) {
     n: i + 1,
     next,
     alt,
-    translated: LANGS.some((l) => l !== s.lang && !!sibling(s, l))
+    translated: LANGS.some((l) => l !== s.lang && !!sibling(s, l)),
+    writer: writerFor(s.author) ? writerUrl(writerFor(s.author)) : null
   };
 }
 

@@ -12,7 +12,7 @@
   const date = $derived(new Date(s.date));
 </script>
 
-<a class="row" href="{base}/{s.lang}/{s.slug}">
+<a class="row" href="{base}/{s.lang}/{s.slug}" lang={s.lang}>
   <span class="date">{SHORT_DATE[lang].format(date)}</span>
   <span class="main">
     {#if showTopic}<span class="topic">{sectionLabel(s.section, lang)}</span>{/if}

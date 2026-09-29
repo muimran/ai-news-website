@@ -5,7 +5,7 @@
   import Row from './Row.svelte';
   import { matches, MONTH, STR } from './reel.js';
 
-  let { lang, stories, title, kicker, back, showTopic = false, placeholder = null } = $props();
+  let { lang, stories, title, kicker, back, showTopic = false, placeholder = null, subtitle = null, intro = null } = $props();
   const L = $derived(STR[lang]);
   const num = (n) => formatNumber(n, lang);
 
@@ -28,6 +28,8 @@
   <header class="head">
     <p class="kick">{kicker} · {L.count(num(stories.length))}</p>
     <h1>{title}</h1>
+    {#if subtitle}<p class="subtitle" lang="bn">{subtitle}</p>{/if}
+    {#if intro}<div class="intro">{@html intro}</div>{/if}
     <div class="tools">
       <a class="back" href={back.href}>← {back.label}</a>
       <label class="filter">
@@ -85,6 +87,19 @@
   h1:lang(bn) {
     line-height: 1.2;
     letter-spacing: 0;
+  }
+  .subtitle {
+    margin: -1.25rem 0 2rem;
+    color: var(--mute);
+    font-family: 'Noto Sans Bengali', sans-serif;
+    font-size: clamp(1.1rem, 0.9rem + 0.8vw, 1.6rem);
+    font-weight: 500;
+  }
+  .intro {
+    max-width: 36rem;
+    margin: -0.5rem 0 2rem;
+    font-size: 1.05rem;
+    line-height: 1.6;
   }
   .tools {
     display: flex;

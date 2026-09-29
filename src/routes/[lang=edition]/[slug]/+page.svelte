@@ -53,7 +53,7 @@
       {#if s.dek}<p class="dek">{s.dek}</p>{/if}
       <p class="byline">
         <span>{kindLabel(s.kind, lang)}</span>
-        <span>{s.author}{s.authorTitle ? `, ${s.authorTitle}` : ''}</span>
+        <span>{#if data.writer}<a class="writer" href={data.writer}>{s.author}</a>{:else}{s.author}{/if}{s.authorTitle ? `, ${s.authorTitle}` : ''}</span>
         {#if s.location}<span>{s.location}</span>{/if}
       </p>
       <div class="body">{@html data.html}</div>
@@ -180,6 +180,12 @@
     font-weight: 500;
     line-height: 1.35;
     letter-spacing: -0.01em;
+  }
+  .writer {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-underline-offset: 0.2em;
   }
   .byline {
     display: flex;

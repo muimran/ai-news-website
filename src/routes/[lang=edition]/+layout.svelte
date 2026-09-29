@@ -173,6 +173,7 @@
       <footer class="house" style="--i:{data.topics.length + 1}">
         <p>{L.blurb}</p>
         <nav aria-label="Ground Truth">
+          <a href="{base}/en/authors" hreflang="en">{L.reporters}</a>
           {#each data.pages as p (p.slug)}<a href={p.href}>{p.title}</a>{/each}
         </nav>
       </footer>

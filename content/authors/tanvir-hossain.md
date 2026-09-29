@@ -1,0 +1,7 @@
+---
+# Draft: English spelling and role written from the Bangla byline; please confirm.
+name: "Tanvir Hossain"
+role: "Technology reporter"
+name_bn: "তানভীর হোসেন"
+role_bn: "প্রযুক্তি প্রতিবেদক"
+---
