@@ -1,8 +1,14 @@
 <script>
+  /* SvelteKit loads the root error page on every route, so a plain import
+     would push the classic stylesheet onto /new too. Linked only while shown. */
+  import appCss from '../app.css?url';
   import { page } from '$app/state';
   import SignalBar from '$lib/components/SignalBar.svelte';
   import { t } from '$lib/i18n.js';
-  import { homeUrl } from '$lib/content.js';
+  import { base } from '$app/paths';
+  /* Not homeUrl from content.js: SvelteKit fetches this page's code on every
+     visit, and content.js carries every article with it. */
+  const homeUrl = (l) => base + (l === 'bn' ? '/bn' : '/');
 
   /* The error page sits above the language segment, so it reads the language
      off the path rather than from layout data. */
@@ -10,7 +16,10 @@
   const L = $derived(t(lang));
 </script>
 
-<svelte:head><title>{page.status} — Ground Truth</title></svelte:head>
+<svelte:head>
+  <title>{page.status} — Ground Truth</title>
+  <link rel="stylesheet" href={appCss} />
+</svelte:head>
 
 <section class="err shell">
   <SignalBar seed="error-{page.status}" height={10} />

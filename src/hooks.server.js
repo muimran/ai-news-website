@@ -9,7 +9,8 @@
    Runs at build time for every prerendered page. */
 
 export async function handle({ event, resolve }) {
-  const lang = event.url.pathname.replace(/^\//, '').split('/')[0] === 'bn' ? 'bn' : 'en';
+  /* Any `bn` segment: /bn/... on the classic site, /new/bn/... on the new one. */
+  const lang = event.url.pathname.split('/').includes('bn') ? 'bn' : 'en';
 
   return resolve(event, {
     transformPageChunk: ({ html }) => html.replace('%gt.lang%', lang)

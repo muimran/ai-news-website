@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 5177
+    },
+    {
+      "name": "ground-truth-5178",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["vite", "dev", "--port", "5178", "--strictPort"],
+      "port": 5178
     }
   ]
 }

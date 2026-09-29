@@ -15,6 +15,11 @@
    ============================================================ */
 
 import { base } from '$app/paths';
+import { SECTION_ORDER } from './labels.js';
+
+/* Labels live in labels.js so pages can use them without importing every
+   article; re-exported here so existing imports keep working. */
+export { SECTION_ORDER, sectionLabel, kindLabel, sectionSlug, formatNumber } from './labels.js';
 
 const modules = import.meta.glob('/content/articles/*/*.md', {
   query: '?raw',
@@ -50,9 +55,6 @@ const FMT = {
   en: new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
   bn: new Intl.DateTimeFormat('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' })
 };
-
-export const formatNumber = (n, lang) =>
-  new Intl.NumberFormat(lang === 'bn' ? 'bn-BD' : 'en-GB').format(n);
 
 function toStory(path, raw) {
   const { data, body } = parseFrontmatter(raw);
@@ -107,51 +109,6 @@ function toStory(path, raw) {
 export const stories = Object.entries(modules)
   .map(([path, raw]) => toStory(path, raw))
   .sort((a, b) => b.date - a.date);
-
-/* ---- taxonomy: one shared key set, localized labels ----
-   Sharing the keys keeps tag and section pages working across both desks;
-   only the display string changes. */
-export const SECTION_ORDER = [
-  'The AI Race',
-  'AI & Everyday Life',
-  'Work After Automation',
-  'Machines and Power',
-  'AI in the Global South',
-  'The Human Dataset',
-  'Climate, Chips & Infrastructure',
-  'Culture, Media & Synthetic Reality',
-  'Open Source and the Commons'
-];
-
-const SECTION_BN = {
-  'The AI Race': 'এআই প্রতিযোগিতা',
-  'AI & Everyday Life': 'দৈনন্দিন জীবনে এআই',
-  'Work After Automation': 'স্বয়ংক্রিয়তার পরে কাজ',
-  'Machines and Power': 'যন্ত্র ও ক্ষমতা',
-  'AI in the Global South': 'গ্লোবাল সাউথে এআই',
-  'The Human Dataset': 'মানুষের তথ্যভান্ডার',
-  'Climate, Chips & Infrastructure': 'জলবায়ু, চিপ ও অবকাঠামো',
-  'Culture, Media & Synthetic Reality': 'সংস্কৃতি, গণমাধ্যম ও কৃত্রিম বাস্তবতা',
-  'Open Source and the Commons': 'ওপেন সোর্স ও সর্বজনীন সম্পদ'
-};
-
-const KIND_BN = {
-  Interview: 'সাক্ষাৎকার',
-  Investigation: 'অনুসন্ধান',
-  Report: 'প্রতিবেদন',
-  Analysis: 'বিশ্লেষণ',
-  Explainer: 'ব্যাখ্যা',
-  Feature: 'ফিচার',
-  Dispatch: 'সরেজমিন',
-  'Q&A': 'সাক্ষাৎকার'
-};
-
-export const sectionLabel = (key, lang) =>
-  lang === 'bn' ? SECTION_BN[key] || key : key;
-export const kindLabel = (key, lang) => (lang === 'bn' ? KIND_BN[key] || key : key);
-
-export const sectionSlug = (key) =>
-  key.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 /* ---- language-scoped selectors ---- */
 export const inLang = (lang) => stories.filter((s) => s.lang === lang);
