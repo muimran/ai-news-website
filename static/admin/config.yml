@@ -128,10 +128,10 @@ collections:
     default: 5
     hint: 1 is the section lead. Lower numbers run higher.
   - name: featured
-    label: Front-page lead
+    label: Lead story
     widget: boolean
     default: false
-    hint: One per edition. Each language picks its own lead independently.
+    hint: Puts this story at the top of its topic (and of Interviews or Investigations), and first on the front page. Use it for the one story that matters most right now.
   - name: secondary
     label: Front-page secondary
     widget: boolean
@@ -270,10 +270,10 @@ collections:
     default: 5
     hint: 1 is the section lead. Lower numbers run higher.
   - name: featured
-    label: প্রচ্ছদের প্রধান
+    label: প্রধান প্রতিবেদন
     widget: boolean
     default: false
-    hint: One per edition. Each language picks its own lead independently.
+    hint: প্রতিবেদনটি তার বিষয়ের (এবং সাক্ষাৎকার বা অনুসন্ধানের) শীর্ষে আর প্রথম পাতায় সবার আগে দেখায়। এই মুহূর্তে সবচেয়ে গুরুত্বপূর্ণ একটি প্রতিবেদনের জন্যই ব্যবহার করুন।
   - name: secondary
     label: প্রচ্ছদের দ্বিতীয়
     widget: boolean

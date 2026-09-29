@@ -8,32 +8,46 @@
   import { formatNumber, sectionLabel, formatLabel } from '$lib/labels.js';
   import Frame from './Frame.svelte';
   import Odometer from './Odometer.svelte';
-  import { lastRead, photo, range, topicUrl, two, DAY_DATE, STR } from './reel.js';
+  import { lastRead, photo, range, topicUrl, two, DAY_DATE, SHORT_DATE, STR } from './reel.js';
 
   /* `opener`: the front reel opens on the issue card — the latest stories,
      who we are, and every topic. Every story card after it is the same size. */
   let { lang, reel, section = null, format = null, opener = false } = $props();
   const L = $derived(STR[lang]);
   const items = $derived(reel.items);
-  const stories = $derived(items.filter((i) => i.type === 'story'));
+  // every story in order, a pair's two included
+  const stories = $derived(items.flatMap((i) => (i.type === 'pair' ? [i.a, i.b].filter(Boolean) : [i])));
+  /* A section's last pair can be one story short; the doorway then takes
+     the empty half instead of a slot of its own. */
+  const doorInPair = $derived(items.at(-1)?.type === 'pair' && !items.at(-1).b);
   const titled = $derived(!!(section || format));
   const opens = $derived(!!opener && !titled);
   const heading = $derived(format ? formatLabel(format, lang) : section && sectionLabel(section, lang));
+  /* The title card's name, as big as its longest word allows across the card
+     (in % of the card's width). Letters are counted as a reader sees them, so
+     a Bangla vowel sign doesn't count as one of its own; measured in these
+     faces a letter runs up to 0.49em wide in English and 0.85em in Bangla,
+     so each allowance leaves a little room. */
+  const fit = $derived.by(() => {
+    if (!heading) return 0;
+    const letters = new Intl.Segmenter(lang, { granularity: 'grapheme' });
+    const longest = Math.max(...heading.split(/\s+/).map((w) => [...letters.segment(w)].length));
+    return Math.min(24, 100 / (longest * (lang === 'bn' ? 0.88 : 0.5)));
+  });
 
-  const DAY_MS = 86400000;
   const weekStart = (d) =>
     new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - ((d.getUTCDay() + 6) % 7)));
-  const weekEnd = (d) => new Date(weekStart(d).getTime() + 6 * DAY_MS);
 
-  /* The issue: the five newest stories, three on a phone (which leaves the
-     card room for who we are). Titled "This week" when they all ran this
+  /* The issue: the five newest stories whatever their section (the reel
+     after it is one per section, so this is where what's new lives), three
+     when the card is short. Titled "This week" when they all ran this
      calendar week, "Latest" when they reach further back. Both versions are
      in the page and CSS picks one, so a phone never shows five first. */
   function issueOf(count) {
-    const items = stories.slice(0, count);
+    const items = (reel.latest ?? []).slice(0, count);
     if (!items.length) return { items, from: null, to: null, thisWeek: false };
-    const to = new Date(items[0].story.date);
-    const from = new Date(items.at(-1).story.date);
+    const to = new Date(items[0].date);
+    const from = new Date(items.at(-1).date);
     return { items, from, to, thisWeek: from >= weekStart(to) };
   }
   const issue = $derived(issueOf(5));
@@ -50,14 +64,12 @@
   const num = (n) => formatNumber(n, lang);
 
   /* The reel's length as CSS, so the server can size the scroll distance
-     before any script runs; measure() then corrects it to the pixel. Frames
-     are --fw wide, day markers 5vw. */
+     before any script runs; measure() then corrects it to the pixel. Every
+     slot (a story, a pair, the title card or opener, the doorway) is --fw. */
   const reelLength = $derived.by(() => {
-    const days = items.filter((i) => i.type === 'day').length;
-    const extra = (titled ? 1 : 0) + (opens ? 1 : 0); // title card or opener
-    const frames = stories.length + extra + 1; // + doorway
-    const gaps = items.length + extra;
-    return `6vw + ${days} * 5vw + ${gaps} * 1.2vw + ${frames} * var(--fw)`;
+    const slots = items.length + (opens ? 1 : 0) + (doorInPair ? 0 : 1);
+    const pieces = slots + (titled ? 1 : 0); // the title card is half a slot
+    return `6vw + ${pieces - 1} * 1.2vw + ${slots} * var(--fw)${titled ? ' + var(--tw)' : ''}`;
   });
 
   /* The frame whose photo should fly back into place, if we came from a story. */
@@ -136,7 +148,10 @@
     const right = cardL + cardW - x; // where its right edge would be by now
     const stickAt = (mobile ? 0 : cardL) + spineW; // on a phone it sits flush with the edge
     if (!mobile) card.style.translate = `${Math.max(0, stickAt - right)}px 0`;
-    const p = ease((stickAt + 260 - right) / 260);
+    // the turn runs over the last 260px before it's held, or the whole card
+    // if that's narrower, so at rest (x = 0) it hasn't started
+    const run = Math.min(260, cardW - spineW);
+    const p = ease((stickAt + run - right) / run);
     card.classList.toggle('stuck', p > 0.6);
     card.style.setProperty('--fade', String(ease(p / 0.4)));
 
@@ -161,9 +176,12 @@
     return u * u * (3 - 2 * u);
   }
 
+  /* One slot along; a pair's two stories share a slot, so skip to the next
+     frame that sits somewhere else. */
   function go(d) {
-    const i = frames.findIndex((f) => f.n === active);
-    const f = frames[Math.min(frames.length - 1, Math.max(0, i + d))];
+    const here = frames.find((f) => f.n === active);
+    const along = frames.filter((f) => (d > 0 ? f.left > here.left : f.left < here.left));
+    const f = d > 0 ? along[0] : along.at(-1);
     if (f) scrollToFrame(f);
   }
 
@@ -171,16 +189,6 @@
     const left = Math.max(0, f.left - innerWidth * (mobile ? 0.04 : 0.03));
     if (mobile) track.scrollTo({ left, behavior: 'smooth' });
     else scrollTo({ top: left, behavior: 'smooth' });
-  }
-
-  /* A story on the issue card slides the reel to it rather than opening
-     it; new-tab clicks still go to the story. */
-  function jump(e, n) {
-    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    const f = frames.find((x) => x.n === n);
-    if (!f) return;
-    e.preventDefault();
-    scrollToFrame(f);
   }
 
   function toStart() {
@@ -227,14 +235,25 @@
 
 <svelte:window onkeydown={keys} />
 
+{#snippet door()}
+  <a class="more" href={reel.index}>
+    <span class="spacer"></span>
+    <span class="door">
+      <span class="kick">{L.count(num(reel.total))}</span>
+      <span class="big">{L.all} →</span>
+      <span class="kick">{range(reel.from, reel.to, lang)}</span>
+    </span>
+  </a>
+{/snippet}
+
 <div class="wrap" bind:this={wrap} style="--length: calc({reelLength})">
   <main class="stage">
     {#if !titled}<h1 class="sr">Ground Truth — {L.tagline}</h1>{/if}
-    <div class="track" bind:this={track}>
+    <div class="track" class:titled bind:this={track}>
       {#if titled}
         <div class="titlecard" bind:this={card}>
           <span class="spacer"></span>
-          <div class="card">
+          <div class="card" style:--fit="{fit}cqi">
             <p class="kick">
               {format ? L.format : L.topic} · {L.count(num(reel.total))}
             </p>
@@ -263,11 +282,11 @@
                 </p>
               </div>
               <ol class="issue">
-                {#each issue.items as it, i (it.story.slug)}
+                {#each issue.items as s, i (s.slug)}
                   <li class:extra={i >= 3}>
-                    <a href="{base}/{lang}/{it.story.slug}" draggable="false" onclick={(e) => jump(e, it.n)}>
-                      <span class="issue-n">{two(it.n, lang)}</span>
-                      <span class="issue-h">{it.story.title}</span>
+                    <a href="{base}/{lang}/{s.slug}" draggable="false">
+                      <span class="issue-n">{SHORT_DATE[lang].format(new Date(s.date))}</span>
+                      <span class="issue-h">{s.title}</span>
                     </a>
                   </li>
                 {/each}
@@ -289,9 +308,22 @@
         </div>
       {/if}
       {#each items as item (item.key)}
-        {#if item.type === 'day'}
-          <div class="day" aria-hidden="true">
-            <span>{item.from ? range(item.from, item.to, lang) : DAY_DATE[lang].format(item.date)}</span><i></i>
+        {#if item.type === 'pair'}
+          <div class="pair">
+            {#each [item.a, item.b].filter(Boolean) as it (it.key)}
+              <Frame
+                story={it.story}
+                n={it.n}
+                size="half"
+                tone={tones.get(it.story.slug)}
+                sizes="calc((88vh - 8rem) * 5 / 7)"
+                named={hero === it.story.slug}
+                topic={section}
+                {format}
+                onpick={(slug) => (hero = slug)}
+              />
+            {/each}
+            {#if !item.b}{@render door()}{/if}
           </div>
         {:else}
           <Frame
@@ -306,14 +338,7 @@
           />
         {/if}
       {/each}
-      <a class="more" href={reel.index}>
-        <span class="spacer"></span>
-        <span class="door">
-          <span class="kick">{L.count(num(reel.total))}</span>
-          <span class="big">{L.all} →</span>
-          <span class="kick">{range(reel.from, reel.to, lang)}</span>
-        </span>
-      </a>
+      {#if !doorInPair}{@render door()}{/if}
     </div>
 
     <div class="rail">
@@ -361,6 +386,7 @@
     --reel: min(calc(var(--avail) * 0.88), 56rem);
     --box: calc(var(--reel) - 1.75rem);
     --fw: calc(var(--box) * 5 / 7);
+    --tw: calc(var(--fw) / 2); /* a topic's or format's title card */
     position: relative;
     height: calc(100vh + var(--length) - 100vw);
   }
@@ -385,30 +411,21 @@
   .track :global(.frame) {
     width: var(--fw);
   }
-
-  .day {
+  /* On a section's reel everything after its top story goes two to a slot,
+     one above the other. */
+  .pair {
     flex: none;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    width: 5vw;
-    padding-top: 1.75rem;
+    gap: 0.9rem;
+    width: var(--fw);
   }
-  .day span {
-    padding-bottom: 0.9rem;
-    writing-mode: vertical-rl;
-    rotate: 180deg;
-    white-space: nowrap;
-    font: 500 calc(0.6875rem * var(--k))/1 var(--mono);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--mute);
-  }
-  .day i {
+  .pair :global(.frame) {
     flex: 1;
-    width: 1px;
-    background: var(--line);
+    min-height: 0;
+    height: auto;
   }
+
 
 
   .titlecard {
@@ -417,8 +434,18 @@
     flex: none;
     display: flex;
     flex-direction: column;
-    width: var(--fw);
+    width: var(--tw);
     background: var(--bg); /* frames' code lines pass under the spacer too */
+  }
+  /* Half a slot wide, so the name is set to the card: big, wrapping by word,
+     a long word broken only if it can't fit at all. */
+  .titlecard .card {
+    container-type: inline-size;
+  }
+  .titlecard .card h1 {
+    font-size: clamp(1.4rem, var(--fit), 3.75rem);
+    overflow-wrap: break-word;
+    hyphens: auto;
   }
   /* A fixed gutter the width of the reel's own gap: stories disappear at its
      far edge, so their text never runs up against the card. */
@@ -592,7 +619,7 @@
   }
   .issue a {
     display: grid;
-    grid-template-columns: 2.2em minmax(0, 1fr);
+    grid-template-columns: 3.6em minmax(0, 1fr);
     align-items: baseline;
     gap: 0.5rem;
     padding: 0.65em 0;
@@ -691,6 +718,14 @@
     background: var(--ink);
     color: var(--bg);
   }
+  .pair .more {
+    flex: 1;
+    width: auto;
+    min-height: 0;
+  }
+  .pair .door .big {
+    font-size: clamp(1.6rem, 0.6rem + 2.4vw, 3.2rem);
+  }
   .door .big {
     font-size: clamp(2.2rem, 0.8rem + 3.6vw, 5rem);
     font-weight: 620;
@@ -772,14 +807,11 @@
     /* On a phone the cards run full height, the stories format, all one
        width. */
     .track :global(.frame),
+    .pair,
     .opener,
-    .titlecard,
     .more {
       width: var(--fw);
       scroll-snap-align: start;
-    }
-    .day {
-      width: 12vw;
     }
     /* A phone card is short: both parts close up so all of it fits. */
     .issue-news {
@@ -806,8 +838,10 @@
     /* Held flush with the screen edge (past the track's 4vw padding), showing
        only the spine. */
     .titlecard {
+      width: var(--tw);
+      scroll-snap-align: start;
       position: sticky;
-      left: calc(1.75rem - var(--fw) - 4vw);
+      left: calc(1.75rem - var(--tw) - 4vw);
     }
     .titlecard {
       --spine: 1.75rem;
@@ -815,6 +849,10 @@
     }
     .titlecard::after {
       width: 3vw;
+    }
+    /* Cards come to rest clear of the spine and its gutter, not under them. */
+    .track.titled {
+      scroll-padding-left: calc(1.75rem + 3vw + 2px);
     }
     .rail {
       left: 4vw;

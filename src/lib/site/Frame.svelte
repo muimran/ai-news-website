@@ -5,14 +5,17 @@
      tone). Headlines sit at the same size and place on every card, so they
      line up along the reel. Width comes from the parent. The section in the
      code line is its own link, and so is the format pill (Investigation,
-     Interview), except on that topic's or format's own page. */
+     Interview), except on that topic's or format's own page.
+     `size` 'half': half the height, stacked with another on a section's
+     reel; the photo is cropped wide and the summary left out. */
   import { base } from '$app/paths';
   import { sectionLabel, kindLabel, formatNumber, FORMATS } from '$lib/labels.js';
   import { photo, topicUrl, formatUrl, two, SHORT_DATE, STR } from './reel.js';
 
-  let { story: s, n, tone = 'ink', named = false, sizes = '100vw', topic = null, format = null, onpick } = $props();
+  let { story: s, n, tone = 'ink', size = 'story', named = false, sizes = '100vw', topic = null, format = null, onpick } = $props();
 
   const lang = $derived(s.lang);
+  const half = $derived(size === 'half');
   const pic = $derived(photo(s));
 </script>
 
@@ -21,6 +24,7 @@
   class:pic={!!pic}
   class:text={!pic}
   class:indigo={!pic && tone === 'indigo'}
+  class:half
   data-n={n}
 >
   <span class="code">
@@ -48,7 +52,7 @@
       </span>
       <span class="cap">
         <span class="title">{s.title}</span>
-        {#if s.dek}<span class="dek">{s.dek}</span>{/if}
+        {#if s.dek && !half}<span class="dek">{s.dek}</span>{/if}
         {#if s.author}<span class="by">{s.author}</span>{/if}
         <span class="go">{STR[lang].read} →</span>
       </span>
@@ -251,12 +255,28 @@
     opacity: 1;
     translate: 0 0;
   }
+  /* A half card's headline sits a notch below a full card's, to fit. */
+  .half .title {
+    font-size: clamp(1.15rem, 5.6cqi, 2.2rem);
+  }
+  .half .cap {
+    padding: 1rem 1.1rem 0.95rem;
+  }
+  .half.pic .cap {
+    padding-top: 3rem;
+  }
+  .half .by {
+    margin-top: 0.6rem;
+  }
   /* Held closer, a phone card wants its headline a notch larger. */
   @media (max-width: 759px) {
     .title {
       font-size: clamp(1.3rem, 8cqi, 2rem);
     }
-      }
+    .half .title {
+      font-size: clamp(1.1rem, 7cqi, 1.6rem);
+    }
+  }
   .box:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;

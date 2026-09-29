@@ -18,9 +18,9 @@ export const authorSlug = (name) =>
 export const topicUrl = (key, lang) => `${base}/${lang}/topic/${sectionSlug(key)}`;
 export const formatUrl = (key, lang) => `${base}/${lang}/${FORMATS[key].slug}`;
 
-/* Free-licensed Unsplash photos standing in for the reporters' own, keyed by
-   English slug (the same set the v2 mock used). A translation shows its
-   original's photo. */
+/* Free-licensed Unsplash photos standing in for the reporters' own, one for
+   every story: keyed by English slug, or by its own slug for a Bangla
+   original. A translation shows its original's photo. */
 const PHOTOS = {
   'the-ai-boom-is-reaching-places-investors-forgot-to-look': 'photo-1680992046626-418f7e910589',
   'the-procurement-documents-that-show-how-a-country-buys-surveillance': 'photo-1515432085503-cabf2fbcd690',
@@ -33,7 +33,42 @@ const PHOTOS = {
   'every-photo-you-posted-in-2011-is-still-working': 'photo-1727334291061-fd29582ef9dc',
   'the-water-bill-a-data-centre-does-not-have-to-publish': 'photo-1506399558188-acca6f8cbf41',
   'the-next-ai-race-may-be-about-electricity-not-models': 'photo-1473341304170-971dccb5ac1e',
-  'chip-makers-are-chasing-cheap-power-to-bangladeshs-economic-zones': 'photo-1746893737268-81fe686e6a51'
+  'chip-makers-are-chasing-cheap-power-to-bangladeshs-economic-zones': 'photo-1746893737268-81fe686e6a51',
+  'a-model-trained-on-sundarbans-field-notes-by-the-people-who-wrote-them': 'photo-1612536090790-680138b3f2cd',
+  'a-public-compute-cluster-run-like-a-library': 'photo-1691435828932-911a7801adfb',
+  'a-union-contract-that-treats-a-model-as-a-piece-of-equipment': 'photo-1721578006568-17901600cff3',
+  'a-voice-actor-is-suing-over-a-performance-she-never-gave': 'photo-1531651008558-ed1740375b39',
+  'bangladesh-is-writing-ai-rules-for-a-market-it-does-not-control': 'photo-1694343906708-e0d2306b5802',
+  'chinese-open-weight-models-are-winning-on-price-not-benchmarks': 'photo-1515879218367-8466d910aaa4',
+  'gazipur-built-an-ai-cluster-then-the-power-went-out': 'photo-1587815713661-418a916ca3a9',
+  'marriage-brokers-matchmakers-and-the-model-in-between': 'photo-1625012932492-2c2dc979940e',
+  'small-languages-are-building-their-own-ai-futures': 'photo-1671345495303-6466658ed02d',
+  'synthetic-anchors-are-reading-the-news-on-four-dhaka-channels': 'photo-1651465531201-7e430660fd82',
+  'the-archive-that-refuses-to-be-scraped': 'photo-1549964336-67d7d7d74ac2',
+  'the-commons-is-not-a-licence-it-is-a-maintenance-budget': 'photo-1721332154191-ba5f1534266e',
+  'the-film-industry-that-decided-to-label-everything': 'photo-1632187981988-40f3cbaeef5e',
+  'the-grid-operator-who-says-no': 'photo-1587622054651-e3e62142c3e0',
+  'the-maintainer-burnout-behind-half-the-ai-stack': 'photo-1550439062-609e1531270e',
+  'the-mirpur-annotators-who-unionised-and-what-happened-next': 'photo-1606857521015-7f9fcf423740',
+  'the-pharmacist-in-kurigram-who-became-a-triage-system': 'photo-1580281657527-47f249e8f4df',
+  'the-quiet-consolidation-of-the-ai-supply-chain': 'photo-1590497008432-598f04441de8',
+  'the-school-that-banned-ai-then-quietly-unbanned-it': 'photo-1709290749293-c6152a187b14',
+  'translators-did-not-disappear-their-rates-did': 'photo-1543165796-5426273eaab3',
+  'two-labs-one-grid-and-a-city-that-was-not-consulted': 'photo-1653932133705-851f4547eb2b',
+  'what-a-data-broker-actually-sells-line-by-line': 'photo-1686061593213-98dad7c599b9',
+  'what-open-means-when-the-weights-are-free-and-the-data-is-not': 'photo-1542831371-29b0f74f9713',
+  'when-the-regulator-and-the-regulated-share-the-same-consultants': 'photo-1573167507387-6b4b98cb7c13',
+  'your-landlord-may-already-be-using-ai-to-price-your-rent': 'photo-1630987871777-f7b2d62894d0',
+  // Bangla originals, keyed by their own slug
+  'bangla-bhashar-model-toiri-korchen-jara': 'photo-1771699435062-3072daa0418f',
+  'chattogramer-poshak-karkhanay-camera-ja-dekhe': 'photo-1770196009760-bead9eb10514',
+  'data-centerer-panir-hisab-keu-prokash-kore-na': 'photo-1729954924953-ff957b3e9edc',
+  'dhakar-ridarra-je-thikanar-manchitra-baniyeche': 'photo-1646927509586-08adb766512a',
+  'gramer-clinic-e-phone-je-siddhanta-nicche': 'photo-1773140278162-fd7df1043f0c',
+  'nirbachone-bhuya-content-kothay-toiri-hoy': 'photo-1777428411691-e4d5c3423ed0',
+  'open-source-e-bangla-tothyer-obhab': 'photo-1771699435693-52329f0d18ff',
+  'sadharon-jiboner-tothyer-malik-ke': 'photo-1662569189726-b08beb143864',
+  'silheter-cha-bagane-drone-o-sromik': 'photo-1706444326115-6a659b5cfda5'
 };
 
 const unsplash = (id, w) => `https://images.unsplash.com/${id}?w=${w}&q=80&auto=format&fit=crop`;

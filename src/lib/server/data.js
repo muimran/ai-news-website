@@ -8,9 +8,9 @@ import { FORMATS } from '$lib/labels.js';
 import { photo, topicUrl, formatUrl } from '$lib/site/reel.js';
 import { writerFor, writerUrl } from './authors.js';
 
-/* Reels are for what's new: the front reel runs the latest 24, a topic reel
-   its latest 12. Everything older is in the topic's index. */
-const REEL = { front: 24, topic: 12 };
+/* A section's reel runs its latest 12; everything older is in its index.
+   The front reel is one story per section. */
+const REEL = { topic: 12 };
 
 /** What a frame needs, and nothing else — no body. */
 const summary = (s) => ({
@@ -40,45 +40,57 @@ export const indexUrl = (lang, section) =>
 /** One format's stories (every interview, say), newest first. */
 export const ofKind = (lang, kind) => inLang(lang).filter((s) => s.kind === kind).sort(newestFirst);
 
-const DAY = 86400000;
+/* A section's stories, most important first: an editor's lead story (the
+   newest, if there are several), then newest first. */
+const leadFirst = (list) => [...list].sort((a, b) => b.featured - a.featured || newestFirst(a, b));
 
-/** Monday 00:00 UTC of the week a date falls in. */
-const weekStart = (d) => new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - ((d.getUTCDay() + 6) % 7)));
+/** Every section a reader can open: the topics, then each format that has
+    stories in this edition. */
+const sectionLists = (lang) => [
+  ...sections(lang).map((key) => order(lang, key)),
+  ...Object.keys(FORMATS)
+    .map((key) => ofKind(lang, key))
+    .filter((list) => list.length)
+];
 
-/** A reel: numbered frames with a marker wherever the date moves on (the
-    first date is on the first frame itself). Markers mark days while there
-    are several stories a day, weeks once stories are sparser than that. */
-export function reelFor(lang, section = null) {
-  const all = order(lang, section);
-  return reelOf(all, section ? REEL.topic : REEL.front, indexUrl(lang, section));
+const frame = (s, i) => ({ type: 'story', key: s.slug, story: summary(s), n: i + 1 });
+
+/** The front reel: the top story of every section, each story once. One at
+    the top of two sections (an investigation leading its topic) stands for
+    both. Editors' lead stories come first, then newest first. The issue card
+    lists the latest few regardless, so what's new is always on the front. */
+export function frontReel(lang) {
+  const tops = new Map();
+  for (const list of sectionLists(lang)) {
+    const top = leadFirst(list)[0];
+    if (top) tops.set(top.slug, top);
+  }
+  const all = order(lang);
+  return {
+    items: leadFirst([...tops.values()]).map(frame),
+    latest: all.slice(0, 5).map(summary),
+    total: all.length,
+    from: all.at(-1).date,
+    to: all[0].date,
+    index: indexUrl(lang)
+  };
 }
 
-/** A format's reel: its latest 12, like a topic's. */
-export const formatReel = (lang, kind) =>
-  reelOf(ofKind(lang, kind), REEL.topic, `${formatUrl(kind, lang)}/all`);
-
-function reelOf(all, size, index) {
-  const slice = all.slice(0, size);
-  const days = new Set(slice.map((s) => s.dateISO.slice(0, 10))).size;
-  const byWeek = days > slice.length * 0.6;
-
-  const items = [];
-  let mark = null;
-  slice.forEach((s, i) => {
-    const start = byWeek ? weekStart(s.date) : null;
-    const key = byWeek ? start.toISOString().slice(0, 10) : s.dateISO.slice(0, 10);
-    if (mark && key !== mark) {
-      items.push(
-        byWeek
-          ? { type: 'day', key, date: s.date, from: start, to: new Date(start.getTime() + 6 * DAY) }
-          : { type: 'day', key, date: s.date }
-      );
-    }
-    mark = key;
-    items.push({ type: 'story', key: s.slug, story: summary(s), n: i + 1 });
-  });
-  return { items, total: all.length, from: all.at(-1).date, to: all[0].date, index };
+/** A section's reel: its top story, the same one the front shows for it, at
+    full size; then the rest of its latest, two to a slot. */
+function sectionReel(list, index) {
+  const [top, ...rest] = leadFirst(list).slice(0, REEL.topic);
+  const items = [frame(top, 0)];
+  for (let i = 0; i < rest.length; i += 2) {
+    const a = frame(rest[i], i + 1);
+    const b = rest[i + 1] ? frame(rest[i + 1], i + 2) : null;
+    items.push({ type: 'pair', key: a.key, a, b });
+  }
+  return { items, total: list.length, from: list.at(-1).date, to: list[0].date, index };
 }
+
+export const reelFor = (lang, section) => sectionReel(order(lang, section), indexUrl(lang, section));
+export const formatReel = (lang, kind) => sectionReel(ofKind(lang, kind), `${formatUrl(kind, lang)}/all`);
 
 /** Every story in a topic (or everything), newest first, for an index page. */
 export const listFor = (lang, section = null) => order(lang, section).map(row);
