@@ -88,7 +88,7 @@
     margin-top: 4rem;
     padding-top: 1.25rem;
     border-top: 1px solid var(--line);
-    font: 500 calc(0.75rem * var(--k))/1 var(--mono);
+    font: 500 calc(0.6875rem * var(--k))/1 var(--mono);
     letter-spacing: 0.06em;
     text-transform: uppercase;
   }

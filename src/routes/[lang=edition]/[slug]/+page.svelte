@@ -132,7 +132,7 @@
   }
   .sec {
     margin-right: 1.1rem;
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     font-weight: 540;
     line-height: 1;
     color: inherit;
@@ -194,7 +194,7 @@
     margin: 0 0 2rem;
     padding-bottom: 1.5rem;
     border-bottom: 1px solid var(--line);
-    font: 400 calc(0.75rem * var(--k))/1.4 var(--mono);
+    font: 400 calc(0.6875rem * var(--k))/1.4 var(--mono);
     color: var(--mute);
   }
   .body :global(p) {
@@ -227,7 +227,7 @@
   }
   .other {
     margin: 2.5rem 0 0;
-    font: 500 calc(0.8125rem * var(--k))/1 var(--mono);
+    font: 500 calc(0.6875rem * var(--k))/1 var(--mono);
   }
 
   .next {
@@ -236,7 +236,7 @@
   }
   .next h2 {
     margin: 0 var(--pad) 1.25rem;
-    font: 500 calc(0.75rem * var(--k))/1 var(--mono);
+    font: 500 calc(0.6875rem * var(--k))/1 var(--mono);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--mute);

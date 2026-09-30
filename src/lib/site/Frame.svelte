@@ -5,7 +5,7 @@
      tone). Headlines sit at the same size and place on every card, so they
      line up along the reel. Width comes from the parent. The section in the
      code line is its own link, and so is the format pill (Investigation,
-     Interview), except on that topic's or format's own page.
+     Interview); each is left out on that topic's or format's own page.
      `size` 'half': half the height, stacked with another on a section's
      reel; the photo is cropped wide and the summary left out. */
   import { base } from '$app/paths';
@@ -29,9 +29,8 @@
 >
   <span class="code">
     <b class="n">{two(n, lang)}</b>
-    {#if topic === s.section}
-      <span class="sec">{sectionLabel(s.section, lang)}</span>
-    {:else}
+    <!-- left out on the topic's own page, where every card would repeat it -->
+    {#if topic !== s.section}
       <a class="sec" href={topicUrl(s.section, lang)}>{sectionLabel(s.section, lang)}</a>
     {/if}
     <span class="when">{SHORT_DATE[lang].format(s.date)} · {formatNumber(s.readTime, lang)} {STR[lang].min}</span>
@@ -58,12 +57,8 @@
       </span>
     </a>
     <!-- outside the story link, since a link can't hold another -->
-    {#if FORMATS[s.kind]}
-      {#if format === s.kind}
-        <span class="tag">{kindLabel(s.kind, lang)}</span>
-      {:else}
-        <a class="tag" href={formatUrl(s.kind, lang)} draggable="false">{kindLabel(s.kind, lang)}</a>
-      {/if}
+    {#if FORMATS[s.kind] && format !== s.kind}
+      <a class="tag" href={formatUrl(s.kind, lang)} draggable="false">{kindLabel(s.kind, lang)}</a>
     {/if}
   </div>
 </div>
@@ -86,7 +81,7 @@
   .n {
     flex: none;
     margin-right: 0.55rem;
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 640;
     font-stretch: 75%;
     font-variant-numeric: tabular-nums;
@@ -100,7 +95,7 @@
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: calc(0.8125rem * var(--k));
+    font-size: calc(0.875rem * var(--k));
     font-weight: 540;
     /* room above and below for Bangla vowel signs, which the ellipsis
        clipping would otherwise slice off */
@@ -117,7 +112,7 @@
     flex: none;
     margin-left: auto;
     padding-left: 1rem;
-    font: 400 calc(0.625rem * var(--k))/1 var(--mono);
+    font: 400 calc(0.6875rem * var(--k))/1 var(--mono);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--mute);
@@ -136,7 +131,6 @@
     display: block;
     flex: 1;
     overflow: hidden;
-    border-radius: 3px;
     color: var(--ink);
     text-decoration: none;
     -webkit-user-drag: none;
@@ -227,7 +221,7 @@
   .dek {
     max-width: 34em;
     margin-top: 0.8rem;
-    font-size: clamp(0.875rem, 2.7cqi, 1.05rem);
+    font-size: 0.875rem;
     line-height: 1.42;
     opacity: 0.82;
   }

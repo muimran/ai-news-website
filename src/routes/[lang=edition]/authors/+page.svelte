@@ -59,7 +59,7 @@
   .back {
     color: var(--mute);
     text-decoration: none;
-    font: 500 calc(0.75rem * var(--k))/1 var(--mono);
+    font: 500 calc(0.6875rem * var(--k))/1 var(--mono);
     letter-spacing: 0.06em;
     text-transform: uppercase;
   }
@@ -92,7 +92,6 @@
     aspect-ratio: 5 / 7;
     overflow: hidden;
     border: 1px solid var(--line);
-    border-radius: 2px;
   }
   .photo img {
     display: block;

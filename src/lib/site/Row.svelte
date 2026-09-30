@@ -51,7 +51,7 @@
     min-width: 0;
   }
   .topic {
-    font-size: calc(0.75rem * var(--k));
+    font-size: calc(0.875rem * var(--k));
     font-weight: 540;
     color: var(--mute);
   }
@@ -72,7 +72,6 @@
     width: 2.5rem;
     height: 3.5rem;
     overflow: hidden;
-    border-radius: 2px;
   }
   img {
     display: block;

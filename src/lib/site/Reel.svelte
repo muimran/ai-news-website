@@ -1,14 +1,13 @@
 <script>
   /* The reel: the latest stories, or one section's when `section` is set
-     (one format's when `format` is), in which case it opens on a title card
-     for it. It always ends on a doorway to the full index. */
+     (one format's when `format` is), whose name the top bar then carries. It always ends on a doorway to the full index. */
   import { onMount, untrack } from 'svelte';
   import { base } from '$app/paths';
   import { page } from '$app/state';
   import { formatNumber, sectionLabel, formatLabel } from '$lib/labels.js';
   import Frame from './Frame.svelte';
   import Odometer from './Odometer.svelte';
-  import { lastRead, photo, range, topicUrl, two, DAY_DATE, SHORT_DATE, STR } from './reel.js';
+  import { lastRead, photo, range, topicUrl, two, SHORT_DATE, STR } from './reel.js';
 
   /* `opener`: the front reel opens on the issue card — the latest stories,
      who we are, and every topic. Every story card after it is the same size. */
@@ -23,35 +22,24 @@
   const titled = $derived(!!(section || format));
   const opens = $derived(!!opener && !titled);
   const heading = $derived(format ? formatLabel(format, lang) : section && sectionLabel(section, lang));
-  /* The title card's name, as big as its longest word allows across the card
-     (in % of the card's width). Letters are counted as a reader sees them, so
-     a Bangla vowel sign doesn't count as one of its own; measured in these
-     faces a letter runs up to 0.49em wide in English and 0.85em in Bangla,
-     so each allowance leaves a little room. */
-  const fit = $derived.by(() => {
-    if (!heading) return 0;
-    const letters = new Intl.Segmenter(lang, { granularity: 'grapheme' });
-    const longest = Math.max(...heading.split(/\s+/).map((w) => [...letters.segment(w)].length));
-    return Math.min(24, 100 / (longest * (lang === 'bn' ? 0.88 : 0.5)));
-  });
-
   const weekStart = (d) =>
     new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - ((d.getUTCDay() + 6) % 7)));
 
-  /* The issue: the five newest stories whatever their section (the reel
-     after it is one per section, so this is where what's new lives), three
-     when the card is short. Titled "This week" when they all ran this
-     calendar week, "Latest" when they reach further back. Both versions are
-     in the page and CSS picks one, so a phone never shows five first. */
+  /* The issue: the newest stories whatever their section (the reel after
+     it is one per section, so this is where what's new lives): eight, six
+     or four, as many as the card's height holds. Titled "This week" when
+     they all ran this calendar week, "Latest" when they reach further back.
+     Every version is in the page and CSS picks one, so a phone never shows
+     eight first. */
   function issueOf(count) {
     const items = (reel.latest ?? []).slice(0, count);
-    if (!items.length) return { items, from: null, to: null, thisWeek: false };
+    if (!items.length) return { n: count, items, from: null, to: null, thisWeek: false };
     const to = new Date(items[0].date);
     const from = new Date(items.at(-1).date);
-    return { items, from, to, thisWeek: from >= weekStart(to) };
+    return { n: count, items, from, to, thisWeek: from >= weekStart(to) };
   }
-  const issue = $derived(issueOf(5));
-  const issueShort = $derived(issueOf(3));
+  const tiers = $derived([8, 6, 4].map(issueOf));
+  const issue = $derived(tiers[0]);
 
   /* Cards without a photo alternate ink and indigo, counted across those
      cards only, so two never sit side by side in the same tone. */
@@ -65,31 +53,25 @@
 
   /* The reel's length as CSS, so the server can size the scroll distance
      before any script runs; measure() then corrects it to the pixel. Every
-     slot (a story, a pair, the title card or opener, the doorway) is --fw. */
+     slot (a story, a pair, the opener, the doorway) is --fw. */
   const reelLength = $derived.by(() => {
     const slots = items.length + (opens ? 1 : 0) + (doorInPair ? 0 : 1);
-    const pieces = slots + (titled ? 1 : 0); // the title card is half a slot
-    return `6vw + ${pieces - 1} * 1.2vw + ${slots} * var(--fw)${titled ? ' + var(--tw)' : ''}`;
+    return `6vw + ${slots - 1} * 1.2vw + ${slots} * var(--fw)`;
   });
 
   /* The frame whose photo should fly back into place, if we came from a story. */
   let hero = $state(lastRead());
 
   let wrap = $state();
+  let shelf = $state();
+  let shelfOff = $state(false); // the topics box scrolled off its start (phones)
   let track = $state();
-  let card = $state();
-  let cardL = 0;
-  let cardW = 0;
-  let spineW = 0;
-  let morph = null;
-  const still = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
   let mobile = $state(false);
   let x = $state(0);
   let over = $state(1);
   let active = $state(0);
   let frames = [];
 
-  const activeStory = $derived(stories.find((i) => i.n === active)?.story);
 
   function measure() {
     mobile = matchMedia('(max-width: 759px)').matches;
@@ -102,30 +84,6 @@
       wrap.style.height = `${over + innerHeight}px`;
     }
     frames = [...track.querySelectorAll('.frame')].map((el) => ({ n: +el.dataset.n, left: el.offsetLeft }));
-    if (card) {
-      card.style.translate = '';
-      cardL = card.offsetLeft;
-      cardW = card.offsetWidth;
-      spineW = card.querySelector('.spine').offsetWidth;
-      // resting geometry, card-relative, for the title → spine morph
-      const h = card.querySelector('h1');
-      const v = card.querySelector('.vlabel');
-      h.style.transform = '';
-      v.style.transform = '';
-      const face = card.querySelector('.card');
-      morph = {
-        // how much of the card to trim from the top once the name has settled,
-        // leaving a tab just tall enough for it (20px above and below)
-        cut: Math.max(0, face.offsetHeight - v.offsetWidth - 40),
-        h,
-        v,
-        hx: h.offsetLeft,
-        hy: h.offsetTop,
-        bx: v.offsetLeft,
-        by: v.offsetTop,
-        k: parseFloat(getComputedStyle(v).fontSize) / parseFloat(getComputedStyle(h).fontSize)
-      };
-    }
     update();
   }
 
@@ -137,43 +95,6 @@
     let cur = frames[0];
     for (const f of frames) if (f.left <= probe) cur = f;
     active = cur?.n ?? 1;
-    stick();
-  }
-
-  /* The title card rides out with the reel until only its spine is left at
-     the screen edge; there it stays, and the stories pass underneath. On a
-     phone `position: sticky` does the holding, so only the morph is set here. */
-  function stick() {
-    if (!card || !morph) return;
-    const right = cardL + cardW - x; // where its right edge would be by now
-    const stickAt = (mobile ? 0 : cardL) + spineW; // on a phone it sits flush with the edge
-    if (!mobile) card.style.translate = `${Math.max(0, stickAt - right)}px 0`;
-    // the turn runs over the last 260px before it's held, or the whole card
-    // if that's narrower, so at rest (x = 0) it hasn't started
-    const run = Math.min(260, cardW - spineW);
-    const p = ease((stickAt + run - right) / run);
-    card.classList.toggle('stuck', p > 0.6);
-    card.style.setProperty('--fade', String(ease(p / 0.4)));
-
-    /* The big title shrinks and turns onto the spine; halfway round it hands
-       over to the one-line spine label, which has been riding along with it
-       from the same spot at the same size and angle. */
-    const { h, v, hx, hy, bx, by, k } = morph;
-    const swap = ease((p - 0.35) / 0.3);
-    h.style.opacity = String(1 - swap);
-    v.style.opacity = String(swap);
-    card.style.setProperty('--cut', `${ease((p - 0.6) / 0.4) * morph.cut}px`);
-    if (still) return;
-    const dx = (bx - hx) * p;
-    const dy = (by - hy) * p;
-    const turn = `rotate(${-90 * p}deg)`;
-    h.style.transform = `translate(${dx}px, ${dy}px) ${turn} scale(${k ** p})`;
-    v.style.transform = `translate(${hx - bx + dx}px, ${hy - by + dy}px) ${turn} scale(${k ** (p - 1)})`;
-  }
-
-  function ease(t) {
-    const u = Math.min(1, Math.max(0, t));
-    return u * u * (3 - 2 * u);
   }
 
   /* One slot along; a pair's two stories share a slot, so skip to the next
@@ -189,11 +110,6 @@
     const left = Math.max(0, f.left - innerWidth * (mobile ? 0.04 : 0.03));
     if (mobile) track.scrollTo({ left, behavior: 'smooth' });
     else scrollTo({ top: left, behavior: 'smooth' });
-  }
-
-  function toStart() {
-    if (mobile) track.scrollTo({ left: 0, behavior: 'smooth' });
-    else scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function keys(e) {
@@ -225,6 +141,10 @@
     addEventListener('wheel', wheel, { passive: false });
     track.addEventListener('scroll', onTrack, { passive: true });
     measure();
+    // on a phone the box scrolls; bring the current topic into view
+    const cur = shelf?.querySelector('[aria-current]');
+    if (cur) shelf.scrollLeft = cur.offsetLeft - (shelf.clientWidth - cur.offsetWidth) / 2;
+    shelfOff = (shelf?.scrollLeft ?? 0) > 4;
     return () => {
       removeEventListener('scroll', onScroll);
       removeEventListener('resize', measure);
@@ -248,22 +168,9 @@
 
 <div class="wrap" bind:this={wrap} style="--length: calc({reelLength})">
   <main class="stage">
-    {#if !titled}<h1 class="sr">Ground Truth — {L.tagline}</h1>{/if}
-    <div class="track" class:titled bind:this={track}>
-      {#if titled}
-        <div class="titlecard" bind:this={card}>
-          <span class="spacer"></span>
-          <div class="card" style:--fit="{fit}cqi">
-            <p class="kick">
-              {format ? L.format : L.topic} · {L.count(num(reel.total))}
-            </p>
-            <h1>{heading}</h1>
-            <a href="{base}/{lang}">← {L.latest}</a>
-            <span class="vlabel" aria-hidden="true">{heading}</span>
-            <button type="button" class="spine" onclick={toStart} tabindex="-1" aria-hidden="true"></button>
-          </div>
-        </div>
-      {/if}
+    <!-- a topic's name shows in the top bar, beside the site's -->
+    <h1 class="sr">{titled ? heading : `Ground Truth — ${L.tagline}`}</h1>
+    <div class="track" bind:this={track}>
       {#if opens}
         <div class="opener">
           <span class="spacer"></span>
@@ -271,19 +178,15 @@
             <div class="issue-news">
               <div class="issue-head">
                 <p class="kick">
-                  <span class="wide">{range(issue.from, issue.to, lang)}</span><span class="narrow"
-                    >{range(issueShort.from, issueShort.to, lang)}</span
-                  >
+                  {#each tiers as t (t.n)}<span class="t{t.n}">{range(t.from, t.to, lang)}</span>{/each}
                 </p>
                 <p class="issue-title">
-                  <span class="wide">{issue.thisWeek ? L.thisWeek : L.latest}</span><span class="narrow"
-                    >{issueShort.thisWeek ? L.thisWeek : L.latest}</span
-                  >
+                  {#each tiers as t (t.n)}<span class="t{t.n}">{t.thisWeek ? L.thisWeek : L.latest}</span>{/each}
                 </p>
               </div>
               <ol class="issue">
                 {#each issue.items as s, i (s.slug)}
-                  <li class:extra={i >= 3}>
+                  <li class:x4={i >= 4} class:x6={i >= 6}>
                     <a href="{base}/{lang}/{s.slug}" draggable="false">
                       <span class="issue-n">{SHORT_DATE[lang].format(new Date(s.date))}</span>
                       <span class="issue-h">{s.title}</span>
@@ -291,17 +194,6 @@
                   </li>
                 {/each}
               </ol>
-              <div class="issue-foot">
-                <p class="issue-label">{L.topics}</p>
-                <nav class="issue-topics" aria-label={L.topics}>
-                  {#each page.data.topics ?? [] as tp, i (tp.key)}
-                    <span class="tp"
-                      ><a href={topicUrl(tp.key, lang)}>{sectionLabel(tp.key, lang)}</a
-                      >{#if i < page.data.topics.length - 1}<span class="sep" aria-hidden="true">/</span>{/if}</span
-                    >
-                  {/each}
-                </nav>
-              </div>
             </div>
             <p class="motto">{L.blurb}</p>
           </div>
@@ -342,14 +234,31 @@
     </div>
 
     <div class="rail">
+      <!-- The topics take the progress line's place: every one a tap away,
+           in one box, the one you're in marked. It starts on the page's
+           left edge, under the logo and the first card; the counter, which
+           still says where you are along the reel, sits at the right. -->
+      <nav
+        class="shelf"
+        class:off={shelfOff}
+        aria-label={L.topics}
+        bind:this={shelf}
+        onscroll={() => (shelfOff = shelf.scrollLeft > 4)}
+      >
+        {#each page.data.topics ?? [] as tp (tp.key)}
+          <a
+            href={topicUrl(tp.key, lang)}
+            aria-current={section === tp.key ? 'page' : undefined}
+            draggable="false">{sectionLabel(tp.key, lang)}</a
+          >
+        {/each}
+      </nav>
       <span class="count"
         ><b><Odometer value={active || 1} {lang} /></b><span class="sr">{two(active || 1, lang)}</span> / {two(
           stories.length,
           lang
         )}</span
       >
-      {#if activeStory}<span class="when">{DAY_DATE[lang].format(activeStory.date)}</span>{/if}
-      <span class="line"><i style="transform: scaleX({x / over})"></i></span>
       <span class="hint" class:gone={x > 40}>{L.scroll} →</span>
     </div>
   </main>
@@ -380,13 +289,12 @@
      turns that vertical scroll into sideways travel. */
   .wrap {
     /* Every card is 5:7 (the photo-print proportion), photo or not. The reel takes 88% of the height between the
-       bars (7.5rem), up to 56rem, centred, so it has air above and below;
+       bars (8.5rem: the bottom one sits 1rem off the edge), up to 56rem, centred, so it has air above and below;
        a card is that less its code line (1.75rem). */
-    --avail: calc(100vh - 7.5rem);
+    --avail: calc(100vh - 8.5rem);
     --reel: min(calc(var(--avail) * 0.88), 56rem);
     --box: calc(var(--reel) - 1.75rem);
     --fw: calc(var(--box) * 5 / 7);
-    --tw: calc(var(--fw) / 2); /* a topic's or format's title card */
     position: relative;
     height: calc(100vh + var(--length) - 100vw);
   }
@@ -428,36 +336,6 @@
 
 
 
-  .titlecard {
-    position: relative;
-    z-index: 2;
-    flex: none;
-    display: flex;
-    flex-direction: column;
-    width: var(--tw);
-    background: var(--bg); /* frames' code lines pass under the spacer too */
-  }
-  /* Half a slot wide, so the name is set to the card: big, wrapping by word,
-     a long word broken only if it can't fit at all. */
-  .titlecard .card {
-    container-type: inline-size;
-  }
-  .titlecard .card h1 {
-    font-size: clamp(1.4rem, var(--fit), 3.75rem);
-    overflow-wrap: break-word;
-    hyphens: auto;
-  }
-  /* A fixed gutter the width of the reel's own gap: stories disappear at its
-     far edge, so their text never runs up against the card. */
-  .titlecard::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 100%;
-    width: 1.2vw;
-    background: var(--bg);
-  }
   .spacer {
     height: 1.75rem;
   }
@@ -468,91 +346,15 @@
     flex-direction: column;
     justify-content: space-between;
     padding: 1.25rem;
-    border-radius: 3px;
     background: var(--accent);
     color: #111;
+    overflow: hidden;
   }
-  .kick,
-  .card > a {
+  .kick {
     margin: 0;
     font: 500 calc(0.6875rem * var(--k))/1 var(--mono);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-  }
-  .card h1 {
-    margin: auto 0 1.5rem;
-    font-size: clamp(2.2rem, 0.8rem + 3.6vw, 5rem);
-    font-weight: 620;
-    font-stretch: 75%;
-    line-height: 0.92;
-    letter-spacing: -0.01em;
-    text-wrap: balance;
-  }
-  .card h1:lang(bn) {
-    line-height: 1.2;
-    letter-spacing: 0;
-  }
-  .card > a {
-    align-self: flex-start;
-    color: #111;
-    text-decoration: none;
-  }
-  .card > a:hover,
-  .card > a:focus-visible {
-    text-decoration: underline;
-    outline: none;
-  }
-  .titlecard {
-    --spine: 2.75rem; /* what stays showing at the edge */
-    --label: 1.2rem; /* the title's size once it's on the spine */
-    --fade: 0;
-  }
-  .card {
-    overflow: hidden;
-    /* once held at the edge the card trims down from the top to a tab */
-    clip-path: inset(var(--cut, 0px) 0 0 0 round 3px);
-  }
-  .card .kick,
-  .card > a {
-    opacity: calc(1 - var(--fade));
-  }
-  .card h1 {
-    transform-origin: 0 0;
-  }
-
-  /* The title as it ends up: one line, turned to read up the spine. Placed
-     so that after the turn it is centred in the spine, its start at the foot. */
-  .vlabel {
-    position: absolute;
-    left: calc(100% - var(--spine) / 2 - var(--label) / 2);
-    top: calc(100% - 1.25rem);
-    font-size: var(--label);
-    font-weight: 620;
-    font-stretch: 75%;
-    line-height: 1;
-    letter-spacing: -0.01em;
-    white-space: nowrap;
-    transform-origin: 0 0;
-    transform: rotate(-90deg);
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  /* Click target over the spine once the card is held at the edge. */
-  .spine {
-    position: absolute;
-    top: var(--cut, 0px);
-    right: 0;
-    bottom: 0;
-    width: var(--spine);
-    padding: 0;
-    border: 0;
-    background: none;
-    pointer-events: none;
-    cursor: pointer;
-  }
-  .stuck .spine {
-    pointer-events: auto;
   }
 
   /* The front reel's opener. It scrolls away with the reel rather than
@@ -569,21 +371,31 @@
     line-height: 1.4;
   }
 
-  /* The issue: this week's headlines as a contents list, five when the card
-     is tall enough and three when it isn't (a phone, a short laptop screen).
+  /* The issue: this week's headlines as a contents list, eight, six or four
+     by the card's height (a tall screen, a laptop, a phone).
      The card measures itself, so it's the same rule everywhere. */
   .issuecard {
     container-type: size;
   }
-  .narrow {
+  .t6,
+  .t4 {
     display: none;
   }
-  @container (max-height: 44rem) {
-    .wide,
-    .issue li.extra {
+  @container (max-height: 36rem) {
+    .t8,
+    .issue li.x6 {
       display: none;
     }
-    .narrow {
+    .t6 {
+      display: inline;
+    }
+  }
+  @container (max-height: 29rem) {
+    .t6,
+    .issue li.x4 {
+      display: none;
+    }
+    .t4 {
       display: inline;
     }
   }
@@ -625,7 +437,7 @@
     padding: 0.65em 0;
     color: #111;
     text-decoration: none;
-    font-size: clamp(0.875rem, 3.8cqi, 1.15rem);
+    font-size: 1rem;
     font-weight: 580;
     font-stretch: 85%;
     line-height: 1.12;
@@ -642,44 +454,6 @@
   .issue-n {
     font: 500 calc(0.6875rem * var(--k))/1 var(--mono);
     letter-spacing: 0.06em;
-  }
-  /* Every topic, one tap away: the names run as one wrapping line, never
-     broken mid-name. */
-  .issue-label {
-    margin: 0 0 0.5rem;
-    font: 500 calc(0.625rem * var(--k))/1 var(--mono);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    opacity: 0.7;
-  }
-  .issue-topics {
-    display: flex;
-    flex-wrap: wrap;
-    row-gap: 0.1rem;
-    font-size: clamp(0.95rem, 4.3cqi, 1.3rem);
-    font-weight: 620;
-    font-stretch: 80%;
-    line-height: 1.3;
-  }
-  .issue-topics:lang(bn) {
-    line-height: 1.5;
-  }
-  .tp {
-    white-space: nowrap;
-  }
-  .issue-topics a {
-    color: #111;
-    text-decoration: none;
-    outline: none;
-  }
-  .issue-topics a:hover,
-  .issue-topics a:focus-visible {
-    text-decoration: underline;
-    text-underline-offset: 0.15em;
-  }
-  .sep {
-    margin: 0 0.4em;
-    opacity: 0.45;
   }
   .issuecard .motto {
     max-width: none;
@@ -708,7 +482,6 @@
     justify-content: space-between;
     padding: 1.25rem;
     border: 1px solid var(--line);
-    border-radius: 3px;
     transition:
       background 0.3s,
       color 0.3s;
@@ -742,12 +515,12 @@
     position: absolute;
     left: 3vw;
     right: 3vw;
-    bottom: 0;
+    bottom: 1rem;
     display: flex;
     align-items: center;
     gap: 1.25rem;
     height: 3.5rem;
-    font: 500 calc(0.75rem * var(--k))/1 var(--mono);
+    font: 500 calc(0.6875rem * var(--k))/1 var(--mono);
     color: var(--mute);
     white-space: nowrap;
   }
@@ -755,17 +528,66 @@
     font-weight: 500;
     color: var(--accent-text);
   }
-  .line {
-    position: relative;
+  /* The front's topics: one outlined box, a cell to each, filled in ink on
+     hover like the doorway at the reel's end. */
+  .shelf {
     flex: 1;
-    height: 1px;
-    background: var(--line);
+    display: flex;
+    min-width: 0;
+    overflow-x: auto;
+    /* outlined in ink, no fill: the site's mark for a way somewhere, like
+       the language button and the doorway */
+    border: 1px solid var(--ink);
+    scrollbar-width: none;
   }
-  .line i {
+  .shelf::-webkit-scrollbar {
+    display: none;
+  }
+  .shelf a {
+    flex: 1 0 auto;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    color: var(--ink);
+    text-decoration: none;
+    font: 600 calc(1rem * var(--k)) / 1.2 'Instrument Sans', 'Noto Sans Bengali', system-ui, sans-serif;
+    font-stretch: 85%;
+    outline: none;
+    position: relative;
+    isolation: isolate; /* keeps the fill behind the name */
+    /* the name turns as the fill passes its middle */
+    transition: color 0.2s 0.1s;
+  }
+  /* On hover the ink rises from the bottom of the cell. */
+  .shelf a::before {
+    content: '';
     position: absolute;
     inset: 0;
-    background: var(--accent);
-    transform-origin: 0 0;
+    z-index: -1;
+    background: var(--ink);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.35s cubic-bezier(0.3, 0.7, 0.1, 1);
+  }
+  .shelf a:hover::before,
+  .shelf a:focus-visible::before {
+    transform: scaleY(1);
+  }
+  .shelf a + a {
+    border-left: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
+  }
+  .shelf a[aria-current='page'] {
+    color: var(--accent-text);
+    box-shadow: inset 0 -2px 0 var(--accent);
+  }
+  .shelf a:hover,
+  .shelf a:focus-visible {
+    color: var(--bg);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .shelf a,
+    .shelf a::before {
+      transition: none;
+    }
   }
   .hint {
     color: var(--ink);
@@ -780,9 +602,12 @@
      centred with air above and below. */
   @media (max-width: 759px) {
     .wrap {
-      --avail: calc(100svh - 7.5rem);
-      --box: min(calc(86vw * 7 / 5), calc(var(--avail) * 0.88 - 1.75rem));
-      --fw: calc(var(--box) * 5 / 7);
+      /* Full width and as tall as the screen allows, 1rem clear of each
+         bar, so no band of empty paper above and below; never taller than
+         a phone story (9:16), and on a short phone back to 5:7. */
+      --avail: calc(100svh - 8.5rem);
+      --fw: min(86vw, calc((var(--avail) - 3.75rem) * 5 / 7));
+      --box: min(calc(var(--avail) - 3.75rem), calc(var(--fw) * 16 / 9));
       --reel: calc(var(--box) + 1.75rem);
       height: auto;
     }
@@ -823,42 +648,46 @@
     .issue a {
       padding: 0.5em 0;
     }
-    .issue-label {
-      margin-bottom: 0.35rem;
-    }
-    .issue-topics {
-      font-size: 0.875rem;
-    }
     .issuecard .motto {
       margin-top: 0.9rem;
       padding: 0.7rem 1.25rem 0.8rem;
-      font-size: 0.8125rem;
+      font-size: 0.875rem;
       line-height: 1.35;
     }
-    /* Held flush with the screen edge (past the track's 4vw padding), showing
-       only the spine. */
-    .titlecard {
-      width: var(--tw);
-      scroll-snap-align: start;
-      position: sticky;
-      left: calc(1.75rem - var(--tw) - 4vw);
-    }
-    .titlecard {
-      --spine: 1.75rem;
-      --label: 0.95rem;
-    }
-    .titlecard::after {
-      width: 3vw;
-    }
-    /* Cards come to rest clear of the spine and its gutter, not under them. */
-    .track.titled {
-      scroll-padding-left: calc(1.75rem + 3vw + 2px);
-    }
+    /* The topics box runs on past the screen's right edge, open on that
+       side, the way a row you can swipe does in an app; it closes after the
+       last topic. Once swiped, its start fades out on the left. The counter
+       moves ahead of it, onto the page's left edge. */
     .rail {
       left: 4vw;
-      right: 4vw;
+      right: 0;
     }
-    .when {
+    .count {
+      order: -1;
+    }
+    .shelf {
+      border-right: 0;
+    }
+    .shelf a:last-child {
+      border-right: 1px solid color-mix(in srgb, var(--ink) 35%, transparent);
+    }
+    .shelf.off {
+      mask-image: linear-gradient(to right, transparent, #000 2rem);
+    }
+    /* a size down on a phone, and lighter (medium names, grey outline) so
+       it doesn't outweigh the card above; still a comfortable tap (40px) */
+    .shelf {
+      border-color: color-mix(in srgb, var(--ink) 35%, transparent);
+    }
+    .shelf a {
+      padding: 0.65rem 0.8rem;
+      font-size: calc(0.875rem * var(--k));
+      font-weight: 500;
+    }
+    .shelf a[aria-current='page'] {
+      font-weight: 600;
+    }
+    .hint {
       display: none;
     }
   }

@@ -68,7 +68,7 @@ export function frontReel(lang) {
   const all = order(lang);
   return {
     items: leadFirst([...tops.values()]).map(frame),
-    latest: all.slice(0, 5).map(summary),
+    latest: all.slice(0, 8).map(summary),
     total: all.length,
     from: all.at(-1).date,
     to: all[0].date,

@@ -92,11 +92,30 @@
   />
 </svelte:head>
 
+{#snippet where(plain)}
+  <!-- Where you are: the name, then the topic or format this page is in.
+       Drawn twice, once per layer below, each showing only its own half so
+       the two line up exactly. -->
+  <div class="where">
+    <a class="name" href="{base}/{lang}" aria-hidden={plain} tabindex={plain ? -1 : undefined}>Ground Truth</a>
+    {#if current}
+      <span class="slash" aria-hidden="true">/</span>
+      <a
+        class="here"
+        href={page.data.format ? formatUrl(current, lang) : topicUrl(current, lang)}
+        aria-hidden={!plain}
+        tabindex={plain ? undefined : -1}
+        >{page.data.format ? formatLabel(current, lang) : sectionLabel(current, lang)}</a
+      >
+    {/if}
+  </div>
+{/snippet}
+
 <div class="gtr" {lang}>
   <div class="veil" class:on={scrolled} aria-hidden="true"></div>
   <!-- Blended with `difference`, so it stays legible over paper, ink and photos alike. -->
   <header class="bar" class:onpanel={open === 'menu'}>
-    <a class="name" href="{base}/{lang}">Ground Truth</a>
+    {@render where(false)}
     <div class="right">
       <button
         type="button"
@@ -119,6 +138,12 @@
       <a class="lang" href={hrefFor(other)} hreflang={other} lang={other} title={L.readOther} aria-label={L.readOther}>{OTHER_NAME[other]}</a>
     </div>
   </header>
+  <!-- The topic in the accent. It can't sit in the bar above, whose
+       inverting blend would turn orange blue; nothing passes under it on the
+       pages that have a topic, so it doesn't need the blend. -->
+  {#if current && !open}
+    <div class="bar plain">{@render where(true)}</div>
+  {/if}
 
   {@render children()}
 
@@ -248,6 +273,8 @@
     animation-timing-function: cubic-bezier(0.3, 0.7, 0.1, 1);
   }
 
+  /* Below headline size there are three steps and no others: 11px for
+     labels (mono), 14px for running text, 16px for navigation. */
   .gtr {
     --k: 1; /* scale for the small labels; larger for Bangla, below */
     --mono: 'JetBrains Mono', 'Noto Sans Bengali', ui-monospace, monospace;
@@ -317,7 +344,59 @@
     font-stretch: 75%;
     letter-spacing: -0.01em;
   }
+  /* The topic sits on the name's line at the same size, lighter, so the
+     name reads as the parent and the topic as where you are in it. */
+  .where {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    min-width: 0;
+  }
+  .slash,
+  .here {
+    font-family: 'Instrument Sans', 'Noto Sans Bengali', system-ui, sans-serif;
+    font-size: 1.4rem;
+    font-weight: 420;
+    font-stretch: 75%;
+    letter-spacing: -0.01em;
+  }
+  .slash {
+    opacity: 0.35;
+  }
+  /* each layer shows only its half */
+  .bar:not(.plain) .slash,
+  .bar:not(.plain) .here,
+  .plain .name {
+    visibility: hidden;
+  }
+  .plain {
+    mix-blend-mode: normal;
+    color: var(--accent-text);
+  }
+  .plain .where {
+    pointer-events: none;
+  }
+  .plain .here {
+    pointer-events: auto;
+  }
+  .plain .slash {
+    color: var(--ink);
+    opacity: 0.3;
+  }
+  .here {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: inherit;
+    text-decoration: none;
+  }
+  .here:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
   .right {
+    flex: none;
     display: flex;
     align-items: center;
     gap: 1.1rem;
@@ -385,7 +464,7 @@
   .status {
     min-height: 1rem;
     margin: 1rem 0 0.5rem;
-    font: 500 calc(0.75rem * var(--k))/1 var(--mono);
+    font: 500 calc(0.6875rem * var(--k))/1 var(--mono);
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--accent-text);
@@ -436,7 +515,7 @@
   }
   .i,
   .ct {
-    font: 500 calc(0.75rem * var(--k))/1 var(--mono);
+    font: 500 calc(0.6875rem * var(--k))/1 var(--mono);
     color: var(--mute);
   }
   .ct {
@@ -467,7 +546,6 @@
   .thumbs i {
     width: 3.25rem;
     height: 4rem;
-    border-radius: 2px;
     object-fit: cover;
     background: var(--ink);
     filter: grayscale(1);
@@ -508,7 +586,7 @@
   .house p {
     max-width: 30rem;
     margin: 0;
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     line-height: 1.45;
     color: var(--mute);
   }
@@ -516,7 +594,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.6rem 1.5rem;
-    font: 500 calc(0.75rem * var(--k))/1 var(--mono);
+    font: 500 calc(0.6875rem * var(--k))/1 var(--mono);
     letter-spacing: 0.06em;
     text-transform: uppercase;
   }
@@ -572,6 +650,22 @@
   @media (max-width: 759px) {
     .gtr {
       --pad: 4vw;
+    }
+    /* No room for one line beside the buttons: the topic goes under the name. */
+    .where {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.15rem;
+    }
+    .where .name {
+      font-size: 1.2rem;
+    }
+    .slash {
+      display: none;
+    }
+    .here {
+      max-width: 100%;
+      font-size: 1rem;
     }
     li a {
       grid-template-columns: 2rem minmax(0, 1fr) auto;

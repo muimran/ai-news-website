@@ -110,7 +110,6 @@
     aspect-ratio: 5 / 7;
     overflow: hidden;
     border: 1px solid var(--line);
-    border-radius: 3px;
   }
   .photo img {
     display: block;
@@ -153,7 +152,7 @@
   .intro {
     max-width: 36rem;
     margin: -0.5rem 0 2rem;
-    font-size: 1.05rem;
+    font-size: 1rem;
     line-height: 1.6;
   }
   .links {
@@ -184,7 +183,7 @@
     flex-wrap: wrap;
     align-items: baseline;
     gap: 0.75rem 1.75rem;
-    font: 500 calc(0.75rem * var(--k))/1 var(--mono);
+    font: 500 calc(0.6875rem * var(--k))/1 var(--mono);
   }
   .back {
     color: var(--mute);
@@ -229,7 +228,7 @@
     padding: 1.5rem 0 0.6rem;
     border-bottom: 1px solid var(--ink);
     background: var(--bg);
-    font: 500 calc(0.75rem * var(--k))/1 var(--mono);
+    font: 500 calc(0.6875rem * var(--k))/1 var(--mono);
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
