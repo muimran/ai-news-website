@@ -22,7 +22,7 @@ export const formatUrl = (key, lang) => `${base}/${lang}/${FORMATS[key].slug}`;
    every story: keyed by English slug, or by its own slug for a Bangla
    original. A translation shows its original's photo. */
 const PHOTOS = {
-  'the-ai-boom-is-reaching-places-investors-forgot-to-look': 'photo-1680992046626-418f7e910589',
+  'the-ai-boom-is-reaching-places-investors-forgot-to-look': 'photo-1653925689658-8dd32ebb0658',
   'the-procurement-documents-that-show-how-a-country-buys-surveillance': 'photo-1515432085503-cabf2fbcd690',
   'election-officials-are-being-sold-ai-they-did-not-ask-for': 'photo-1782998307726-f93ec14eda24',
   'who-owns-the-data-generated-by-ordinary-life': 'photo-1583429891508-015ef9cd958e',
