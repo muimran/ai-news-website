@@ -25,7 +25,7 @@
       <span>{lang === 'bn' ? 'প্রতিবেদন' : stories.length === 1 ? 'story' : 'stories'}</span>
     </div>
     <div class="about">
-      <p class="lab">{kicker}</p>
+      <p class="lab">{kicker}<span class="count-inline">&nbsp;· {L.count(num(stories.length))}</span></p>
       <h1>{title}</h1>
       <div class="tools">
         <a class="cell fill" href={back.href}>← {back.label}</a>
@@ -144,24 +144,30 @@
     color: var(--mute);
   }
 
+  .count-inline {
+    display: none;
+  }
+  /* A phone: compact. No count column, the count rides in the label line;
+     a smaller title; the way back and the search share one row. */
   @media (max-width: 759px) {
-    .tally {
-      padding: var(--u);
+    .head {
+      grid-template-columns: minmax(0, 1fr);
     }
-    .tally b {
-      font-size: 2.2rem;
+    .tally {
+      display: none;
+    }
+    .count-inline {
+      display: inline;
     }
     h1 {
-      padding: var(--in) var(--in) var(--in);
-      font-size: 2.2rem;
+      padding: var(--u) var(--in) var(--in);
+      font-size: 2rem;
     }
-    .tools {
-      flex-wrap: wrap;
+    .cell {
+      height: 2.5rem;
     }
     .filter {
-      flex-basis: 100%;
-      border-top: 1px solid var(--hair);
-      border-right: 0;
+      flex: 1;
     }
   }
 </style>
