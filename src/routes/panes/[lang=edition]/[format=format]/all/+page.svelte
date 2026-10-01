@@ -17,7 +17,6 @@
   lang={data.lang}
   stories={data.stories}
   title={L.all}
-  kicker="{L.format} · {name}"
   back={{ href: gridFormat(data.format, data.lang), label: L.reel }}
   placeholder={L.searchBy}
 />

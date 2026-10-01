@@ -18,7 +18,6 @@
   stories={data.stories}
   section={data.section}
   title={L.all}
-  kicker="{L.topic} · {name}"
   back={{ href: gridTopic(data.section, data.lang), label: L.reel }}
   placeholder={L.searchIn}
 />

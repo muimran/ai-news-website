@@ -9,7 +9,7 @@
   import Ledger from './Ledger.svelte';
   import Mark from './Mark.svelte';
 
-  let { lang, stories, title, kicker, back, section = null, placeholder } = $props();
+  let { lang, stories, title, back, section = null, placeholder } = $props();
   const L = $derived(STR[lang]);
   const num = (n) => formatNumber(n, lang);
 
@@ -25,7 +25,10 @@
       <span>{lang === 'bn' ? 'প্রতিবেদন' : stories.length === 1 ? 'story' : 'stories'}</span>
     </div>
     <div class="about">
-      <p class="lab">{kicker}<span class="count-inline">&nbsp;· {L.count(num(stories.length))}</span></p>
+      <!-- the name is the header's already (the site's, or the topic's or
+           format's cell), so the label is only the count, and only on a
+           phone, where the count column isn't shown -->
+      <p class="lab">{L.count(num(stories.length))}</p>
       <h1>{title}</h1>
       <div class="tools">
         <a class="cell fill" href={back.href}>← {back.label}</a>
@@ -144,8 +147,10 @@
     color: var(--mute);
   }
 
-  .count-inline {
-    display: none;
+  @media (min-width: 760px) {
+    .lab {
+      display: none;
+    }
   }
   /* A phone: compact. No count column, the count rides in the label line;
      a smaller title; the way back and the search share one row. */
@@ -155,9 +160,6 @@
     }
     .tally {
       display: none;
-    }
-    .count-inline {
-      display: inline;
     }
     h1 {
       padding: var(--u) var(--in) var(--in);

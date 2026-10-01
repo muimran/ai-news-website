@@ -15,7 +15,6 @@
   lang={data.lang}
   stories={data.stories}
   title={L.all}
-  kicker="Ground Truth"
   back={{ href: gridHome(data.lang), label: L.reel }}
   placeholder={L.searchAll}
 />
