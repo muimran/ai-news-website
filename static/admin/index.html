@@ -10,5 +10,38 @@
     <!-- Sveltia CMS: a git-backed editor. It reads config.yml, shows a login,
          and commits markdown straight into content/articles/. -->
     <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js" type="module"></script>
+    <!-- A "Wide photo" block for the story body: a photo on a line of its
+         own, which the site runs across the full width of the page with its
+         caption and credit beneath. Stored as plain markdown —
+         ![alt](photo "Caption — Photo: credit") — so a story still reads
+         anywhere. -->
+    <script type="module">
+      const SEP = ' — Photo: ';
+      window.CMS?.registerEditorComponent({
+        id: 'wide-photo',
+        label: 'Wide photo',
+        fields: [
+          { name: 'src', label: 'Photo', widget: 'image' },
+          {
+            name: 'alt',
+            label: 'Alt text',
+            widget: 'string',
+            hint: 'What a screen-reader user hears instead of the photo. Describe what is shown.'
+          },
+          { name: 'caption', label: 'Caption', widget: 'string', required: false },
+          { name: 'credit', label: 'Photo credit', widget: 'string', required: false }
+        ],
+        pattern: /^!\[([^\]]*)\]\((\S+?)(?: "([^"]*)")?\)$/m,
+        fromBlock: (m) => {
+          const [caption = '', credit = ''] = (m[3] || '').split(SEP);
+          return { alt: m[1], src: m[2], caption, credit };
+        },
+        toBlock: (d) => {
+          const title = [d.caption, d.credit && `${SEP.trim()} ${d.credit}`].filter(Boolean).join(' ');
+          return `![${d.alt || ''}](${d.src}${title ? ` "${title.replace(/"/g, "'")}"` : ''})`;
+        },
+        toPreview: (d) => `<figure><img src="${d.src}" alt="${d.alt || ''}" style="width:100%" /><figcaption>${d.caption || ''}</figcaption></figure>`
+      });
+    </script>
   </body>
 </html>

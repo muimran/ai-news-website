@@ -253,6 +253,19 @@
     font-size: 1.125rem;
     font-weight: 620;
   }
+  /* a wide photo, in this design held to the text's width */
+  .body :global(figure.wide) {
+    margin: 2em 0;
+  }
+  .body :global(figure.wide img) {
+    display: block;
+    width: 100%;
+  }
+  .body :global(figure.wide figcaption) {
+    margin-top: 0.6em;
+    font: 400 calc(0.6875rem * var(--k)) / 1.4 var(--mono);
+    color: var(--mute);
+  }
   .body :global(blockquote) {
     margin: 2em 0;
     padding: 0.2em 0 0.2em var(--in);

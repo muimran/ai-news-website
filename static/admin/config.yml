@@ -157,6 +157,7 @@ collections:
   - name: body
     label: Story
     widget: markdown
+    hint: For a photo across the full width of the page, add a Wide photo block (or put a photo on a line of its own) with a caption and credit.
 - name: articles_bn
   label: প্রতিবেদন — বাংলা
   label_singular: বাংলা প্রতিবেদন
@@ -299,3 +300,4 @@ collections:
   - name: body
     label: প্রতিবেদন
     widget: markdown
+    hint: For a photo across the full width of the page, add a Wide photo block (or put a photo on a line of its own) with a caption and credit.

@@ -91,15 +91,31 @@
     box-sizing: border-box;
     transition:
       width 0.4s cubic-bezier(0.3, 0.7, 0.1, 1),
-      bottom 0.4s cubic-bezier(0.3, 0.7, 0.1, 1);
+      top 0.5s cubic-bezier(0.45, 0, 0.2, 1),
+      bottom 0.4s cubic-bezier(0.3, 0.7, 0.1, 1),
+      border-right-width 0.2s ease;
     border-left: var(--frame) solid var(--rule);
     border-right: var(--line) solid var(--rule);
     background: var(--paper);
   }
   /* deep in a story the topics row lowers away and the page runs on to the
      screen's foot; the pane goes with it, so its rule never breaks off */
-  :global(.g.reading) .latest {
+  :global(.g.reading) .latest,
+  :global(.g:has(main.footless)) .latest {
     bottom: var(--mv);
+  }
+  :global(.g.far) .latest {
+    top: var(--mv);
+  }
+  /* a story's facts folded into this line: it thickens as their trace,
+     once they've arrived, and thins again before they unfold */
+  :global(.g.deep) .latest {
+    border-right-width: 3px;
+    transition:
+      width 0.4s cubic-bezier(0.3, 0.7, 0.1, 1),
+      top 0.5s cubic-bezier(0.45, 0, 0.2, 1),
+      bottom 0.4s cubic-bezier(0.3, 0.7, 0.1, 1),
+      border-right-width 0.3s ease 0.5s;
   }
   @media (prefers-reduced-motion: reduce) {
     .latest {

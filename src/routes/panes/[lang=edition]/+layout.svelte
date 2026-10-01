@@ -102,11 +102,11 @@
   <link rel="preconnect" href="https://images.unsplash.com" />
   <link
     rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wdth,wght@75..100,400..700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Bengali:wdth,wght@62.5..100,400..700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wdth,wght@75..100,400..700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Bengali:wdth,wght@62.5..100,400..700&family=Gelasio:ital,wght@0,400;0,700;1,400&family=Noto+Serif+Bengali:wght@400;700&display=swap"
   />
 </svelte:head>
 
-<div class="g" {lang} class:folded={ui.folded || ((!!page.data?.story || ui.reading) && !ui.pin)} class:reading={ui.reading}>
+<div class="g" {lang} class:folded={ui.folded || ((!!page.data?.story || ui.reading) && !ui.pin)} class:reading={ui.reading} class:deep={ui.deep || ui.wide} class:far={ui.deep} class:bare={ui.deep && !ui.up && !open}>
   <!-- on a phone a story's topic is the first of its facts, so the header
        doesn't give it a row of its own there -->
   <header class="top" class:topic={!!(current || format) && !reading}>
@@ -139,6 +139,11 @@
          on the right. -->
     <div class="panel menu" id="gmenu" transition:blind>
       <nav class="col" aria-label={L.topics}>
+        <!-- a phone has no Latest pane, and a story no topics row to open it
+             from: the menu leads to it -->
+        <button type="button" class="row big fill to-latest" onclick={() => ((open = null), (ui.sheet = true))}>
+          <span class="nm">{L.latest}</span><span class="ct">→</span>
+        </button>
         <p class="head">{L.topics}</p>
         {#each data.topics as t (t.key)}
           <a class="row big fill" href={gridTopic(t.key, lang)} aria-current={current === t.key ? 'page' : undefined}>
@@ -244,6 +249,10 @@
     --line: 1px;
     --mono: 'JetBrains Mono', 'Noto Sans Bengali', ui-monospace, monospace;
     --sans: 'Instrument Sans', 'Noto Sans Bengali', system-ui, sans-serif;
+    /* the reading face, for the running text of stories and pages only:
+       Georgia where the device has it, Gelasio (drawn to its measure) where
+       it doesn't, and a serif Bangla to sit with them */
+    --read: Georgia, 'Gelasio', 'Noto Serif Bengali', serif;
     --u: 0.75rem;
     --in: calc(2 * var(--u));
     --m: 0px;
@@ -267,6 +276,7 @@
     --k: 1.18;
     --mono: 'Noto Sans Bengali', 'JetBrains Mono', ui-monospace, monospace;
     --sans: 'Noto Sans Bengali', 'Instrument Sans', system-ui, sans-serif;
+    --read: 'Noto Serif Bengali', Georgia, 'Gelasio', serif;
   }
   :global(.g:lang(bn) *) {
     letter-spacing: 0 !important;
@@ -318,6 +328,18 @@
     border-top: 0;
     border-bottom-width: var(--line);
     background: var(--paper);
+    transition: transform 0.5s cubic-bezier(0.45, 0, 0.2, 1);
+  }
+  /* deep in a story the header slides off the top, in step with the facts
+     folding away; scrolling back up even a little brings it back, over
+     the story */
+  .g.bare .top {
+    transform: translateY(-100%);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .top {
+      transition: none;
+    }
   }
   .cell {
     display: flex;
@@ -454,6 +476,23 @@
     font-weight: 620;
     font-stretch: 75%;
     letter-spacing: -0.01em;
+  }
+  /* the way to Latest, on a phone only: the pane does the job elsewhere */
+  .to-latest {
+    display: none;
+    width: 100%;
+    border: 0;
+    border-bottom: var(--line) solid var(--rule);
+    background: var(--o3);
+    color: var(--o-text);
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  @media (max-width: 759px) {
+    .to-latest {
+      display: flex;
+    }
   }
   .row[aria-current='page'] {
     background: var(--o3);

@@ -90,8 +90,9 @@
     letter-spacing: 0;
   }
   .body {
+    font-family: var(--read);
     font-size: 1.125rem;
-    line-height: 1.65;
+    line-height: 1.75;
   }
   .text:lang(bn) .body {
     line-height: 1.85;
@@ -101,6 +102,7 @@
   }
   .body :global(h2),
   .body :global(h3) {
+    font-family: var(--sans);
     margin: 2em 0 0.5em;
     font-size: 1.125rem;
     font-weight: 620;
@@ -120,17 +122,25 @@
     .doc {
       grid-template-columns: minmax(0, 1fr);
     }
+    /* a phone: the pages as one row that swipes, like the topics row */
     .pages {
       flex-direction: row;
-      flex-wrap: wrap;
+      overflow-x: auto;
+      scrollbar-width: none;
       border-right: 0;
       border-bottom: var(--line) solid var(--rule);
     }
+    .pages::-webkit-scrollbar {
+      display: none;
+    }
     .lab {
-      flex-basis: 100%;
+      display: none;
     }
     .pg {
+      flex: none;
+      border-bottom: 0;
       border-right: 1px solid var(--hair);
+      white-space: nowrap;
     }
     .text {
       padding: 1.5rem 1rem 3rem;

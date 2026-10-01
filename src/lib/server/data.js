@@ -133,6 +133,19 @@ export const altFor = (section, index = false) =>
     })
   );
 
+/* A photo on a line of its own in a story is a wide photo: it becomes a
+   figure that runs the width of the page, its title (the editor's
+   "Caption — Photo: credit") the caption beneath. A site path gets the
+   site's base, so uploads work under GitHub Pages too. */
+const widePhotos = (html) =>
+  html.replace(
+    /<p>\s*<img src="([^"]+)" alt="([^"]*)"(?: title="([^"]*)")?\s*\/?>\s*<\/p>/g,
+    (_, src, alt, title) =>
+      `<figure class="wide"><img src="${src.startsWith('/') ? base + src : src}" alt="${alt}" loading="lazy" />` +
+      (title ? `<figcaption>${title}</figcaption>` : '') +
+      `</figure>`
+  );
+
 export function storyPage(s) {
   const all = order(s.lang);
   const i = all.findIndex((x) => x.slug === s.slug);
@@ -153,7 +166,7 @@ export function storyPage(s) {
 
   return {
     story: { ...summary(s), kind: s.kind, author: s.author, authorTitle: s.authorTitle, location: s.location },
-    html: marked.parse(body),
+    html: widePhotos(marked.parse(body)),
     n: i + 1,
     next,
     alt,

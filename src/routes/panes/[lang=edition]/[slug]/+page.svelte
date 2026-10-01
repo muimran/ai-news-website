@@ -6,10 +6,11 @@
      and the next three stories in the same two columns at its foot. */
   import { base } from '$app/paths';
   import { kindLabel, sectionLabel, formatNumber, FORMATS } from '$lib/labels.js';
-  import { photo, setLastRead, two, DAY_DATE, STR } from '$lib/site/reel.js';
+  import { photo, setLastRead, two, DAY_DATE, SHORT_DATE, STR } from '$lib/site/reel.js';
   import Mark from '../../Mark.svelte';
   import GridPage from '../../GridPage.svelte';
   import { gridTopic, storyUrl } from '../../grid.js';
+  import { ui } from '../../ui.svelte.js';
 
   let { data } = $props();
   const lang = $derived(data.lang);
@@ -33,6 +34,28 @@
     picked = null;
     setLastRead(data.story.slug);
   });
+
+  /* While a wide photo is on screen the facts make way for it, folding
+     into the Latest line as they do deeper in, so nothing sits on it. */
+  let article = $state();
+  $effect(() => {
+    void data.story.slug;
+    const figures = article?.querySelectorAll('figure.wide');
+    if (!figures?.length) return;
+    const seen = new Set();
+    const watch = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) e.isIntersecting ? seen.add(e.target) : seen.delete(e.target);
+        ui.wide = seen.size > 0;
+      },
+      { root: article.closest('main.page') }
+    );
+    figures.forEach((f) => watch.observe(f));
+    return () => {
+      watch.disconnect();
+      ui.wide = false;
+    };
+  });
 </script>
 
 <svelte:head>
@@ -40,7 +63,7 @@
   <meta name="description" content={s.dek} />
 </svelte:head>
 
-<GridPage {lang} section={s.section} reading>
+<GridPage {lang} section={s.section} reading foot={false}>
 <div class="story">
   <figure class="hero">
     <div class="media" style:view-transition-name={picked ? null : 'hero'}>
@@ -71,7 +94,7 @@
       {/if}
     </aside>
 
-    <article class="text" {lang}>
+    <article class="text" {lang} bind:this={article}>
       <!-- one reading column, centred in the space beside the facts -->
       <div class="col">
         <h1>{s.title}</h1>
@@ -89,8 +112,12 @@
       {#each next as it (it.story.slug)}
         {@const p = photo(it.story)}
         <a class="cell fill" href={storyUrl(it.story)} onclick={() => (picked = it.story.slug)}>
-          <span class="cmedia" style:view-transition-name={picked === it.story.slug ? 'hero' : null}>
-            {#if p}<img src={p.src} srcset={p.srcset} sizes="(max-width: 759px) 6rem, 25vw" alt="" loading="lazy" />{/if}
+          <!-- the reel's spine: date and length up a strip beside the photo -->
+          <span class="cbody">
+            <span class="cspine"><span>{SHORT_DATE[it.story.lang].format(new Date(it.story.date))} · {formatNumber(it.story.readTime, it.story.lang)} {STR[it.story.lang].min}</span></span>
+            <span class="cmedia" style:view-transition-name={picked === it.story.slug ? 'hero' : null}>
+              {#if p}<img src={p.src} srcset={p.srcset} sizes="(max-width: 759px) 6rem, 25vw" alt="" loading="lazy" />{/if}
+            </span>
           </span>
           <span class="ct"><b>{two(it.n, lang)}</b>{it.story.title}</span>
         </a>
@@ -133,6 +160,48 @@
     display: grid;
     grid-template-columns: var(--pic) minmax(0, 1fr);
     border-bottom: var(--line) solid var(--rule);
+  }
+  /* Well into the story (past the Latest pane and topics row stepping
+     aside) the facts slide away into the Latest pane's line like a drawer
+     closing, their own rule riding along, and the pane's line then
+     thickens as the trace of them. Back at the top the line thins and
+     they slide back out of it. Their column keeps its place, so the text never
+     moves. */
+  @media (min-width: 760px) {
+    /* a drawer: the facts keep their shape and slide left into the line,
+       cut off where their column begins, so they vanish into it */
+    .facts {
+      clip-path: inset(0 0 0 0);
+      transition:
+        transform 0.5s cubic-bezier(0.45, 0, 0.2, 1) 0.1s,
+        clip-path 0.5s cubic-bezier(0.45, 0, 0.2, 1) 0.1s;
+    }
+    .read::before {
+      transition:
+        transform 0.5s cubic-bezier(0.45, 0, 0.2, 1) 0.1s,
+        opacity 0.15s ease 0.25s;
+    }
+    :global(.g.deep) .facts {
+      transform: translateX(-100%);
+      clip-path: inset(0 0 0 100%);
+      pointer-events: none;
+      transition:
+        transform 0.5s cubic-bezier(0.45, 0, 0.2, 1),
+        clip-path 0.5s cubic-bezier(0.45, 0, 0.2, 1);
+    }
+    :global(.g.deep) .read::before {
+      transform: translateX(calc(-1 * var(--pic)));
+      opacity: 0;
+      transition:
+        transform 0.5s cubic-bezier(0.45, 0, 0.2, 1),
+        opacity 0.15s ease 0.5s;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .facts,
+    .read::before {
+      transition: none !important;
+    }
   }
   .facts {
     align-self: start;
@@ -224,9 +293,11 @@
     padding: calc(3 * var(--u)) var(--in) calc(7 * var(--u));
     min-width: 0;
   }
+  /* the reading column, centred on the whole page rather than the space
+     beside the facts, so it's already where it stays once they've gone */
   .col {
     max-width: 40rem;
-    margin: 0 auto;
+    margin: 0 auto 0 max(0px, calc((100% - var(--pic) - 40rem) / 2));
   }
   h1 {
     margin: 0 0 1.5rem;
@@ -243,8 +314,9 @@
     line-height: 1.4;
   }
   .body {
+    font-family: var(--read);
     font-size: 1.125rem;
-    line-height: 1.65;
+    line-height: 1.75;
   }
   .text:lang(bn) h1 {
     line-height: 1.2;
@@ -258,11 +330,41 @@
   }
   .body :global(h2),
   .body :global(h3) {
+    font-family: var(--sans);
     margin: 2em 0 0.5em;
     font-size: 1.125rem;
     font-weight: 620;
   }
+  /* A wide photo: out of the text column to the page's full width. The
+     column is centred on the page, so half the page either side of its
+     middle is the page's edge. The caption sits under it in line with the
+     text. */
+  .body :global(figure.wide) {
+    /* above the facts and their rule, even while they fold away */
+    position: relative;
+    z-index: 2;
+    background: var(--paper);
+    width: 100cqi;
+    margin: 2.5em 0 2.5em calc(50% - 50cqi);
+    border-top: var(--line) solid var(--rule);
+    border-bottom: var(--line) solid var(--rule);
+  }
+  .body :global(figure.wide img) {
+    display: block;
+    width: 100%;
+    max-height: 82vh;
+    object-fit: cover;
+    background: var(--i3);
+  }
+  .body :global(figure.wide figcaption) {
+    padding: var(--u) max(var(--in), calc(50cqi - 20rem));
+    border-top: 1px solid var(--hair);
+    font: 500 calc(0.6875rem * var(--k)) / 1.5 var(--mono);
+    letter-spacing: 0.04em;
+    color: var(--mute);
+  }
   .body :global(blockquote) {
+    font-family: var(--sans);
     margin: 2em 0;
     padding: 0.2em 0 0.2em var(--in);
     border-left: 2px solid var(--o);
@@ -310,7 +412,34 @@
   .cell:last-child {
     border-right: 0;
   }
+  .cbody {
+    display: flex;
+  }
+  .cspine {
+    flex: none;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: var(--spine);
+    padding-bottom: var(--u);
+    box-sizing: border-box;
+    border-right: 1px solid var(--hair);
+  }
+  .cspine span {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font: 400 calc(0.6875rem * var(--k)) / 1 var(--mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--mute);
+  }
+  .cell:hover .cspine span,
+  .cell:focus-visible .cspine span {
+    color: inherit;
+  }
   .cmedia {
+    flex: 1;
     position: relative;
     aspect-ratio: 16 / 9;
     background: var(--i3);
@@ -390,6 +519,9 @@
     .facts .face {
       width: 2rem;
     }
+    .col {
+      margin: 0 auto;
+    }
     .text {
       grid-row: 2;
       grid-column: 1;
@@ -419,6 +551,12 @@
     }
     .cell + .cell {
       border-top: 1px solid var(--hair);
+    }
+    .cspine {
+      display: none;
+    }
+    .cbody {
+      flex: none;
     }
     .cmedia {
       flex: none;

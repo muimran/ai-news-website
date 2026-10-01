@@ -29,6 +29,8 @@ What follows is drawn from eighteen interviews, a review of contracts obtained
 under freedom of information law, and two weeks of reporting on the ground. Where
 we could not confirm a claim independently, we have said so.
 
+![A lone cyclist on a rural road lined with tall trees](https://images.unsplash.com/photo-1766859786368-19ffd664ce72?w=2400&q=80&auto=format&fit=crop "The road to the nearest clinic. — Photo: Fareed Akhyear Chowdhury / Unsplash (stand-in)")
+
 ## The pattern
 
 The same arrangement appears in three other places we checked. Each time, the
