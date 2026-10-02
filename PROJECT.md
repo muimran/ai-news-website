@@ -126,6 +126,9 @@ undo it" log.
 - **Social links** in the footer point at placeholder `#about` — real URLs
   need to go into the `SOCIAL` array in `Footer.svelte`.
 - **Newsletter signup** fakes a 900ms delay — no real endpoint wired.
+- **Writer photos are stand-ins**: five AI-generated faces of people who
+  don't exist, shared between the 18 writers (`static/uploads/authors/
+  stand-in-*.jpg`). Each writer's real photo replaces theirs before launch.
 - **Test fixtures** need clearing before launch: `static/uploads/test-photo.svg`
   and the frontmatter fields on the English test stories that reference it.
 - **CMS scaling decision (WordPress migration)** — discussed, architecture
