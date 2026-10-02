@@ -65,6 +65,15 @@
 
   function measure() {
     mobile = matchMedia('(max-width: 759px)').matches;
+    /* how many whole cards the window holds: those whose photos come
+       nearest their natural 5:7 at the reel's height */
+    const media = track.querySelector(':scope > .card .media');
+    const spine = track.querySelector('.spine');
+    if (mobile || !media || !spine) win.style.removeProperty('--per');
+    else {
+      const natural = (media.offsetHeight * 5) / 7 + spine.offsetWidth;
+      win.style.setProperty('--per', Math.max(1, Math.round((win.clientWidth - spine.offsetWidth) / natural)));
+    }
     if (mobile) {
       wrap.style.height = '';
       track.style.transform = '';
@@ -262,8 +271,14 @@
     height: 100vh;
     overflow: hidden;
   }
-  /* the frame's sides; the header row and topics row close it above and below */
+  /* the frame's sides; the header row and topics row close it above and below.
+     Whole cards and the next card's date strip fill it exactly, so it ends
+     on a strip, never on a cut photo: as many cards as keep each photo
+     nearest its natural 5:7 (counted in measure), one on a phone. */
   .window {
+    container-type: inline-size;
+    --per: 2;
+    --fw: calc((100cqw - var(--spine)) / var(--per));
     position: absolute;
     top: calc(var(--mv) + var(--top));
     left: calc(var(--m) + var(--side));
@@ -322,7 +337,7 @@
     align-items: baseline;
     gap: 0.6rem;
     height: var(--label);
-    padding: 0 var(--in);
+    padding: 0 var(--in) 0 0;
     box-sizing: border-box;
     line-height: var(--label);
     white-space: nowrap;
@@ -349,8 +364,16 @@
   .card:focus-visible .lab .n {
     color: var(--paper);
   }
+  /* the number stands over the date strip, flush with the date on its
+     photo side, so a card cut down to its strip at the window's edge still
+     shows it whole; the topic starts where the headline does */
   .n {
     flex: none;
+    width: var(--spine);
+    margin-right: calc(var(--in) - 0.6rem);
+    padding-right: calc(var(--u) / 2);
+    box-sizing: border-box;
+    text-align: right;
     font-size: 1rem;
     font-weight: 640;
     font-stretch: 75%;
@@ -632,11 +655,14 @@
     .track::-webkit-scrollbar {
       display: none;
     }
+    .window {
+      --per: 1;
+    }
     .card,
     .pair,
     .issue,
     .door {
-      width: 80vw;
+      width: var(--fw);
       scroll-snap-align: start;
     }
     .track > :last-child {

@@ -264,7 +264,6 @@
     --side: calc(28 * var(--u)); /* the Latest pane */
     --reel: calc(100vh - var(--top) - var(--bot) - 2 * var(--mv));
     --spine: calc(3 * var(--u)); /* a card's date strip, beside its photo */
-    --fw: calc((var(--reel) - var(--label)) * 5 / 7 + var(--spine));
     min-height: 100vh;
     background: var(--paper);
     color: var(--ink);
