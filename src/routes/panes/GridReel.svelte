@@ -380,13 +380,15 @@
     min-height: 0;
   }
   /* a strip one label row thick, a hairline from the photo */
+  /* the date reads up the strip's photo side, a few px off its own photo,
+     so it plainly belongs to that card and not the one before */
   .spine {
     flex: none;
     display: flex;
     align-items: flex-end;
-    justify-content: center;
+    justify-content: flex-end;
     width: var(--spine);
-    padding-bottom: var(--in);
+    padding: 0 calc(var(--u) / 2) var(--in) 0;
     box-sizing: border-box;
     border-right: 1px solid var(--hair);
   }

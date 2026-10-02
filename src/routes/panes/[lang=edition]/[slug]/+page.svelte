@@ -413,9 +413,9 @@
     flex: none;
     display: flex;
     align-items: flex-end;
-    justify-content: center;
+    justify-content: flex-end;
     width: var(--spine);
-    padding-bottom: var(--u);
+    padding: 0 calc(var(--u) / 2) var(--u) 0;
     box-sizing: border-box;
     border-right: 1px solid var(--hair);
   }
