@@ -16,8 +16,27 @@
      repeated on its own cards */
   let { lang, reel, section = null, format = null, opens = false } = $props();
   const L = $derived(STR[lang]);
-  const items = $derived(reel.items);
-  const stories = $derived(items.flatMap((i) => (i.type === 'pair' ? [i.a, i.b].filter(Boolean) : [i])));
+  /* A topic's or format's reel keeps one shape: its lead full height, the
+     rest two to a column, and the way to all its stories always in the last
+     column's lower half. So it shows an even number of stories: of an odd
+     number, the oldest waits in the full list. With nothing but the lead,
+     the way in takes a column of its own. The front reel is one story to a
+     column and keeps its doorway at the end. */
+  const shaped = $derived.by(() => {
+    if (!section && !format) return { items: reel.items, doorIn: false };
+    const [lead, ...rest] = reel.items;
+    const halves = rest.flatMap((i) => (i.type === 'pair' ? [i.a, i.b].filter(Boolean) : [i]));
+    if (!halves.length) return { items: [lead], doorIn: false };
+    const keep = halves.length % 2 ? halves : halves.slice(0, -1);
+    const pairs = [];
+    for (let k = 0; k < keep.length; k += 2) {
+      pairs.push({ type: 'pair', key: keep[k].key, a: keep[k], b: keep[k + 1] ?? null });
+    }
+    return { items: [lead, ...pairs], doorIn: true };
+  });
+  const items = $derived(shaped.items);
+  const doorIn = $derived(shaped.doorIn);
+  const allHref = $derived(format ? `${gridFormat(format, lang)}/all` : gridIndex(lang, section));
   const issue = $derived(reel.latest ?? []);
   /* This week shows as many headlines as fit the card at their own height,
      no more and no stretching: the rest are hidden, and the dates above
@@ -69,8 +88,12 @@
     active = cur?.n ?? 1;
   }
 
-  // the pane folding or opening changes the reel's width
+  /* Measure again whenever the reel's length can change: other stories
+     (moving from one topic to another reuses this reel, so without this it
+     kept the last topic's length and scrolled on past its own end), or
+     the pane folding and opening. */
   $effect(() => {
+    void items;
     void ui.folded;
     if (track) tick().then(measure);
   });
@@ -133,6 +156,14 @@
   });
 </script>
 
+{#snippet door()}
+  <a class="door fill" href={allHref} draggable="false">
+    <span class="kick">{L.count(num(reel.total))}</span>
+    <span class="big">{L.all} →</span>
+    <span class="kick">{range(reel.from, reel.to, lang)}</span>
+  </a>
+{/snippet}
+
 {#snippet card(it, half)}
   {@const s = it.story}
   {@const pic = photo(s)}
@@ -193,17 +224,13 @@
         {#if item.type === 'pair'}
           <div class="pair">
             {@render card(item.a, true)}
-            {#if item.b}{@render card(item.b, true)}{:else}<span class="card half empty"></span>{/if}
+            {#if item.b}{@render card(item.b, true)}{:else if doorIn}{@render door()}{/if}
           </div>
         {:else}
           {@render card(item, false)}
         {/if}
       {/each}
-      <a class="door fill" href={format ? `${gridFormat(format, lang)}/all` : gridIndex(lang, section)} draggable="false">
-        <span class="kick">{L.count(num(reel.total))}</span>
-        <span class="big">{L.all} →</span>
-        <span class="kick">{range(reel.from, reel.to, lang)}</span>
-      </a>
+      {#if !doorIn}{@render door()}{/if}
     </div>
     </div>
 
@@ -464,8 +491,16 @@
   .half .cap {
     padding-top: calc(4 * var(--u));
   }
-  .empty {
-    pointer-events: none;
+  /* the way to all of them, in the last column's lower half */
+  .pair .door {
+    flex: 1;
+    min-height: 0;
+    width: auto;
+    border-right: 0;
+    border-top: var(--line) solid var(--rule);
+  }
+  .pair .door .big {
+    font-size: clamp(1.6rem, 0.8rem + 1.8vw, 2.8rem);
   }
 
   /* ---- this week ---- */

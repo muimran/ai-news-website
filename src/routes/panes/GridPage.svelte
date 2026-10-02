@@ -17,6 +17,7 @@
     if (el) el.scrollTop = 0;
     ui.reading = false;
     ui.deep = false;
+    ui.begun = false;
     ui.up = false;
     last = 0;
     ui.pin = false;
@@ -33,7 +34,10 @@
     }
     const deep = el.scrollTop > 160;
     if (deep !== ui.reading) ui.reading = deep;
-    // where the header leaves and the facts fold, together
+    // a phone's header goes almost at once, as the reading starts
+    const begun = el.scrollTop > 50;
+    if (begun !== ui.begun) ui.begun = begun;
+    // where the header leaves and the facts fold, together (wide screens)
     const deeper = el.scrollTop > 340;
     if (deeper !== ui.deep) ui.deep = deeper;
   }
@@ -66,6 +70,10 @@
   :global(.g.reading) .page,
   .footless {
     bottom: var(--mv);
+  }
+  /* a story starts at the screen's top, under the header lying over it */
+  .footless {
+    top: var(--mv);
   }
   :global(.g.far) .page {
     top: var(--mv);

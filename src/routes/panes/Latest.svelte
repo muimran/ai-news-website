@@ -39,7 +39,7 @@
   }
 </script>
 
-<aside class="latest" class:folded class:sheet={ui.sheet} aria-label={L.latest}>
+<aside class="latest" class:folded class:sheet={ui.sheet} class:onstory={story} aria-label={L.latest}>
   {#if folded && !ui.sheet}
     <button type="button" class="strip fill" onclick={unfold}>
       <span>{L.latest} [+]</span>
@@ -101,7 +101,8 @@
   /* deep in a story the topics row lowers away and the page runs on to the
      screen's foot; the pane goes with it, so its rule never breaks off */
   :global(.g.reading) .latest,
-  :global(.g:has(main.footless)) .latest {
+  :global(.g:has(main.footless)) .latest,
+  :global(.g:has(.panel)) .latest {
     bottom: var(--mv);
   }
   :global(.g.far) .latest {
@@ -121,6 +122,10 @@
     .latest {
       transition: none;
     }
+  }
+  /* none on a story; on a phone it can still open from the menu */
+  .onstory:not(.sheet) {
+    display: none;
   }
   /* folded: one strip, its label turned to read up it */
   .strip {

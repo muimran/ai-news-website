@@ -66,6 +66,13 @@
     active = cur?.n ?? 1;
   }
 
+  /* Measure again when the stories change: moving from one topic to
+     another reuses this reel, which otherwise kept the last one's length. */
+  $effect(() => {
+    void items;
+    if (track) tick().then(measure);
+  });
+
   onMount(() => {
     const onScroll = () => !mobile && update();
     const onTrack = () => mobile && update();

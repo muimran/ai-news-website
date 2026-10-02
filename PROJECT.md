@@ -17,6 +17,42 @@ files read at build time via `import.meta.glob`. Sveltia CMS (git-backed
 headless CMS) sits at `/admin/` as the editing surface — no database, no
 server, output is static files.
 
+(The design language just above is the original one. The site has since been
+redesigned; see the next section for where it stands.)
+
+## Current design (October 2026): three versions side by side
+
+All three read the same stories; nothing is chosen yet.
+- `/en`, `/bn` — **the reel**: the live design.
+- `/grid/en` — **the grid**: the reel as a ruled table inside one ink frame.
+- `/panes/en` — **the panes**: the grid, full width, with a Latest pane down
+  the left. The one being worked on now.
+
+Rules the grid and panes versions keep to:
+- **One spatial unit.** Every size is a multiple of `--u` (12px on a wide
+  screen, 8px on a phone): label rows 3u, text 2u in from a cell's edge, and
+  so on. No space without a job; no filler to make something "fit".
+- **Line weights carry hierarchy, one job each.** A main rule (`--rule`)
+  parts rows and one story from the next; a hairline (`--hair`) divides cells
+  within a row. (The framed grid also has a heavier frame, `--frame`.)
+- **Lines are lighter on a phone** (`--rule` about 55% ink, `--hair` about 13%,
+  against 100% and 18% on a wide screen). In a small space every rule sits
+  closer to the text and to the next rule, and there are more of them per
+  screen, so the darkness that reads as structure on a wide screen reads as
+  clutter on a phone. Both weights drop by about the same share, so a rule
+  still outranks a hairline. Keep any new line on these two tokens so it
+  follows the rule; don't hardcode an ink border.
+- **Don't repeat what's on screen.** The site's name isn't repeated under the
+  logo, a topic isn't named on its own cards, the menu hides the topic rows
+  it would duplicate.
+- **The table never moves, only what's inside it.** The header and topics
+  rows stay put; reels move sideways, lists and stories move down.
+- **Stories are for reading.** No Latest pane and no topics row on a story;
+  the header lies transparent over the lead photo and leaves once the reader
+  is in (with the facts sliding away into the left edge on a wide screen),
+  and comes back on any scroll up. The reading face is Georgia (Gelasio where
+  a device lacks it, Noto Serif Bengali for Bangla).
+
 ## Why it's shaped the way it is
 
 **Bilingual = two separate front pages, not one filtered page.**

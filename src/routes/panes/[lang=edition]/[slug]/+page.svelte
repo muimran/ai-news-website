@@ -148,11 +148,9 @@
   figcaption {
     height: var(--label);
     padding: 0 var(--in) 0 calc(var(--pic) + var(--in));
-    border-bottom: var(--line) solid var(--rule);
     font: 500 calc(0.6875rem * var(--k)) / var(--label) var(--mono);
     letter-spacing: 0.04em;
     color: var(--mute);
-    background: linear-gradient(to right, transparent calc(var(--pic) - 1px), var(--rule) 0 var(--pic), transparent 0);
   }
 
   /* ---- facts | text, one rule between ---- */
@@ -210,14 +208,10 @@
     display: flex;
     flex-direction: column;
   }
-  /* the rule runs the text's full height, whatever the facts' */
+  /* no rule between facts and text: under the open photo it would start in
+     mid-air; the facts are a list, held by their own hairlines */
   .read::before {
-    content: '';
-    grid-column: 1;
-    grid-row: 1;
-    justify-self: end;
-    width: var(--line);
-    background: var(--rule);
+    content: none;
   }
   .facts {
     grid-column: 1;
@@ -493,7 +487,8 @@
       align-items: baseline;
       padding-top: var(--u);
       border-right: 0;
-      border-bottom: var(--line) solid var(--rule);
+      /* a hairline, like the one above the writer: the facts end, softly */
+      border-bottom: 1px solid var(--hair);
     }
     .facts .topic {
       display: none;

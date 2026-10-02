@@ -106,12 +106,16 @@
   />
 </svelte:head>
 
-<div class="g" {lang} class:folded={ui.folded || ((!!page.data?.story || ui.reading) && !ui.pin)} class:reading={ui.reading} class:deep={ui.deep || ui.wide} class:far={ui.deep} class:bare={ui.deep && !ui.up && !open}>
+<div class="g" {lang} class:story={reading} class:folded={ui.folded || ((!!page.data?.story || ui.reading) && !ui.pin)} class:reading={ui.reading} class:deep={ui.deep || ui.wide} class:far={ui.deep} class:bare={ui.deep && !ui.up && !open} class:over={reading && !open} class:begun={reading && ui.begun && !ui.up && !open}>
   <!-- on a phone a story's topic is the first of its facts, so the header
        doesn't give it a row of its own there -->
-  <header class="top" class:topic={!!(current || format) && !reading}>
+  <!-- with the menu or search open, that panel is the page: the topic's
+       cell steps out of the header, and the topics row out of the foot -->
+  <header class="top" class:topic={!!(current || format) && !reading && !open}>
     <a class="cell name" href={gridHome(lang)}>Ground Truth</a>
-    {#if current}
+    {#if open}
+      <!-- nothing: the panel says where you are -->
+    {:else if current}
       <a class="cell here" class:onstory={reading} href={gridTopic(current, lang)}><Mark key={current} /><span class="nm1">{sectionLabel(current, lang)}</span></a>
     {:else if format}
       <a class="cell here" href={gridFormat(format, lang)}><span class="nm1">{formatLabel(format, lang)}</span></a>
@@ -139,11 +143,6 @@
          on the right. -->
     <div class="panel menu" id="gmenu" transition:blind>
       <nav class="col" aria-label={L.topics}>
-        <!-- a phone has no Latest pane, and a story no topics row to open it
-             from: the menu leads to it -->
-        <button type="button" class="row big fill to-latest" onclick={() => ((open = null), (ui.sheet = true))}>
-          <span class="nm">{L.latest}</span><span class="ct">→</span>
-        </button>
         <p class="head">{L.topics}</p>
         {#each data.topics as t (t.key)}
           <a class="row big fill" href={gridTopic(t.key, lang)} aria-current={current === t.key ? 'page' : undefined}>
@@ -258,7 +257,7 @@
     --m: 0px;
     --mv: 0px;
     --pad: 0px;
-    --top: calc(4 * var(--u));
+    --top: calc(4 * var(--u) * 1.3); /* the header row */
     --bot: calc(4 * var(--u));
     --label: calc(3 * var(--u));
     --pic: calc(16 * var(--u)); /* the picture column of a page that scrolls down: lists, writers, stories */
@@ -299,14 +298,21 @@
     transform-origin: bottom;
     transition: transform 0.35s cubic-bezier(0.3, 0.7, 0.1, 1);
   }
-  :global(.g .fill:hover::before),
   :global(.g .fill:focus-visible::before) {
     transform: scaleY(1);
   }
-  :global(.g .fill:hover),
   :global(.g .fill:focus-visible) {
     color: var(--paper);
     outline: none;
+  }
+  /* hover only where there's a pointer: a tap would leave it stuck on */
+  @media (hover: hover) {
+    :global(.g .fill:hover::before) {
+      transform: scaleY(1);
+    }
+    :global(.g .fill:hover) {
+      color: var(--paper);
+    }
   }
   @media (prefers-reduced-motion: reduce) {
     :global(.g .fill),
@@ -335,6 +341,32 @@
      the story */
   .g.bare .top {
     transform: translateY(-100%);
+  }
+  /* a story's topic is in its facts; the header doesn't repeat it */
+  .here.onstory {
+    display: none;
+  }
+  /* On a story the header lies over the page, photo or text: no ground, no
+     rules, its type turned light or dark by whatever is beneath it. */
+  .g.over .top {
+    background: transparent;
+    border-bottom-color: transparent;
+    color: #fff;
+    mix-blend-mode: difference;
+  }
+  .g.over .top .cell {
+    border-color: transparent;
+  }
+  /* A phone's header leaves as soon as the reading starts, quickly (as De
+     Correspondent's does: a quarter second, easing out), and comes back
+     the moment the reader scrolls up. */
+  @media (max-width: 759px) {
+    .top {
+      transition: transform 0.25s ease-out;
+    }
+    .g.begun .top {
+      transform: translateY(-100%);
+    }
   }
   @media (prefers-reduced-motion: reduce) {
     .top {
@@ -368,6 +400,11 @@
      width, and its rule runs on down past the portrait, photos or facts */
   .g.folded {
     --side: calc(3 * var(--u));
+  }
+  /* a story has no Latest pane: the page is all the story's */
+  .g.story,
+  .g.story.folded {
+    --side: 0px;
   }
   /* the topic gives way first when the row is short: it shortens with an
      ellipsis rather than pushing the tools out of the frame */
@@ -428,11 +465,15 @@
     top: calc(var(--mv) + var(--top));
     left: calc(var(--m) + var(--side));
     right: var(--m);
-    bottom: calc(var(--mv) + var(--bot));
+    bottom: var(--mv);
     overflow-y: auto;
     box-sizing: border-box;
     border-right: var(--frame) solid var(--rule);
     background: var(--paper);
+  }
+  /* the panel runs to the foot; the topics row would only repeat it */
+  .g:has(.panel) :global(.bottom) {
+    display: none;
   }
   .menu {
     display: grid;
@@ -443,20 +484,19 @@
     border-left: var(--line) solid var(--rule);
     align-self: stretch;
   }
+  /* a group's name: a quiet label, no rule; groups are parted by space */
   .head {
     margin: 0;
     padding: 0 var(--in);
     height: var(--label);
     line-height: var(--label);
-    border-bottom: var(--line) solid var(--rule);
     font: 500 calc(0.6875rem * var(--k)) / var(--label) var(--mono);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--mute);
   }
   .row + .head {
-    border-top: var(--line) solid var(--rule);
-    margin-top: 2.5rem;
+    margin-top: var(--in);
   }
   .row {
     display: flex;
@@ -476,23 +516,6 @@
     font-weight: 620;
     font-stretch: 75%;
     letter-spacing: -0.01em;
-  }
-  /* the way to Latest, on a phone only: the pane does the job elsewhere */
-  .to-latest {
-    display: none;
-    width: 100%;
-    border: 0;
-    border-bottom: var(--line) solid var(--rule);
-    background: var(--o3);
-    color: var(--o-text);
-    font-family: inherit;
-    text-align: left;
-    cursor: pointer;
-  }
-  @media (max-width: 759px) {
-    .to-latest {
-      display: flex;
-    }
   }
   .row[aria-current='page'] {
     background: var(--o3);
@@ -517,10 +540,8 @@
     color: inherit;
   }
   .blurb {
-    margin: 2.5rem 0 0;
+    margin: var(--in) 0 0;
     padding: var(--in) var(--in) var(--u);
-    border-top: var(--line) solid var(--rule);
-    border-bottom: var(--line) solid var(--rule);
     background: var(--i3);
     font-size: 0.875rem;
     line-height: 1.45;
@@ -563,7 +584,7 @@
     }
     .side {
       border-left: 0;
-      border-top: var(--line) solid var(--rule);
+      margin-top: var(--in);
     }
     .res {
       grid-template-columns: 4rem minmax(0, 1fr);
@@ -586,11 +607,14 @@
       --bot: 2.5rem; /* the topics row, lower on a phone */
       --pic: calc(11 * var(--u));
       --side: 0px;
-      --top: 3rem;
+      --top: 3.9rem;
       --reel: calc(100svh - var(--top) - var(--bot) - 2 * var(--mv));
-    }
-    .here.onstory {
-      display: none;
+      /* Lighter lines on a phone. In a small space every rule sits closer
+         to the text and to the next rule, so the darkness that reads as
+         structure on a wide screen reads as clutter here. Both weights drop
+         by about the same share, so a rule still outranks a hairline. */
+      --rule: color-mix(in srgb, var(--ink) 55%, transparent);
+      --hair: color-mix(in srgb, var(--ink) 13%, transparent);
     }
     /* no pane on a phone, folded or not: it opens as a panel instead */
     .g.folded {
@@ -598,13 +622,13 @@
     }
     /* A topic's cell takes a second header row of its own. */
     .g:has(.top.topic) {
-      --top: 5.5rem;
+      --top: 6.4rem;
     }
     .top {
       flex-wrap: wrap;
     }
     .top > .cell {
-      height: calc(3rem - 1px);
+      height: calc(3.9rem - 1px);
     }
     .name {
       flex: 0 0 auto;
