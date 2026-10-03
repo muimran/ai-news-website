@@ -62,7 +62,10 @@
   let over = 1;
   let active = $state(1);
   let frames = [];
-  let stops = $state([]);
+  let stops = [];
+  /* where a phone's reel stands: there the page doesn't scroll (so the
+     browser's bars stay put); the finger moves the reel itself */
+  let pos = 0;
 
   function measure() {
     mobile = matchMedia('(max-width: 759px)').matches;
@@ -76,18 +79,19 @@
       win.style.setProperty('--per', Math.max(1, Math.round((win.clientWidth - spine.offsetWidth) / natural)));
     }
     over = Math.max(1, track.scrollWidth - win.clientWidth);
-    wrap.style.height = `${over + innerHeight}px`;
+    wrap.style.height = mobile ? '' : `${over + innerHeight}px`;
     frames = [...track.querySelectorAll('[data-n]')].map((el) => ({ n: +el.dataset.n, left: el.offsetLeft }));
     /* each column's start, and the reel's end */
     stops = [...new Set([...[...track.children].map((el) => el.offsetLeft).filter((x) => x < over), over])];
+    pos = stops.reduce((b, s) => (Math.abs(s - pos) < Math.abs(b - pos) ? s : b), 0);
     update();
     fitIssue();
   }
 
-  /* Vertical scroll drives the cells sideways, one pixel for one pixel,
-     on a phone too: scrolling down the page swipes the reel. */
+  /* On a computer the page's vertical scroll drives the cells sideways,
+     one pixel for one pixel; on a phone the finger does. */
   function update() {
-    const x = Math.min(scrollY, over);
+    const x = mobile ? pos : Math.min(scrollY, over);
     track.style.transform = `translate3d(${-x}px, 0, 0)`;
     const probe = x + innerWidth * 0.3;
     let cur = frames[0];
@@ -102,6 +106,7 @@
   $effect(() => {
     void items;
     void ui.folded;
+    pos = 0;
     if (track) tick().then(measure);
   });
 
@@ -113,33 +118,43 @@
     e.preventDefault();
     scrollBy(0, e.deltaX);
   }
-  /* A phone also takes a sideways swipe (the browser keeps the up-and-down
-     ones): the reel follows the finger, then settles on the next card in
-     the swipe's direction, or back on this one for a short swipe. */
+  /* On a phone a swipe any way moves the reel, up or left for the next
+     card, down or right for the one before: it follows the finger, then
+     settles a whole card on (or back, for a short swipe). */
   let drag = null;
   let dragged = false;
+  const travel = (e) => {
+    const dx = e.clientX - drag.x;
+    const dy = e.clientY - drag.cy;
+    return Math.abs(dx) > Math.abs(dy) ? dx : dy;
+  };
   function press(e) {
     if (e.button !== 0 || (e.pointerType === 'mouse') === mobile) return;
-    drag = { x: e.clientX, y: scrollY, touch: e.pointerType !== 'mouse' };
+    drag = { x: e.clientX, cy: e.clientY, y: scrollY, from: pos, touch: mobile, d: 0 };
     dragged = false;
+    if (mobile) track.style.transition = 'none';
   }
   function move(e) {
     if (!drag) return;
-    const dx = e.clientX - drag.x;
-    if (Math.abs(dx) > 5 && !dragged) {
+    const d = drag.touch ? travel(e) : e.clientX - drag.x;
+    if (Math.abs(d) > 5 && !dragged) {
       dragged = true;
       win.classList.add('dragging');
-      if (drag.touch) document.documentElement.style.scrollSnapType = 'none';
     }
-    if (dragged) scrollTo(0, drag.y - dx);
+    if (!dragged) return;
+    drag.d = d;
+    if (drag.touch) {
+      pos = Math.min(over, Math.max(0, drag.from - d));
+      update();
+    } else scrollTo(0, drag.y - d);
   }
-  function release(e) {
+  function release() {
     if (drag?.touch && dragged) {
-      const dx = e.clientX - drag.x;
-      const i = stops.reduce((b, s, k) => (Math.abs(s - drag.y) < Math.abs(stops[b] - drag.y) ? k : b), 0);
-      const to = stops[Math.min(stops.length - 1, Math.max(0, i + (dx < -40 ? 1 : dx > 40 ? -1 : 0)))];
-      scrollTo({ top: to, behavior: 'smooth' });
-      setTimeout(() => (document.documentElement.style.scrollSnapType = ''), 450);
+      const i = stops.indexOf(drag.from);
+      const step = drag.d < -30 ? 1 : drag.d > 30 ? -1 : 0;
+      pos = stops[Math.min(stops.length - 1, Math.max(0, (i < 0 ? 0 : i) + step))];
+      track.style.transition = 'transform 0.35s cubic-bezier(0.3, 0.7, 0.1, 1)';
+      update();
     }
     drag = null;
     win?.classList.remove('dragging');
@@ -169,7 +184,6 @@
       removeEventListener('pointermove', move);
       removeEventListener('pointerup', release);
       removeEventListener('pointercancel', release);
-      document.documentElement.style.scrollSnapType = '';
     };
   });
 </script>
@@ -211,7 +225,6 @@
 {/snippet}
 
 <div class="wrap" bind:this={wrap}>
-  {#each stops as top (top)}<i class="stop" style:top="{top}px"></i>{/each}
   <main class="stage">
     <h1 class="sr">{section ? sectionLabel(section, lang) : format ? formatLabel(format, lang) : `Ground Truth — ${L.tagline}`}</h1>
     <div class="window" bind:this={win}>
@@ -644,31 +657,20 @@
     letter-spacing: -0.01em;
   }
 
-  /* where a scroll may come to rest: each column's start (only a phone
-     uses them, so a card always settles whole beside the next one's strip) */
-  .stop {
-    position: absolute;
-    left: 0;
-    width: 1px;
-    height: 1px;
-    pointer-events: none;
-  }
-
   /* ---- phone: one card at a time; scrolling down swipes the reel ---- */
   @media (max-width: 759px) {
-    :global(html:has(.g .wrap)) {
-      scroll-snap-type: y mandatory;
-    }
-    .stop {
-      scroll-snap-align: start;
+    /* the page itself doesn't scroll, so the browser's bars stay put */
+    :global(html:has(.g .wrap)),
+    :global(body:has(.g .wrap)) {
+      overflow: hidden;
     }
     .stage {
       height: 100dvh;
     }
-    /* the browser keeps up-and-down; sideways swipes go to the reel */
+    /* every swipe on the reel is the reel's */
     .window {
       --per: 1;
-      touch-action: pan-y;
+      touch-action: none;
     }
     .card,
     .pair,
