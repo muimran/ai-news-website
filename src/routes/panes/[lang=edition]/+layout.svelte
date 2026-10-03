@@ -117,7 +117,7 @@
   <!-- with the menu or search open, that panel is the page: the topic's
        cell steps out of the header, and the topics row out of the foot -->
   <header class="top" class:topic={!!(current || format) && !reading && !open}>
-    <a class="cell name" href={gridHome(lang)}>Ground Truth</a>
+    <a class="cell name" href={gridHome(lang)} lang="en">Ground Truth</a>
     {#if open}
       <!-- nothing: the panel says where you are -->
     {:else if current}
@@ -396,13 +396,16 @@
   }
   /* The name's cell is the Latest pane's width, so its rule runs on down
      the pane's edge; folded, it's as wide as the name. */
+  /* the name is one mark on both editions: always the English face and
+     spacing, never the Bangla one's Latin letters */
   .name {
     flex: 0 0 calc(var(--side) - var(--frame));
     min-width: max-content;
+    font-family: 'Instrument Sans', system-ui, sans-serif;
     font-size: 1.4rem;
     font-weight: 660;
     font-stretch: 75%;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.01em !important;
   }
   /* on a page that scrolls down, the name's cell is the picture column's
      width, and its rule runs on down past the portrait, photos or facts */
