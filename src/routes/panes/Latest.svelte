@@ -278,6 +278,10 @@
     .latest.sheet {
       display: flex;
     }
+    /* the cross that closes it is in the topics row, where it opened */
+    .sheet .fold {
+      display: none;
+    }
     .row {
       grid-template-columns: 3.5rem minmax(0, 1fr);
     }

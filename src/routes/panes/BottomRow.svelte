@@ -44,7 +44,16 @@
 
 <div class="bottom" class:fixed>
   <!-- a phone has no room for the Latest pane: it opens from here -->
-  <button type="button" class="tp latest fill" aria-pressed={ui.sheet} onclick={() => ((ui.sheet = !ui.sheet), (open = false))}>{L.latest}</button>
+  <!-- open, the word gives way to a cross that closes it (the word stays,
+       unseen, so the cell keeps its width) -->
+  <button
+    type="button"
+    class="tp latest fill"
+    aria-pressed={ui.sheet}
+    aria-label={ui.sheet ? L.close : undefined}
+    onclick={() => ((ui.sheet = !ui.sheet), (open = false))}
+    ><span class:gone={ui.sheet}>{L.latest}</span>{#if ui.sheet}<span class="x" aria-hidden="true"></span>{/if}</button
+  >
   <div class="topics" bind:this={box}>
     {#if open}
       <nav id="gtopics" class="drawer" aria-label={L.topics} transition:rise>
@@ -183,6 +192,34 @@
     .latest[aria-pressed='true'] {
       background: var(--o3);
       color: var(--o-text);
+    }
+    .latest {
+      position: relative;
+    }
+    .gone {
+      visibility: hidden;
+    }
+    /* the cross, drawn like the menu's */
+    .latest .x {
+      position: absolute;
+      inset: 0;
+      width: 0.875rem;
+      height: 0.875rem;
+      margin: auto;
+    }
+    .latest .x::before,
+    .latest .x::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(50% - 1px);
+      height: 2px;
+      background: currentColor;
+      transform: rotate(45deg);
+    }
+    .latest .x::after {
+      transform: rotate(-45deg);
     }
     .count {
       order: -1;
