@@ -47,9 +47,7 @@
   {:else}
     <div class="phead">
       <span>{L.latest} · {num(shown.length)}</span>
-      <button type="button" class="fold fill" onclick={close} aria-label={L.close}>
-        {ui.sheet ? '✕' : '−'}
-      </button>
+      <button type="button" class="fold fill" onclick={close} aria-label={L.close}><span class="x" aria-hidden="true"></span></button>
     </div>
     <div class="filters" role="group" aria-label={L.topics}>
       <button type="button" class="all fill" aria-pressed={!only} onclick={() => (only = null)}>{lang === 'bn' ? 'সব' : 'All'}</button>
@@ -159,14 +157,36 @@
     color: var(--o-text);
   }
   .fold {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: var(--label);
     height: 100%;
     border: 0;
     border-left: 1px solid var(--hair);
     background: none;
     color: var(--ink);
-    font: 500 1rem / 1 var(--mono);
     cursor: pointer;
+  }
+  /* a cross drawn like the menu's: two lines, crossed at the middle */
+  .x {
+    position: relative;
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+  .x::before,
+  .x::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(50% - 1px);
+    height: 2px;
+    background: currentColor;
+    transform: rotate(45deg);
+  }
+  .x::after {
+    transform: rotate(-45deg);
   }
   .filters {
     flex: none;
