@@ -3,7 +3,6 @@
      own, the one you're in filled pale orange, and on a reel the counter in
      the last cell. Fixed, like the header row; only what's between them
      moves. */
-  import { onMount } from 'svelte';
   import { page } from '$app/state';
   import { sectionLabel } from '$lib/labels.js';
   import { two, STR } from '$lib/site/reel.js';
@@ -15,24 +14,17 @@
      frame round the end of a story instead */
   let { lang, section = null, n = null, total = null, fixed = true } = $props();
   const L = $derived(STR[lang]);
-  let shelf = $state();
-
-  // on a phone the row scrolls: bring the current topic into view
-  onMount(() => {
-    const cur = shelf?.querySelector('[aria-current]');
-    if (cur && matchMedia('(max-width: 759px)').matches)
-      shelf.scrollLeft = cur.offsetLeft - (shelf.clientWidth - cur.offsetWidth) / 2;
-  });
 </script>
 
 <div class="bottom" class:fixed>
   <!-- a phone has no room for the Latest pane: it opens from here -->
   <button type="button" class="tp latest fill" aria-pressed={ui.sheet} onclick={() => (ui.sheet = !ui.sheet)}>{L.latest}</button>
-  <nav class="shelf" aria-label={L.topics} bind:this={shelf}>
+  <nav class="shelf" aria-label={L.topics}>
     {#each page.data?.topics ?? [] as tp (tp.key)}
       <a
         class="tp fill"
         href={gridTopic(tp.key, lang)}
+        class:open={(section ?? page.data?.topics?.[0]?.key) === tp.key}
         aria-current={section === tp.key ? 'page' : undefined}
         draggable="false"><Mark key={tp.key} /><span>{sectionLabel(tp.key, lang)}</span></a
       >
@@ -163,6 +155,38 @@
     }
     .tp[aria-current='page'] {
       font-weight: 600;
+    }
+    /* The topics share the row like an accordion folded sideways: one open
+       to its full name (the one you're in, or else the first), the rest
+       side by side down to their mark and first letters, faded where they
+       stop. No scrolling, nothing hidden off the edge. */
+    .shelf {
+      overflow: hidden;
+      interpolate-size: allow-keywords;
+    }
+    .shelf .tp {
+      flex: 1 1 0;
+      min-width: 2.5rem;
+      box-sizing: border-box;
+      justify-content: flex-start;
+      gap: 0.25rem;
+      padding: 0 0 0 calc(0.75 * var(--u));
+      transition: flex 0.4s cubic-bezier(0.3, 0.7, 0.1, 1);
+    }
+    .shelf .tp.open {
+      flex: 0 0 auto;
+      max-width: calc(100% - 5 * 2.5rem);
+    }
+    .shelf .tp > span {
+      min-width: 0;
+      overflow: hidden;
+      padding-right: var(--u);
+      mask-image: linear-gradient(to right, #000 calc(100% - var(--u)), transparent);
+    }
+  }
+  @media (max-width: 759px) and (prefers-reduced-motion: reduce) {
+    .shelf .tp {
+      transition: none;
     }
   }
 </style>
