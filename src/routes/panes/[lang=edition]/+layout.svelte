@@ -51,17 +51,20 @@
     document.documentElement.lang = lang;
   });
 
-  /* One panel at a time, dropped into the frame over the reel: the menu or
-     search. */
+  /* One panel, the menu, dropped into the frame over the reel. Search is
+     its first row: typing there turns the menu into results. */
   let open = $state(null);
   afterNavigate(() => {
     open = null;
     ui.sheet = false;
   });
-  const toggle = (which) => (open = open === which ? null : which);
+  const toggle = (which) => {
+    open = open === which ? null : which;
+    q = '';
+  };
 
   /* Search reads the live site's list of every headline, fetched the first
-     time the panel opens. */
+     time the menu opens. */
   let q = $state('');
   let input = $state();
   let lists = $state({});
@@ -69,8 +72,10 @@
   const found = $derived(list && q.trim() ? list.filter((s) => matches(s, q)) : []);
 
   $effect(() => {
-    if (open !== 'search') return;
-    tick().then(() => input?.focus());
+    if (open !== 'menu') return;
+    // a wide screen with a mouse can type straight away; a phone-sized one
+    // opens the menu as it is, the field waiting until it's tapped
+    if (matchMedia('(hover: hover) and (min-width: 760px)').matches) tick().then(() => input?.focus());
     if (!lists[lang]) {
       const l = lang;
       fetch(`${base}/${l}/search.json`)
@@ -126,13 +131,17 @@
       {#if reading}
         <a class="btn fill" href={current ? gridTopic(current, lang) : gridHome(lang)} onclick={close}>✕ {L.close}</a>
       {/if}
-      <button type="button" class="btn fill" aria-expanded={open === 'search'} aria-controls="gsearch" onclick={() => toggle('search')}
-        >{open === 'search' ? `${L.close} ✕` : L.search}</button
-      >
-      <button type="button" class="btn fill" aria-expanded={open === 'menu'} aria-controls="gmenu" onclick={() => toggle('menu')}
-        >{open === 'menu' ? `${L.close} ✕` : `${L.menu} ↓`}</button
-      >
+      <!-- the other edition stays in sight: it's how half the readers find theirs -->
       <a class="btn fill lang" href={otherHref} hreflang={other} lang={other}>{other === 'en' ? 'EN' : 'বাংলা'}</a>
+      <!-- two lines that cross when the menu is open -->
+      <button
+        type="button"
+        class="btn fill burger"
+        aria-expanded={open === 'menu'}
+        aria-controls="gmenu"
+        aria-label={open === 'menu' ? L.close : L.menu}
+        onclick={() => toggle('menu')}><span class="bars" aria-hidden="true"></span></button
+      >
     </nav>
   </header>
   <Latest {lang} stories={data.latest} current={page.data.story?.slug ?? null} />
@@ -142,7 +151,27 @@
     <!-- Topics on the left, big; the formats and the newsroom's own pages
          on the right. -->
     <div class="panel menu" id="gmenu" transition:blind>
-      <nav class="col" aria-label={L.topics}>
+      <div class="find" role="search">
+        <label class="q">
+          <span class="sr">{L.searchAll}</span>
+          <input bind:this={input} bind:value={q} type="search" placeholder={L.searchAll} autocomplete="off" />
+        </label>
+      </div>
+      {#if q.trim()}
+        <div class="found">
+          <p class="head status" aria-live="polite">
+            {#if !list}{L.loading}{:else}{found.length ? L.count(formatNumber(found.length, lang)) : L.none}{/if}
+          </p>
+          {#each found.slice(0, 50) as s (s.slug)}
+            <a class="row res fill" href={storyUrl(s)}>
+              <span class="d">{SHORT_DATE[lang].format(new Date(s.date))}</span>
+              <span class="nm">{s.title}</span>
+              <span class="ct"><Mark key={s.section} size={14} />{sectionLabel(s.section, lang)}</span>
+            </a>
+          {/each}
+        </div>
+      {:else}
+        <nav class="col" aria-label={L.topics}>
         <p class="head">{L.topics}</p>
         {#each data.topics as t (t.key)}
           <a class="row big fill" href={gridTopic(t.key, lang)} aria-current={current === t.key ? 'page' : undefined}>
@@ -169,27 +198,7 @@
         {/each}
         <p class="blurb">{L.blurb}</p>
       </nav>
-    </div>
-  {/if}
-
-  {#if open === 'search'}
-    <div class="panel search" id="gsearch" role="search" transition:blind>
-      <label class="q">
-        <span class="sr">{L.searchAll}</span>
-        <input bind:this={input} bind:value={q} type="search" placeholder={L.searchAll} autocomplete="off" />
-      </label>
-      <p class="head status" aria-live="polite">
-        {#if !list}{L.loading}{:else if q.trim()}{found.length ? L.count(formatNumber(found.length, lang)) : L.none}{:else}&nbsp;{/if}
-      </p>
-      <div class="results">
-        {#each found.slice(0, 50) as s (s.slug)}
-          <a class="row res fill" href={storyUrl(s)}>
-            <span class="d">{SHORT_DATE[lang].format(new Date(s.date))}</span>
-            <span class="nm">{s.title}</span>
-            <span class="ct"><Mark key={s.section} size={14} />{sectionLabel(s.section, lang)}</span>
-          </a>
-        {/each}
-      </div>
+      {/if}
     </div>
   {/if}
 </div>
@@ -448,6 +457,44 @@
   .lang:lang(en) {
     font-family: 'JetBrains Mono', ui-monospace, monospace;
   }
+  /* the menu: two lines, which turn and cross while it's open */
+  .burger {
+    padding: 0 var(--in) 0 var(--u);
+  }
+  .bars {
+    position: relative;
+    display: block;
+    width: 1.375rem;
+    height: 0.5rem;
+  }
+  .bars::before,
+  .bars::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: currentColor;
+    transition: transform 0.35s cubic-bezier(0.3, 0.7, 0.1, 1);
+  }
+  .bars::before {
+    top: 0;
+  }
+  .bars::after {
+    bottom: 0;
+  }
+  .burger[aria-expanded='true'] .bars::before {
+    transform: translateY(calc(0.25rem - 1px)) rotate(45deg);
+  }
+  .burger[aria-expanded='true'] .bars::after {
+    transform: translateY(calc(1px - 0.25rem)) rotate(-45deg);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bars::before,
+    .bars::after {
+      transition: none;
+    }
+  }
 
   /* ---- the panels: laid over the reel, inside the frame ---- */
   .sr {
@@ -477,7 +524,13 @@
   .menu {
     display: grid;
     grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
     align-items: start;
+  }
+  /* search is the menu's first row, across it; its results take the rest */
+  .find,
+  .found {
+    grid-column: 1 / -1;
   }
   .side {
     border-left: var(--line) solid var(--rule);
@@ -580,10 +633,29 @@
   @media (max-width: 759px) {
     .menu {
       grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: none;
+      align-content: start;
+    }
+    /* on a phone the whole menu fits one screen: the topics a size down,
+       one line each, and the short links two to a line, the left one's
+       edge drawn by a hairline (the right one's falls off the screen) */
+    .row.big {
+      padding: calc(0.75 * var(--u)) var(--in);
+      font-size: 1.2rem;
     }
     .side {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-content: start;
       border-left: 0;
       margin-top: var(--in);
+    }
+    .side .head,
+    .side .blurb {
+      grid-column: 1 / -1;
+    }
+    .side .row {
+      box-shadow: 1px 0 0 var(--hair);
     }
     .res {
       grid-template-columns: 4rem minmax(0, 1fr);
