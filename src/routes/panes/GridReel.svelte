@@ -266,11 +266,11 @@
     clip-path: inset(50%);
     white-space: nowrap;
   }
-  @media (min-width: 760px) {
-    :global(html:has(.g .wrap)),
-    :global(body:has(.g .wrap)) {
-      overscroll-behavior-y: none;
-    }
+  /* the reel's page is a fixed table, not a sheet: it doesn't pull past
+     its ends (no bounce, no pull-to-refresh) */
+  :global(html:has(.g .wrap)),
+  :global(body:has(.g .wrap)) {
+    overscroll-behavior-y: none;
   }
   .wrap {
     position: relative;
