@@ -3,7 +3,9 @@
      own, the one you're in filled pale orange, and on a reel the counter in
      the last cell. Fixed, like the header row; only what's between them
      moves. */
+  import { cubicOut } from 'svelte/easing';
   import { page } from '$app/state';
+  import { afterNavigate } from '$app/navigation';
   import { sectionLabel } from '$lib/labels.js';
   import { two, STR } from '$lib/site/reel.js';
   import Mark from './Mark.svelte';
@@ -14,17 +16,55 @@
      frame round the end of a story instead */
   let { lang, section = null, n = null, total = null, fixed = true } = $props();
   const L = $derived(STR[lang]);
+  let box = $state();
+
+  /* On a phone the topics don't fit in a row: one cell, Topics (the one
+     you're in is named in the header already), opens them all upward, a
+     row each, the way Latest opens beside it. Choosing one, tapping
+     elsewhere or going anywhere folds them away; so does opening Latest. */
+  let open = $state(false);
+  afterNavigate(() => (open = false));
+  function toggle() {
+    open = !open;
+    if (open) ui.sheet = false;
+  }
+  function away(e) {
+    if (open && !box?.contains(e.target)) open = false;
+  }
+  function rise() {
+    return {
+      duration: matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 420,
+      easing: cubicOut,
+      css: (t) => `clip-path: inset(${(1 - t) * 100}% 0 0 0)`
+    };
+  }
 </script>
+
+<svelte:window onpointerdown={away} onkeydown={(e) => e.key === 'Escape' && (open = false)} />
 
 <div class="bottom" class:fixed>
   <!-- a phone has no room for the Latest pane: it opens from here -->
-  <button type="button" class="tp latest fill" aria-pressed={ui.sheet} onclick={() => (ui.sheet = !ui.sheet)}>{L.latest}</button>
+  <button type="button" class="tp latest fill" aria-pressed={ui.sheet} onclick={() => ((ui.sheet = !ui.sheet), (open = false))}>{L.latest}</button>
+  <div class="topics" bind:this={box}>
+    {#if open}
+      <nav id="gtopics" class="drawer" aria-label={L.topics} transition:rise>
+        {#each page.data?.topics ?? [] as tp (tp.key)}
+          <a class="row" href={gridTopic(tp.key, lang)} aria-current={section === tp.key ? 'page' : undefined}
+            ><Mark key={tp.key} /><span>{sectionLabel(tp.key, lang)}</span></a
+          >
+        {/each}
+      </nav>
+    {/if}
+    <button type="button" class="tp pick" aria-expanded={open} aria-controls="gtopics" onclick={toggle}>
+      <span>{L.topics}</span>
+      <span class="arr" aria-hidden="true">{open ? '↓' : '↑'}</span>
+    </button>
+  </div>
   <nav class="shelf" aria-label={L.topics}>
     {#each page.data?.topics ?? [] as tp (tp.key)}
       <a
         class="tp fill"
         href={gridTopic(tp.key, lang)}
-        class:open={(section ?? page.data?.topics?.[0]?.key) === tp.key}
         aria-current={section === tp.key ? 'page' : undefined}
         draggable="false"><Mark key={tp.key} /><span>{sectionLabel(tp.key, lang)}</span></a
       >
@@ -35,6 +75,7 @@
 
 <style>
   .bottom {
+    position: relative;
     display: flex;
     box-sizing: border-box;
     height: var(--bot);
@@ -109,7 +150,8 @@
       font-size: calc(0.875rem * var(--k));
     }
   }
-  .latest {
+  .latest,
+  .topics {
     display: none;
   }
   .count {
@@ -156,37 +198,64 @@
     .tp[aria-current='page'] {
       font-weight: 600;
     }
-    /* The topics share the row like an accordion folded sideways: one open
-       to its full name (the one you're in, or else the first), the rest
-       side by side down to their mark and first letters, faded where they
-       stop. No scrolling, nothing hidden off the edge. */
     .shelf {
-      overflow: hidden;
-      interpolate-size: allow-keywords;
+      display: none;
     }
-    .shelf .tp {
-      flex: 1 1 0;
-      min-width: 2.5rem;
-      box-sizing: border-box;
-      justify-content: flex-start;
-      gap: 0.25rem;
-      padding: 0 0 0 calc(0.75 * var(--u));
-      transition: flex 0.4s cubic-bezier(0.3, 0.7, 0.1, 1);
-    }
-    .shelf .tp.open {
-      flex: 0 0 auto;
-      max-width: calc(100% - 5 * 2.5rem);
-    }
-    .shelf .tp > span {
+    .topics {
+      position: relative;
+      flex: 1;
+      display: flex;
       min-width: 0;
-      overflow: hidden;
-      padding-right: var(--u);
-      mask-image: linear-gradient(to right, #000 calc(100% - var(--u)), transparent);
     }
-  }
-  @media (max-width: 759px) and (prefers-reduced-motion: reduce) {
-    .shelf .tp {
-      transition: none;
+    .pick {
+      flex: 1;
+      justify-content: flex-start;
+      border: 0;
+      background: none;
+      cursor: pointer;
+    }
+    .pick[aria-expanded='true'] {
+      background: var(--o3);
+    }
+    .arr {
+      margin-left: auto;
+      font-family: var(--mono);
+    }
+    /* the topics stand on the cell that opened them, its width, a row each
+       as tall as the row they rise from */
+    .drawer {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 100%;
+      display: flex;
+      flex-direction: column;
+      border-top: var(--line) solid var(--rule);
+      border-left: var(--line) solid var(--rule);
+      margin-left: calc(-1 * var(--line));
+      background: var(--paper);
+    }
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      height: var(--bot);
+      flex: none;
+      padding: 0 var(--u);
+      border-bottom: 1px solid var(--hair);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: calc(0.875rem * var(--k));
+      font-weight: 500;
+      font-stretch: 85%;
+    }
+    .row:last-child {
+      border-bottom: 0;
+    }
+    .row[aria-current='page'] {
+      background: var(--o3);
+      color: var(--o-text);
+      font-weight: 600;
     }
   }
 </style>
