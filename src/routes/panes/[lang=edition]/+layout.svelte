@@ -607,7 +607,7 @@
       --pic: calc(11 * var(--u));
       --side: 0px;
       --top: 3.9rem;
-      --reel: calc(100svh - var(--top) - var(--bot) - 2 * var(--mv));
+      --reel: calc(100dvh - var(--top) - var(--bot) - 2 * var(--mv));
       /* Lighter lines on a phone. In a small space every rule sits closer
          to the text and to the next rule, so the darkness that reads as
          structure on a wide screen reads as clutter here. Both weights drop

@@ -663,7 +663,7 @@
       scroll-snap-align: start;
     }
     .stage {
-      height: 100svh;
+      height: 100dvh;
     }
     /* the browser keeps up-and-down; sideways swipes go to the reel */
     .window {
