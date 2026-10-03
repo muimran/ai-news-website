@@ -62,6 +62,7 @@
   let over = 1;
   let active = $state(1);
   let frames = [];
+  let stops = $state([]);
 
   function measure() {
     mobile = matchMedia('(max-width: 759px)').matches;
@@ -74,23 +75,20 @@
       const natural = (media.offsetHeight * 5) / 7 + spine.offsetWidth;
       win.style.setProperty('--per', Math.max(1, Math.round((win.clientWidth - spine.offsetWidth) / natural)));
     }
-    if (mobile) {
-      wrap.style.height = '';
-      track.style.transform = '';
-    } else {
-      over = Math.max(1, track.scrollWidth - win.clientWidth);
-      wrap.style.height = `${over + innerHeight}px`;
-    }
+    over = Math.max(1, track.scrollWidth - win.clientWidth);
+    wrap.style.height = `${over + innerHeight}px`;
     frames = [...track.querySelectorAll('[data-n]')].map((el) => ({ n: +el.dataset.n, left: el.offsetLeft }));
+    /* each column's start, and the reel's end */
+    stops = [...new Set([...[...track.children].map((el) => el.offsetLeft).filter((x) => x < over), over])];
     update();
     fitIssue();
   }
 
-  /* Vertical scroll drives the cells sideways, one pixel for one pixel;
-     on a phone the track is swiped instead. */
+  /* Vertical scroll drives the cells sideways, one pixel for one pixel,
+     on a phone too: scrolling down the page swipes the reel. */
   function update() {
-    const x = mobile ? track.scrollLeft : Math.min(scrollY, over);
-    if (!mobile) track.style.transform = `translate3d(${-x}px, 0, 0)`;
+    const x = Math.min(scrollY, over);
+    track.style.transform = `translate3d(${-x}px, 0, 0)`;
     const probe = x + innerWidth * 0.3;
     let cur = frames[0];
     for (const f of frames) if (f.left <= probe) cur = f;
@@ -115,23 +113,34 @@
     e.preventDefault();
     scrollBy(0, e.deltaX);
   }
+  /* A phone also takes a sideways swipe (the browser keeps the up-and-down
+     ones): the reel follows the finger, then settles on the next card in
+     the swipe's direction, or back on this one for a short swipe. */
   let drag = null;
   let dragged = false;
   function press(e) {
-    if (mobile || e.pointerType !== 'mouse' || e.button !== 0) return;
-    drag = { x: e.clientX, y: scrollY };
+    if (e.button !== 0 || (e.pointerType === 'mouse') === mobile) return;
+    drag = { x: e.clientX, y: scrollY, touch: e.pointerType !== 'mouse' };
     dragged = false;
   }
   function move(e) {
     if (!drag) return;
     const dx = e.clientX - drag.x;
-    if (Math.abs(dx) > 5) {
+    if (Math.abs(dx) > 5 && !dragged) {
       dragged = true;
       win.classList.add('dragging');
+      if (drag.touch) document.documentElement.style.scrollSnapType = 'none';
     }
     if (dragged) scrollTo(0, drag.y - dx);
   }
-  function release() {
+  function release(e) {
+    if (drag?.touch && dragged) {
+      const dx = e.clientX - drag.x;
+      const i = stops.reduce((b, s, k) => (Math.abs(s - drag.y) < Math.abs(stops[b] - drag.y) ? k : b), 0);
+      const to = stops[Math.min(stops.length - 1, Math.max(0, i + (dx < -40 ? 1 : dx > 40 ? -1 : 0)))];
+      scrollTo({ top: to, behavior: 'smooth' });
+      setTimeout(() => (document.documentElement.style.scrollSnapType = ''), 450);
+    }
     drag = null;
     win?.classList.remove('dragging');
   }
@@ -144,23 +153,23 @@
   }
 
   onMount(() => {
-    const onScroll = () => !mobile && update();
-    const onTrack = () => mobile && update();
-    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('scroll', update, { passive: true });
     addEventListener('resize', measure);
     addEventListener('wheel', wheel, { passive: false });
     addEventListener('pointermove', move);
     addEventListener('pointerup', release);
-    track.addEventListener('scroll', onTrack, { passive: true });
+    addEventListener('pointercancel', release);
     win.addEventListener('pointerdown', press);
     win.addEventListener('click', swallow, true);
     measure();
     return () => {
-      removeEventListener('scroll', onScroll);
+      removeEventListener('scroll', update);
       removeEventListener('resize', measure);
       removeEventListener('wheel', wheel);
       removeEventListener('pointermove', move);
       removeEventListener('pointerup', release);
+      removeEventListener('pointercancel', release);
+      document.documentElement.style.scrollSnapType = '';
     };
   });
 </script>
@@ -202,6 +211,7 @@
 {/snippet}
 
 <div class="wrap" bind:this={wrap}>
+  {#each stops as top (top)}<i class="stop" style:top="{top}px"></i>{/each}
   <main class="stage">
     <h1 class="sr">{section ? sectionLabel(section, lang) : format ? formatLabel(format, lang) : `Ground Truth — ${L.tagline}`}</h1>
     <div class="window" bind:this={win}>
@@ -634,36 +644,37 @@
     letter-spacing: -0.01em;
   }
 
-  /* ---- phone: a swiped track of full-width cells ---- */
+  /* where a scroll may come to rest: each column's start (only a phone
+     uses them, so a card always settles whole beside the next one's strip) */
+  .stop {
+    position: absolute;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+  }
+
+  /* ---- phone: one card at a time; scrolling down swipes the reel ---- */
   @media (max-width: 759px) {
-    .wrap {
-      height: auto;
+    :global(html:has(.g .wrap)) {
+      scroll-snap-type: y mandatory;
+    }
+    .stop {
+      scroll-snap-align: start;
     }
     .stage {
-      position: relative;
       height: 100svh;
     }
-    .track {
-      right: 0;
-      width: auto;
-      height: 100%;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scrollbar-width: none;
-      will-change: auto;
-    }
-    .track::-webkit-scrollbar {
-      display: none;
-    }
+    /* the browser keeps up-and-down; sideways swipes go to the reel */
     .window {
       --per: 1;
+      touch-action: pan-y;
     }
     .card,
     .pair,
     .issue,
     .door {
       width: var(--fw);
-      scroll-snap-align: start;
     }
     .track > :last-child {
       border-right: var(--line) solid var(--rule);
