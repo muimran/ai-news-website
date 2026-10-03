@@ -196,8 +196,8 @@
         {#each data.pages as p (p.slug)}
           <a class="row fill" href={p.href} aria-current={page.data.doc?.slug === p.slug ? 'page' : undefined}><span class="nm">{p.title}</span></a>
         {/each}
-        <p class="blurb">{L.blurb}</p>
       </nav>
+      <p class="blurb">{L.blurb}</p>
       {/if}
     </div>
   {/if}
@@ -436,10 +436,11 @@
     min-width: 0;
     padding: 0;
   }
+  /* the last button runs to the screen's edge, so its fill does too */
   .tools {
     flex: none;
     gap: 0.25rem;
-    padding: 0 0.5rem;
+    padding: 0 0 0 0.5rem;
     border-right: 0;
   }
   .btn {
@@ -458,8 +459,14 @@
     font-family: 'JetBrains Mono', ui-monospace, monospace;
   }
   /* the menu: two lines, which turn and cross while it's open */
+  /* the other edition and the menu: two boxes of one size, 6u, their
+     contents centred, so the lines (and the cross) sit in the middle */
+  .tools .lang,
   .burger {
-    padding: 0 var(--in) 0 var(--u);
+    box-sizing: border-box;
+    width: calc(6 * var(--u));
+    justify-content: center;
+    padding: 0;
   }
   .bars {
     position: relative;
@@ -509,13 +516,30 @@
     position: fixed;
     z-index: 20;
     top: calc(var(--mv) + var(--top));
-    left: calc(var(--m) + var(--side));
+    /* open, the menu is the page: it runs the full width, over the Latest
+       pane, whose rows keep a rhythm of their own */
+    left: var(--m);
     right: var(--m);
     bottom: var(--mv);
     overflow-y: auto;
     box-sizing: border-box;
     border-right: var(--frame) solid var(--rule);
     background: var(--paper);
+  }
+  /* The menu is the newsroom's own surface: pale indigo, the tint that
+     already means "who we are" (dark mode: its deep counterpart). On it
+     the pale indigo inside the topic marks turns paper, so it doesn't
+     melt into the ground. */
+  .panel {
+    --paper: #d7d7ec;
+    --i3: #e9ebee;
+    --hair: color-mix(in srgb, var(--ink) 10%, transparent);
+  }
+  @media (prefers-color-scheme: dark) {
+    .panel {
+      --paper: #26254a;
+      --i3: #0e0e10;
+    }
   }
   /* the panel runs to the foot; the topics row would only repeat it */
   .g:has(.panel) :global(.bottom) {
@@ -524,15 +548,25 @@
   .menu {
     display: grid;
     grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto 1fr auto;
     align-items: start;
   }
-  /* search is the menu's first row, across it; its results take the rest */
+  /* search is the menu's first row, across it; its results take the rest.
+     Below it the topics fill the left column; the right holds the other
+     links, and at its foot who we are */
   .find,
   .found {
     grid-column: 1 / -1;
   }
-  .side {
+  .found {
+    grid-row: 2 / -1;
+  }
+  .col {
+    grid-row: 2 / -1;
+  }
+  .side,
+  .blurb {
+    grid-column: 2;
     border-left: var(--line) solid var(--rule);
     align-self: stretch;
   }
@@ -591,12 +625,58 @@
   .row:focus-visible .ct {
     color: inherit;
   }
+  /* who we are, in the newsroom's own words: its statement, set in the
+     display face like the topics, signed off at the foot of its column */
   .blurb {
-    margin: var(--in) 0 0;
-    padding: var(--in) var(--in) var(--u);
-    background: var(--i3);
-    font-size: 0.875rem;
-    line-height: 1.45;
+    margin: 0;
+    padding: calc(2 * var(--in)) var(--in) var(--in);
+    font-size: clamp(1.5rem, 1rem + 1vw, 2rem);
+    font-weight: 560;
+    font-stretch: 80%;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+  .blurb:lang(bn) {
+    line-height: 1.4;
+  }
+  /* The menu's lines are its structure: the rule under search, the one
+     between the columns, a hairline between the topics (its main list,
+     read like a table) and one above each further group. The short links
+     go without: space parts them, and each fills from below when pressed.
+     (Search results keep theirs: a list of dated stories.) */
+  .menu nav .row {
+    border-bottom: 0;
+  }
+  .menu nav .row.big {
+    border-bottom: 1px solid var(--hair);
+  }
+  /* On a wide screen the two columns keep one rhythm, in the unit: a topic
+     row is 6u, everything in the other column 4u (its second group's name
+     included), so nine of those end with the six topics, on one line, and
+     both columns' names sit in the label row. */
+  @media (min-width: 760px) {
+    .menu .row.big,
+    .side .row,
+    .side .row + .head {
+      box-sizing: border-box;
+      padding-block: 0;
+    }
+    .menu .row.big {
+      height: calc(6 * var(--u));
+    }
+    .side .row {
+      height: calc(4 * var(--u));
+    }
+    .side .row + .head {
+      height: calc(4 * var(--u));
+      margin-top: 0;
+      padding-top: var(--u);
+    }
+    .side .row:last-of-type {
+      border-bottom: 1px solid var(--hair);
+    }
   }
   .q {
     display: block;
@@ -616,6 +696,14 @@
     font-stretch: 75%;
     outline: none;
   }
+  /* beside the Latest pane the search row is as tall as its two label rows,
+     so the rule under it runs on from theirs as one line */
+  @media (min-width: 760px) {
+    .q input {
+      height: calc(2 * var(--label) + var(--line));
+      padding-block: 0;
+    }
+  }
   .q input::placeholder {
     color: var(--mute);
     opacity: 0.6;
@@ -631,31 +719,45 @@
   }
 
   @media (max-width: 759px) {
+    /* a phone: one column, and who we are sunk to the screen's foot */
     .menu {
-      grid-template-columns: minmax(0, 1fr);
-      grid-template-rows: none;
-      align-content: start;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .blurb {
+      margin-top: auto;
+      border-left: 0;
     }
     /* on a phone the whole menu fits one screen: the topics a size down,
-       one line each, and the short links two to a line, the left one's
-       edge drawn by a hairline (the right one's falls off the screen) */
+       one line each, and the short links two to a line */
     .row.big {
-      padding: calc(0.75 * var(--u)) var(--in);
+      padding: calc(0.6 * var(--u)) var(--in);
       font-size: 1.2rem;
+    }
+    .menu nav .row:not(.big) {
+      padding-block: calc(0.6 * var(--u));
+    }
+    .row + .head {
+      margin-top: var(--u);
     }
     .side {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       align-content: start;
       border-left: 0;
-      margin-top: var(--in);
+      margin-top: var(--u);
     }
-    .side .head,
-    .side .blurb {
+    .menu .row + .head {
+      border-top: 1px solid var(--hair);
+    }
+    .side .head {
       grid-column: 1 / -1;
     }
-    .side .row {
-      box-shadow: 1px 0 0 var(--hair);
+    .blurb {
+      padding-top: var(--in);
+      font-size: 1.25rem;
+      text-wrap: pretty;
     }
     .res {
       grid-template-columns: 4rem minmax(0, 1fr);
@@ -709,7 +811,7 @@
       font-size: 1.2rem;
     }
     .tools {
-      padding: 0 0.25rem;
+      padding: 0 0 0 0.25rem;
       gap: 0;
       border-left: 0;
     }

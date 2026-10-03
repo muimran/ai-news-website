@@ -74,7 +74,6 @@
         </li>
       {/each}
     </ol>
-    <p class="blurb">{L.blurb}</p>
   {/if}
 </aside>
 
@@ -244,15 +243,6 @@
   }
   .row:lang(bn) .h {
     line-height: 1.5;
-  }
-  .blurb {
-    flex: none;
-    margin: 0;
-    padding: var(--u) var(--in);
-    border-top: var(--line) solid var(--rule);
-    background: var(--i3);
-    font-size: calc(0.75rem * var(--k));
-    line-height: 1.4;
   }
 
   /* a phone: no room for a pane; it opens as a panel from the topics row */

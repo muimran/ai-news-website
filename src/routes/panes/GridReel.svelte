@@ -409,12 +409,19 @@
     font-size: calc(0.875rem * var(--k));
     font-weight: 540;
   }
+  /* the format sits at the row's far end and glows: its letters lit in
+     lilac light, a soft halo round them, as the lilac lights up on the ink
+     bar when the card is pointed at */
   .kind {
     flex: none;
+    margin-left: auto;
     font: 500 calc(0.6875rem * var(--k)) / 1 var(--mono);
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--i);
+    text-shadow:
+      0 0 0.3em var(--i2),
+      0 0 0.9em var(--i2);
   }
   .card:hover .kind,
   .card:focus-visible .kind {

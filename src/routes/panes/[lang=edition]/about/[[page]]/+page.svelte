@@ -119,8 +119,10 @@
   }
 
   @media (max-width: 759px) {
+    /* the row of pages keeps its own height; the text takes the rest */
     .doc {
       grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto 1fr;
     }
     /* a phone: the pages as one row that swipes, like the topics row */
     .pages {
