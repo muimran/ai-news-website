@@ -48,7 +48,8 @@
         for (const e of entries) e.isIntersecting ? seen.add(e.target) : seen.delete(e.target);
         ui.wide = seen.size > 0;
       },
-      { root: article.closest('main.page') }
+      // the frame the story scrolls in, or the screen where the page itself scrolls (a phone)
+      { root: getComputedStyle(article.closest('main.page')).position === 'fixed' ? article.closest('main.page') : null }
     );
     figures.forEach((f) => watch.observe(f));
     return () => {

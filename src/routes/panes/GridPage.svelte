@@ -24,25 +24,30 @@
   });
 
   let last = 0;
+  /* On a phone a story scrolls as the page itself, like any page you read
+     down, so the browser's bars shrink away as usual; everywhere else the
+     page scrolls inside the frame. Whichever moved, read that. */
   function scrolled() {
     if (!reading) return;
+    const y = Math.max(el.scrollTop, scrollY);
     // which way: any real move up brings the header back, down sends it off
-    const d = el.scrollTop - last;
+    const d = y - last;
     if (Math.abs(d) > 6) {
       ui.up = d < 0;
-      last = el.scrollTop;
+      last = y;
     }
-    const deep = el.scrollTop > 160;
+    const deep = y > 160;
     if (deep !== ui.reading) ui.reading = deep;
     // a phone's header goes almost at once, as the reading starts
-    const begun = el.scrollTop > 50;
+    const begun = y > 50;
     if (begun !== ui.begun) ui.begun = begun;
     // where the header leaves and the facts fold, together (wide screens)
-    const deeper = el.scrollTop > 340;
+    const deeper = y > 340;
     if (deeper !== ui.deep) ui.deep = deeper;
   }
 </script>
 
+<svelte:window onscroll={scrolled} />
 <main class="page" class:footless={!foot} bind:this={el} onscroll={scrolled}>{@render children()}</main>
 {#if foot}<BottomRow {lang} {section} />{/if}
 
@@ -77,6 +82,12 @@
   }
   :global(.g.far) .page {
     top: var(--mv);
+  }
+  @media (max-width: 759px) {
+    .footless {
+      position: static;
+      overflow: visible;
+    }
   }
   @media (prefers-reduced-motion: reduce) {
     .page {
