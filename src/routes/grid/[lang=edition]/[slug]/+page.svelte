@@ -18,8 +18,12 @@
   const s = $derived(data.story);
   const pic = $derived(photo(s));
   const next = $derived(data.next.slice(0, 3));
+  /* our own illustrations, cut from free Unsplash photos, are credited as
+     such; any other photo carries its own credit */
   const credit = $derived(
-    data.credit ? `${lang === 'bn' ? 'ছবি' : 'Photo'}: ${data.credit}` : lang === 'bn' ? 'ছবি: আনস্প্ল্যাশ (প্রতীকী)' : 'Photo: Unsplash (stand-in)'
+    pic?.illustration
+      ? lang === 'bn' ? 'অলংকরণ: গ্রাউন্ড ট্রুথ / আনস্প্ল্যাশ' : 'Illustration: Ground Truth / Unsplash'
+      : data.credit ? `${lang === 'bn' ? 'ছবি' : 'Photo'}: ${data.credit}` : lang === 'bn' ? 'ছবি: আনস্প্ল্যাশ (প্রতীকী)' : 'Photo: Unsplash (stand-in)'
   );
 
   /* Only one element may hold the `hero` name at a time: this page's photo,

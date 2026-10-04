@@ -22,8 +22,12 @@
   // the facts that sit two to a row on a phone: format, date, length, place
   const k = $derived(FORMATS[s.kind] ? 1 : 0); // the format, if shown, comes first
   const halves = $derived(k + 2 + (s.location ? 1 : 0));
+  /* our own illustrations, cut from free Unsplash photos, are credited as
+     such; any other photo carries its own credit */
   const credit = $derived(
-    data.credit ? `${lang === 'bn' ? 'ছবি' : 'Photo'}: ${data.credit}` : lang === 'bn' ? 'ছবি: আনস্প্ল্যাশ (প্রতীকী)' : 'Photo: Unsplash (stand-in)'
+    pic?.illustration
+      ? lang === 'bn' ? 'অলংকরণ: গ্রাউন্ড ট্রুথ / আনস্প্ল্যাশ' : 'Illustration: Ground Truth / Unsplash'
+      : data.credit ? `${lang === 'bn' ? 'ছবি' : 'Photo'}: ${data.credit}` : lang === 'bn' ? 'ছবি: আনস্প্ল্যাশ (প্রতীকী)' : 'Photo: Unsplash (stand-in)'
   );
 
   /* Only one element may hold the `hero` name at a time: this page's photo,
