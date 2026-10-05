@@ -564,13 +564,13 @@
      it never holds anyone up; on opening only. */
   .menu > :not(nav),
   .menu nav > * {
-    animation: rise 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-    animation-delay: calc(60ms + var(--n, 0) * 16ms);
+    animation: rise 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(60ms + var(--n, 0) * 30ms);
   }
   @keyframes rise {
     from {
       opacity: 0;
-      transform: translateY(6px);
+      transform: translateY(18px);
     }
   }
   @media (prefers-reduced-motion: reduce) {
