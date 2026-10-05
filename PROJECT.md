@@ -20,13 +20,13 @@ server, output is static files.
 (The design language just above is the original one. The site has since been
 redesigned; see the next section for where it stands.)
 
-## Current design (October 2026): three versions side by side
+## Current design (October 2026)
 
-All three read the same stories; nothing is chosen yet.
-- `/en`, `/bn` — **the reel**: the live design.
-- `/grid/en` — **the grid**: the reel as a ruled table inside one ink frame.
-- `/panes/en` — **the panes**: the grid, full width, with a Latest pane down
-  the left. The one being worked on now.
+The **panes** design is the site, at the root (`/`, `/bn`, stories at
+`/2026/09/<slug>`). It was tried out under `/panes`; those addresses, and the
+original reel design's `/en/...` ones, forward to the same pages today. The
+original reel design is retired (its code is in git history). Two earlier
+alternates remain for reference: `/grid/en` (the framed grid) and `/map/en`.
 
 Rules the grid and panes versions keep to:
 - **One spatial unit.** Every size is a multiple of `--u` (12px on a wide
@@ -134,6 +134,26 @@ undo it" log.
 - **CMS scaling decision (WordPress migration)** — discussed, architecture
   agreed in principle, not built. Revisit if the git-based workflow becomes a
   real blocker for writers.
+
+## Story addresses
+
+`/2026/09/the-story-slug` for English, `/bn/2026/09/the-story-slug` for
+Bangla . English has the plain address;
+every other edition its two letters (a new language: add it to LANGS in
+content.js and to src/params/edition2.js).
+- Year/month: the folder the story is filed in,
+  `content/articles/<lang>/2026/09/<file>.md`. The CMS files a story by the
+  month it's first saved, so its address never moves, even if its date is
+  corrected later. A translation takes its original's year/month and slug.
+- Slug, always English letters (rule in `src/lib/content.js`): the "Web
+  address" typed in the CMS; else, for a Bangla translation, its English
+  original's; else the file name when it's in English letters (the CMS makes
+  English ones from the headline); else, for a Bangla original with nothing
+  typed, its title spelled in Latin letters (a rough fallback).
+- No two stories in one edition share an address: the older keeps it, the
+  newer gets `-2`, and the build warns.
+- Old addresses (/en/…, undated /bn/<slug>) forward to the new ones. The one
+  exception is the old /en/about, which the About page's own pattern claims.
 
 ## Things that bit us once (don't repeat)
 

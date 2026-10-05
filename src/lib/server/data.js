@@ -15,6 +15,7 @@ const REEL = { topic: 12 };
 /** What a frame needs, and nothing else — no body. */
 const summary = (s) => ({
   slug: s.slug,
+  ym: s.ym,
   lang: s.lang,
   title: s.title,
   dek: s.dek,

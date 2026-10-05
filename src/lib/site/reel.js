@@ -25,6 +25,7 @@ export const formatUrl = (key, lang) => `${base}/${lang}/${FORMATS[key].slug}`;
    shows its original's. Built by hand from the source photos; the files
    live in static/uploads/stories/<key>-<width>.jpg. */
 const PHOTOS = {
+  'a-data-centres-day': 'photo-1596394723269-b2cbca4e6313',
   'the-ai-boom-is-reaching-places-investors-forgot-to-look': 'photo-1659579740355-9fd915e0a9aa',
   'the-procurement-documents-that-show-how-a-country-buys-surveillance': 'photo-1528312635006-8ea0bc49ec63',
   'election-officials-are-being-sold-ai-they-did-not-ask-for': 'photo-1540910419892-4a36d2c3266c',
@@ -117,11 +118,11 @@ export const two = (n, lang) =>
 
 export const SHORT_DATE = {
   en: new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' }),
-  bn: new Intl.DateTimeFormat('bn-BD', { day: 'numeric', month: 'long', timeZone: 'UTC' })
+  bn: new Intl.DateTimeFormat('bn-BD', { day: 'numeric', month: 'short', timeZone: 'UTC' })
 };
 export const RANGE = {
   en: new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' }),
-  bn: new Intl.DateTimeFormat('bn-BD', { day: 'numeric', month: 'long', timeZone: 'UTC' })
+  bn: new Intl.DateTimeFormat('bn-BD', { day: 'numeric', month: 'short', timeZone: 'UTC' })
 };
 export const range = (from, to, lang) => RANGE[lang].formatRange(from, to);
 
@@ -132,7 +133,7 @@ export const MONTH = {
 
 export const DAY_DATE = {
   en: new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' }),
-  bn: new Intl.DateTimeFormat('bn-BD', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' })
+  bn: new Intl.DateTimeFormat('bn-BD', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' })
 };
 
 export const STR = {

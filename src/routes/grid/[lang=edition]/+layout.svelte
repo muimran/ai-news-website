@@ -63,7 +63,7 @@
     tick().then(() => input?.focus());
     if (!lists[lang]) {
       const l = lang;
-      fetch(`${base}/${l}/search.json`)
+      fetch(`${base}/search/${l}.json`)
         .then((r) => r.json())
         .then((rows) => (lists = { ...lists, [l]: rows }));
     }
