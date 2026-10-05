@@ -53,6 +53,33 @@ Rules the grid and panes versions keep to:
   and comes back on any scroll up. The reading face is Georgia (Gelasio where
   a device lacks it, Noto Serif Bengali for Bangla).
 
+- **Story cards: words at the top, on the picture's own colour.** Each card
+  takes the dominant colour of its picture's upper half (read when the site
+  is built, `src/lib/server/tone.js`, using `sharp`). The headline, summary
+  and byline sit at the top on that colour, solid behind the words, then
+  fading into the picture over a long tail below them, so the wash only goes
+  as deep as the words need. No dark shade over any picture. The words go
+  dark ink or white, whichever reads better; a colour too middling for
+  either is eased lighter or darker until the text reaches 4.5:1. An editor
+  can set the colour by hand ("Card colour" in the CMS), and it's then used
+  as set. The illustrations are composed for this: objects kept in the lower
+  part of the frame (`tools/illustrations/`). Idea taken from De
+  Correspondent's cards; their rounded corners, gaps and type pills were left
+  out on purpose (they'd break the table of lines and repeat what the label
+  row already says).
+- **Phone bottom row.** Latest and Topics read as buttons: an ↑ on each, a
+  faint tint (7% ink) deepening when pressed, and on a first visit only the
+  arrows bob once (remembered in the browser as `gt-nudged`). Open, Topics
+  softly blurs and pales the page behind it (1.5px, 20%); a tap there closes.
+
+- **Font trial (October 2026, temporary).** `src/routes/FontPicker.svelte`:
+  two small menus at the right edge, Headline and Body, switching the
+  headline face and the English reading face among a few free Google Fonts.
+  Always on the local copy; on the live site only after opening any page
+  with `?fonts` (remembered in that browser; `?nofonts` hides it again), so
+  readers never see it. Once a choice is made, set it for real and delete
+  the picker.
+
 ## Why it's shaped the way it is
 
 **Bilingual = two separate front pages, not one filtered page.**
@@ -186,6 +213,8 @@ content.js and to src/params/edition2.js).
   it ships to, most do it automatically).
 - Content: `content/articles/en/*.md`, `content/articles/bn/*.md`.
 - Design tokens: `src/app.css`.
+- Card colours: `src/lib/server/tone.js` (read at build time).
+- How the story illustrations are made: `tools/illustrations/README.md`.
 - Decisions-and-restores index: `NOTES.md`.
 
 ## How I like to work on this

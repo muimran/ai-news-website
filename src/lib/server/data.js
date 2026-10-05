@@ -7,10 +7,23 @@ import { LANGS, inLang, sibling, sections } from '$lib/content.js';
 import { FORMATS } from '$lib/labels.js';
 import { photo, topicUrl, formatUrl } from '$lib/site/reel.js';
 import { writerFor, writerUrl } from './authors.js';
+import { toneFor, dominant } from './tone.js';
 
 /* A section's reel runs its latest 12; everything older is in its index.
    The front reel is one story per section. */
 const REEL = { topic: 12 };
+
+/* Every story's card colour, read once from its picture before any page is
+   built (an editor's own colour wins). */
+const TONES = new Map();
+for (const s of LANGS.flatMap(inLang)) {
+  const pic = photo(s);
+  if (s.cardColour) TONES.set(`${s.lang}/${s.slug}`, toneFor(s.cardColour, { adjust: false }));
+  else if (pic) {
+    const bg = await dominant(pic.thumb);
+    if (bg) TONES.set(`${s.lang}/${s.slug}`, toneFor(bg));
+  }
+}
 
 /** What a frame needs, and nothing else — no body. */
 const summary = (s) => ({
@@ -25,7 +38,8 @@ const summary = (s) => ({
   kind: s.kind,
   author: s.author,
   translationOf: s.translationOf,
-  image: s.image
+  image: s.image,
+  tone: TONES.get(`${s.lang}/${s.slug}`) ?? null
 });
 
 /** An index or search row: a summary plus what the filter looks through. */

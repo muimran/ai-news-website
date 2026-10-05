@@ -156,6 +156,8 @@ function toStory(path, raw) {
     image: data.image
       ? { src: base + data.image, alt: data.imageAlt || '', credit: data.imageCredit || '' }
       : null,
+    // the card's colour, when an editor sets it; otherwise it's read from the picture
+    cardColour: /^#[0-9a-f]{6}$/i.test(data.cardColour || '') ? data.cardColour : '',
 
     /* Video is a FORMAT, not a section. A video interview about chip fabs
        belongs in Climate/Chips like any other story on that beat; the format

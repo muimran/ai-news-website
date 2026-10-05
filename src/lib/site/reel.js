@@ -25,7 +25,7 @@ export const formatUrl = (key, lang) => `${base}/${lang}/${FORMATS[key].slug}`;
    shows its original's. Built by hand from the source photos; the files
    live in static/uploads/stories/<key>-<width>.jpg. */
 const PHOTOS = {
-  'a-data-centres-day': 'photo-1596394723269-b2cbca4e6313',
+  'a-data-centres-day': 'photo-1619365566184-272a34acfeb9',
   'the-ai-boom-is-reaching-places-investors-forgot-to-look': 'photo-1659579740355-9fd915e0a9aa',
   'the-procurement-documents-that-show-how-a-country-buys-surveillance': 'photo-1528312635006-8ea0bc49ec63',
   'election-officials-are-being-sold-ai-they-did-not-ask-for': 'photo-1540910419892-4a36d2c3266c',
@@ -66,7 +66,7 @@ const PHOTOS = {
   // Bangla originals, keyed by their own slug
   'bangla-bhashar-model-toiri-korchen-jara': 'photo-1786360746884-2a29477f2def',
   'chattogramer-poshak-karkhanay-camera-ja-dekhe': 'photo-1466027397211-20d0f2449a3f',
-  'data-centerer-panir-hisab-keu-prokash-kore-na': 'photo-1596394723269-b2cbca4e6313',
+  'data-centerer-panir-hisab-keu-prokash-kore-na': 'photo-1619365566184-272a34acfeb9',
   'dhakar-ridarra-je-thikanar-manchitra-baniyeche': 'photo-1591637333184-19aa84b3e01f',
   'gramer-clinic-e-phone-je-siddhanta-nicche': 'photo-1655313719493-16ebe4906441',
   'nirbachone-bhuya-content-kothay-toiri-hoy': 'photo-1710392046859-dba4aa3cd0bf',

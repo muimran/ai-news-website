@@ -102,6 +102,12 @@ collections:
     widget: string
     required: false
     hint: Photographer or agency. An uncredited photo is a rights problem.
+  - name: cardColour
+    label: Card colour
+    widget: color
+    required: false
+    hint: The colour behind the headline on the story's card. Leave empty and it's taken from the top
+      edge of the photo, which is usually right; set it when that colour looks wrong.
   - name: video
     label: Video URL
     widget: string
@@ -251,6 +257,12 @@ collections:
     widget: string
     required: false
     hint: Photographer or agency. An uncredited photo is a rights problem.
+  - name: cardColour
+    label: Card colour
+    widget: color
+    required: false
+    hint: The colour behind the headline on the story's card. Leave empty and it's taken from the top
+      edge of the photo, which is usually right; set it when that colour looks wrong.
   - name: video
     label: ভিডিও লিংক
     widget: string

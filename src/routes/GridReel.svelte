@@ -199,7 +199,7 @@
 {#snippet card(it, half)}
   {@const s = it.story}
   {@const pic = photo(s)}
-  <a class="card" class:half class:bare={!pic} href={storyUrl(s)} data-n={it.n} draggable="false" onclick={() => (hero = s.slug)}>
+  <a class="card" class:half class:bare={!pic} class:toned={pic} style:--card={s.tone?.bg} style:--on={s.tone?.fg} href={storyUrl(s)} data-n={it.n} draggable="false" onclick={() => (hero = s.slug)}>
     <span class="lab">
       <b class="n">{two(it.n, lang)}</b>
       {#if !section}<span class="sec">{sectionLabel(s.section, lang)}</span>{/if}
@@ -489,6 +489,39 @@
     background: linear-gradient(to top, rgb(0 0 0 / 0.78), rgb(0 0 0 / 0.45) 55%, transparent);
     color: #fff;
   }
+  /* The words stand at the top of the card, dark or white (--on), on the
+     picture's dominant colour (--card, read at build time): solid behind
+     the words, then fading into the picture over a long tail below them, so
+     the wash goes as deep as the words need and no further. No dark shade
+     over any picture. */
+  .toned .cap {
+    top: 0;
+    bottom: auto;
+    z-index: 1;
+    padding: calc(var(--in) + var(--u)) var(--in) calc(3 * var(--u));
+    background: var(--card, var(--i3));
+    color: var(--on, #26282f);
+  }
+  .toned .cap::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: calc(16 * var(--u));
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      var(--card),
+      color-mix(in srgb, var(--card) 82%, transparent) 25%,
+      color-mix(in srgb, var(--card) 52%, transparent) 50%,
+      color-mix(in srgb, var(--card) 22%, transparent) 75%,
+      transparent
+    );
+  }
+  .half.toned .cap::after {
+    height: calc(10 * var(--u));
+  }
   .bare .cap {
     background: none;
     color: var(--ink);
@@ -545,6 +578,9 @@
   }
   .half .cap {
     padding-top: calc(4 * var(--u));
+  }
+  .half.toned .cap {
+    padding-top: calc(var(--in) + var(--u));
   }
   /* the way to all of them, in the last column's lower half */
   .pair .door {

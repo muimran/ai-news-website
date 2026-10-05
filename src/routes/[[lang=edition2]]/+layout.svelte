@@ -4,6 +4,7 @@
      ruled table: a header row of cells, the Latest pane beside the main
      pane (the reel's cells, a list, a story), a row of topics. Lines are the structure,
      never decoration; where two cells meet they share one rule. */
+  import FontPicker from '../FontPicker.svelte';
   import { tick } from 'svelte';
   import { cubicOut } from 'svelte/easing';
   import { page } from '$app/state';
@@ -217,6 +218,8 @@
   {/if}
 </div>
 {/if}
+
+<FontPicker />
 
 <style>
   /* Two colours, each at three strengths, and no others: full for marks,
