@@ -554,7 +554,10 @@
     border-right: 0;
     border-top: var(--line) solid var(--rule);
   }
+  /* set to the right, so it isn't clipped while the column is only peeking in */
   .pair .door .big {
+    align-self: flex-end;
+    text-align: right;
     font-size: clamp(1.6rem, 0.8rem + 1.8vw, 2.8rem);
   }
 
