@@ -7,6 +7,7 @@
   import { fade } from 'svelte/transition';
   import { page } from '$app/state';
   import { afterNavigate } from '$app/navigation';
+  import { onMount } from 'svelte';
   import { sectionLabel } from '$lib/labels.js';
   import { two, STR } from '$lib/site/reel.js';
   import Mark from './Mark.svelte';
@@ -24,6 +25,18 @@
      row each, the way Latest opens beside it. Choosing one, tapping
      elsewhere or going anywhere folds them away; so does opening Latest. */
   let open = $state(false);
+  /* on a first visit the two arrows bob up, once, to say these open; never
+     again after (remembered in this browser) */
+  let nudge = $state(false);
+  onMount(() => {
+    try {
+      if (localStorage.getItem('gt-nudged')) return;
+      localStorage.setItem('gt-nudged', '1');
+    } catch {
+      return;
+    }
+    nudge = true;
+  });
   afterNavigate(() => (open = false));
   function toggle() {
     open = !open;
@@ -47,7 +60,7 @@
      on its own; a tap on it folds them away -->
 {#if open}<div class="veil" aria-hidden="true" transition:fade={{ duration: 200 }}></div>{/if}
 
-<div class="bottom" class:fixed class:up={open}>
+<div class="bottom" class:fixed class:up={open} class:nudge>
   <!-- a phone has no room for the Latest pane: it opens from here -->
   <!-- open, the word gives way to a cross that closes it (the word stays,
        unseen, so the cell keeps its width) -->
@@ -57,7 +70,7 @@
     aria-pressed={ui.sheet}
     aria-label={ui.sheet ? L.close : undefined}
     onclick={() => ((ui.sheet = !ui.sheet), (open = false))}
-    ><span class:gone={ui.sheet}>{L.latest}</span>{#if ui.sheet}<span class="x" aria-hidden="true"></span>{/if}</button
+    ><span class:gone={ui.sheet}>{L.latest}<span class="arr" aria-hidden="true">↑</span></span>{#if ui.sheet}<span class="x" aria-hidden="true"></span>{/if}</button
   >
   <div class="topics" bind:this={box}>
     {#if open}
@@ -204,11 +217,38 @@
       flex: none;
       border: 0;
       border-right: var(--line) solid var(--rule);
-      background: none;
       font: 500 calc(0.6875rem * var(--k)) / 1 var(--mono);
       letter-spacing: 0.08em;
       text-transform: uppercase;
       cursor: pointer;
+    }
+    /* both open something: a faint tint over the row's paper, deeper while
+       pressed, and an arrow pointing where they open */
+    .latest,
+    .pick {
+      background: color-mix(in srgb, var(--ink) 7%, var(--paper));
+      transition: background-color 0.15s;
+    }
+    .latest:active,
+    .pick:active {
+      background: color-mix(in srgb, var(--ink) 13%, var(--paper));
+    }
+    .nudge .arr {
+      display: inline-block;
+      animation: nudge 1.2s ease-in-out 1s 1;
+    }
+    @keyframes nudge {
+      0%, 50%, 100% { transform: none; }
+      25%, 75% { transform: translateY(-4px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .nudge .arr {
+        animation: none;
+      }
+    }
+    .latest .arr {
+      margin-left: 0.5em;
+      letter-spacing: 0;
     }
     .latest[aria-pressed='true'] {
       background: var(--o3);
@@ -269,7 +309,6 @@
       flex: 1;
       justify-content: flex-start;
       border: 0;
-      background: none;
       cursor: pointer;
     }
     .pick[aria-expanded='true'] {
