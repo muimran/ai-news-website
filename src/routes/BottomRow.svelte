@@ -4,6 +4,7 @@
      the last cell. Fixed, like the header row; only what's between them
      moves. */
   import { cubicOut } from 'svelte/easing';
+  import { fade } from 'svelte/transition';
   import { page } from '$app/state';
   import { afterNavigate } from '$app/navigation';
   import { sectionLabel } from '$lib/labels.js';
@@ -42,7 +43,11 @@
 
 <svelte:window onpointerdown={away} onkeydown={(e) => e.key === 'Escape' && (open = false)} />
 
-<div class="bottom" class:fixed>
+<!-- open, the page behind the topics blurs and pales, so the list reads
+     on its own; a tap on it folds them away -->
+{#if open}<div class="veil" aria-hidden="true" transition:fade={{ duration: 200 }}></div>{/if}
+
+<div class="bottom" class:fixed class:up={open}>
   <!-- a phone has no room for the Latest pane: it opens from here -->
   <!-- open, the word gives way to a cross that closes it (the word stays,
        unseen, so the cell keeps its width) -->
@@ -83,6 +88,19 @@
 </div>
 
 <style>
+  /* a reel's stage (sticky) holds the veil in its own layer: open, that
+     layer comes up over the header, so the veil covers the header too */
+  :global(.stage:has(.veil)) {
+    z-index: 11;
+  }
+  .veil {
+    position: fixed;
+    z-index: 11;
+    inset: 0;
+    background: color-mix(in srgb, var(--paper) 20%, transparent);
+    -webkit-backdrop-filter: blur(1.5px);
+    backdrop-filter: blur(1.5px);
+  }
   .bottom {
     position: relative;
     display: flex;
@@ -90,6 +108,9 @@
     height: var(--bot);
     border-top: var(--line) solid var(--rule);
     background: var(--paper);
+  }
+  .bottom.up {
+    z-index: 12;
   }
   .fixed {
     position: fixed;
