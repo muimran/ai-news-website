@@ -122,6 +122,15 @@
     }
   }
 
+  // the name drawn four ways, each from the world of terms and contracts
+  const LOGO = {
+    now: { label: 'Plain (now)' },
+    stack: { label: 'Stacked' },
+    caret: { label: 'Inserted (caret)' },
+    bracket: { label: 'Amended [brackets]' },
+    signed: { label: 'Signed (× line)' }
+  };
+
   const get = (k, d) => {
     try {
       return localStorage.getItem(k) || d;
@@ -139,6 +148,7 @@
   let head = $state('now');
   let body = $state('now');
   let pal = $state('now');
+  let logo = $state('now');
   let open = $state(false); // folded to a chevron at the edge until wanted
   $effect.pre(() => {
     const q = new URLSearchParams(location.search);
@@ -149,6 +159,7 @@
     body = get('gt-body', 'now');
     pal = get('gt-pal', 'now');
     open = get('gt-pick-open', '') === '1';
+    logo = get('gt-logo', 'now');
   });
 
   function load(key, f) {
@@ -167,6 +178,7 @@
     if (!on) {
       delete root.dataset.head;
       delete root.dataset.body;
+      delete root.dataset.logo;
       return;
     }
     const p = PAL[pal] ?? PAL.now;
@@ -186,6 +198,8 @@
     watch.observe(document.body, { childList: true, subtree: true });
     load(`head-${head}`, HEAD[head]);
     load(`body-${body}`, BODY[body]);
+    root.dataset.logo = logo;
+    set('gt-logo', logo);
     root.dataset.head = head;
     root.dataset.body = body;
     set('gt-head', head);
@@ -206,6 +220,12 @@
       ><span aria-hidden="true">{open ? '›' : '‹'}</span></button
     >
     {#if open}<div id="gt-pick" class="menus">
+    <label>
+      <span>Logo</span>
+      <select bind:value={logo}>
+        {#each Object.entries(LOGO) as [key, f] (key)}<option value={key}>{f.label}</option>{/each}
+      </select>
+    </label>
     <label>
       <span>Headline</span>
       <select bind:value={head}>
@@ -313,6 +333,86 @@
     font-weight: 600;
     letter-spacing: -0.015em;
     line-height: 1.02;
+  }
+  /* the logo, four ways. 1 stacked: NEW over TERMS, set to one width,
+     parted by an accent rule, like a stamp */
+  :global(html[data-logo='stack'] .name .logo) {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+    font-size: 0.84em;
+    font-weight: 800;
+    line-height: 0.82;
+    text-transform: uppercase;
+  }
+  :global(html[data-logo='stack'] .name .w1) {
+    font-stretch: 100%;
+    letter-spacing: 0.115em;
+    padding-bottom: 0.1em;
+    margin-bottom: 0.12em;
+    border-bottom: 0.11em solid var(--o);
+  }
+  :global(html[data-logo='stack'] .name .w2) {
+    font-stretch: 75%;
+    letter-spacing: 0.01em;
+  }
+  /* 2 inserted: "new" written in above a proofreader's caret */
+  :global(html[data-logo='caret'] .name .logo) {
+    position: relative;
+    display: inline-block;
+    padding-top: 0.42em;
+    padding-left: 0.12em;
+    font-size: 0.92em;
+  }
+  :global(html[data-logo='caret'] .name .w1) {
+    position: absolute;
+    top: 0.02em;
+    left: -0.32em;
+    font-size: 0.5em;
+    font-weight: 600;
+    font-stretch: 100%;
+    font-style: italic;
+    letter-spacing: 0.02em;
+    color: var(--o-text);
+  }
+  :global(html[data-logo='caret'] .name .w2::before) {
+    content: '‸';
+    position: absolute;
+    left: -0.2em;
+    bottom: 0.02em;
+    font-size: 0.7em;
+    font-weight: 700;
+    color: var(--o);
+  }
+  /* 3 amended: [New] Terms, the brackets an amendment's */
+  :global(html[data-logo='bracket'] .name .w1::before),
+  :global(html[data-logo='bracket'] .name .w1::after) {
+    font-weight: 300;
+    color: var(--o);
+  }
+  :global(html[data-logo='bracket'] .name .w1::before) {
+    content: '[';
+    margin-right: 0.04em;
+  }
+  :global(html[data-logo='bracket'] .name .w1::after) {
+    content: ']';
+    margin-left: 0;
+  }
+  /* 4 signed: the name on a signature line, marked × */
+  :global(html[data-logo='signed'] .name .logo) {
+    position: relative;
+    display: inline-block;
+    padding: 0 0.1em 0.06em 0.62em;
+    border-bottom: 0.06em solid currentColor;
+  }
+  :global(html[data-logo='signed'] .name .logo::before) {
+    content: '×';
+    position: absolute;
+    left: 0;
+    bottom: 0.08em;
+    font-size: 0.6em;
+    font-weight: 500;
+    color: var(--o);
   }
   /* the menu's pale panel takes the trial's palest cool shade */
   :global(html[data-pal] .panel) {

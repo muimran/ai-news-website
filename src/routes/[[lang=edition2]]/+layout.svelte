@@ -132,7 +132,9 @@
   <!-- with the menu or search open, that panel is the page: the topic's
        cell steps out of the header, and the topics row out of the foot -->
   <header class="top" class:topic={!!(current || format) && !reading && !open}>
-    <a class="cell name" href={gridHome(lang)} lang="en">New Terms</a>
+    <a class="cell name" href={gridHome(lang)} lang="en"
+      ><span class="logo"><span class="w1">New</span> <span class="w2">Terms</span></span></a
+    >
     {#if open}
       <!-- nothing: the panel says where you are -->
     {:else if current}
@@ -420,7 +422,7 @@
     flex: 0 0 calc(var(--side) - var(--frame));
     min-width: max-content;
     font-family: 'Instrument Sans', system-ui, sans-serif;
-    font-size: 1.4rem;
+    font-size: 1.9rem;
     font-weight: 660;
     font-stretch: 75%;
     letter-spacing: -0.01em !important;
@@ -872,7 +874,7 @@
       width: auto;
       padding: 0 var(--u);
       border-right-color: var(--hair);
-      font-size: 1.2rem;
+      font-size: 1.55rem;
     }
     .tools {
       padding: 0 0 0 0.25rem;
