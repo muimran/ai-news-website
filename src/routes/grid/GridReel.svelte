@@ -114,7 +114,7 @@
 
 <div class="wrap" bind:this={wrap}>
   <main class="stage">
-    <h1 class="sr">{section ? sectionLabel(section, lang) : `Ground Truth — ${L.tagline}`}</h1>
+    <h1 class="sr">{section ? sectionLabel(section, lang) : `New Terms — ${L.tagline}`}</h1>
     <div class="window" bind:this={win}>
     <div class="track" bind:this={track}>
       {#if opens && issue.length}

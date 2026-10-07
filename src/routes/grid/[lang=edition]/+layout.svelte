@@ -98,7 +98,7 @@
 
 <div class="g" {lang}>
   <header class="top" class:topic={!!current}>
-    <a class="cell name" href={gridHome(lang)}>Ground Truth</a>
+    <a class="cell name" href={gridHome(lang)}>New Terms</a>
     {#if current}
       <a class="cell here" href={gridTopic(current, lang)}><Mark key={current} /><span class="nm1">{sectionLabel(current, lang)}</span></a>
     {/if}

@@ -18,7 +18,7 @@ export const authorSlug = (name) =>
 export const topicUrl = (key, lang) => `${base}/${lang}/topic/${sectionSlug(key)}`;
 export const formatUrl = (key, lang) => `${base}/${lang}/${FORMATS[key].slug}`;
 
-/* The stories' images: photo-illustrations made for Ground Truth, one per
+/* The stories' images: photo-illustrations made for New Terms, one per
    story, each an object cut from a free Unsplash photo (its id is kept here,
    the source) and set in black and white on its topic's colours. Keyed by
    English slug, or by its own slug for a Bangla original; a translation

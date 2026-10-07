@@ -11,7 +11,7 @@ date: 2026-09-06
 readTime: 9
 image: "/uploads/test-photo.svg"
 imageAlt: "Placeholder — replace with the real photograph"
-imageCredit: "Test / Ground Truth"
+imageCredit: "Test / New Terms"
 weight: 5
 featured: false
 secondary: false

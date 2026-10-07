@@ -1,4 +1,4 @@
-# Ground Truth — project log
+# New Terms — project log
 
 A working memo for picking this project back up, mine to re-read, not
 polished for anyone else. Update it as things change; don't let it go stale.

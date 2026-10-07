@@ -8,14 +8,14 @@
 </script>
 
 <svelte:head>
-  <title>{L.all} — Ground Truth</title>
+  <title>{L.all} — New Terms</title>
 </svelte:head>
 
 <ListPage
   lang={data.lang}
   stories={data.stories}
   title={L.all}
-  kicker="Ground Truth"
+  kicker="New Terms"
   back={{ href: gridHome(data.lang), label: L.reel }}
   placeholder={L.searchAll}
 />

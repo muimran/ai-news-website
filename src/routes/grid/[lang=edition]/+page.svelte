@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-  <title>Ground Truth — {STR[data.lang].tagline}</title>
+  <title>New Terms — {STR[data.lang].tagline}</title>
 </svelte:head>
 
 <GridReel lang={data.lang} reel={data.reel} opens />

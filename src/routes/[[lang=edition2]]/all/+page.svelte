@@ -8,7 +8,7 @@
 </script>
 
 <svelte:head>
-  <title>{L.all} — Ground Truth</title>
+  <title>{L.all} — New Terms</title>
 </svelte:head>
 
 <ListPage

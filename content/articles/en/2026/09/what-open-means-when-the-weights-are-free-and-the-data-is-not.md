@@ -3,7 +3,7 @@ title: "What \"open\" means when the weights are free and the data is not"
 dek: "A field guide to the licences now competing for the word."
 section: "The AI Race"
 kind: "Explainer"
-author: "Ground Truth staff"
+author: "New Terms staff"
 authorTitle: "Newsroom"
 location: "Dhaka"
 tags: ["licensing", "open weights"]
@@ -11,7 +11,7 @@ date: 2026-09-10
 readTime: 8
 image: "/uploads/test-photo.svg"
 imageAlt: "Placeholder — replace with the real photograph"
-imageCredit: "Test / Ground Truth"
+imageCredit: "Test / New Terms"
 weight: 3
 featured: false
 secondary: false

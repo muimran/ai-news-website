@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-  <title>Ground Truth — {STR[data.lang].tagline}</title>
+  <title>New Terms — {STR[data.lang].tagline}</title>
 </svelte:head>
 
 <!-- what's new lives in the Latest pane, so the reel opens on its lead story -->

@@ -9,13 +9,13 @@
 </script>
 
 <svelte:head>
-  <title>{page.status} — Ground Truth</title>
+  <title>{page.status} — New Terms</title>
 </svelte:head>
 
 <main class="err" {lang}>
   <p class="code">{page.status}</p>
   <h1>{page.status === 404 ? (bn ? 'এই পাতাটি পাওয়া যায়নি।' : 'This page isn’t here.') : bn ? 'কিছু একটা ভুল হয়েছে।' : 'Something went wrong.'}</h1>
-  <a href="{base}/{lang}">← Ground Truth</a>
+  <a href="{base}/{lang}">← New Terms</a>
 </main>
 
 <style>

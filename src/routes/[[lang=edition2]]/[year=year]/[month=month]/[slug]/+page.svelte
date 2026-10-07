@@ -42,7 +42,7 @@
      such; any other photo carries its own credit */
   const credit = $derived(
     pic?.illustration
-      ? lang === 'bn' ? 'অলংকরণ: গ্রাউন্ড ট্রুথ / আনস্প্ল্যাশ' : 'Illustration: Ground Truth / Unsplash'
+      ? lang === 'bn' ? 'অলংকরণ: নিউ টার্মস / আনস্প্ল্যাশ' : 'Illustration: New Terms / Unsplash'
       : data.credit ? `${lang === 'bn' ? 'ছবি' : 'Photo'}: ${data.credit}` : lang === 'bn' ? 'ছবি: আনস্প্ল্যাশ (প্রতীকী)' : 'Photo: Unsplash (stand-in)'
   );
 
@@ -80,7 +80,7 @@
 </script>
 
 <svelte:head>
-  <title>{s.title} — Ground Truth</title>
+  <title>{s.title} — New Terms</title>
   <meta name="description" content={s.dek} />
 </svelte:head>
 

@@ -11,7 +11,7 @@ date: 2026-09-14
 readTime: 9
 image: "/uploads/test-photo.svg"
 imageAlt: "A street at dusk with figures in the foreground"
-imageCredit: "Test / Ground Truth"
+imageCredit: "Test / New Terms"
 weight: 1
 featured: false
 secondary: false

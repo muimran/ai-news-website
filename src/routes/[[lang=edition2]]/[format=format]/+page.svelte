@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-  <title>{formatLabel(data.format, data.lang)} — Ground Truth</title>
+  <title>{formatLabel(data.format, data.lang)} — New Terms</title>
 </svelte:head>
 
 <GridReel lang={data.lang} reel={data.reel} format={data.format} />

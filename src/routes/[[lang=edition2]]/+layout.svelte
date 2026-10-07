@@ -122,7 +122,7 @@
   <div class="g full" {lang}>
     {@render children()}
     {#if ui.back !== false}
-      <a class="away" data-at={ui.back} href={current ? gridTopic(current, lang) : gridHome(lang)} onclick={close}>Ground Truth ✕</a>
+      <a class="away" data-at={ui.back} href={current ? gridTopic(current, lang) : gridHome(lang)} onclick={close}>New Terms ✕</a>
     {/if}
   </div>
 {:else}
@@ -132,7 +132,7 @@
   <!-- with the menu or search open, that panel is the page: the topic's
        cell steps out of the header, and the topics row out of the foot -->
   <header class="top" class:topic={!!(current || format) && !reading && !open}>
-    <a class="cell name" href={gridHome(lang)} lang="en">Ground Truth</a>
+    <a class="cell name" href={gridHome(lang)} lang="en">New Terms</a>
     {#if open}
       <!-- nothing: the panel says where you are -->
     {:else if current}

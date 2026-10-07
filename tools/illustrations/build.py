@@ -58,7 +58,6 @@ ANCHOR = {
 # now and then a texture in the field, drawn in the field's own colour (a
 # shade darker on a light field, lighter on a dark one), chosen to suit
 TEXTURE = {
-    'the-ai-boom-is-reaching-places-investors-forgot-to-look': 'halftone',
     'the-next-ai-race-may-be-about-electricity-not-models': 'halftone',
     'chinese-open-weight-models-are-winning-on-price-not-benchmarks': 'halftone',
     'the-quiet-consolidation-of-the-ai-supply-chain': 'halftone',

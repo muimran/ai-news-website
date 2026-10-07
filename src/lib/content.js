@@ -138,7 +138,7 @@ function toStory(path, raw) {
     section: data.section || 'Latest',
     kind: data.kind || 'Report',
     tags: Array.isArray(data.tags) ? data.tags : [],
-    author: data.author || 'Ground Truth staff',
+    author: data.author || 'New Terms staff',
     authorTitle: data.authorTitle || '',
     location: data.location || '',
     date,

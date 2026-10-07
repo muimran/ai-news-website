@@ -11,7 +11,7 @@
 </script>
 
 <svelte:head>
-  <title>{data.doc.title} — Ground Truth</title>
+  <title>{data.doc.title} — New Terms</title>
 </svelte:head>
 
 <GridPage {lang}>

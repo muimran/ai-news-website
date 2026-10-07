@@ -34,9 +34,9 @@ const escape = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/
 
 /** A plain stand-in bio from the name and role, until a real one is written. */
 function standIn(name, role) {
-  if (role === 'Newsroom') return '<p>Stories reported and edited by the Ground Truth newsroom as a whole.</p>';
+  if (role === 'Newsroom') return '<p>Stories reported and edited by the New Terms newsroom as a whole.</p>';
   const what = role ? `${/^[aeiou]/i.test(role) ? 'an' : 'a'} ${role.toLowerCase()}` : 'a reporter';
-  return `<p>${escape(name)} is ${escape(what)} at Ground Truth, the nonprofit newsroom reporting on AI in Bangladesh.</p>`;
+  return `<p>${escape(name)} is ${escape(what)} at New Terms, the nonprofit newsroom reporting on AI in Bangladesh.</p>`;
 }
 
 const files = import.meta.glob('/content/authors/*.md', { query: '?raw', import: 'default', eager: true });

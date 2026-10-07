@@ -10,7 +10,11 @@ TAP = (A['water valve pipe'] + A['water tap faucet'])[7]   # a brass tap, drippi
 FLIP = {'when-the-regulator-and-the-regulated-share-the-same-consultants'}
 
 record = {}
+# ONLY=slug,slug rebuilds just those
+ONLY = set(filter(None, os.environ.get('ONLY', '').split(',')))
 for slug, (topic, q) in plan.items():
+    if ONLY and slug not in ONLY:
+        continue
     path, pid = source(q)
     if slug == 'data-centerer-panir-hisab-keu-prokash-kore-na':
         path, pid = f'allcut/{TAP}.png', TAP
@@ -41,4 +45,5 @@ for slug, (topic, q) in plan.items():
         img.resize((w, w * 2 // 3), Image.LANCZOS).save(f'{OUT}/{slug}-{w}.jpg', quality=80, optimize=True, progressive=True)
     record[slug] = pid
     print(f"{anchor:6} {y/C.H:.2f} {slug[:56]}")
-json.dump(record, open('sources_top.json', 'w'), indent=1)
+if not ONLY:
+    json.dump(record, open('sources_top.json', 'w'), indent=1)

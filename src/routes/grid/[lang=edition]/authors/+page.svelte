@@ -1,5 +1,5 @@
 <script>
-  /* Everyone who writes for Ground Truth: a sheet of portrait cells sharing
+  /* Everyone who writes for New Terms: a sheet of portrait cells sharing
      their rules, each with name, role and count beneath. */
   import { base } from '$app/paths';
   import { formatNumber } from '$lib/labels.js';
@@ -12,12 +12,12 @@
 </script>
 
 <svelte:head>
-  <title>{L.reporters} — Ground Truth</title>
+  <title>{L.reporters} — New Terms</title>
 </svelte:head>
 
 <GridPage lang="en">
   <header class="intro">
-    <p class="lab">Ground Truth · {L.people(num(data.authors.length))}</p>
+    <p class="lab">New Terms · {L.people(num(data.authors.length))}</p>
     <h1>{L.reporters}</h1>
   </header>
   <ol class="sheet">

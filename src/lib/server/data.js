@@ -114,7 +114,7 @@ export const formatList = (lang, kind) => ofKind(lang, kind).map(row);
 /* Every story from both desks, newest first — a writer's page spans both. */
 const everything = () => [...order('en'), ...order('bn')].sort(newestFirst);
 
-/** Everyone who writes for Ground Truth, most stories first, with their
+/** Everyone who writes for New Terms, most stories first, with their
     count across both desks. */
 export function writers() {
   const bySlug = new Map();

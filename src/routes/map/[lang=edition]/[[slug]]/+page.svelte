@@ -407,7 +407,7 @@
 <svelte:window bind:innerWidth={vw} bind:innerHeight={vh} onkeydown={keys} />
 
 <svelte:head>
-  <title>{openItem ? `${openItem.story.title} — Ground Truth` : `Ground Truth — ${L.tagline}`}</title>
+  <title>{openItem ? `${openItem.story.title} — New Terms` : `New Terms — ${L.tagline}`}</title>
   <meta name="description" content={openItem ? openItem.story.dek : L.tagline} />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
@@ -428,7 +428,7 @@
     bind:this={viewport}
     style="background-size:{grid}px {grid}px; background-position:{tx}px {ty}px"
   >
-    <h1 class="sr">Ground Truth — {L.tagline}</h1>
+    <h1 class="sr">New Terms — {L.tagline}</h1>
     <div class="world" style="--z:{cam.z}; transform:translate({tx}px, {ty}px) scale({cam.z})">
       {#each map.areas as a (a.key)}
         <button
@@ -465,7 +465,7 @@
   </main>
 
   <header class="top">
-    <a class="name" href={home(lang)}>Ground Truth</a>
+    <a class="name" href={home(lang)}>New Terms</a>
     <form class="search" role="search" onsubmit={goToHits}>
       <input
         bind:this={searchEl}
