@@ -5,7 +5,7 @@
      the picture column's width beside the text, one rule between them,
      and the next three stories in the same two columns at its foot. */
   import { base } from '$app/paths';
-  import { kindLabel, sectionLabel, formatNumber, FORMATS } from '$lib/labels.js';
+  import { kindLabel, sectionLabel, formatNumber, FORMATS, KINDS } from '$lib/labels.js';
   import { photo, setLastRead, two, DAY_DATE, SHORT_DATE, STR } from '$lib/site/reel.js';
   import Mark from '../../../../Mark.svelte';
   import GridPage from '../../../../GridPage.svelte';
@@ -105,7 +105,7 @@
       <!-- On a phone the topic is left to the topics row, and format, date,
            length and place run as one dotted line above the writer. -->
       <a class="fact topic wide fill" href={gridTopic(s.section, lang)}><Mark key={s.section} />{sectionLabel(s.section, lang)}</a>
-      {#if FORMATS[s.kind]}<span class="fact mono kind">{kindLabel(s.kind, lang)}</span>{/if}
+      {#if KINDS.includes(s.kind)}<span class="fact mono kind">{kindLabel(s.kind, lang)}</span>{/if}
       <span class="fact mono" class:r={k === 1}>{DAY_DATE[lang].format(new Date(s.date))}</span>
       <span class="fact mono" class:r={k === 0} class:wide={halves % 2 === 1 && !s.location}>{formatNumber(s.readTime, lang)} {L.min}</span>
       {#if s.location}<span class="fact mono" class:r={k === 1} class:wide={halves % 2 === 1}>{s.location}</span>{/if}

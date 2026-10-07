@@ -2,7 +2,6 @@
 title: "The pharmacist in Kurigram who became a triage system"
 dek: "When the nearest doctor is four hours away, a phone model starts making decisions nobody designed it to make."
 section: "AI & Everyday Life"
-kind: "Dispatch"
 author: "Shireen Akhtar"
 authorTitle: "Health and access reporter"
 location: "Kurigram"

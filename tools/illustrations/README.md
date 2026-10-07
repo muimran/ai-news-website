@@ -14,6 +14,8 @@ colours, with grain. Run on a Mac (the cut-out uses macOS Vision).
   frame (from 40% down), so the card's words can stand on plain colour at the
   top. Hands that hung from the top edge are flipped to rise from the bottom;
   the water stories use a whole brass tap.
+- `thumbs.mjs`: makes the 240-wide copies (search results use them); run it
+  after rebuilding: `node tools/illustrations/thumbs.mjs`.
 - `sources_top.json`: which Unsplash photo each story's image came from (the
   same ids are in `PHOTOS` in `src/lib/site/reel.js`, for credit).
 

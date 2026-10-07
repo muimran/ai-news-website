@@ -2,7 +2,6 @@
 title: "A union contract that treats a model as a piece of equipment"
 dek: "Port workers in Chattogram negotiated language that other unions are already copying."
 section: "Work After Automation"
-kind: "Report"
 author: "Rifat Ahmed"
 authorTitle: "Reporter"
 location: "Chattogram"

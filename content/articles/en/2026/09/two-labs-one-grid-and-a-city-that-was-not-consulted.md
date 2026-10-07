@@ -2,7 +2,6 @@
 title: "Two labs, one grid, and a city that was not consulted"
 dek: "The council learned about the second data centre from a planning notice taped to a fence."
 section: "The AI Race"
-kind: "Report"
 author: "Rifat Ahmed"
 authorTitle: "Reporter"
 location: "Dhaka"

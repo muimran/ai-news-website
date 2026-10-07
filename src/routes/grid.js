@@ -19,4 +19,6 @@ const ymOf = (s) => {
   const d = new Date(s.date);
   return `${d.getUTCFullYear()}/${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
 };
+// a writer's page is one page for both desks, at the English address
+export const gridAuthor = (slug) => `${at('en')}/author/${slug}`;
 export const storyUrl = (s) => `${at(s.lang)}/${ymOf(s)}/${s.slug}`;

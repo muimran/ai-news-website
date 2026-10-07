@@ -5,7 +5,7 @@
      with its photo set in, so neighbours are parted by paper and one rule. */
   import { onMount, tick } from 'svelte';
   import { page } from '$app/state';
-  import { sectionLabel, kindLabel, formatLabel, formatNumber, FORMATS } from '$lib/labels.js';
+  import { sectionLabel, kindLabel, formatLabel, formatNumber, FORMATS, KINDS } from '$lib/labels.js';
   import { photo, two, range, lastRead, SHORT_DATE, STR } from '$lib/site/reel.js';
   import Mark from './Mark.svelte';
   import BottomRow from './BottomRow.svelte';
@@ -203,7 +203,7 @@
     <span class="lab">
       <b class="n">{two(it.n, lang)}</b>
       {#if !section}<span class="sec">{sectionLabel(s.section, lang)}</span>{/if}
-      {#if FORMATS[s.kind] && s.kind !== format}<span class="kind">{kindLabel(s.kind, lang)}</span>{/if}
+      {#if KINDS.includes(s.kind) && s.kind !== format}<span class="kind">{kindLabel(s.kind, lang)}</span>{/if}
     </span>
     <span class="body">
     <!-- date and length up a spine beside the photo, read from its foot -->

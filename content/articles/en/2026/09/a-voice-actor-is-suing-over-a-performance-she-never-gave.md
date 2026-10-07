@@ -2,7 +2,6 @@
 title: "A voice actor is suing over a performance she never gave"
 dek: "The case turns on whether a voice is a work or a person."
 section: "AI & Everyday Life"
-kind: "Report"
 author: "Maliha Chowdhury"
 authorTitle: "Culture reporter"
 location: "Dhaka"

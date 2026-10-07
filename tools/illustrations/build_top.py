@@ -41,7 +41,7 @@ for slug, (topic, q) in plan.items():
     if slug == 'what-happens-when-a-chatbot-becomes-your-co-worker':
         C.bubbles(bg, sub, x, y)
     img = Image.fromarray(C.grain(np.array(bg.convert('RGB'), float), amount=5).astype('uint8'))
-    for w in (1600, 800):
+    for w in (1600, 800, 240):
         img.resize((w, w * 2 // 3), Image.LANCZOS).save(f'{OUT}/{slug}-{w}.jpg', quality=80, optimize=True, progressive=True)
     record[slug] = pid
     print(f"{anchor:6} {y/C.H:.2f} {slug[:56]}")

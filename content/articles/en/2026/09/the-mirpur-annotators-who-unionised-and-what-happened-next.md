@@ -2,7 +2,6 @@
 title: "The Mirpur annotators who unionised, and what happened next"
 dek: "Two years after the first contract, the work has moved and the union is following it."
 section: "AI Across Bangladesh"
-kind: "Report"
 author: "Naima Siddiqui"
 authorTitle: "Elections and labour reporter"
 location: "Dhaka"

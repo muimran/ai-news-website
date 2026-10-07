@@ -27,7 +27,7 @@ PALETTES = {
 ONE_FIELD = {'L': ('#1b1c21', '#383a42'), 'M': ('#2a52d6', '#5a7ce4')}
 for letter in sys.argv[1:] or PALETTES:
     o, o2, o3, i, i2, i3 = PALETTES[letter]
-    code = src.replace("for w in (1600, 800):", "for w in (800,):")
+    code = src.replace("for w in (1600, 800, 240):", "for w in (800,):")
     code = code.replace("f'{OUT}/{slug}-{w}.jpg'", "f'{OUT}/trial/" + letter + "/{slug}-{w}.jpg'")
     code = code.replace("\nrecord = {}\n", "\nC.PAL.update(o='%s', o2='%s', o3='%s', i='%s', i2='%s', i3='%s')\nos.makedirs(OUT + '/trial/%s', exist_ok=True)\nrecord = {}\n" % (o, o2, o3, i, i2, i3, letter))
     if letter in ONE_FIELD:

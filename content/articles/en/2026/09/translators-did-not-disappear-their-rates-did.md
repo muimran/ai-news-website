@@ -2,7 +2,6 @@
 title: "Translators did not disappear. Their rates did."
 dek: "The work is still there. What changed is who sets the price and how fast it must be delivered."
 section: "Work After Automation"
-kind: "Report"
 author: "Maliha Chowdhury"
 authorTitle: "Culture reporter"
 location: "Dhaka"

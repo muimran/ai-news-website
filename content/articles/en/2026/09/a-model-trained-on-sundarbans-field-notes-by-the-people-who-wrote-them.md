@@ -2,7 +2,6 @@
 title: "A model trained on Sundarbans field notes, by the people who wrote them"
 dek: "Researchers in Khulna kept the data and licensed the outputs. It took four years."
 section: "AI Across Bangladesh"
-kind: "Feature"
 author: "Sabrina Rahman"
 authorTitle: "Platforms and policy reporter"
 location: "Khulna"

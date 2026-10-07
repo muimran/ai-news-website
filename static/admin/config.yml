@@ -65,15 +65,13 @@ collections:
   - name: kind
     label: Story type
     widget: select
-    default: Report
+    required: false
+    hint: Optional. Set it only when the piece really is one of these; a story with no type shows no label.
     options:
     - Investigation
-    - Report
-    - Analysis
-    - Explainer
-    - Feature
-    - Dispatch
     - Interview
+    - Explainer
+    - Analysis
   - name: section
     label: Section
     widget: select
@@ -226,15 +224,12 @@ collections:
   - name: kind
     label: ধরন
     widget: select
-    default: Report
+    required: false
     options:
     - Investigation
-    - Report
-    - Analysis
-    - Explainer
-    - Feature
-    - Dispatch
     - Interview
+    - Explainer
+    - Analysis
   - name: section
     label: বিভাগ
     widget: select

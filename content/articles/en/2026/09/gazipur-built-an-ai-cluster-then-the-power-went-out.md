@@ -2,7 +2,6 @@
 title: "Gazipur built an AI cluster. Then the power went out."
 dek: "The generators cost more than the GPUs. Nobody budgeted for that."
 section: "AI Across Bangladesh"
-kind: "Feature"
 author: "Tanvir Hasan"
 authorTitle: "Senior reporter"
 location: "Gazipur"

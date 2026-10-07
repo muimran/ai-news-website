@@ -83,6 +83,7 @@ export function photo(s) {
   if (key) {
     return {
       thumb: art(key, 800),
+      small: art(key, 240),
       src: art(key, 1600),
       srcset: `${art(key, 800)} 800w, ${art(key, 1600)} 1600w`,
       illustration: true
@@ -90,7 +91,7 @@ export function photo(s) {
   }
   // The seeded placeholder is artwork, not a photograph: treat it as none.
   if (s.image && !s.image.src.endsWith('/test-photo.svg')) {
-    return { thumb: s.image.src, src: s.image.src, srcset: null };
+    return { thumb: s.image.src, small: s.image.src, src: s.image.src, srcset: null };
   }
   return null;
 }
@@ -101,10 +102,69 @@ export function matches(s, query) {
   const words = query.toLowerCase().split(/\s+/).filter(Boolean);
   if (!words.length) return true;
   const kind = FORMATS[s.kind] ? kindLabel(s.kind, s.lang) : '';
-  const hay = [s.title, s.dek, s.author, sectionLabel(s.section, s.lang), kind, ...(s.tags || [])]
+  const hay = [s.title, s.dek, s.author, sectionLabel(s.section, s.lang), kind, ...(s.tags || []), s.text || '']
     .join(' ')
     .toLowerCase();
   return words.every((w) => hay.includes(w));
+}
+
+/* Where any of a search's words stands as a word of its own (or the start
+   of one) in a piece of text. Search hands over the words it actually
+   matched, so a typo's correction or a longer form is what gets shown. */
+const termsRe = (terms, flags) => {
+  const esc = terms.filter(Boolean).map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  return esc.length ? new RegExp(`(?<![\\p{L}\\p{M}\\p{N}])(${esc.join('|')})(?![\\p{L}\\p{M}\\p{N}])`, flags) : null;
+};
+
+/** A line to show under a search result: the story's own words around the
+    first place a matched word turns up in its running text, or its summary
+    when the text doesn't have it (found only in the headline, say). */
+export function snippet(s, terms = [], size = 150) {
+  const text = s.text || '';
+  const re = termsRe(terms, 'iu');
+  const at = re ? text.search(re) : -1;
+  if (at < 0) return s.dek || text.slice(0, size);
+  // start a little before the word, at a word's beginning, and stop at a word's end
+  let from = Math.max(0, at - Math.round(size / 3));
+  if (from > 0) from = text.indexOf(' ', from) + 1 || from;
+  let to = Math.min(text.length, from + size);
+  if (to < text.length) to = text.lastIndexOf(' ', to) > from ? text.lastIndexOf(' ', to) : to;
+  return (from > 0 ? '…' : '') + text.slice(from, to) + (to < text.length ? '…' : '');
+}
+
+/** A piece of text cut where the matched words stand, so each can be shown
+    apart: [{ t, hit }]. */
+export function marked(text, terms = []) {
+  const re = termsRe(terms, 'giu');
+  if (!re || !text) return [{ t: text, hit: false }];
+  const low = terms.map((w) => w.toLowerCase());
+  return text
+    .split(re)
+    .filter(Boolean)
+    .map((t) => ({ t, hit: low.includes(t.toLowerCase()) }));
+}
+
+/** How many slips apart two words are: a letter added, dropped or changed,
+    or two neighbours swapped (each counts one). */
+export function slips(a, b) {
+  const d = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]);
+  for (let j = 1; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cost);
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+    }
+  }
+  return d[a.length][b.length];
+}
+
+/** Is a suggestion close enough to offer as "did you mean": word by word,
+    one slip for a word under eight letters, two for a longer one. */
+export function closeTo(typed, suggestion) {
+  const a = typed.toLowerCase().split(/\s+/).filter(Boolean);
+  const b = suggestion.toLowerCase().split(/\s+/).filter(Boolean);
+  return a.length === b.length && a.every((w, i) => slips(w, b[i]) <= (w.length >= 8 ? 2 : 1));
 }
 
 /* The story last opened, so the reel can hand its photo back to the right
@@ -154,6 +214,15 @@ export const STR = {
     searchAll: 'Search every story',
     searchIn: 'Search this topic',
     none: 'Nothing matches that.',
+    some: 'No story has all these words. Showing stories with some of them.',
+    writer: 'Writer',
+    topic: 'Topic',
+    any: 'All',
+    meant: 'Did you mean',
+    tryTopic: 'Or try a topic',
+    newest: 'The latest stories',
+    recent: 'Recent searches',
+    clear: 'Clear',
     loading: 'Loading…',
     shown: (a, b) => `${a} of ${b}`,
     next: 'Next in the reel',
@@ -185,6 +254,15 @@ export const STR = {
     searchAll: 'সব প্রতিবেদনে খুঁজুন',
     searchIn: 'এই বিষয়ে খুঁজুন',
     none: 'কিছু মেলেনি।',
+    some: 'সব শব্দ একসঙ্গে কোনো প্রতিবেদনে নেই। কিছু শব্দ আছে এমনগুলো দেখানো হচ্ছে।',
+    writer: 'লেখক',
+    topic: 'বিষয়',
+    any: 'সব',
+    meant: 'আপনি কি খুঁজছিলেন',
+    tryTopic: 'অথবা কোনো বিষয় দেখুন',
+    newest: 'সর্বশেষ প্রতিবেদন',
+    recent: 'সাম্প্রতিক খোঁজ',
+    clear: 'মুছুন',
     loading: 'লোড হচ্ছে…',
     shown: (a, b) => `${b}টির মধ্যে ${a}টি`,
     next: 'এরপর',

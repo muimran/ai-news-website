@@ -2,7 +2,6 @@
 title: "The consent form nobody could read"
 dek: "A clinic in Mymensingh collected scans for research. The terms were four screens of English."
 section: "Machines and Power"
-kind: "Report"
 author: "Kamrul Islam"
 authorTitle: "Media and health reporter"
 location: "Mymensingh"

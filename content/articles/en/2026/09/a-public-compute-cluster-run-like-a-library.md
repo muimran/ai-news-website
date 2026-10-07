@@ -2,7 +2,6 @@
 title: "A public compute cluster, run like a library"
 dek: "Researchers in Rajshahi built shared infrastructure with a lending model. It is fully booked."
 section: "The AI Race"
-kind: "Feature"
 author: "Farzana Haque"
 authorTitle: "Public policy reporter"
 location: "Rajshahi"

@@ -2,7 +2,6 @@
 title: "What happens when a chatbot becomes your co-worker?"
 dek: "At a Dhaka outsourcing firm, an assistant was introduced to help. Eighteen months on, staff describe negotiating with it for their own shifts."
 section: "Work After Automation"
-kind: "Report"
 author: "Farhana Akter"
 authorTitle: "Labour and automation reporter"
 location: "Chattogram"

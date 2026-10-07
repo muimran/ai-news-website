@@ -135,7 +135,33 @@ export const storiesByWriter = (w) =>
     .map(row);
 
 /** The search list: headlines and summaries only, fetched when search opens. */
-export const searchIndex = (lang) => order(lang).map(row);
+/* A story's running text as plain words, for search to look through and
+   quote from: no headings, no markdown, no tags, one space between words. */
+const plain = (md = '') =>
+  md
+    .replace(/^\s{0,3}#{1,6}\s.*$/gm, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/^\s{0,3}(>|[-*+]|\d+\.)\s+/gm, '')
+    .replace(/[*_`~]+/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+/** Everything search needs for an edition: every story (its row plus its
+    running text) and every writer (to be found by name). */
+export const searchIndex = (lang) => ({
+  stories: order(lang).map((s) => ({ ...row(s), text: plain(s.body) })),
+  writers: writers().map(({ slug, name, name_bn, role, role_bn, photo, count }) => ({
+    slug,
+    name,
+    name_bn,
+    role,
+    role_bn,
+    photo,
+    count
+  }))
+});
 
 /** Where the language switch goes: the same topic if the other edition has
     it, otherwise that edition's front reel. `index` for index pages. */

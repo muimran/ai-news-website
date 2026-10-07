@@ -10,12 +10,12 @@
   import { page } from '$app/state';
   import { base } from '$app/paths';
   import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
-  import { sectionLabel, formatLabel, formatNumber } from '$lib/labels.js';
-  import { STR, SHORT_DATE, matches } from '$lib/site/reel.js';
+  import { sectionLabel, formatLabel, formatNumber, kindLabel } from '$lib/labels.js';
+  import { STR, SHORT_DATE, snippet, marked, photo, closeTo } from '$lib/site/reel.js';
   import Mark from '../Mark.svelte';
   import Latest from '../Latest.svelte';
   import { ui } from '../ui.svelte.js';
-  import { gridHome, gridTopic, gridFormat, storyUrl } from '../grid.js';
+  import { gridHome, gridTopic, gridFormat, gridAuthor, storyUrl } from '../grid.js';
 
   let { data, children } = $props();
   const lang = $derived(data.lang);
@@ -68,24 +68,142 @@
     q = '';
   };
 
-  /* Search reads the live site's list of every headline, fetched the first
-     time the menu opens. */
+  /* Search reads the edition's every story, headline to last line, fetched
+     the first time the menu opens, with MiniSearch (loaded only then too):
+     whole words, word beginnings (union finds unionised), small typos
+     forgiven, and the best matches first, a headline counting most. Stories
+     with every word searched; if none has them all, those with some, said
+     so. */
   let q = $state('');
   let input = $state();
-  let lists = $state({});
-  const list = $derived(lists[lang]);
-  const found = $derived(list && q.trim() ? list.filter((s) => matches(s, q)) : []);
+  let indexes = $state({});
+  const index = $derived(indexes[lang]);
+  const results = $derived.by(() => {
+    if (!index || !q.trim()) return { list: [], some: false };
+    let hits = index.search(q);
+    const some = !hits.length && q.trim().split(/\s+/).length > 1;
+    if (some) hits = index.search(q, { combineWith: 'OR' });
+    // a writer's name isn't in the row, so a match there puts it in the quote
+    const byWriter = (r) => Object.values(r.match).some((fields) => fields.includes('author'));
+    return { list: hits.map((r) => ({ ...index.byId.get(r.id), terms: r.terms, byWriter: byWriter(r) })), some };
+  });
+  const found = $derived(results.list);
+
+  /* Above the stories, the writers and topics a search names: every word
+     searched starts a word of the name. Words of two letters or fewer
+     ("ai") don't count here, or "ai" would name half the topics. */
+  const named = (label) => {
+    const want = q.toLowerCase().split(/\s+/).filter((w) => w.length > 2);
+    const have = label.toLowerCase().split(/[\s&,]+/).filter(Boolean);
+    return want.length > 0 && want.every((w) => have.some((h) => h.startsWith(w)));
+  };
+  const people = $derived(
+    index && q.trim() ? index.writers.filter((w) => named(`${w.name} ${w.name_bn ?? ''}`)).slice(0, 3) : []
+  );
+  const places = $derived(
+    q.trim() ? data.topics.filter((t) => named(`${sectionLabel(t.key, lang)} ${t.key}`)) : []
+  );
+
+  /* When nothing is found: the nearest spelling the stories have, then the
+     topics, then the newest stories, so a search never ends at a wall. */
+  const nothing = $derived(!!index && !!q.trim() && !found.length && !people.length && !places.length);
+  const meant = $derived.by(() => {
+    if (!nothing) return null;
+    const want = q.trim().toLowerCase();
+    // only a real near-miss: one slip in a short word, two in a long one
+    return (
+      index
+        .suggest(q)
+        .map((x) => x.suggestion)
+        .find((x) => x !== want && closeTo(want, x)) ?? null
+    );
+  });
+
+  /* The last few searches someone followed through (opened a result, or
+     pressed Enter), kept in this browser only, offered when search opens
+     empty; Clear forgets them. */
+  let recent = $state([]);
+  $effect.pre(() => {
+    try {
+      recent = JSON.parse(localStorage.getItem('nt-recent') || '[]');
+    } catch {}
+  });
+  function remember() {
+    const term = q.trim();
+    if (!term) return;
+    recent = [term, ...recent.filter((x) => x.toLowerCase() !== term.toLowerCase())].slice(0, 5);
+    try {
+      localStorage.setItem('nt-recent', JSON.stringify(recent));
+    } catch {}
+  }
+  function forget() {
+    recent = [];
+    try {
+      localStorage.removeItem('nt-recent');
+    } catch {}
+  }
+
+  /* After a search, chips narrow it to one topic or one kind of story; only
+     those the results have, each with how many. A new search clears them. */
+  let only = $state({ section: null, kind: null });
+  $effect(() => {
+    q;
+    only = { section: null, kind: null };
+  });
+  const tally = (key) => {
+    const m = new Map();
+    for (const s of found) if (s[key]) m.set(s[key], (m.get(s[key]) ?? 0) + 1);
+    return [...m].sort((a, b) => b[1] - a[1]);
+  };
+  const bySection = $derived(tally('section'));
+  const byKind = $derived(tally('kind'));
+  const shown = $derived(
+    found.filter((s) => (!only.section || s.section === only.section) && (!only.kind || s.kind === only.kind))
+  );
 
   $effect(() => {
     if (open !== 'menu') return;
     // a wide screen with a mouse can type straight away; a phone-sized one
     // opens the menu as it is, the field waiting until it's tapped
     if (matchMedia('(hover: hover) and (min-width: 760px)').matches) tick().then(() => input?.focus());
-    if (!lists[lang]) {
+    if (!indexes[lang]) {
       const l = lang;
-      fetch(`${base}/search/${l}.json`)
-        .then((r) => r.json())
-        .then((rows) => (lists = { ...lists, [l]: rows }));
+      Promise.all([fetch(`${base}/search/${l}.json`).then((r) => r.json()), import('minisearch')]).then(
+        ([{ stories: rows, writers }, { default: MiniSearch }]) => {
+          const ms = new MiniSearch({
+            idField: 'id',
+            // only what a result shows: a match always has a visible reason
+            // (topic names and tags would let "ai" find nearly everything)
+            fields: ['title', 'dek', 'author', 'text'],
+            searchOptions: {
+              boost: { title: 4, dek: 2, author: 2 },
+              // a word's beginning finds the word from three letters on
+              // ("chatt" finds Chattogram; "us" is only us)
+              prefix: (term) => term.length >= 3,
+              // typos forgiven only in longer words: one letter off a short
+              // word is another word ("usa" isn't "us" or "use")
+              fuzzy: (term) => (term.length >= 5 ? 0.2 : false),
+              combineWith: 'AND'
+            }
+          });
+          // a story's address is its month and slug: two months may share a slug
+          const docs = rows.map((r) => ({ ...r, id: `${r.ym}/${r.slug}` }));
+          ms.addAll(docs);
+          indexes = {
+            ...indexes,
+            [l]: {
+              search: (text, opts) => ms.search(text, opts),
+              // the nearest real word or words in the stories, for "did you mean"
+              // candidates up to two letters off (a swap counts two here);
+              // closeTo then keeps only true near-misses
+              suggest: (text) => ms.autoSuggest(text, { fuzzy: 2, prefix: false, combineWith: 'AND' }),
+              byId: new Map(docs.map((r) => [r.id, r])),
+              newest: docs.slice(0, 3),
+              writers
+            }
+          };
+        }
+      );
     }
   });
 
@@ -171,19 +289,105 @@
       <div class="find" role="search">
         <label class="q">
           <span class="sr">{L.searchAll}</span>
-          <input bind:this={input} bind:value={q} type="search" placeholder={L.searchAll} autocomplete="off" />
+          <input
+            bind:this={input}
+            bind:value={q}
+            type="search"
+            placeholder={L.searchAll}
+            autocomplete="off"
+            onkeydown={(e) => e.key === 'Enter' && remember()}
+          />
         </label>
+        {#if !q.trim() && recent.length}
+          <div class="recent">
+            <span class="lbl">{L.recent}</span>
+            {#each recent as term (term)}
+              <button type="button" class="chip" onclick={() => ((q = term), input?.focus())}>{term}</button>
+            {/each}
+            <button type="button" class="forget" onclick={forget}>{L.clear}</button>
+          </div>
+        {/if}
       </div>
       {#if q.trim()}
         <div class="found">
-          <p class="head status" aria-live="polite">
-            {#if !list}{L.loading}{:else}{found.length ? L.count(formatNumber(found.length, lang)) : L.none}{/if}
+          <p class="head status" class:empty={nothing} aria-live="polite">
+            {#if !index}{L.loading}{:else if found.length}{L.count(formatNumber(found.length, lang))}{:else if !people.length && !places.length}{L.none}{/if}
           </p>
-          {#each found.slice(0, 50) as s (s.slug)}
-            <a class="row res fill" href={storyUrl(s)}>
+          {#if index && results.some && found.length}<p class="some">{L.some}</p>{/if}
+          {#if nothing}
+            <div class="instead">
+              {#if meant}
+                <p class="meant">{L.meant} <button type="button" onclick={() => (q = meant)}>{meant}</button>?</p>
+              {/if}
+              <p class="lbl">{L.tryTopic}</p>
+              <div class="chips flat">
+                {#each data.topics as t (t.key)}
+                  <a class="chip" href={gridTopic(t.key, lang)}><Mark key={t.key} size={12} />{sectionLabel(t.key, lang)}</a>
+                {/each}
+              </div>
+              <p class="lbl">{L.newest}</p>
+            </div>
+            {#each index.newest as s (s.id)}
+              {@const pic = photo(s)}
+              <a class="row res fill" href={storyUrl(s)}>
+                <span class="thumb">{#if pic}<img src={pic.small} alt="" loading="lazy" />{:else}<Mark key={s.section} size={20} />{/if}</span>
+                <span class="d">{SHORT_DATE[lang].format(new Date(s.date))}</span>
+                <span class="nm">{s.title}</span>
+                <span class="ct"><Mark key={s.section} size={14} />{sectionLabel(s.section, lang)}</span>
+                <span class="snip">{s.dek}</span>
+              </a>
+            {/each}
+          {/if}
+          {#each people as w (w.slug)}
+            <a class="row res named fill" href={gridAuthor(w.slug)} onclick={remember}>
+              <span class="thumb face">{#if w.photo}<img src={w.photo} alt="" loading="lazy" />{/if}</span>
+              <span class="d">{L.writer}</span>
+              <span class="nm">{lang === 'bn' && w.name_bn ? w.name_bn : w.name}</span>
+              <span class="ct">{L.count(formatNumber(w.count, lang))}</span>
+              <span class="snip">{lang === 'bn' && w.role_bn ? w.role_bn : w.role}</span>
+            </a>
+          {/each}
+          {#each places as t (t.key)}
+            <a class="row res named fill" href={gridTopic(t.key, lang)} onclick={remember}>
+              <span class="thumb mark"><Mark key={t.key} size={26} /></span>
+              <span class="d">{L.topic}</span>
+              <span class="nm">{sectionLabel(t.key, lang)}</span>
+              <span class="ct">{L.count(formatNumber(t.count, lang))}</span>
+            </a>
+          {/each}
+          {#if found.length > 1 && (bySection.length > 1 || byKind.length > 1)}
+            <div class="chips" role="group" aria-label={L.topics}>
+              <button type="button" class="chip" aria-pressed={!only.section && !only.kind} onclick={() => (only = { section: null, kind: null })}
+                >{L.any} <b>{formatNumber(found.length, lang)}</b></button
+              >
+              {#if bySection.length > 1}
+                {#each bySection as [key, n] (key)}
+                  <button type="button" class="chip" aria-pressed={only.section === key} onclick={() => (only = { ...only, section: only.section === key ? null : key })}
+                    ><Mark {key} size={12} />{sectionLabel(key, lang)} <b>{formatNumber(n, lang)}</b></button
+                  >
+                {/each}
+              {/if}
+              {#if byKind.length > 1}
+                {#each byKind as [key, n] (key)}
+                  <button type="button" class="chip kind" aria-pressed={only.kind === key} onclick={() => (only = { ...only, kind: only.kind === key ? null : key })}
+                    >{kindLabel(key, lang)} <b>{formatNumber(n, lang)}</b></button
+                  >
+                {/each}
+              {/if}
+            </div>
+          {/if}
+          {#each shown.slice(0, 50) as s (s.id)}
+            {@const pic = photo(s)}
+            <a class="row res fill" href={storyUrl(s)} onclick={remember}>
+              <span class="thumb">{#if pic}<img src={pic.small} alt="" loading="lazy" />{:else}<Mark key={s.section} size={20} />{/if}</span>
               <span class="d">{SHORT_DATE[lang].format(new Date(s.date))}</span>
-              <span class="nm">{s.title}</span>
+              <span class="nm"
+                >{#each marked(s.title, s.terms) as p, i (i)}{#if p.hit}<mark>{p.t}</mark>{:else}{p.t}{/if}{/each}</span
+              >
               <span class="ct"><Mark key={s.section} size={14} />{sectionLabel(s.section, lang)}</span>
+              <span class="snip"
+                >{#each marked((s.byWriter ? `${s.author} · ` : '') + snippet(s, s.terms), s.terms) as p, i (i)}{#if p.hit}<mark>{p.t}</mark>{:else}{p.t}{/if}{/each}</span
+              >
             </a>
           {/each}
         </div>
@@ -774,14 +978,204 @@
     color: var(--mute);
     opacity: 0.6;
   }
+  /* a result: its picture, then date, headline and topic on a line, the
+     quote under the headline */
   .res {
     display: grid;
-    grid-template-columns: 5rem minmax(0, 1fr) auto;
+    grid-template-columns: 4.5rem 5rem minmax(0, 1fr) auto;
+    column-gap: 0.9rem;
     align-items: baseline;
+  }
+  .res .thumb {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    align-self: start;
+    display: grid;
+    place-items: center;
+    width: 4.5rem;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--i3);
+  }
+  .res .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 65%;
+  }
+  .res .thumb.face {
+    width: 3.25rem;
+    aspect-ratio: 5 / 7;
+    justify-self: center;
+  }
+  .res .thumb.face img {
+    object-position: 50% 25%;
+  }
+  .res .thumb.mark {
+    background: none;
+  }
+  .res .d {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .res .nm {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .res .ct {
+    grid-column: 4;
+    grid-row: 1;
+  }
+  /* a writer or topic the search names, ahead of the stories */
+  .named .nm {
+    font-size: 1.25rem;
+    font-weight: 620;
+    font-stretch: 75%;
+  }
+  .named .d {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  /* recent searches, under the empty field */
+  .recent {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    padding: var(--u) var(--in);
+    border-bottom: 1px solid var(--hair);
+  }
+  .lbl {
+    margin: 0 0.3rem 0 0;
+    font: 500 calc(0.6875rem * var(--k)) / 1 var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+  .forget,
+  .meant button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--o-text);
+    font: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+  }
+  .forget {
+    margin-left: auto;
+    font: 500 calc(0.75rem * var(--k)) / 1 var(--sans);
+  }
+  /* nothing found: said plainly, in the headline face, not as a label */
+  .status.empty {
+    padding-top: var(--in);
+    font: 650 clamp(1.4rem, 1rem + 1.2vw, 2rem) / 1.1 var(--sans);
+    font-stretch: 80%;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    color: var(--ink);
+  }
+  /* nothing found: what to try instead */
+  .instead {
+    display: flex;
+    flex-direction: column;
+    gap: var(--u);
+    padding: 0 var(--in) var(--u);
+  }
+  .instead .lbl {
+    margin: var(--u) 0 0;
+  }
+  .meant {
+    margin: 0;
+    font-size: clamp(1.1rem, 0.9rem + 0.6vw, 1.4rem);
+    font-weight: 600;
+    font-stretch: 85%;
+  }
+  .meant button {
+    font-weight: 700;
+  }
+  .chips.flat {
+    padding: 0;
+    border: 0;
+  }
+  a.chip {
+    text-decoration: none;
+  }
+  /* the chips that narrow the results: those the results have, with counts */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding: var(--u) var(--in);
+    border-bottom: 1px solid var(--hair);
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--ink);
+    font: 500 calc(0.75rem * var(--k)) / 1 var(--sans);
+    cursor: pointer;
+  }
+  .chip b {
+    font: 500 calc(0.6875rem * var(--k)) / 1 var(--mono);
+    color: var(--mute);
+  }
+  .chip.kind {
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: calc(0.6875rem * var(--k));
+  }
+  .chip[aria-pressed='true'] {
+    border-color: var(--o-text);
+    background: var(--o3);
+    color: var(--o-text);
+  }
+  .chip[aria-pressed='true'] b {
+    color: inherit;
   }
   .d {
     font: 500 calc(0.6875rem * var(--k)) / 1 var(--mono);
     color: var(--o-text);
+  }
+  /* under the headline, in small type: the story's own words around what
+     was searched for; the searched words stand out in the accent colour,
+     headline and quote alike */
+  .snip {
+    grid-column: 3 / -1;
+    grid-row: 2;
+    margin-top: 0.35rem;
+    font-size: calc(0.8125rem * var(--k));
+    font-weight: 400;
+    font-stretch: 100%;
+    line-height: 1.45;
+    color: var(--mute);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: normal;
+  }
+  /* when no story has every word: a plain line saying the results are the
+     nearest, under the count, before the first of them */
+  .some {
+    margin: 0;
+    padding: 0 var(--in) var(--u);
+    font-size: calc(0.8125rem * var(--k));
+    line-height: 1.45;
+    color: var(--mute);
+  }
+  .res mark {
+    background: none;
+    color: var(--o-text);
+    font-weight: 650;
   }
 
   @media (max-width: 759px) {
@@ -825,11 +1219,60 @@
       font-size: 1.25rem;
       text-wrap: pretty;
     }
+    /* a phone: the picture, and beside it the date, headline and quote one
+       under another */
     .res {
       grid-template-columns: 4rem minmax(0, 1fr);
+      column-gap: 0.75rem;
+      row-gap: 0.3rem;
+    }
+    .res .thumb {
+      grid-row: 1 / span 3;
+      width: 4rem;
+    }
+    .res .d,
+    .res .nm,
+    .snip {
+      grid-column: 2;
+    }
+    .res .nm {
+      grid-row: 2;
+    }
+    .snip {
+      grid-row: 3;
+      margin-top: 0;
     }
     .res .ct {
       display: none;
+    }
+    .chips {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .chip {
+      flex: none;
+    }
+    /* recent searches: one short line that swipes, so the menu still fits */
+    .recent {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-block: calc(0.5 * var(--u));
+      gap: 0.3rem;
+    }
+    .recent .chip {
+      padding-block: 0.2rem;
+    }
+    /* and the topic rows give up that line's height between them */
+    .menu:has(.recent) .row.big {
+      padding-block: calc(0.45 * var(--u));
+    }
+    .recent .lbl {
+      flex: none;
+    }
+    .forget {
+      flex: none;
     }
   }
 

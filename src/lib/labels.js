@@ -25,12 +25,14 @@ const SECTION_BN = {
 const KIND_BN = {
   Interview: 'সাক্ষাৎকার',
   Investigation: 'অনুসন্ধান',
-  Report: 'প্রতিবেদন',
   Analysis: 'বিশ্লেষণ',
-  Explainer: 'ব্যাখ্যা',
-  Feature: 'ফিচার',
-  Dispatch: 'সরেজমিন'
+  Explainer: 'ব্যাখ্যা'
 };
+
+/** The four kinds of story, each named on cards and stories; a story may
+    have none, and then shows no label. Investigations
+    and interviews also have pages of their own (FORMATS). */
+export const KINDS = ['Investigation', 'Interview', 'Explainer', 'Analysis'];
 
 /* Formats a reader can browse as well as topics. A topic is what a story is
    about, a format what kind of piece it is; the two cross, so an interview

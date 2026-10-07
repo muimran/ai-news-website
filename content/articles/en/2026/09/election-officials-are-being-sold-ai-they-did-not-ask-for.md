@@ -2,7 +2,6 @@
 title: "Election officials are being sold AI they did not ask for"
 dek: "Vendors are bundling detection tools into contracts for ordinary voter roll software."
 section: "Machines and Power"
-kind: "Report"
 author: "Naima Siddiqui"
 authorTitle: "Elections and labour reporter"
 location: "Dhaka"

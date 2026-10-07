@@ -83,7 +83,7 @@
     return { bg: hex(rgb), fg: hex(fg) };
   }
 
-  const STORY = /\/uploads\/stories\/(?:trial\/[A-Z]\/)?([^/]+)-(?:800|1600)\.jpg/;
+  const STORY = /\/uploads\/stories\/(?:trial\/[A-Z]\/)?([^/]+)-(?:240|800|1600)\.jpg/;
   function paint(pal) {
     for (const img of document.querySelectorAll('img')) {
       const src = img.dataset.orig ?? img.getAttribute('src') ?? '';

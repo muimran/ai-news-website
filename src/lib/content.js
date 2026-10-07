@@ -136,7 +136,7 @@ function toStory(path, raw) {
     title: data.title || 'Untitled',
     dek: data.dek || '',
     section: data.section || 'Latest',
-    kind: data.kind || 'Report',
+    kind: data.kind || '', // optional: no type, no label
     tags: Array.isArray(data.tags) ? data.tags : [],
     author: data.author || 'New Terms staff',
     authorTitle: data.authorTitle || '',

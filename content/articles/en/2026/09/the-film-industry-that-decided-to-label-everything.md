@@ -2,7 +2,6 @@
 title: "The film industry that decided to label everything"
 dek: "Dhallywood's producers agreed on disclosure rules before any regulator asked."
 section: "AI & Everyday Life"
-kind: "Report"
 author: "Tanvir Hasan"
 authorTitle: "Senior reporter"
 location: "Dhaka"

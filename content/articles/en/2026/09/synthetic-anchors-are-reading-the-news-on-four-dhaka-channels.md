@@ -2,7 +2,6 @@
 title: "Synthetic anchors are reading the news on four Dhaka channels"
 dek: "Most audiences can tell. Broadcasters are running them anyway, and explaining why."
 section: "AI & Everyday Life"
-kind: "Feature"
 author: "Kamrul Islam"
 authorTitle: "Media and health reporter"
 location: "Dhaka"

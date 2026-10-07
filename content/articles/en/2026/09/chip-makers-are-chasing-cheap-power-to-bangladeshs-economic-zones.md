@@ -2,7 +2,6 @@
 title: "Chip makers are chasing cheap power to Bangladesh's economic zones"
 dek: "Mirsarai, Mongla and Bhola are competing for the same three customers."
 section: "Climate, Chips & Infrastructure"
-kind: "Report"
 author: "Zubair Alam"
 authorTitle: "Chips and compute reporter"
 location: "Chattogram"

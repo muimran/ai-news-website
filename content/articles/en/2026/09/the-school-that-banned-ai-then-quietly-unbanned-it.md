@@ -2,7 +2,6 @@
 title: "The school that banned AI, then quietly unbanned it"
 dek: "Teachers in Cumilla spent a year arguing. The compromise they reached is stranger than either position."
 section: "AI & Everyday Life"
-kind: "Report"
 author: "Farzana Haque"
 authorTitle: "Public policy reporter"
 location: "Cumilla"

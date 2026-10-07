@@ -2,7 +2,6 @@
 title: "Marriage brokers, matchmakers, and the model in between"
 dek: "Families in Dhaka, Sylhet and Rajshahi describe outsourcing the first conversation."
 section: "AI & Everyday Life"
-kind: "Feature"
 author: "Shireen Akhtar"
 authorTitle: "Health and access reporter"
 location: "Sylhet"
