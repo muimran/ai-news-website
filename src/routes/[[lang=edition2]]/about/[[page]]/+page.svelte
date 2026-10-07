@@ -11,7 +11,7 @@
 </script>
 
 <svelte:head>
-  <title>{data.doc.title} — New Terms</title>
+  <title>{data.doc.title} — Second Order</title>
 </svelte:head>
 
 <GridPage {lang}>

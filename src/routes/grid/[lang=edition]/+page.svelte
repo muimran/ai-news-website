@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-  <title>New Terms — {STR[data.lang].tagline}</title>
+  <title>Second Order — {STR[data.lang].tagline}</title>
 </svelte:head>
 
 <GridReel lang={data.lang} reel={data.reel} opens />

@@ -55,7 +55,7 @@ function parseFrontmatter(raw) {
    in Latin digits reads as a half-translated page. */
 const FMT = {
   en: new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
-  bn: new Intl.DateTimeFormat('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' })
+  bn: new Intl.DateTimeFormat('bn-BD-u-nu-beng', { day: 'numeric', month: 'long', year: 'numeric' })
 };
 
 /* ---- a story's web address: always plain English letters ----
@@ -138,7 +138,7 @@ function toStory(path, raw) {
     section: data.section || 'Latest',
     kind: data.kind || '', // optional: no type, no label
     tags: Array.isArray(data.tags) ? data.tags : [],
-    author: data.author || 'New Terms staff',
+    author: data.author || 'Second Order staff',
     authorTitle: data.authorTitle || '',
     location: data.location || '',
     date,

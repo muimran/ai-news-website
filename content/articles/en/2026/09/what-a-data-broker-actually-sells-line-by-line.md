@@ -3,7 +3,7 @@ title: "What a data broker actually sells, line by line"
 dek: "We bought a sample. Here is what was in it."
 section: "Machines and Power"
 kind: "Explainer"
-author: "New Terms staff"
+author: "Second Order staff"
 authorTitle: "Newsroom"
 location: "Dhaka"
 tags: ["data brokers", "privacy"]
@@ -11,7 +11,7 @@ date: 2026-09-07
 readTime: 7
 image: "/uploads/test-photo.svg"
 imageAlt: "Placeholder — replace with the real photograph"
-imageCredit: "Test / New Terms"
+imageCredit: "Test / Second Order"
 weight: 4
 featured: false
 secondary: false

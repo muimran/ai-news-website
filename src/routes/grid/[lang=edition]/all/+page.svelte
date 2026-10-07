@@ -8,14 +8,14 @@
 </script>
 
 <svelte:head>
-  <title>{L.all} — New Terms</title>
+  <title>{L.all} — Second Order</title>
 </svelte:head>
 
 <ListPage
   lang={data.lang}
   stories={data.stories}
   title={L.all}
-  kicker="New Terms"
+  kicker="Second Order"
   back={{ href: gridHome(data.lang), label: L.reel }}
   placeholder={L.searchAll}
 />

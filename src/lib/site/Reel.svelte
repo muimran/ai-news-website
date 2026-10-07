@@ -169,7 +169,7 @@
 <div class="wrap" bind:this={wrap} style="--length: calc({reelLength})">
   <main class="stage">
     <!-- a topic's name shows in the top bar, beside the site's -->
-    <h1 class="sr">{titled ? heading : `New Terms — ${L.tagline}`}</h1>
+    <h1 class="sr">{titled ? heading : `Second Order — ${L.tagline}`}</h1>
     <div class="track" bind:this={track}>
       {#if opens}
         <div class="opener">

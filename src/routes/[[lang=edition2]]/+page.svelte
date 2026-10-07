@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-  <title>New Terms — {STR[data.lang].tagline}</title>
+  <title>Second Order — {STR[data.lang].tagline}</title>
 </svelte:head>
 
 <!-- what's new lives in the Latest pane, so the reel opens on its lead story -->

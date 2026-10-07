@@ -122,13 +122,32 @@
     }
   }
 
-  // the name drawn four ways, each from the world of terms and contracts
+  // the name as a wordmark, fifteen ways: serifs, reversed boxes, and the
+  // site's sans with one quiet detail (fonts load only when picked)
+  const SERIF = {
+    newsreader: 'Newsreader:opsz,wght@6..72,500..800',
+    fraunces: 'Fraunces:opsz,wght@9..144,500..800',
+    source: 'Source+Serif+4:opsz,wght@8..60,600..800',
+    caslon: 'Libre+Caslon+Text:wght@700',
+    instrument: 'Instrument+Serif'
+  };
   const LOGO = {
     now: { label: 'Plain (now)' },
-    stack: { label: 'Stacked' },
-    caret: { label: 'Inserted (caret)' },
-    bracket: { label: 'Amended [brackets]' },
-    signed: { label: 'Signed (× line)' }
+    s1: { label: '1a Serif · Newsreader', font: 'newsreader' },
+    s2: { label: '1b Serif · Fraunces', font: 'fraunces' },
+    s3: { label: '1c Serif · Source Serif', font: 'source' },
+    s4: { label: '1d Serif · Caslon', font: 'caslon' },
+    s5: { label: '1e Serif · Instrument', font: 'instrument' },
+    b1: { label: '2a Box · ink, serif', font: 'newsreader' },
+    b2: { label: '2b Box · accent, serif', font: 'newsreader' },
+    b3: { label: '2c Box · ink, sans' },
+    b4: { label: '2d Box · stacked' },
+    b5: { label: '2e Box · split', font: 'newsreader' },
+    d1: { label: '3a Sans · accent ²' },
+    d2: { label: '3b Sans · ink ²' },
+    d3: { label: '3c Sans · accent full stop' },
+    d4: { label: '3d Sans · underlined Order' },
+    d5: { label: '3e Sans · capitals ²' }
   };
 
   const get = (k, d) => {
@@ -197,6 +216,7 @@
     });
     watch.observe(document.body, { childList: true, subtree: true });
     load(`head-${head}`, HEAD[head]);
+    if (LOGO[logo]?.font) load(`logo-${LOGO[logo].font}`, { css: SERIF[LOGO[logo].font] });
     load(`body-${body}`, BODY[body]);
     root.dataset.logo = logo;
     set('gt-logo', logo);
@@ -334,85 +354,117 @@
     letter-spacing: -0.015em;
     line-height: 1.02;
   }
-  /* the logo, four ways. 1 stacked: NEW over TERMS, set to one width,
-     parted by an accent rule, like a stamp */
-  :global(html[data-logo='stack'] .name .logo) {
+  /* the logo, fifteen ways */
+  :global(html[data-logo] .name .logo) {
     display: inline-flex;
-    flex-direction: column;
-    align-items: stretch;
-    font-size: 0.84em;
-    font-weight: 800;
-    line-height: 0.82;
-    text-transform: uppercase;
+    align-items: baseline;
+    gap: 0.25em;
+    white-space: nowrap;
   }
-  :global(html[data-logo='stack'] .name .w1) {
-    font-stretch: 100%;
-    letter-spacing: 0.115em;
-    padding-bottom: 0.1em;
-    margin-bottom: 0.12em;
-    border-bottom: 0.11em solid var(--o);
-  }
-  :global(html[data-logo='stack'] .name .w2) {
-    font-stretch: 75%;
-    letter-spacing: 0.01em;
-  }
-  /* 2 inserted: "new" written in above a proofreader's caret */
-  :global(html[data-logo='caret'] .name .logo) {
-    position: relative;
-    display: inline-block;
-    padding-top: 0.42em;
-    padding-left: 0.12em;
-    font-size: 0.92em;
-  }
-  :global(html[data-logo='caret'] .name .w1) {
-    position: absolute;
-    top: 0.02em;
-    left: -0.32em;
-    font-size: 0.5em;
-    font-weight: 600;
-    font-stretch: 100%;
-    font-style: italic;
-    letter-spacing: 0.02em;
-    color: var(--o-text);
-  }
-  :global(html[data-logo='caret'] .name .w2::before) {
-    content: '‸';
-    position: absolute;
-    left: -0.2em;
-    bottom: 0.02em;
-    font-size: 0.7em;
+  /* 1 serif wordmarks */
+  :global(html[data-logo='s1'] .name .logo),
+  :global(html[data-logo='b1'] .name .logo),
+  :global(html[data-logo='b2'] .name .logo),
+  :global(html[data-logo='b5'] .name .logo) {
+    font-family: 'Newsreader', Georgia, serif;
     font-weight: 700;
+    font-stretch: 100%;
+    font-variation-settings: 'opsz' 72;
+    letter-spacing: -0.02em !important;
+  }
+  :global(html[data-logo='s2'] .name .logo) {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 640;
+    font-stretch: 100%;
+    font-variation-settings: 'opsz' 144;
+    letter-spacing: -0.025em !important;
+  }
+  :global(html[data-logo='s3'] .name .logo) {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-weight: 700;
+    font-stretch: 100%;
+    font-variation-settings: 'opsz' 60;
+    letter-spacing: -0.015em !important;
+  }
+  :global(html[data-logo='s4'] .name .logo) {
+    font-family: 'Libre Caslon Text', Georgia, serif;
+    font-weight: 700;
+    font-stretch: 100%;
+    font-size: 0.86em;
+    letter-spacing: -0.01em !important;
+  }
+  :global(html[data-logo='s5'] .name .logo) {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-weight: 400;
+    font-stretch: 100%;
+    font-size: 1.12em;
+  }
+  /* 2 reversed boxes */
+  :global(html[data-logo^='b'] .name .logo) {
+    padding: 0.16em 0.36em 0.2em;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 0.86em;
+  }
+  :global(html[data-logo='b2'] .name .logo) {
+    background: var(--o);
+    color: #fff;
+  }
+  :global(html[data-logo='b3'] .name .logo) {
+    font-weight: 700;
+  }
+  :global(html[data-logo='b4'] .name .logo) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 0.28em 0.36em 0.3em;
+    font-size: 0.56em;
+    font-weight: 700;
+    line-height: 0.88;
+    text-transform: uppercase;
+    letter-spacing: 0.01em !important;
+  }
+  :global(html[data-logo='b5'] .name .logo) {
+    gap: 0;
+    padding: 0;
+    background: none;
+    color: var(--ink);
+  }
+  :global(html[data-logo='b5'] .name .w1) {
+    padding: 0.16em 0.3em 0.2em;
+    background: var(--ink);
+    color: var(--paper);
+  }
+  :global(html[data-logo='b5'] .name .w2) {
+    padding: 0.1em 0.3em 0.14em;
+    border: 0.06em solid var(--ink);
+  }
+  /* 3 the sans with one quiet detail */
+  :global(html[data-logo='d1'] .name .w2::after),
+  :global(html[data-logo='d2'] .name .w2::after),
+  :global(html[data-logo='d5'] .name .w2::after) {
+    content: '2';
+    margin-left: 0.06em;
+    font-size: 0.42em;
+    font-weight: 700;
+    vertical-align: 0.95em;
+    line-height: 0;
     color: var(--o);
   }
-  /* 3 amended: [New] Terms, the brackets an amendment's */
-  :global(html[data-logo='bracket'] .name .w1::before),
-  :global(html[data-logo='bracket'] .name .w1::after) {
-    font-weight: 300;
+  :global(html[data-logo='d2'] .name .w2::after) {
+    color: inherit;
+  }
+  :global(html[data-logo='d3'] .name .w2::after) {
+    content: '.';
     color: var(--o);
   }
-  :global(html[data-logo='bracket'] .name .w1::before) {
-    content: '[';
-    margin-right: 0.04em;
+  :global(html[data-logo='d4'] .name .w2) {
+    background: linear-gradient(var(--o), var(--o)) 0 100% / 100% 0.08em no-repeat;
+    padding-bottom: 0.06em;
   }
-  :global(html[data-logo='bracket'] .name .w1::after) {
-    content: ']';
-    margin-left: 0;
-  }
-  /* 4 signed: the name on a signature line, marked × */
-  :global(html[data-logo='signed'] .name .logo) {
-    position: relative;
-    display: inline-block;
-    padding: 0 0.1em 0.06em 0.62em;
-    border-bottom: 0.06em solid currentColor;
-  }
-  :global(html[data-logo='signed'] .name .logo::before) {
-    content: '×';
-    position: absolute;
-    left: 0;
-    bottom: 0.08em;
-    font-size: 0.6em;
-    font-weight: 500;
-    color: var(--o);
+  :global(html[data-logo='d5'] .name .logo) {
+    text-transform: uppercase;
+    letter-spacing: -0.005em !important;
   }
   /* the menu's pale panel takes the trial's palest cool shade */
   :global(html[data-pal] .panel) {

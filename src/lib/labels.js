@@ -53,4 +53,4 @@ export const sectionSlug = (key) =>
   key.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 export const formatNumber = (n, lang) =>
-  new Intl.NumberFormat(lang === 'bn' ? 'bn-BD' : 'en-GB').format(n);
+  new Intl.NumberFormat(lang === 'bn' ? 'bn-BD-u-nu-beng' : 'en-GB').format(n);

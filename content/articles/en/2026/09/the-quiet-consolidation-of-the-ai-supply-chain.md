@@ -11,7 +11,7 @@ date: 2026-09-12
 readTime: 6
 image: "/uploads/test-photo.svg"
 imageAlt: "Placeholder test photograph"
-imageCredit: "Test / New Terms"
+imageCredit: "Test / Second Order"
 weight: 4
 featured: false
 secondary: false

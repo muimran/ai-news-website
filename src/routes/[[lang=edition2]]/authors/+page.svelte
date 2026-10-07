@@ -1,5 +1,5 @@
 <script>
-  /* Everyone who writes for New Terms: a sheet of portrait cells sharing
+  /* Everyone who writes for Second Order: a sheet of portrait cells sharing
      their rules, each with name, role and count beneath. */
   import { base } from '$app/paths';
   import { formatNumber } from '$lib/labels.js';
@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-  <title>{L.reporters} — New Terms</title>
+  <title>{L.reporters} — Second Order</title>
 </svelte:head>
 
 <GridPage lang="en">

@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-  <title>{sectionLabel(data.section, data.lang)} — New Terms</title>
+  <title>{sectionLabel(data.section, data.lang)} — Second Order</title>
 </svelte:head>
 
 <GridReel lang={data.lang} reel={data.reel} section={data.section} />

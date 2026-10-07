@@ -19,10 +19,10 @@ The component gets two props:
 Two layouts (the CMS's **Layout** field):
 - **Special**: inside the site's frame (header, Close), as below.
 - **Special — full screen**: nothing of the site at all, only your page,
-  plus one small "New Terms ✕" in the top-left corner to go back. Use it
+  plus one small "Second Order ✕" in the top-left corner to go back. Use it
   when the piece is its own design from edge to edge.
 
-The full-screen "New Terms ✕" can move, or go, from the special itself:
+The full-screen "Second Order ✕" can move, or go, from the special itself:
 
 ```svelte
 <script module>
@@ -32,7 +32,7 @@ The full-screen "New Terms ✕" can move, or go, from the special itself:
 
 It's a plain link with the class `away`, so a special may restyle it with
 `:global(.away) { ... }`. Before setting `false`, give readers another way
-back to New Terms, and keep the piece recognisably ours when it's shared.
+back to Second Order, and keep the piece recognisably ours when it's shared.
 
 Inside the frame, it sits like this: the header lies over its top on arrival
 (leave about 6rem of room there, or start with a picture) and leaves as the

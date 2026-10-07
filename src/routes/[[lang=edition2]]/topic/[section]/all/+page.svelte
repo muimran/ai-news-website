@@ -10,7 +10,7 @@
 </script>
 
 <svelte:head>
-  <title>{L.all} · {name} — New Terms</title>
+  <title>{L.all} · {name} — Second Order</title>
 </svelte:head>
 
 <ListPage

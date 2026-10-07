@@ -83,9 +83,13 @@
     let hits = index.search(q);
     const some = !hits.length && q.trim().split(/\s+/).length > 1;
     if (some) hits = index.search(q, { combineWith: 'OR' });
-    // a writer's name isn't in the row, so a match there puts it in the quote
-    const byWriter = (r) => Object.values(r.match).some((fields) => fields.includes('author'));
-    return { list: hits.map((r) => ({ ...index.byId.get(r.id), terms: r.terms, byWriter: byWriter(r) })), some };
+    // a writer's name and a dateline aren't in the row, so a match in either
+    // puts it at the start of the quote
+    const via = (r, field) => Object.values(r.match).some((fields) => fields.includes(field));
+    return {
+      list: hits.map((r) => ({ ...index.byId.get(r.id), terms: r.terms, byWriter: via(r, 'author'), byPlace: via(r, 'location') })),
+      some
+    };
   });
   const found = $derived(results.list);
 
@@ -174,9 +178,9 @@
             idField: 'id',
             // only what a result shows: a match always has a visible reason
             // (topic names and tags would let "ai" find nearly everything)
-            fields: ['title', 'dek', 'author', 'text'],
+            fields: ['title', 'dek', 'author', 'location', 'text'],
             searchOptions: {
-              boost: { title: 4, dek: 2, author: 2 },
+              boost: { title: 4, dek: 2, author: 2, location: 1.5 },
               // a word's beginning finds the word from three letters on
               // ("chatt" finds Chattogram; "us" is only us)
               prefix: (term) => term.length >= 3,
@@ -240,7 +244,7 @@
   <div class="g full" {lang}>
     {@render children()}
     {#if ui.back !== false}
-      <a class="away" data-at={ui.back} href={current ? gridTopic(current, lang) : gridHome(lang)} onclick={close}>New Terms ✕</a>
+      <a class="away" data-at={ui.back} href={current ? gridTopic(current, lang) : gridHome(lang)} onclick={close}>Second Order ✕</a>
     {/if}
   </div>
 {:else}
@@ -251,7 +255,7 @@
        cell steps out of the header, and the topics row out of the foot -->
   <header class="top" class:topic={!!(current || format) && !reading && !open}>
     <a class="cell name" href={gridHome(lang)} lang="en"
-      ><span class="logo"><span class="w1">New</span> <span class="w2">Terms</span></span></a
+      ><span class="logo"><span class="w1">Second</span> <span class="w2">{#each 'Order' as ch, i (i)}<span class="ch" style:--i={i}>{ch}</span>{/each}</span></span></a
     >
     {#if open}
       <!-- nothing: the panel says where you are -->
@@ -386,7 +390,7 @@
               >
               <span class="ct"><Mark key={s.section} size={14} />{sectionLabel(s.section, lang)}</span>
               <span class="snip"
-                >{#each marked((s.byWriter ? `${s.author} · ` : '') + snippet(s, s.terms), s.terms) as p, i (i)}{#if p.hit}<mark>{p.t}</mark>{:else}{p.t}{/if}{/each}</span
+                >{#each marked((s.byWriter ? `${s.author} · ` : '') + (s.byPlace && s.location ? `${s.location} · ` : '') + snippet(s, s.terms), s.terms) as p, i (i)}{#if p.hit}<mark>{p.t}</mark>{:else}{p.t}{/if}{/each}</span
               >
             </a>
           {/each}
@@ -908,8 +912,19 @@
     text-wrap: balance;
     color: var(--ink);
   }
+  /* Bangla letters stand taller and heavier than Latin ones at one size, so
+     the menu's large type is set a step smaller in Bangla to look the same
+     size as the English; the small labels already run a step larger (--k) */
   .blurb:lang(bn) {
-    line-height: 1.4;
+    font-size: clamp(1.25rem, 0.85rem + 0.8vw, 1.65rem);
+    font-weight: 520;
+    line-height: 1.32;
+  }
+  .menu:lang(bn) .row.big .nm {
+    font-size: 0.88em;
+  }
+  .q:lang(bn) input {
+    font-size: clamp(1.45rem, 0.9rem + 1.45vw, 2.35rem);
   }
   /* The menu's lines are its structure: the rule under search, the one
      between the columns, a hairline between the topics (its main list,
@@ -1218,6 +1233,10 @@
       padding-top: var(--in);
       font-size: 1.25rem;
       text-wrap: pretty;
+    }
+    .blurb:lang(bn) {
+      font-size: 1.04rem;
+      line-height: 1.22;
     }
     /* a phone: the picture, and beside it the date, headline and quote one
        under another */

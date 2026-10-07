@@ -18,7 +18,7 @@ export const authorSlug = (name) =>
 export const topicUrl = (key, lang) => `${base}/${lang}/topic/${sectionSlug(key)}`;
 export const formatUrl = (key, lang) => `${base}/${lang}/${FORMATS[key].slug}`;
 
-/* The stories' images: photo-illustrations made for New Terms, one per
+/* The stories' images: photo-illustrations made for Second Order, one per
    story, each an object cut from a free Unsplash photo (its id is kept here,
    the source) and set in black and white on its topic's colours. Keyed by
    English slug, or by its own slug for a Bangla original; a translation
@@ -174,26 +174,26 @@ export const lastRead = () => last;
 export const setLastRead = (slug) => (last = slug);
 
 export const two = (n, lang) =>
-  new Intl.NumberFormat(lang === 'bn' ? 'bn-BD' : 'en-GB', { minimumIntegerDigits: 2 }).format(n);
+  new Intl.NumberFormat(lang === 'bn' ? 'bn-BD-u-nu-beng' : 'en-GB', { minimumIntegerDigits: 2 }).format(n);
 
 export const SHORT_DATE = {
   en: new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' }),
-  bn: new Intl.DateTimeFormat('bn-BD', { day: 'numeric', month: 'short', timeZone: 'UTC' })
+  bn: new Intl.DateTimeFormat('bn-BD-u-nu-beng', { day: 'numeric', month: 'short', timeZone: 'UTC' })
 };
 export const RANGE = {
   en: new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' }),
-  bn: new Intl.DateTimeFormat('bn-BD', { day: 'numeric', month: 'short', timeZone: 'UTC' })
+  bn: new Intl.DateTimeFormat('bn-BD-u-nu-beng', { day: 'numeric', month: 'short', timeZone: 'UTC' })
 };
 export const range = (from, to, lang) => RANGE[lang].formatRange(from, to);
 
 export const MONTH = {
   en: new Intl.DateTimeFormat('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' }),
-  bn: new Intl.DateTimeFormat('bn-BD', { month: 'long', year: 'numeric', timeZone: 'UTC' })
+  bn: new Intl.DateTimeFormat('bn-BD-u-nu-beng', { month: 'long', year: 'numeric', timeZone: 'UTC' })
 };
 
 export const DAY_DATE = {
   en: new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' }),
-  bn: new Intl.DateTimeFormat('bn-BD', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' })
+  bn: new Intl.DateTimeFormat('bn-BD-u-nu-beng', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' })
 };
 
 export const STR = {

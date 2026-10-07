@@ -114,7 +114,7 @@ export const formatList = (lang, kind) => ofKind(lang, kind).map(row);
 /* Every story from both desks, newest first — a writer's page spans both. */
 const everything = () => [...order('en'), ...order('bn')].sort(newestFirst);
 
-/** Everyone who writes for New Terms, most stories first, with their
+/** Everyone who writes for Second Order, most stories first, with their
     count across both desks. */
 export function writers() {
   const bySlug = new Map();
@@ -151,7 +151,7 @@ const plain = (md = '') =>
 /** Everything search needs for an edition: every story (its row plus its
     running text) and every writer (to be found by name). */
 export const searchIndex = (lang) => ({
-  stories: order(lang).map((s) => ({ ...row(s), text: plain(s.body) })),
+  stories: order(lang).map((s) => ({ ...row(s), location: s.location, text: plain(s.body) })),
   writers: writers().map(({ slug, name, name_bn, role, role_bn, photo, count }) => ({
     slug,
     name,

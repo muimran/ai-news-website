@@ -10,7 +10,7 @@ date: 2026-09-14
 readTime: 9
 image: "/uploads/test-photo.svg"
 imageAlt: "A street at dusk with figures in the foreground"
-imageCredit: "Test / New Terms"
+imageCredit: "Test / Second Order"
 weight: 1
 featured: false
 secondary: false
