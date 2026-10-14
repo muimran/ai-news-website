@@ -35,6 +35,14 @@
      pages (the six in the menu's last group, and each writer's page). All
      of them close back to where the reader was browsing. */
   const away = $derived(reading || !!page.data.newsroom);
+  /* Only the front page opens with the Latest pane open; every other page
+     (a topic, a format, the archive, a writer) starts with it folded, and
+     opening it there lasts until the next page. Coming home opens it. */
+  const home = $derived(page.route.id === '/[[lang=edition2]]');
+  afterNavigate(() => {
+    ui.pin = false;
+    if (home) ui.folded = false;
+  });
   let back = null;
   beforeNavigate(() => {
     if (!page.data.story && !page.data.newsroom) back = { url: page.url.href, y: scrollY, depth: 0 };
@@ -248,7 +256,7 @@
     {/if}
   </div>
 {:else}
-<div class="g" {lang} class:story={away} class:folded={ui.folded || ((away || ui.reading) && !ui.pin)} class:reading={ui.reading} class:deep={ui.deep || ui.wide} class:far={ui.deep} class:bare={ui.deep && !ui.up && !open} class:over={reading && !open} class:begun={reading && ui.begun && !ui.up && !open}>
+<div class="g" {lang} class:story={away} class:folded={ui.folded || ((away || !home || ui.reading) && !ui.pin)} class:reading={ui.reading} class:deep={ui.deep || ui.wide} class:far={ui.deep} class:bare={ui.deep && !ui.up && !open} class:over={reading && !open} class:begun={reading && ui.begun && !ui.up && !open}>
   <!-- on a phone a story's topic is the first of its facts, so the header
        doesn't give it a row of its own there -->
   <!-- with the menu or search open, that panel is the page: the topic's
@@ -283,7 +291,7 @@
       >
     </nav>
   </header>
-  <Latest {lang} stories={data.latest} current={page.data.story?.slug ?? null} aside={!!page.data.newsroom} />
+  <Latest {lang} stories={data.latest} current={page.data.story?.slug ?? null} aside={!!page.data.newsroom} shut={!home} />
   {@render children()}
 
   {#if open === 'menu'}

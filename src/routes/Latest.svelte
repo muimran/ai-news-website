@@ -12,7 +12,7 @@
   import { ui } from './ui.svelte.js';
 
   /* `aside`: a page that, like a story, has the screen to itself */
-  let { lang, stories, current = null, aside = false } = $props();
+  let { lang, stories, current = null, aside = false, shut = false } = $props();
   const L = $derived(STR[lang]);
   const num = (n) => formatNumber(n, lang);
 
@@ -28,14 +28,14 @@
      touching the reader's own choice elsewhere; opening it there keeps it
      open until they move to another page. */
   const story = $derived(current !== null || aside);
-  const folded = $derived(ui.folded || ((story || ui.reading) && !ui.pin));
+  const folded = $derived(ui.folded || ((story || shut || ui.reading) && !ui.pin));
   function unfold() {
-    if (story || ui.reading) ui.pin = true;
+    if (story || shut || ui.reading) ui.pin = true;
     else fold(false);
   }
   function close() {
     if (ui.sheet) ui.sheet = false;
-    else if (story || ui.reading) ui.pin = false;
+    else if (story || shut || ui.reading) ui.pin = false;
     else fold(true);
   }
 </script>

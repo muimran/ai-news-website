@@ -106,6 +106,7 @@
   $effect(() => {
     void items;
     void ui.folded;
+    void ui.pin;
     pos = 0;
     if (track) tick().then(measure);
   });
