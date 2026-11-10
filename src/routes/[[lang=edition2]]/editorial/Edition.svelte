@@ -2,15 +2,16 @@
   /* The editorial trial: the reel as the pages of a paper. The same table,
      header row above and topics row below, and the same sideways move, but
      each step is a composed page rather than one more card: the front page
-     ranks the day (a lead, two seconds, an Inside column pointing to the
-     pages after it), then a page for each topic, its name in an ink column
+     ranks the day (a lead and two seconds; it stops short of the screen's
+     edge, so the next page's ink column shows beside it), then a page for
+     each topic, its name in an ink column
      and its stories at different sizes, then the way to all of them.
 
      The sizes carry the judgement: a lead on its picture's colour across
      most of the page, seconds smaller, the rest as words alone. The deks
      are in the reading face; an Analysis sets its headline in it too, as
      papers set opinion. A phone gets the same pages one under another. */
-  import { onMount, tick } from 'svelte';
+  import { onMount } from 'svelte';
   import { sectionLabel, kindLabel, formatNumber, KINDS } from '$lib/labels.js';
   import { photo, two, range, SHORT_DATE, STR } from '$lib/site/reel.js';
   import Mark from '../../Mark.svelte';
@@ -23,8 +24,8 @@
   const num = (n) => formatNumber(n, lang);
 
   const W = {
-    en: { front: 'Front page', inside: 'Inside' },
-    bn: { front: 'প্রথম পাতা', inside: 'ভেতরের পাতায়' }
+    en: { front: 'Front page' },
+    bn: { front: 'প্রথম পাতা' }
   };
   /* the edition's date as a paper prints it under its name */
   const EDITION = {
@@ -56,18 +57,6 @@
      words alone */
   const roleOf = (i) => (i === 0 ? 'lead' : i === 1 ? 'pic' : 'word');
 
-  /* Inside shows as many as fit its column at their own height, no more */
-  let fit = $state(10);
-  let list = $state();
-  async function fitInside() {
-    if (!list) return;
-    if (mobile) return void (fit = 6);
-    fit = ed.inside.length;
-    await tick();
-    const bottom = list.getBoundingClientRect().bottom + 0.5;
-    fit = [...list.children].filter((li) => li.getBoundingClientRect().bottom <= bottom).length;
-  }
-
   /* On a computer the page's vertical scroll drives the pages sideways,
      one pixel for one pixel, as on the reel; a phone scrolls down them. */
   let wrap = $state();
@@ -84,7 +73,6 @@
     wrap.style.height = mobile ? '' : `${over + innerHeight}px`;
     frames = [...track.querySelectorAll('[data-n]')].map((el) => ({ n: +el.dataset.n, left: el.offsetLeft }));
     update();
-    fitInside();
   }
   function update() {
     if (mobile) {
@@ -146,7 +134,6 @@
     addEventListener('pointercancel', release);
     win.addEventListener('pointerdown', press);
     win.addEventListener('click', swallow, true);
-    document.fonts?.ready.then(fitInside);
     measure();
     return () => {
       watch.disconnect();
@@ -214,7 +201,7 @@
     <div class="window" bind:this={win}>
       <div class="track" bind:this={track}>
         <!-- 01, the front page: the edition's line, the lead across most of
-             the page, two seconds, and what's inside -->
+             the page, and two seconds -->
         <section class="pg front" data-n="1" aria-label={W[lang].front}>
           <p class="folio">
             <span class="fl"
@@ -223,26 +210,11 @@
               ></span
             >
             <span class="fc motto">{L.tagline}</span>
-            <span class="fc end">{L.count(num(ed.total))}</span>
           </p>
           {@render story(ed.lead, 'lead', 'lead', { front: true, wide: true, quote: ed.quote, facts: true })}
           {#each ed.seconds as s, i (s.slug)}
             {@render story(s, i === 0 ? 'pic' : 'word', i === 0 ? 'sa' : 'sb', { front: true })}
           {/each}
-          <section class="inside" aria-label={W[lang].inside}>
-            <p class="ihead">{W[lang].inside}</p>
-            <ol bind:this={list}>
-              {#each ed.inside as s, i (s.slug)}
-                <li class:gone={i >= fit}>
-                  <a class="fill" href={storyUrl(s)} draggable="false">
-                    <b class="ip">{two(s.page, lang)}</b>
-                    <span class="ih">{s.title}</span>
-                    <span class="im"><Mark key={s.section} size={12} />{SHORT_DATE[lang].format(new Date(s.date))}</span>
-                  </a>
-                </li>
-              {/each}
-            </ol>
-          </section>
         </section>
 
         <!-- 02 on: a page for each topic -->
@@ -335,10 +307,13 @@
     border-right: var(--line) solid var(--rule);
     background: var(--rule);
   }
+  /* the front stops short of the screen's edge: the next page's ink column
+     stands in the space, saying there's more to the right */
   .front {
-    grid-template-columns: minmax(0, 7.2fr) minmax(0, 3fr) minmax(0, 2.6fr);
+    width: max(80cqw, 864px);
+    grid-template-columns: minmax(0, 7.2fr) minmax(0, 3fr);
     grid-template-rows: var(--label) minmax(0, 1.15fr) minmax(0, 1fr);
-    grid-template-areas: 'f f f' 'lead sa in' 'lead sb in';
+    grid-template-areas: 'f f' 'lead sa' 'lead sb';
   }
   .sec {
     grid-template-columns: var(--cols);
@@ -349,7 +324,7 @@
   /* the edition's line, under the name: a row of cells like the header's,
      divided on the page's own column rules (it takes the page's columns, and
      the gaps between them show its hairline colour): the page and its date
-     over the lead, the motto over the seconds, the count over Inside */
+     over the lead, the motto over the seconds */
   .folio {
     grid-area: f;
     display: grid;
@@ -421,7 +396,7 @@
   /* the words never shrink to fit: short of room, the picture gives way
      first, and a cell too short for everything loses its foot, never a
      line cut through */
-  /* a story's first line is a band one label row high, as Inside's label
+  /* a story's first line is a band one label row high, as the folio
      is beside it, so labels sit level across a page and headlines start
      level under them */
   .top {
@@ -649,79 +624,6 @@
     }
   }
 
-  /* ---- Inside: the newest of the pages after this one, each with its page ---- */
-  .inside {
-    grid-area: in;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    background: var(--paper);
-  }
-  .ihead {
-    flex: none;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    height: var(--label);
-    margin: 0;
-    padding: 0 var(--in);
-    border-bottom: var(--line) solid var(--rule);
-    font: 500 calc(0.6875rem * var(--k)) / 1 var(--mono);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-  .inside ol {
-    flex: 1;
-    min-height: 0;
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .inside li {
-    border-bottom: 1px solid var(--hair);
-  }
-  .inside li.gone {
-    display: none;
-  }
-  .inside a {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    column-gap: var(--u);
-    row-gap: 0.4rem;
-    padding: var(--u) var(--in);
-    color: var(--ink);
-    text-decoration: none;
-    outline: none;
-  }
-  .ip {
-    grid-row: 1 / 3;
-    font: 640 1rem / 1.1 var(--sans);
-    font-stretch: 75%;
-    color: var(--o-text);
-  }
-  .ih {
-    font-size: 0.95rem;
-    font-weight: 580;
-    font-stretch: 85%;
-    line-height: 1.15;
-  }
-  .im {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font: 500 calc(0.625rem * var(--k)) / 1 var(--mono);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--mute);
-  }
-  @media (hover: hover) {
-    .inside a:hover .im,
-    .inside a:hover .ip {
-      color: inherit;
-    }
-  }
-
   /* ---- a topic's head: its page, its mark and its name, in ink ---- */
   .head {
     grid-area: h;
@@ -846,8 +748,7 @@
     .st {
       container-type: inline-size;
     }
-    .folio .motto,
-    .folio .end {
+    .folio .motto {
       display: none;
     }
     .folio {
@@ -913,9 +814,6 @@
     }
     .word .by {
       margin-top: 0;
-    }
-    .inside ol {
-      overflow: visible;
     }
     /* the number at the left edge, the mark at the right, on the same
        edges as the words and labels below */

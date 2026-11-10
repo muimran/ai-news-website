@@ -38,11 +38,20 @@ touch, and both run off `edition()` in `src/lib/server/data.js`. Code in
 - **The site itself** (for comparison): `/` —
   https://muimran.github.io/ai-news-website/
 - **Sideways** (`Edition.svelte`): `/editorial` — the reel as the pages of a
-  paper. A front page (lead, two seconds, an Inside column pointing to
-  pages), then a page per topic, scrolled sideways like the main site.
+  paper. A front page (lead, two seconds), then a page per topic, scrolled
+  sideways like the main site. The one I'm sticking with (10 November).
   https://muimran.github.io/ai-news-website/editorial
-- **Vertical** (`Vertical.svelte`): `/editorial/vertical` — read down, the
-  one I'm working on. https://muimran.github.io/ai-news-website/editorial/vertical
+  - The Inside column is gone (10 November): it listed the newest stories
+    from the later pages with their page numbers, which repeated Latest and
+    meant nothing until you knew the layout. The front now stops at about
+    80% of the screen, so the next page's ink column ("02 · The AI Race")
+    stands where Inside was and says there's more to the right. The
+    "38 stories" cell above it went too; the count is on the last page.
+  - Tried and dropped the same day: a front as one fixed table that never
+    scrolls, topics opening in place (too confusing for a news site), and
+    a single ranked list (didn't look good).
+- **Vertical** (`Vertical.svelte`): `/editorial/vertical` — read down; kept
+  for reference. https://muimran.github.io/ai-news-website/editorial/vertical
   (Bangla: `/bn/editorial/vertical`.)
 
 How the vertical one is built, and why:
