@@ -2,12 +2,14 @@
    stories it shows instead of the whole archive. */
 
 import { marked } from 'marked';
+import matter from 'gray-matter';
 import { base } from '$app/paths';
 import { LANGS, inLang, sibling, sections } from '$lib/content.js';
 import { FORMATS } from '$lib/labels.js';
 import { photo, topicUrl, formatUrl } from '$lib/site/reel.js';
 import { writerFor, writerUrl } from './authors.js';
 import { toneFor, dominant } from './tone.js';
+import { smart, smartHtml } from '$lib/typo.js';
 
 /* A section's reel runs its latest 12; everything older is in its index.
    The front reel is one story per section. */
@@ -88,6 +90,57 @@ export function frontReel(lang) {
     from: all.at(-1).date,
     to: all[0].date,
     index: indexUrl(lang)
+  };
+}
+
+/* A pull quote in a story's text: a line starting with >, and on the next
+   line who said it, after a dash (as pullQuotes reads them below). */
+const PULL = /^>\s*(.+?)\s*\n>?\s*(?:—|–|-{1,2}\s)\s*(.+)$/m;
+
+/** The editorial trial (/editorial): the reel as the pages of a paper.
+    The front page leads with the front reel's lead; its two seconds are
+    the editors' secondary stories, then the next tops, each from a topic
+    not on the front yet; a quote from the lead when its writer set one
+    with a speaker. Then a page for each topic: its stories but the three
+    on the front, most important first, five at most. The front's Inside
+    column is the newest of those, each with the page it's on. */
+export function edition(lang) {
+  const tops = new Map();
+  for (const list of sectionLists(lang)) {
+    const top = leadFirst(list)[0];
+    if (top) tops.set(top.slug, top);
+  }
+  const [lead, ...rest] = leadFirst([...tops.values()]);
+  const all = order(lang);
+  const taken = new Set([lead.section]);
+  const seconds = [];
+  for (const s of [...all.filter((x) => x.secondary), ...rest]) {
+    if (seconds.length === 2) break;
+    if (s === lead || seconds.includes(s) || taken.has(s.section)) continue;
+    taken.add(s.section);
+    seconds.push(s);
+  }
+  const front = new Set([lead, ...seconds].map((s) => s.slug));
+  const pages = sections(lang)
+    .map((key) => {
+      const list = order(lang, key);
+      const stories = leadFirst(list).filter((s) => !front.has(s.slug)).slice(0, 5);
+      return { key, total: list.length, from: list.at(-1)?.date, to: list[0]?.date, stories };
+    })
+    .filter((p) => p.stories.length)
+    .map((p, i) => ({ ...p, n: i + 2 }));
+  const onPage = new Map(pages.flatMap((p) => p.stories.map((s) => [s.slug, p.n])));
+  const quote = PULL.exec(lead.body ?? '');
+  return {
+    date: all[0].date,
+    total: all.length,
+    lead: { ...summary(lead), interviews: lead.interviews, documents: lead.documents, reporting: lead.reporting },
+    quote: quote ? { text: smart(quote[1].replace(/^["“]|["”]$/g, '')), who: smart(quote[2].trim()) } : null,
+    seconds: seconds.map(summary),
+    inside: all.filter((s) => onPage.has(s.slug)).slice(0, 10).map((s) => ({ ...summary(s), page: onPage.get(s.slug) })),
+    pages: pages.map((p) => ({ ...p, stories: p.stories.map(summary) })),
+    from: all.at(-1).date,
+    to: all[0].date
   };
 }
 
@@ -187,6 +240,130 @@ const widePhotos = (html) =>
       `</figure>`
   );
 
+/* The glossary (content/glossary/<lang>/*.md, written in the CMS): a term,
+   other ways it's written, and its meaning. Each story explains the first
+   time each term appears in its text, by itself; writers mark nothing.
+   Never inside a link, a heading, a quote, a caption, code or a note. */
+const GLOSSARY = (() => {
+  const files = import.meta.glob('/content/glossary/*/*.md', { query: '?raw', import: 'default', eager: true });
+  const out = Object.fromEntries(LANGS.map((l) => [l, []]));
+  for (const [path, raw] of Object.entries(files)) {
+    const lang = path.split('/')[3];
+    const { data } = matter(raw);
+    if (!out[lang] || !data.term || !data.meaning) continue;
+    const forms = [data.term, ...(Array.isArray(data.also) ? data.also : [])].map((f) => String(f).trim()).filter(Boolean);
+    out[lang].push({ term: smart(String(data.term)), meaning: smart(String(data.meaning).trim()), forms });
+  }
+  return out;
+})();
+
+const escape = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const OFF_LIMITS = /^<(\/?)(a|code|pre|h[1-6]|button|figcaption|blockquote|span)\b/i;
+
+function explained(html, lang) {
+  const word = '\\p{L}\\p{M}\\p{N}';
+  /* English finds plurals too (data centres); Bangla words take their endings
+     straight on (ডেটা সেন্টারের), so a match runs on to the word's end */
+  const tail = lang === 'bn' ? `[\\p{L}\\p{M}]*` : `(?:s|es)?(?![${word}])`;
+  const terms = GLOSSARY[lang]
+    .flatMap((g, k) => g.forms.map((f) => ({ k, re: new RegExp(`(?<![${word}-])${escape(f)}${tail}`, 'iu'), len: f.length })))
+    .sort((a, b) => b.len - a.len);
+  const used = new Map(); // glossary entry -> its number in this story
+  const parts = html.split(/(<[^>]+>)/);
+  let off = 0;
+  for (let i = 0; i < parts.length; i++) {
+    if (i % 2) {
+      const t = OFF_LIMITS.exec(parts[i]);
+      if (t && !parts[i].endsWith('/>')) off += t[1] ? -1 : 1;
+      continue;
+    }
+    if (off > 0 || !parts[i].trim()) continue;
+    let text = parts[i];
+    const found = [];
+    for (const t of terms) {
+      if (used.has(t.k)) continue;
+      const m = t.re.exec(text);
+      if (!m) continue;
+      used.set(t.k, used.size);
+      // held aside as a placeholder, so a shorter term can't match inside it
+      found.push({ k: t.k, text: m[0] });
+      text = text.slice(0, m.index) + `\u0001${found.length - 1}\u0002` + text.slice(m.index + m[0].length);
+    }
+    parts[i] = text.replace(/\u0001(\d+)\u0002/g, (_, n) => {
+      const f = found[Number(n)];
+      return `<span class="gl" role="button" tabindex="0" aria-expanded="false" data-gl="${used.get(f.k)}">${f.text}</span>`;
+    });
+  }
+  const list = [...used].sort((a, b) => a[1] - b[1]).map(([k]) => ({ term: GLOSSARY[lang][k].term, meaning: GLOSSARY[lang][k].meaning }));
+  return { html: parts.join(''), glossary: list };
+}
+
+/* Pull quotes. A writer starts the quote's line with > and puts who said
+   it on the next line, starting with a dash (— or -). The quote and its
+   speaker become one figure; without a speaker, the quote stands alone. */
+const DASH = '(?:—\\s*|–\\s*|-{1,2}\\s+)'; // a plain hyphen needs a space after it
+const SAME_P = new RegExp(`^(<p>[\\s\\S]*?)\\n\\s*${DASH}([^\\n]+?)\\s*<\\/p>$`);
+const OWN_P = new RegExp(`^([\\s\\S]*?)\\s*<p>\\s*${DASH}([\\s\\S]+?)\\s*<\\/p>$`);
+const pullQuotes = (html) =>
+  html.replace(/<blockquote>\s*([\s\S]*?)\s*<\/blockquote>/g, (_, inner) => {
+    const m = SAME_P.exec(inner) ?? OWN_P.exec(inner);
+    const quote = m ? (SAME_P.test(inner) ? m[1] + '</p>' : m[1]) : inner;
+    const who = m ? `<figcaption>${m[2]}</figcaption>` : '';
+    return `<figure class="pull"><blockquote>${quote}</blockquote>${who}</figure>`;
+  });
+
+/* A link to another of our stories, pasted on a line of its own, becomes a
+   card for it beside the text. Any address of ours works (the live site,
+   a copy, a bare /2026/09/slug); one that isn't a story stays a link. The
+   story's HTML comes back in pieces with the cards between them, so the
+   page can draw each card itself. */
+const ALONE = /<p>\s*(?:<a href="([^"]+)"[^>]*>[^<]*<\/a>|(\/(?:bn\/)?\d{4}\/\d{2}\/[a-z0-9-]+\/?))\s*<\/p>/gi;
+function storyAt(href) {
+  const m = /(?:^|\/)(?:(bn)\/)?(\d{4})\/(\d{2})\/([a-z0-9-]+)\/?(?:[?#].*)?$/i.exec(href);
+  if (!m) return null;
+  return order(m[1] ? 'bn' : 'en').find((x) => x.slug === m[4] && x.ym === `${m[2]}/${m[3]}`) ?? null;
+}
+function withCards(html, self) {
+  const blocks = [];
+  let last = 0;
+  for (const m of html.matchAll(ALONE)) {
+    const to = storyAt(m[1] ?? m[2]);
+    if (!to || (to.slug === self.slug && to.lang === self.lang)) continue;
+    if (m.index > last) blocks.push({ html: html.slice(last, m.index) });
+    blocks.push({ also: summary(to) });
+    last = m.index + m[0].length;
+  }
+  if (last < html.length) blocks.push({ html: html.slice(last) });
+  return blocks;
+}
+
+/* Source notes. A writer types [^1] after a sentence and, on a line of its
+   own anywhere below, [^1]: and the source. Each note is set beside the
+   sentence it supports, numbered in the order they're cited: in the margin
+   on a wide screen, opened in place with a tap on a narrower one. A marker
+   with no note, or a note never cited, is left alone. */
+function sourceNotes(body, lang) {
+  const defs = new Map();
+  body = body.replace(/^\[\^([^\]\s]+)\]:[ \t]*(.+)$/gm, (_, key, text) => (defs.set(key, text.trim()), ''));
+  const order = new Map();
+  body = body.replace(/\[\^([^\]\s]+)\]/g, (m, key) => {
+    if (!defs.has(key)) return m;
+    if (!order.has(key)) order.set(key, order.size + 1);
+    return `%%note:${order.get(key)}%%`;
+  });
+  const digits = new Intl.NumberFormat(lang === 'bn' ? 'bn-BD-u-nu-beng' : 'en-GB');
+  const notes = new Map([...order].map(([key, n]) => [n, { mark: digits.format(n), html: smartHtml(marked.parseInline(defs.get(key))) }]));
+  const place = (html) =>
+    html.replace(/%%note:(\d+)%%/g, (_, n) => {
+      const note = notes.get(Number(n));
+      return (
+        `<button type="button" class="nref" aria-expanded="false" aria-controls="note-${n}">${note.mark}</button>` +
+        `<span class="note" id="note-${n}" role="note"><b>${note.mark}</b> ${note.html}</span>`
+      );
+    });
+  return { body, place };
+}
+
 export function storyPage(s) {
   const all = order(s.lang);
   const i = all.findIndex((x) => x.slug === s.slug);
@@ -197,7 +374,7 @@ export function storyPage(s) {
   });
 
   let body = s.body;
-  if (s.dek && body.startsWith(s.dek)) body = body.slice(s.dek.length).trimStart(); // already shown as the dek
+  if (s.dek && smart(body).startsWith(s.dek)) body = body.slice(s.dek.length).trimStart(); // already shown as the dek
 
   const alt = {};
   for (const l of LANGS) {
@@ -205,9 +382,32 @@ export function storyPage(s) {
     alt[l] = t ? `${base}/${l}/${t.slug}` : `${base}/${l}`;
   }
 
+  const noted = sourceNotes(body, s.lang);
+  /* the glossary reads the dek too: it's where a reader meets a term first */
+  const dek = s.dek.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const SPLIT = '<hr data-split>';
+  const done = explained(dek + SPLIT + noted.place(pullQuotes(smartHtml(widePhotos(marked.parse(noted.body))))), s.lang);
+  const [dekHtml, html] = done.html.split(SPLIT);
+  const glossary = done.glossary;
   return {
-    story: { ...summary(s), kind: s.kind, author: s.author, authorTitle: s.authorTitle, location: s.location },
-    html: widePhotos(marked.parse(body)),
+    story: {
+      ...summary(s),
+      kind: s.kind,
+      author: s.author,
+      authorTitle: s.authorTitle,
+      location: s.location,
+      interviews: s.interviews,
+      documents: s.documents,
+      reporting: s.reporting,
+      sources: s.sources,
+      updates: s.updates
+    },
+    html,
+    blocks: withCards(html, s),
+    dekHtml,
+    glossary,
+    // the story's sections, by their headings, for the map beside it
+    sections: [...html.matchAll(/<h2[^>]*>([\s\S]*?)<\/h2>/g)].map((m) => m[1].trim()),
     n: i + 1,
     next,
     alt,

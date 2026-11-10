@@ -176,15 +176,32 @@ export const setLastRead = (slug) => (last = slug);
 export const two = (n, lang) =>
   new Intl.NumberFormat(lang === 'bn' ? 'bn-BD-u-nu-beng' : 'en-GB', { minimumIntegerDigits: 2 }).format(n);
 
+/* Bangla writes its months out in full (১৭ সেপ্টেম্বর); the short forms
+   Intl offers (সেপ) aren't in common use */
 export const SHORT_DATE = {
   en: new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' }),
-  bn: new Intl.DateTimeFormat('bn-BD-u-nu-beng', { day: 'numeric', month: 'short', timeZone: 'UTC' })
+  bn: new Intl.DateTimeFormat('bn-BD-u-nu-beng', { day: 'numeric', month: 'long', timeZone: 'UTC' })
 };
 export const RANGE = {
   en: new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' }),
-  bn: new Intl.DateTimeFormat('bn-BD-u-nu-beng', { day: 'numeric', month: 'short', timeZone: 'UTC' })
+  bn: new Intl.DateTimeFormat('bn-BD-u-nu-beng', { day: 'numeric', month: 'long', timeZone: 'UTC' })
 };
 export const range = (from, to, lang) => RANGE[lang].formatRange(from, to);
+
+/* A date in full, as newspapers write it on a story: 17 September 2026;
+   ১৭ সেপ্টেম্বর ২০২৬ (Bangla papers write it without the comma Intl adds) */
+const bnFull = new Intl.DateTimeFormat('bn-BD-u-nu-beng', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+export const FULL_DATE = {
+  en: new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }),
+  bn: {
+    format: (d) =>
+      bnFull
+        .formatToParts(d)
+        .filter((p) => p.type !== 'literal')
+        .map((p) => p.value)
+        .join(' ')
+  }
+};
 
 export const MONTH = {
   en: new Intl.DateTimeFormat('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' }),
@@ -193,7 +210,7 @@ export const MONTH = {
 
 export const DAY_DATE = {
   en: new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' }),
-  bn: new Intl.DateTimeFormat('bn-BD-u-nu-beng', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' })
+  bn: new Intl.DateTimeFormat('bn-BD-u-nu-beng', { weekday: 'short', day: 'numeric', month: 'long', timeZone: 'UTC' })
 };
 
 export const STR = {
@@ -202,6 +219,7 @@ export const STR = {
     blurb: 'A nonprofit newsroom reporting on AI and the technology around it in Bangladesh, and on the people it reaches first.',
     read: 'Read',
     min: 'min',
+    minRead: (n) => `${n} min read`,
     scroll: 'Scroll',
     reel: 'The reel',
     thisWeek: 'This week',
@@ -223,6 +241,22 @@ export const STR = {
     newest: 'The latest stories',
     recent: 'Recent searches',
     clear: 'Clear',
+    // what the site remembers of its reader (memory.svelte.js)
+    fresh: 'New since your last visit',
+    done: 'Read',
+    goOn: 'Continue',
+    pickUp: 'Continue where you left off',
+    inStory: 'In this story',
+    // how a story was reported, and what's changed in it since
+    method: 'How we reported it',
+    interviews: (n, raw) => `${n} ${raw === 1 ? 'interview' : 'interviews'}`,
+    documents: (n, raw) => `${n} ${raw === 1 ? 'document' : 'documents'}`,
+    Update: 'Updated',
+    Correction: 'Corrected',
+    changes: 'Changes to this story',
+    change: { Update: 'Update', Correction: 'Correction' },
+    note: 'Source note',
+    alsoRead: 'Another of our stories',
     loading: 'Loading…',
     shown: (a, b) => `${a} of ${b}`,
     next: 'Next in the reel',
@@ -242,6 +276,7 @@ export const STR = {
     blurb: 'একটি অলাভজনক সংবাদমাধ্যম, যা বাংলাদেশে কৃত্রিম বুদ্ধিমত্তা ও তাকে ঘিরে থাকা প্রযুক্তি, আর সবার আগে যাঁদের কাছে তা পৌঁছায় তাঁদের নিয়ে কাজ করে।',
     read: 'পড়ুন',
     min: 'মিনিট',
+    minRead: (n) => `${n} মিনিটের পড়া`,
     scroll: 'স্ক্রল করুন',
     reel: 'রিল',
     thisWeek: 'এই সপ্তাহে',
@@ -263,6 +298,20 @@ export const STR = {
     newest: 'সর্বশেষ প্রতিবেদন',
     recent: 'সাম্প্রতিক খোঁজ',
     clear: 'মুছুন',
+    fresh: 'আপনার শেষ ভিজিটের পর নতুন',
+    done: 'পড়া হয়েছে',
+    goOn: 'চালিয়ে যান',
+    pickUp: 'যেখানে থেমেছিলেন, সেখান থেকে পড়ুন',
+    inStory: 'এই প্রতিবেদনে',
+    method: 'যেভাবে প্রতিবেদনটি তৈরি',
+    interviews: (n) => `${n}টি সাক্ষাৎকার`,
+    documents: (n) => `${n}টি নথি`,
+    Update: 'হালনাগাদ',
+    Correction: 'সংশোধিত',
+    changes: 'এই প্রতিবেদনে যা বদলেছে',
+    change: { Update: 'হালনাগাদ', Correction: 'সংশোধন' },
+    note: 'সূত্র',
+    alsoRead: 'আমাদের আরেকটি প্রতিবেদন',
     loading: 'লোড হচ্ছে…',
     shown: (a, b) => `${b}টির মধ্যে ${a}টি`,
     next: 'এরপর',
