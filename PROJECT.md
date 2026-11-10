@@ -28,6 +28,52 @@ original reel design's `/en/...` ones, forward to the same pages today. The
 original reel design is retired (its code is in git history). Two earlier
 alternates remain for reference: `/grid/en` (the framed grid) and `/map/en`.
 
+### Editorial trials (November 2026)
+
+Two trials of the front page as a newspaper, kept brutalist. Front page
+only, no story pages. They sit beside the real front, which they don't
+touch, and both run off `edition()` in `src/lib/server/data.js`. Code in
+`src/routes/[[lang=edition2]]/editorial/`. Live on GitHub Pages:
+
+- **The site itself** (for comparison): `/` —
+  https://muimran.github.io/ai-news-website/
+- **Sideways** (`Edition.svelte`): `/editorial` — the reel as the pages of a
+  paper. A front page (lead, two seconds, an Inside column pointing to
+  pages), then a page per topic, scrolled sideways like the main site.
+  https://muimran.github.io/ai-news-website/editorial
+- **Vertical** (`Vertical.svelte`): `/editorial/vertical` — read down, the
+  one I'm working on. https://muimran.github.io/ai-news-website/editorial/vertical
+  (Bangla: `/bn/editorial/vertical`.)
+
+How the vertical one is built, and why:
+- **One table of four equal columns runs the whole page.** Every cell spans
+  whole columns, so every rule meets the rule above and below. It was first
+  made by stacking the sideways pages, and the rules jumped at every page
+  edge, because each page had its own columns. A layout that changes
+  direction gets designed again for that direction, not stacked.
+- **Front:** the edition's date, then the lead across two columns (words in
+  one, picture in the next) and the two seconds side by side.
+- **Each topic:** a slim ink band (mark, name, "N stories →"), then its lead
+  across two columns, alternating left and right, and the rest beside it.
+  With only one other story, the lead takes three columns.
+- **One picture per topic, the lead's.** When a small cell with a picture
+  shared a row with one without, the one without stretched into an empty
+  middle.
+- **The story type goes in the byline**, in colour, not in a strip above
+  the headline. The strip sat empty in half the cells.
+- **Cut, because a scrolling page doesn't need them:** the "01 · Front page"
+  folio, the motto, the Inside column (every story in it was further down
+  the same page), and the topic and page numbers.
+- **Space:** text 3u in from the rules (2u on a phone, to stay under the
+  header), and a 4u pause of paper before each topic.
+- **Narrower:** two halves at a table width of 939px or less, one column at
+  519px or less (container queries on the table, so opening Latest narrows
+  it too).
+- **Alignment is measured, not eyeballed:** every cell edge on a column line,
+  text insets equal, headlines level within a row, bylines level at the foot.
+  A subgrid silently fails on an element with `container-type`, which is why
+  the lead has `container-type: normal`.
+
 Rules the grid and panes versions keep to:
 - **One spatial unit.** Every size is a multiple of `--u` (12px on a wide
   screen, 8px on a phone): label rows 3u, text 2u in from a cell's edge, and
@@ -71,6 +117,80 @@ Rules the grid and panes versions keep to:
   faint tint (7% ink) deepening when pressed, and on a first visit only the
   arrows bob once (remembered in the browser as `gt-nudged`). Open, Topics
   softly blurs and pales the page behind it (1.5px, 20%); a tap there closes.
+
+- **Small finishes (October 2026).**
+  - *Printer's quotes.* Writers type straight " and '; the build sets them
+    curly (“ ” ‘ ’) in headlines, deks, photo credits, story text, About
+    pages and writer bios, never inside code (`src/lib/typo.js`).
+  - *Shared links.* Every page carries Open Graph / X tags: a story shows its
+    headline, dek and picture; any other page the name, the blurb and a
+    plain name card (`static/social.png`). Full addresses come from
+    `src/lib/site/origin.js`, the one line to change when the site moves to
+    secondorder.news.
+  - *Tab icon.* An interim "SO" in the header's face, white on ink
+    (`static/icon-*.png`, `apple-touch-icon.png`); redo it, and the name
+    card, once the logo is chosen.
+  - *Header over a story's photo.* Its words take the photo's own text
+    colour (ink or white, the card's), and ink once the photo has scrolled
+    up past it. Specials keep the old difference blend, since their tops can
+    be anything.
+  - *Card summaries end on a whole sentence*: sentences drop from the end
+    until the rest fits its three lines (`src/routes/sentences.js`).
+  - *Latest list.* A title's topic mark hangs in front so its lines start
+    together; Bangla months are written out in full (১৭ সেপ্টেম্বর), with a
+    wider date column to hold them.
+  - The photo credit sits in the reading column, on the headline's line; the
+    story-type label on cards lost its glow (read as blur that small).
+
+- **The site remembers its reader (October 2026).** In their own browser
+  only (`src/routes/memory.svelte.js`, localStorage `so-reads`, `so-seen`;
+  nothing is sent anywhere). Read stories go quiet in Latest; a card's label
+  row fills along its foot with how far the reader got; a story begun shows
+  "Continue · 42%" on its card and, opened, a button under the dek back to
+  the paragraph they'd reached (the furthest point is kept). Stories that
+  weren't in any list on the reader's last visit get a small orange dot;
+  a first visit shows none.
+- **The story's map.** Its sections, by their headings, sit in the facts
+  column under the facts and stay when the facts fold away: read sections
+  filled, the one being read marked and filling, a click glides there. It
+  steps aside for wide photos, as the facts do. The hover that brings the
+  facts back answers only in their part of the column now. On a phone, a
+  thin orange line across the top fills instead.
+- **How we know.** In the CMS, per story: Interviews, Documents, Reporting
+  time ("Six months of reporting") → a "How we reported it" block in the
+  facts; Updates and corrections (dated, typed) → "Updated/Corrected 19
+  Sept" in the facts and the full list at the story's foot. Source notes:
+  `[^1]` after a sentence and `[^1]: source` on a line below; set in the
+  right margin beside the sentence on a wide frame (≥1150px), opened in place
+  by a tap below that. Story headers are now read as real YAML (`js-yaml`),
+  falling back to the old line reader if one doesn't parse.
+- **Glossary.** CMS collections "Glossary — English" / "শব্দকোষ — বাংলা"
+  (`content/glossary/<lang>/*.md`: term, also-written-as, meaning). At build,
+  the first time each term appears in a story (dek included) is marked; a
+  tap, click, hover or Enter shows the meaning in a small card. Never in
+  links, headings, quotes, captions, code or notes. English finds plurals,
+  Bangla the endings on a word. It can't tell a noun from a verb ("to
+  compute"), so keep terms that are unambiguous in AI writing.
+- **Evidence to open.** CMS "Documents and data": named links (DocumentCloud,
+  Drive, GitHub), shown as small ink-bordered cells under "How we reported
+  it". Idea from The Markup's "See our data" box, placed in the facts column
+  so it's always in the same place.
+- **Another story, in the text.** A link to one of our stories pasted on a
+  line of its own becomes a card (`src/routes/AlsoCard.svelte`; the HTML is
+  split around it in `withCards()` in data.js): topic, picture on its own
+  colour, headline, date and length, and what the reader's done with it
+  (read, or how far). Wide, it hangs half into the right margin with the
+  text running round it; narrower, in the column. Its label row fills with
+  ink on hover, like a reel card.
+- **Pull quotes name the speaker.** `>` the quote, then a line starting with
+  a dash for who said it → one figure; the speaker in small capitals. Wide,
+  the quote runs out past the text into the right margin. Cards, quotes and
+  source notes all clear each other in that margin, so they stack.
+- *Sample data to delete before launch:* "The AI boom is reaching places
+  investors forgot to look" is now a 1,500-word sample written to show all
+  of this (method, documents, an update, six source notes, two story cards,
+  two pull quotes, a wide photo): it names no real people or firms. And the
+  eight starter glossary terms, if they're not wanted.
 
 - **Font trial (October 2026, temporary).** `src/routes/FontPicker.svelte`:
   two small menus at the right edge, Headline and Body, switching the
