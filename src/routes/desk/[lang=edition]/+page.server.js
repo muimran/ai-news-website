@@ -1,17 +1,18 @@
-import { edition, topicsFor, formatsFor } from '$lib/server/data.js';
-import { pagesFor } from '$lib/server/pages.js';
-import { gridPage } from '../../grid.js';
+import { KINDS } from '$lib/labels.js';
+import { edition } from '$lib/server/data.js';
+import { isIt } from '../state.svelte.js';
 
 export const entries = () => [{ lang: 'en' }, { lang: 'bn' }];
 
 export function load({ params }) {
-  const lang = params.lang;
+  const ed = edition(params.lang);
+  const all = [ed.lead, ...ed.seconds, ...ed.pages.flatMap((p) => p.stories)];
   return {
-    lang,
-    edition: edition(lang),
-    // for the menu: every topic and format with its count, the newsroom's own pages
-    topics: topicsFor(lang).map(({ key, count }) => ({ key, count })),
-    formats: formatsFor(lang).map(({ key, count }) => ({ key, count })),
-    pages: pagesFor(lang).map((p) => ({ ...p, href: gridPage(lang, p.slug) }))
+    edition: ed,
+    // the formats the bar offers: only those the front has, each with how many
+    chips: {
+      total: all.length,
+      list: [...KINDS, 'Video'].map((f) => ({ f, n: all.filter((s) => isIt(s, f)).length })).filter((x) => x.n)
+    }
   };
 }

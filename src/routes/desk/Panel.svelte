@@ -16,7 +16,8 @@
   import { base } from '$app/paths';
   import { sectionLabel, formatLabel, formatNumber, kindLabel } from '$lib/labels.js';
   import { STR, SHORT_DATE, snippet, marked, photo, closeTo, two } from '$lib/site/reel.js';
-  import { gridTopic, gridFormat, gridAuthor, storyUrl } from '../grid.js';
+  import { storyUrl } from '../grid.js';
+  import { deskTopic, deskFormat, deskAuthor, deskAuthors } from './urls.js';
 
   /* open: null, 'menu', or 'search' (the field takes the cursor at once) */
   let { lang, topics, formats, pages, open = $bindable(null) } = $props();
@@ -211,14 +212,14 @@
           {#if meant}<p class="meant">{L.meant} <button type="button" onclick={() => (q = meant)}>{meant}</button>?</p>{/if}
           <p class="mono lbl">{L.tryTopic}</p>
           <div class="chips">
-            {#each topics as t (t.key)}<a class="mono chip" href={gridTopic(t.key, lang)}>{sectionLabel(t.key, lang)}</a>{/each}
+            {#each topics as t (t.key)}<a class="mono chip" href={deskTopic(t.key, lang)}>{sectionLabel(t.key, lang)}</a>{/each}
           </div>
           <p class="mono lbl">{L.newest}</p>
           {#each index.newest as s (s.id)}{@render result(s, false)}{/each}
         {/if}
 
         {#each people as w (w.slug)}
-          <a class="res named" href={gridAuthor(w.slug)} onclick={remember}>
+          <a class="res named" href={deskAuthor(w.slug, lang)} onclick={remember}>
             <span class="sq">{#if w.photo}<img src={w.photo} alt="" loading="lazy" />{/if}</span>
             <span class="mono when">{L.writer}</span>
             <span class="what">
@@ -229,7 +230,7 @@
           </a>
         {/each}
         {#each places as t (t.key)}
-          <a class="res named" href={gridTopic(t.key, lang)} onclick={remember}>
+          <a class="res named" href={deskTopic(t.key, lang)} onclick={remember}>
             <span class="sq no mono">{topicNo(t.key)}</span>
             <span class="mono when">{L.topic}</span>
             <span class="what">
@@ -267,7 +268,7 @@
         <nav class="col" aria-label={L.topics}>
           <p class="mono lbl">{L.topics}</p>
           {#each topics as t, i (t.key)}
-            <a class="row big" href={gridTopic(t.key, lang)}>
+            <a class="row big" href={deskTopic(t.key, lang)}>
               <b class="mono">{two(i + 1, lang)}</b>
               <span class="nm">{sectionLabel(t.key, lang)}</span>
               <span class="mono ct">{L.count(num(t.count))}</span>
@@ -278,13 +279,13 @@
           {#if formats.length}
             <p class="mono lbl">{L.formats}</p>
             {#each formats as f (f.key)}
-              <a class="row" href={gridFormat(f.key, lang)}><span class="nm">{formatLabel(f.key, lang)}</span><span class="mono ct">{num(f.count)}</span></a>
+              <a class="row" href={deskFormat(f.key, lang)}><span class="nm">{formatLabel(f.key, lang)}</span><span class="mono ct">{num(f.count)}</span></a>
             {/each}
           {/if}
         </nav>
         <nav class="col" aria-label={lang === 'bn' ? 'নিউজরুম' : 'The newsroom'}>
           <p class="mono lbl">{lang === 'bn' ? 'নিউজরুম' : 'The newsroom'}</p>
-          <a class="row" href="{base}/authors"><span class="nm">{L.reporters}</span></a>
+          <a class="row" href={deskAuthors(lang)}><span class="nm">{L.reporters}</span></a>
           {#each pages as p (p.slug)}
             <a class="row" href={p.href}><span class="nm">{p.title}</span></a>
           {/each}

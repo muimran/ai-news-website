@@ -1,9 +1,6 @@
 <script>
-  /* Desk: a front page read down, in the family of Núcleo's (a site that
-     feels like a tool: a grey ground, ruled paper cards, a serif for what's
-     said and a mono for what's about it) but not its layout.
+  /* Desk's front page (the look, the bar and the menu are the layout's).
 
-     What's ours:
      - Each topic is a dossier: a tray of paper with a file tab standing on
        its top edge (its number, its name). The rail down the left is the
        drawer's index; it marks the dossier on screen.
@@ -13,18 +10,13 @@
      - The bar holds the formats. Choosing one (Investigation, Video…)
        leaves every story where it is and lets the others fade back, so the
        page never jumps.
-     Nothing moves unless the reader asks: a card lifts under the mouse.
-     - The menu and the site's own search are one sheet under the bar
-       (Panel.svelte): the Search and Menu buttons, or / from anywhere.
-
-     It shares only data with the site: the edition's stories, their
-     pictures and colours, their addresses. */
+     Nothing moves unless the reader asks: a card lifts under the mouse. */
   import { onMount } from 'svelte';
-  import { base } from '$app/paths';
   import { sectionLabel, sectionSlug, kindLabel, formatNumber, KINDS } from '$lib/labels.js';
   import { photo, two, SHORT_DATE, STR } from '$lib/site/reel.js';
-  import { storyUrl, gridIndex, gridPage } from '../../grid.js';
-  import Panel from '../Panel.svelte';
+  import { storyUrl } from '../../grid.js';
+  import { desk, isIt } from '../state.svelte.js';
+  import { deskTopic, deskAll } from '../urls.js';
 
   let { data } = $props();
   const lang = $derived(data.lang);
@@ -33,14 +25,9 @@
   const num = (n) => formatNumber(n, lang);
 
   const W = {
-    en: { front: 'Front page', latest: 'Latest', topics: 'Topics', every: 'All', video: 'Video', about: 'About', other: 'বাংলা', format: 'Format' },
-    bn: { front: 'প্রথম পাতা', latest: 'সর্বশেষ', topics: 'বিষয়', every: 'সব', video: 'ভিডিও', about: 'আমাদের কথা', other: 'English', format: 'ধরন' }
+    en: { front: 'Front page', latest: 'Latest', topics: 'Topics', video: 'Video' },
+    bn: { front: 'প্রথম পাতা', latest: 'সর্বশেষ', topics: 'বিষয়', video: 'ভিডিও' }
   };
-  const DAY = {
-    en: new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }),
-    bn: new Intl.DateTimeFormat('bn-BD-u-nu-beng', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
-  };
-
   /* the dossiers: a topic's first story, and up to four more */
   const dossiers = $derived(
     ed.pages.map((p, i) => ({
@@ -48,23 +35,13 @@
       n: two(i + 1, lang),
       label: sectionLabel(p.key, lang),
       total: p.total,
-      href: gridIndex(lang, p.key),
+      href: deskTopic(p.key, lang),
       lead: p.stories[0],
       rest: p.stories.slice(1, 5)
     }))
   );
-  const everything = $derived([ed.lead, ...ed.seconds, ...ed.pages.flatMap((p) => p.stories)]);
-
-  /* the formats in the bar: only those the page has */
-  const isIt = (s, f) => (f === 'Video' ? s.video : s.kind === f);
-  const formats = $derived(
-    [...KINDS, 'Video'].map((f) => ({ f, n: everything.filter((s) => isIt(s, f)).length })).filter((x) => x.n)
-  );
-  let format = $state(null);
-  /* the menu-and-search sheet: null, 'menu' or 'search' */
-  let panel = $state(null);
-  const out = (s) => format !== null && !isIt(s, format);
-  const formatName = (f) => (f === 'Video' ? W[lang].video : kindLabel(f, lang));
+  /* not the format chosen in the bar: it fades back where it stands */
+  const out = (s) => desk.format !== null && !isIt(s, desk.format);
 
   const mins = (s) => `${num(s.video ? s.duration || s.readTime : s.readTime)} ${L.min}`;
   const kind = (s) => (KINDS.includes(s.kind) ? kindLabel(s.kind, lang) : s.video ? W[lang].video : null);
@@ -94,12 +71,6 @@
 
 <svelte:head>
   <title>Second Order — {L.tagline}</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400..700&family=Anek+Latin:wght@400..700&family=Fraunces:opsz,wght@9..144,400..700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+Bengali:wght@500..700&display=swap"
-  />
 </svelte:head>
 
 <!-- what kind of story, in the mono: a square of the accent, or ▶ for a video -->
@@ -119,27 +90,7 @@
   <span class="sq" style:--bg={s.tone?.bg}>{#if p}<img src={p.small} alt="" loading="lazy" />{/if}</span>
 {/snippet}
 
-<div class="dk" {lang}>
-  <header class="bar">
-    <a class="name" href="{base}/desk/{lang}">Second Order</a>
-    <div class="chips" role="group" aria-label={W[lang].format}>
-      <button type="button" class="chip" aria-pressed={format === null} onclick={() => (format = null)}>{W[lang].every}<small>{num(everything.length)}</small></button>
-      {#each formats as x (x.f)}
-        <button type="button" class="chip" aria-pressed={format === x.f} onclick={() => (format = format === x.f ? null : x.f)}
-          >{formatName(x.f)}<small>{num(x.n)}</small></button
-        >
-      {/each}
-    </div>
-    <span class="date">{DAY[lang].format(new Date(ed.date))}</span>
-    <button type="button" class="tool seek" aria-expanded={panel === 'search'} aria-controls="desk-menu" onclick={() => (panel = panel === 'search' ? null : 'search')}
-      ><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.75" /><path d="M10 10l4.5 4.5" /></svg><span>{L.search}</span><kbd>/</kbd></button
-    >
-    <a class="lang" href="{base}/desk/{lang === 'en' ? 'bn' : 'en'}" lang={lang === 'en' ? 'bn' : 'en'}>{W[lang].other}</a>
-    <button type="button" class="tool" aria-expanded={!!panel} aria-controls="desk-menu" onclick={() => (panel = panel ? null : 'menu')}>{panel ? L.close : L.menu}</button>
-  </header>
-  <Panel {lang} topics={data.topics} formats={data.formats} pages={data.pages} bind:open={panel} />
-
-  <div class="shell">
+<div class="shell">
     <!-- the drawer's index -->
     <nav class="rail" aria-label={W[lang].topics}>
       <p class="rl">{W[lang].topics}</p>
@@ -185,7 +136,7 @@
       <section class="card wire" aria-labelledby="wire-h">
         <header>
           <h2 id="wire-h">{W[lang].latest}</h2>
-          <a href={gridIndex(lang)}>{L.all} · {num(ed.total)} →</a>
+          <a href={deskAll(lang)}>{L.all} · {num(ed.total)} →</a>
         </header>
         <ol>
           {#each ed.inside.slice(0, 8) as s (s.slug)}
@@ -231,20 +182,10 @@
         </section>
       {/each}
 
-      <footer class="end">
-        <span class="name">Second Order</span>
-        <span>{L.tagline}</span>
-        <a href={gridIndex(lang)}>{L.all} →</a>
-        <a href={gridPage(lang, 'about')}>{W[lang].about} →</a>
-      </footer>
     </main>
-  </div>
 </div>
 
 <style>
-  :global(body) {
-    margin: 0;
-  }
   .sr {
     position: absolute;
     width: 1px;
@@ -254,64 +195,11 @@
     white-space: nowrap;
   }
 
-  /* A grey ground, paper on it, one ink and one accent. Three voices: a
-     serif for what's said, a sans for the page's own words, a mono for
-     the facts about a story. */
-  .dk {
-    --ground: #e7e5e0;
-    --card: #fbfaf6;
-    --ink: #161615;
-    --mute: color-mix(in srgb, var(--ink) 60%, var(--card));
-    --hair: color-mix(in srgb, var(--ink) 14%, var(--card));
-    --accent: #ee4a1b;
-    --bar: 3.5rem;
-    --pad: clamp(1rem, 2vw, 1.75rem);
-    --gap: 1rem;
-    --serif: 'Fraunces', 'Noto Serif Bengali', Georgia, serif;
-    --sans: 'Anek Latin', 'Anek Bangla', system-ui, sans-serif;
-    --mono: 'IBM Plex Mono', 'Anek Bangla', ui-monospace, monospace;
-    --hw: 560; /* a headline's weight, */
-    --hlh: 1.04; /* its leading, */
-    --hls: -0.022em; /* its spacing */
-    --hk: 1; /* and its size against the English */
-    --ms: 0.6875rem; /* the mono's size */
-    --mt: 0.07em; /* and its spacing */
-    min-height: 100dvh;
-    background: var(--ground);
-    color: var(--ink);
-    font-family: var(--sans);
-    font-size: 1rem;
-    -webkit-font-smoothing: antialiased;
-  }
-  /* Bangla stands taller, has no capitals to space out, and reads small
-     at the mono's size */
-  .dk:lang(bn) {
-    --serif: 'Noto Serif Bengali', 'Fraunces', Georgia, serif;
-    --sans: 'Anek Bangla', 'Anek Latin', system-ui, sans-serif;
-    --mono: 'Anek Bangla', 'IBM Plex Mono', ui-monospace, monospace;
-    --hw: 600;
-    --hlh: 1.34;
-    --hls: 0;
-    --hk: 0.82;
-    --ms: 0.8125rem;
-    --mt: 0.01em;
-  }
-  @media (prefers-color-scheme: dark) {
-    .dk {
-      --ground: #0f0f0e;
-      --card: #1b1b19;
-      --ink: #ecebe5;
-    }
-  }
   a {
     color: inherit;
     text-decoration: none;
   }
   /* the mono voice */
-  .chip,
-  .date,
-  .lang,
-  .tool,
   .rl,
   .rail b,
   .rail i,
@@ -320,8 +208,7 @@
   .wire header,
   .wire time,
   .tab b,
-  .more,
-  .end {
+  .more {
     font-family: var(--mono);
     font-size: var(--ms);
     font-weight: 500;
@@ -336,125 +223,6 @@
     letter-spacing: var(--hls);
     font-variation-settings: 'opsz' 72;
     text-wrap: balance;
-  }
-
-  /* ---- the bar: the name, the formats, the day, the other language ---- */
-  .bar {
-    position: sticky;
-    top: 0;
-    z-index: 5;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    gap: var(--pad);
-    height: var(--bar);
-    padding: 0 var(--pad);
-    border-bottom: 1px solid var(--ink);
-    background: var(--card);
-  }
-  .name {
-    flex: none;
-    font-family: var(--serif);
-    font-size: 1.375rem;
-    font-weight: 650;
-    font-variation-settings: 'opsz' 72;
-    letter-spacing: -0.03em;
-    line-height: 1;
-    white-space: nowrap;
-  }
-  .chips {
-    flex: 1;
-    display: flex;
-    gap: 0.4rem;
-    min-width: 0;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .chips::-webkit-scrollbar {
-    display: none;
-  }
-  .chip {
-    flex: none;
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.5rem;
-    margin: 0;
-    padding: 0.45rem 0.65rem 0.4rem;
-    border: 1px solid var(--ink);
-    background: var(--card);
-    color: var(--ink);
-    white-space: nowrap;
-    cursor: pointer;
-  }
-  .chip small {
-    font-size: inherit;
-    color: var(--mute);
-  }
-  .chip:hover,
-  .chip:focus-visible {
-    background: var(--hair);
-    outline: none;
-  }
-  .chip[aria-pressed='true'] {
-    background: var(--ink);
-    color: var(--card);
-  }
-  .chip[aria-pressed='true'] small {
-    color: inherit;
-    opacity: 0.6;
-  }
-  .date {
-    flex: none;
-    color: var(--mute);
-    white-space: nowrap;
-  }
-  .lang {
-    flex: none;
-    padding: 0.45rem 0.65rem 0.4rem;
-    border: 1px solid var(--ink);
-    letter-spacing: 0.02em;
-    text-transform: none;
-  }
-  .lang:hover,
-  .lang:focus-visible,
-  .tool:hover,
-  .tool:focus-visible,
-  .tool[aria-expanded='true'] {
-    background: var(--ink);
-    color: var(--card);
-    outline: none;
-  }
-  /* search and menu: two buttons to the one sheet */
-  .tool {
-    flex: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin: 0;
-    padding: 0.45rem 0.65rem 0.4rem;
-    border: 1px solid var(--ink);
-    background: var(--card);
-    color: var(--ink);
-    white-space: nowrap;
-    cursor: pointer;
-  }
-  .tool svg {
-    width: 0.8rem;
-    height: 0.8rem;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.6;
-  }
-  .tool kbd {
-    font: inherit;
-    opacity: 0.55;
-  }
-  .lang,
-  .tool + .lang {
-    margin-left: calc(0.4rem - var(--pad));
-  }
-  .lang + .tool {
-    margin-left: calc(0.4rem - var(--pad));
   }
 
   /* ---- the rail beside the page ---- */
@@ -736,7 +504,7 @@
     text-decoration: underline;
     text-underline-offset: 0.18em;
   }
-  .dk:lang(bn) .wire li a {
+  :global(.dk:lang(bn)) .wire li a {
     grid-template-columns: 6.5rem minmax(0, 1fr);
   }
 
@@ -867,35 +635,12 @@
     text-underline-offset: 0.16em;
   }
 
-  /* ---- the end ---- */
-  .end {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.75rem 2rem;
-    margin-top: 1.5rem;
-    padding: 1.25rem 0 2.5rem;
-    border-top: 1px solid var(--ink);
-    color: var(--mute);
-  }
-  .end .name {
-    margin-right: auto;
-    color: var(--ink);
-    text-transform: none;
-  }
-  .end a:hover,
-  .end a:focus-visible {
-    color: var(--ink);
-    outline: none;
-  }
-
   /* ---- narrower: the rail goes; the tabs still name the dossiers ---- */
   @media (max-width: 1099px) {
     .shell {
       grid-template-columns: minmax(0, 1fr);
     }
-    .rail,
-    .date {
+    .rail {
       display: none;
     }
     .main {
@@ -906,33 +651,6 @@
 
   /* ---- a phone: one column; the formats on a line of their own ---- */
   @media (max-width: 759px) {
-    .dk {
-      --bar: 5.75rem;
-    }
-    .bar {
-      flex-wrap: wrap;
-      align-content: center;
-      row-gap: 0.55rem;
-    }
-    .name {
-      margin-right: auto;
-      font-size: 1.25rem;
-    }
-    .seek span,
-    .seek kbd {
-      display: none;
-    }
-    .seek {
-      padding: 0.55rem 0.6rem;
-    }
-    .chips {
-      order: 3;
-      flex: none;
-      width: calc(100% + var(--pad));
-      margin-right: calc(-1 * var(--pad));
-      padding-right: var(--pad);
-      box-sizing: border-box;
-    }
     .main {
       gap: 1.75rem;
       padding-top: 1rem;
