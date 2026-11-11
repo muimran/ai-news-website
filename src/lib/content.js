@@ -16,6 +16,8 @@
 
 import { base } from '$app/paths';
 import { SECTION_ORDER } from './labels.js';
+import { smart } from './typo.js';
+import yaml from 'js-yaml';
 
 /* Labels live in labels.js so pages can use them without importing every
    article; re-exported here so existing imports keep working. */
@@ -32,9 +34,19 @@ const modules = import.meta.glob('/content/articles/*/**/*.md', {
 export const LANGS = ['en', 'bn'];
 export const DEFAULT_LANG = 'en';
 
+/* A story's header is YAML, as the CMS writes it, including lists over
+   several lines (its updates and corrections). Read as YAML; if a header
+   hand-written in a looser style doesn't parse, fall back to reading it
+   line by line, as the site always has, so no story breaks. */
 function parseFrontmatter(raw) {
   const match = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/.exec(raw);
   if (!match) return { data: {}, body: raw };
+  try {
+    const data = yaml.load(match[1]);
+    if (data && typeof data === 'object') return { data, body: match[2] };
+  } catch {
+    // below
+  }
   const data = {};
   for (const line of match[1].split(/\r?\n/)) {
     const idx = line.indexOf(':');
@@ -133,8 +145,8 @@ function toStory(path, raw) {
     file: file.replace(/\.md$/, ''),
     typed: !!(data.slug && clean(data.slug)),
     lang,
-    title: data.title || 'Untitled',
-    dek: data.dek || '',
+    title: smart(data.title) || 'Untitled',
+    dek: smart(data.dek) || '',
     section: data.section || 'Latest',
     kind: data.kind || '', // optional: no type, no label
     tags: Array.isArray(data.tags) ? data.tags : [],
@@ -154,8 +166,23 @@ function toStory(path, raw) {
        Generated artwork is the FALLBACK when src is absent or fails to load,
        not the default. */
     image: data.image
-      ? { src: base + data.image, alt: data.imageAlt || '', credit: data.imageCredit || '' }
+      ? { src: base + data.image, alt: data.imageAlt || '', credit: smart(data.imageCredit) || '' }
       : null,
+    /* How the story was reported, shown with its facts: counts the writer
+       gives, and the time in their own words ("Six months of reporting") */
+    interviews: Math.max(0, Math.floor(Number(data.interviews) || 0)),
+    documents: Math.max(0, Math.floor(Number(data.documents) || 0)),
+    reporting: smart(data.reporting) || '',
+    // where readers can see the evidence: documents, data (web links only)
+    sources: (Array.isArray(data.sources) ? data.sources : [])
+      .filter((x) => x && x.label && /^https?:\/\//.test(String(x.url || '').trim()))
+      .map((x) => ({ label: smart(String(x.label).trim()), url: String(x.url).trim() })),
+    /* every change after publishing, newest first: an update, or a
+       correction saying what was wrong */
+    updates: (Array.isArray(data.updates) ? data.updates : [])
+      .filter((u) => u && u.note && !isNaN(new Date(u.date)))
+      .map((u) => ({ date: new Date(u.date).toISOString(), kind: u.kind === 'Correction' ? 'Correction' : 'Update', note: smart(String(u.note).trim()) }))
+      .sort((a, b) => (a.date < b.date ? 1 : -1)),
     // the card's colour, when an editor sets it; otherwise it's read from the picture
     cardColour: /^#[0-9a-f]{6}$/i.test(data.cardColour || '') ? data.cardColour : '',
 

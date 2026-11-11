@@ -19,6 +19,7 @@
 import matter from 'gray-matter';
 import { marked } from 'marked';
 import { base } from '$app/paths';
+import { smartHtml } from '$lib/typo.js';
 import { authorSlug } from '$lib/site/reel.js';
 
 const SOCIALS = [
@@ -51,7 +52,7 @@ const REGISTRY = Object.entries(files).map(([path, raw]) => {
     role_bn: data.role_bn || null,
     photo: atBase(data.photo),
     links: SOCIALS.filter(([key]) => data[key]).map(([key, label]) => ({ key, label, href: data[key] })),
-    bio: content.trim() ? marked.parse(content) : standIn(data.name, data.role)
+    bio: content.trim() ? smartHtml(marked.parse(content)) : standIn(data.name, data.role)
   };
 });
 

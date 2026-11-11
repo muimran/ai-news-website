@@ -10,6 +10,8 @@
   import Mark from './Mark.svelte';
   import BottomRow from './BottomRow.svelte';
   import { ui } from './ui.svelte.js';
+  import { whole } from './sentences.js';
+  import { memory, saw, progress, isRead, isBegun, isNew } from './memory.svelte.js';
   import { gridIndex, gridFormat, storyUrl } from './grid.js';
 
   /* `section` or `format`: one topic's reel or one format's; neither is
@@ -35,6 +37,10 @@
     return { items: [lead, ...pairs], doorIn: true };
   });
   const items = $derived(shaped.items);
+  // every card in the reel has been shown; next visit none of them is new
+  $effect(() => {
+    if (memory.ready) saw(items.filter((it) => it.story).map((it) => it.story));
+  });
   const doorIn = $derived(shaped.doorIn);
   const allHref = $derived(format ? `${gridFormat(format, lang)}/all` : gridIndex(lang, section));
   const issue = $derived(reel.latest ?? []);
@@ -200,9 +206,12 @@
 {#snippet card(it, half)}
   {@const s = it.story}
   {@const pic = photo(s)}
-  <a class="card" class:half class:bare={!pic} class:toned={pic} style:--card={s.tone?.bg} style:--on={s.tone?.fg} href={storyUrl(s)} data-n={it.n} draggable="false" onclick={() => (hero = s.slug)}>
+  {@const p = progress(s)}
+  <a class="card" class:half class:bare={!pic} class:toned={pic} class:read={isRead(s)} style:--card={s.tone?.bg} style:--on={s.tone?.fg} style:--p={p || null} href={storyUrl(s)} data-n={it.n} draggable="false" onclick={() => (hero = s.slug)}>
+    <!-- how far the reader got: the label row's foot fills, like a rule
+         being drawn, and a story begun offers to continue -->
     <span class="lab">
-      <b class="n">{two(it.n, lang)}</b>
+      <b class="n">{#if isNew(s)}<i class="new" title={L.fresh}></i>{/if}{two(it.n, lang)}</b>
       {#if !section}<span class="sec">{sectionLabel(s.section, lang)}</span>{/if}
       {#if KINDS.includes(s.kind) && s.kind !== format}<span class="kind">{kindLabel(s.kind, lang)}</span>{/if}
     </span>
@@ -217,8 +226,9 @@
       {/if}
       <span class="cap">
         <span class="title">{s.title}</span>
-        {#if s.dek && !half}<span class="dek">{s.dek}</span>{/if}
-        {#if s.author}<span class="by">{s.author}</span>{/if}
+        {#if s.dek && !half}<span class="dek" use:whole={s.dek}>{s.dek}</span>{/if}
+        {#if s.author}<span class="by">{s.author}{#if isRead(s)}<span class="was"> · {L.done}</span>{/if}</span>{/if}
+        {#if isBegun(s)}<span class="goon">{L.goOn} · {num(Math.round(p * 100))}%</span>{/if}
       </span>
     </span>
     </span>
@@ -382,6 +392,26 @@
   .card:focus-visible .lab::before {
     transform: scaleY(1);
   }
+  /* how far in the reader got, drawn along the label row's foot */
+  .card[style*='--p'] .lab::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: calc(var(--p) * 100%);
+    height: 3px;
+    background: var(--o);
+  }
+  /* new since the last visit: a dot beside the number */
+  .new {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-right: 0.35em;
+    border-radius: 50%;
+    background: var(--o);
+    vertical-align: 0.15em;
+  }
   .card:hover .lab,
   .card:focus-visible .lab,
   .card:hover .lab .n,
@@ -410,9 +440,9 @@
     font-size: calc(0.875rem * var(--k));
     font-weight: 540;
   }
-  /* the format sits at the row's far end and glows: its letters lit in
-     lilac light, a soft halo round them, as the lilac lights up on the ink
-     bar when the card is pointed at */
+  /* the format sits at the row's far end in lilac, crisp (a halo round
+     letters this small read as blur), lighter on the ink bar when the
+     card is pointed at */
   .kind {
     flex: none;
     margin-left: auto;
@@ -420,9 +450,6 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--i);
-    text-shadow:
-      0 0 0.3em var(--i2),
-      0 0 0.9em var(--i2);
   }
   .card:hover .kind,
   .card:focus-visible .kind {
@@ -549,6 +576,20 @@
     line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+  .by .was {
+    opacity: 0.7;
+  }
+  .goon {
+    display: inline-block;
+    align-self: flex-start;
+    margin-top: 0.15rem;
+    padding: 0.35em 0.6em;
+    font: 500 calc(0.6875rem * var(--k)) / 1 var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--on, var(--ink));
+    color: var(--card, var(--paper));
   }
   .by {
     font: 500 calc(0.6875rem * var(--k)) / 1 var(--mono);

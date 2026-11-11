@@ -10,6 +10,7 @@
   import Mark from './Mark.svelte';
   import { storyUrl } from './grid.js';
   import { ui } from './ui.svelte.js';
+  import { memory, saw, isRead, isNew } from './memory.svelte.js';
 
   /* `aside`: a page that, like a story, has the screen to itself */
   let { lang, stories, current = null, aside = false, shut = false } = $props();
@@ -18,6 +19,10 @@
 
   let only = $state(null); // a topic key, or every topic
   const shown = $derived(only ? stories.filter((s) => s.section === only) : stories);
+  // the whole list has been shown once the pane is open
+  $effect(() => {
+    if (memory.ready && (!folded || ui.sheet)) saw(stories);
+  });
 
   /* The site always opens with the pane open; folding lasts until reload. */
   function fold(v) {
@@ -43,7 +48,8 @@
 <aside class="latest" class:folded class:sheet={ui.sheet} class:onstory={story} aria-label={L.latest}>
   {#if folded && !ui.sheet}
     <button type="button" class="strip fill" onclick={unfold}>
-      <span>{L.latest} [+]</span>
+      <span class="go" aria-hidden="true"></span>
+      <span class="word">{L.latest}</span>
     </button>
   {:else}
     <div class="phead">
@@ -66,8 +72,8 @@
     <ol class="list">
       {#each shown as s (s.slug)}
         <li>
-          <a class="row fill" href={storyUrl(s)} aria-current={current === s.slug ? 'page' : undefined} lang={s.lang}>
-            <span class="d">{SHORT_DATE[s.lang].format(new Date(s.date))}</span>
+          <a class="row fill" class:read={isRead(s)} href={storyUrl(s)} aria-current={current === s.slug ? 'page' : undefined} lang={s.lang}>
+            <span class="d">{SHORT_DATE[s.lang].format(new Date(s.date))}{#if isNew(s)}<i class="new" title={L.fresh}><span class="sr">{L.fresh}</span></i>{/if}</span>
             <span class="h"><Mark key={s.section} size={11} />{s.title}</span>
           </a>
         </li>
@@ -125,22 +131,43 @@
   .onstory:not(.sheet) {
     display: none;
   }
-  /* folded: one strip, its label turned to read up it */
+  /* folded: one strip, its label turned to read up it, under an arrow
+     pointing the way it opens; tinted faintly, like the phone's Latest
+     button, to say it's a thing to press */
   .strip {
     flex: 1;
     display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: var(--in) 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.4rem;
+    padding: 0 0 var(--in);
     border: 0;
     background: none;
-    color: var(--ink);
+    color: var(--o-text);
     cursor: pointer;
+    transition: background-color 0.15s;
   }
-  .strip span {
+  .strip:hover {
+    background: color-mix(in srgb, var(--ink) 5%, transparent);
+  }
+  /* a chevron drawn as two strokes, so its weight can be set */
+  .strip .go {
+    width: 0.5rem;
+    height: 0.5rem;
+    /* centred on the cards' label row beside it */
+    margin: calc((var(--label) - 0.5rem) / 2) 0.2rem 0 0;
+    border: solid currentColor;
+    border-width: 2.5px 2.5px 0 0;
+    transform: rotate(45deg);
+    transition: transform 0.2s;
+  }
+  .strip:hover .go {
+    transform: translateX(3px) rotate(45deg);
+  }
+  .strip .word {
     writing-mode: vertical-rl;
     transform: rotate(180deg);
-    font: 500 calc(0.6875rem * var(--k)) / 1 var(--mono);
+    font: 700 calc(0.6875rem * var(--k)) / 1 var(--mono);
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
@@ -257,13 +284,52 @@
     font-stretch: 85%;
     line-height: 1.25;
   }
+  /* the mark hangs in front, so a title's lines all start together */
+  .h {
+    padding-left: calc(11px + 0.4em);
+    text-indent: calc(-11px - 0.4em);
+  }
   .h :global(.mark) {
     display: inline-block;
     margin-right: 0.4em;
     vertical-align: -0.05em;
   }
+  /* read: the headline steps back, so what's left to read stands out */
+  .row.read .h {
+    color: var(--mute);
+    font-weight: 480;
+  }
+  .row.read:hover .h,
+  .row.read:focus-visible .h {
+    color: inherit;
+  }
+  /* new since the last visit: a dot in the margin before its date */
+  .row {
+    position: relative;
+  }
+  .new {
+    position: absolute;
+    left: calc(var(--in) / 2 - 3px);
+    top: calc(var(--u) + 0.45em);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--o);
+  }
+  .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
   .row:lang(bn) .h {
     line-height: 1.5;
+  }
+  /* Bangla writes the month in full; the widest (২৮ ফেব্রুয়ারি) is 68px
+     (the dates are the same size on every screen, so a fixed width) */
+  .row:lang(bn) {
+    grid-template-columns: 4.5rem minmax(0, 1fr);
   }
 
   /* a phone: no room for a pane; it opens as a panel from the topics row */

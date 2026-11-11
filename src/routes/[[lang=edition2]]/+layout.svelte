@@ -12,9 +12,11 @@
   import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
   import { sectionLabel, formatLabel, formatNumber, kindLabel } from '$lib/labels.js';
   import { STR, SHORT_DATE, snippet, marked, photo, closeTo } from '$lib/site/reel.js';
+  import { ORIGIN } from '$lib/site/origin.js';
   import Mark from '../Mark.svelte';
   import Latest from '../Latest.svelte';
   import { ui } from '../ui.svelte.js';
+  import { wake } from '../memory.svelte.js';
   import { gridHome, gridTopic, gridFormat, gridAuthor, storyUrl } from '../grid.js';
 
   let { data, children } = $props();
@@ -35,6 +37,22 @@
      pages (the six in the menu's last group, and each writer's page). All
      of them close back to where the reader was browsing. */
   const away = $derived(reading || !!page.data.newsroom);
+  /* What a shared link shows on Facebook, LinkedIn, X and in messages: a
+     story's own headline, summary and picture; every other page the name,
+     the blurb and the plain name card. */
+  // paths here are relative to the page (../../uploads/…), so resolve them from it
+  const full = (src) => new URL(src, ORIGIN + page.url.pathname).href;
+  const share = $derived.by(() => {
+    const s = page.data.story;
+    const pic = s && photo(s);
+    return {
+      title: s ? s.title : 'Second Order',
+      text: (s && s.dek) || STR[lang].blurb,
+      image: full(pic ? pic.src : `${base}/social.png`),
+      url: ORIGIN + page.url.pathname,
+      story: s
+    };
+  });
   /* Only the front page opens with the Latest pane open; every other page
      (a topic, a format, the archive, a writer) starts with it folded, and
      opening it there lasts until the next page. Coming home opens it. */
@@ -63,6 +81,8 @@
   $effect(() => {
     document.documentElement.lang = lang;
   });
+  // what this browser remembers of its reader, once the page is up
+  $effect(wake);
 
   /* One panel, the menu, dropped into the frame over the reel. Search is
      its first row: typing there turns the menu into results. */
@@ -237,12 +257,22 @@
 <svelte:window onkeydown={keys} />
 
 <svelte:head>
+  <meta name="description" content={share.text} />
+  <meta property="og:site_name" content="Second Order" />
+  <meta property="og:type" content={share.story ? 'article' : 'website'} />
+  <meta property="og:title" content={share.title} />
+  <meta property="og:description" content={share.text} />
+  <meta property="og:image" content={share.image} />
+  <meta property="og:url" content={share.url} />
+  <meta property="og:locale" content={lang === 'bn' ? 'bn_BD' : 'en_GB'} />
+  {#if share.story}<meta property="article:published_time" content={share.story.dateISO} />{/if}
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
   <link rel="preconnect" href="https://images.unsplash.com" />
   <link
     rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wdth,wght@75..100,400..700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Bengali:wdth,wght@62.5..100,400..700&family=Gelasio:ital,wght@0,400;0,700;1,400&family=Noto+Serif+Bengali:wght@400;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wdth,wght@75..100,400..700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+Bengali:wdth,wght@62.5..100,400..700&family=Gelasio:ital,wght@0,400;0,700;1,400&family=Noto+Serif+Bengali:wght@400;700&display=swap"
   />
 </svelte:head>
 
@@ -256,7 +286,7 @@
     {/if}
   </div>
 {:else}
-<div class="g" {lang} class:story={away} class:folded={ui.folded || ((away || !home || ui.reading) && !ui.pin)} class:reading={ui.reading} class:deep={ui.deep || ui.wide} class:far={ui.deep} class:bare={ui.deep && !ui.up && !open} class:over={reading && !open} class:begun={reading && ui.begun && !ui.up && !open}>
+<div class="g" {lang} class:story={away} class:folded={ui.folded || ((away || !home || ui.reading) && !ui.pin)} class:reading={ui.reading} class:deep={ui.deep || ui.wide} class:far={ui.deep} class:bare={ui.deep && !ui.up && !open} class:over={reading && !open} class:begun={reading && ui.begun && !ui.up && !open} class:pic={ui.tone === 'pic'} class:paper={ui.tone === 'paper'} style:--top-on={page.data.story?.tone?.fg}>
   <!-- on a phone a story's topic is the first of its facts, so the header
        doesn't give it a row of its own there -->
   <!-- with the menu or search open, that panel is the page: the topic's
@@ -600,6 +630,17 @@
   }
   .g.over .top .cell {
     border-color: transparent;
+  }
+  /* a story with a photo says what's beneath: over the photo, its own text
+     colour; over the page, plain ink. (A special's top may be anything, so
+     there the difference blend above still does the work.) */
+  .g.over.pic .top,
+  .g.over.paper .top {
+    mix-blend-mode: normal;
+    color: var(--ink);
+  }
+  .g.over.pic .top {
+    color: var(--top-on, #fff);
   }
   /* A phone's header leaves as soon as the reading starts, quickly (as De
      Correspondent's does: a quarter second, easing out), and comes back

@@ -5,6 +5,7 @@
 import matter from 'gray-matter';
 import { marked } from 'marked';
 import { base } from '$app/paths';
+import { smartHtml } from '$lib/typo.js';
 
 const files = import.meta.glob('/content/pages/*/*.md', { query: '?raw', import: 'default', eager: true });
 
@@ -17,7 +18,7 @@ const PAGES = Object.entries(files)
       slug: file.replace(/\.md$/, ''),
       title: data.title,
       order: Number(data.order) || 99,
-      html: content.trim() ? marked.parse(content) : null
+      html: content.trim() ? smartHtml(marked.parse(content)) : null
     };
   })
   .sort((a, b) => a.order - b.order);

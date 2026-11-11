@@ -164,10 +164,62 @@ collections:
       value: special
     - label: Special — full screen, its own design with no site frame
       value: special-full
+  - name: interviews
+    label: Interviews
+    widget: number
+    value_type: int
+    required: false
+    hint: How many people the reporting drew on. Shown beside the story under "How we reported it"; leave empty to leave it out.
+  - name: documents
+    label: Documents
+    widget: number
+    value_type: int
+    required: false
+    hint: How many documents (contracts, records, filings) the reporting rests on.
+  - name: reporting
+    label: Reporting time
+    widget: string
+    required: false
+    hint: In words, as it should read, e.g. "Six months of reporting".
+  - name: sources
+    label: Documents and data
+    label_singular: Link
+    widget: list
+    required: false
+    hint: Where readers can see the evidence for themselves (documents on DocumentCloud or Google Drive, a dataset on GitHub). Shown beside the story under "How we reported it".
+    fields:
+    - name: label
+      label: Link text
+      widget: string
+      hint: What the reader gets, e.g. "Read the contracts" or "Get the data".
+    - name: url
+      label: Link
+      widget: string
+  - name: updates
+    label: Updates and corrections
+    label_singular: Change
+    widget: list
+    required: false
+    hint: Every change made after publishing. Each is shown, dated, at the foot of the story, and the latest beside it. A correction says plainly what was wrong.
+    fields:
+    - name: date
+      label: Date
+      widget: datetime
+      format: YYYY-MM-DD
+    - name: kind
+      label: Type
+      widget: select
+      default: Update
+      options:
+      - Update
+      - Correction
+    - name: note
+      label: What changed
+      widget: text
   - name: body
     label: Story
     widget: markdown
-    hint: For a photo across the full width of the page, add a Wide photo block (or put a photo on a line of its own) with a caption and credit.
+    hint: 'For a photo across the full width of the page, add a Wide photo block (or put a photo on a line of its own) with a caption and credit. For a source note in the margin, type [^1] straight after the sentence, and anywhere below it, on a line of its own, [^1]: and the source (use [^2] for the next, and so on). To point readers to another of our stories, paste its link on a line of its own: it shows as a card beside the text. For a pull quote, start the line with > and put who said it on the next line, starting with — (a dash).'
 - name: articles_bn
   label: প্রতিবেদন — বাংলা
   label_singular: বাংলা প্রতিবেদন
@@ -316,7 +368,112 @@ collections:
       value: special
     - label: Special — full screen, its own design with no site frame
       value: special-full
+  - name: interviews
+    label: সাক্ষাৎকার
+    widget: number
+    value_type: int
+    required: false
+    hint: প্রতিবেদনে কতজনের সঙ্গে কথা বলা হয়েছে। প্রতিবেদনের পাশে "যেভাবে প্রতিবেদনটি তৈরি" অংশে দেখায়; না দিলে দেখাবে না।
+  - name: documents
+    label: নথি
+    widget: number
+    value_type: int
+    required: false
+    hint: প্রতিবেদনটি কতগুলো নথির (চুক্তি, রেকর্ড, দাখিলপত্র) ওপর দাঁড়িয়ে।
+  - name: reporting
+    label: অনুসন্ধানের সময়
+    widget: string
+    required: false
+    hint: যেভাবে পড়া উচিত, সেভাবে লিখুন, যেমন "ছয় মাসের অনুসন্ধান"।
+  - name: sources
+    label: নথি ও ডেটা
+    label_singular: লিংক
+    widget: list
+    required: false
+    hint: পাঠক নিজে যেখানে প্রমাণ দেখতে পারবেন (ডকুমেন্টক্লাউড বা গুগল ড্রাইভে নথি, গিটহাবে ডেটা)। প্রতিবেদনের পাশে "যেভাবে প্রতিবেদনটি তৈরি" অংশে দেখায়।
+    fields:
+    - name: label
+      label: লিংকের লেখা
+      widget: string
+      hint: পাঠক কী পাবেন, যেমন "চুক্তিগুলো পড়ুন" বা "ডেটা নিন"।
+    - name: url
+      label: লিংক
+      widget: string
+  - name: updates
+    label: হালনাগাদ ও সংশোধন
+    label_singular: পরিবর্তন
+    widget: list
+    required: false
+    hint: প্রকাশের পর প্রতিটি পরিবর্তন। প্রতিবেদনের শেষে তারিখসহ দেখায়, আর সর্বশেষটি পাশে। সংশোধনে স্পষ্ট লিখুন কী ভুল ছিল।
+    fields:
+    - name: date
+      label: তারিখ
+      widget: datetime
+      format: YYYY-MM-DD
+    - name: kind
+      label: ধরন
+      widget: select
+      default: Update
+      options:
+      - label: হালনাগাদ
+        value: Update
+      - label: সংশোধন
+        value: Correction
+    - name: note
+      label: কী বদলেছে
+      widget: text
   - name: body
     label: প্রতিবেদন
     widget: markdown
-    hint: For a photo across the full width of the page, add a Wide photo block (or put a photo on a line of its own) with a caption and credit.
+    hint: 'For a photo across the full width of the page, add a Wide photo block (or put a photo on a line of its own) with a caption and credit. মার্জিনে সূত্র দিতে বাক্যের ঠিক পরে লিখুন [^1], আর নিচে যেকোনো জায়গায় আলাদা লাইনে [^1]: এবং সূত্রটি (পরেরটির জন্য [^2], এভাবে)। আমাদের আরেকটি প্রতিবেদনের দিকে পাঠককে নিতে তার লিংক আলাদা লাইনে দিন: লেখার পাশে কার্ড হয়ে দেখাবে। উদ্ধৃতির জন্য লাইন শুরু করুন > দিয়ে, আর কে বলেছেন তা পরের লাইনে — (ড্যাশ) দিয়ে।'
+# The glossary: a term and its meaning, written once. The site explains the
+# first time each term appears in every story of that language, by itself;
+# nothing is marked inside the stories. (Two desks, as above, not an anchor.)
+- name: glossary_en
+  label: Glossary — English
+  label_singular: Term
+  folder: content/glossary/en
+  create: true
+  slug: '{{slug}}'
+  identifier_field: term
+  summary: '{{term}}'
+  sortable_fields:
+  - term
+  fields:
+  - name: term
+    label: Term
+    widget: string
+    hint: As it's usually written in a story, e.g. "open-weight model".
+  - name: also
+    label: Also written as
+    widget: list
+    required: false
+    hint: Other ways stories write it, to explain those too, e.g. "open weights". Plurals (data centres) are found without listing them.
+  - name: meaning
+    label: Meaning
+    widget: text
+    hint: Two short sentences at most, for a reader meeting the term for the first time. Plain words; no jargon to explain the jargon.
+- name: glossary_bn
+  label: শব্দকোষ — বাংলা
+  label_singular: শব্দ
+  folder: content/glossary/bn
+  create: true
+  slug: '{{slug}}'
+  identifier_field: term
+  summary: '{{term}}'
+  sortable_fields:
+  - term
+  fields:
+  - name: term
+    label: শব্দ
+    widget: string
+    hint: প্রতিবেদনে সাধারণত যেভাবে লেখা হয়, যেমন "ডেটা সেন্টার"।
+  - name: also
+    label: অন্যভাবে লেখা
+    widget: list
+    required: false
+    hint: প্রতিবেদনে শব্দটি আর যেভাবে লেখা হয়, সেগুলোও ব্যাখ্যা পাবে।
+  - name: meaning
+    label: অর্থ
+    widget: text
+    hint: বড়জোর দুটি ছোট বাক্য, প্রথমবার শব্দটি দেখছেন এমন পাঠকের জন্য। সহজ ভাষায়।

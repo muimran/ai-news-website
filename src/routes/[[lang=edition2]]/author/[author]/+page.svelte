@@ -152,8 +152,25 @@
   }
 
   @media (max-width: 759px) {
+    /* A phone's picture column is too narrow for a face: there the
+       portrait runs the full width above the name, cropped square round
+       the head and shoulders, as a story's photo runs above its headline. Everything
+       under it is one column, until the tools row, whose first cell is the
+       picture column's width, so its rule carries on down the ledger's. */
+    .who {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .portrait {
+      min-height: 0;
+      aspect-ratio: 1;
+      border-right: 0;
+      border-bottom: var(--line) solid var(--rule);
+    }
+    .portrait img {
+      object-position: 50% 25%;
+    }
     .name {
-      padding: var(--in) var(--in) var(--in);
+      padding: var(--in);
     }
     h1 {
       font-size: 2.2rem;
@@ -161,13 +178,25 @@
     .bio {
       font-size: 0.875rem;
     }
+    /* (no tracking, so its words fit the column's width exactly) */
+    .tools > .cell:first-child {
+      flex: 0 0 var(--pic);
+      box-sizing: border-box;
+      min-width: 0;
+      justify-content: center;
+      padding: 0 0.3rem;
+      letter-spacing: 0;
+    }
     .tools {
       flex-wrap: wrap;
     }
+    /* the search shares the row with the links, taking what's left of it;
+       only when they leave it too little room does it drop to a row of its
+       own (the hairline on its top edge then marks the new row) */
     .filter {
-      flex-basis: 100%;
-      border-top: 1px solid var(--hair);
+      flex: 1 1 10rem;
       border-right: 0;
+      box-shadow: 0 -1px 0 var(--hair);
     }
   }
 </style>

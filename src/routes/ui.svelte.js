@@ -7,4 +7,6 @@
 // story's wide photo is on screen, and the facts make way for it as well
 // `up`: the reader is scrolling back up, which brings the header back;
 // `begun`: just past the top, where a phone's header already leaves
-export const ui = $state({ folded: false, sheet: false, reading: false, deep: false, wide: false, up: false, begun: false, pin: false, back: 'top-left' });
+// `tone`: on a story, whether the header is over its photo ('pic') or the
+// page ('paper'); null where a page has no say (a special's own top)
+export const ui = $state({ folded: false, sheet: false, reading: false, deep: false, wide: false, up: false, begun: false, pin: false, back: 'top-left', tone: null });
