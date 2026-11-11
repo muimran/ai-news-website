@@ -16,8 +16,7 @@
   import { base } from '$app/paths';
   import { sectionLabel, formatLabel, formatNumber, kindLabel } from '$lib/labels.js';
   import { STR, SHORT_DATE, snippet, marked, photo, closeTo, two } from '$lib/site/reel.js';
-  import { storyUrl } from '../grid.js';
-  import { deskTopic, deskFormat, deskAuthor, deskAuthors } from './urls.js';
+  import { deskTopic, deskFormat, deskAuthor, deskAuthors, deskStory } from './urls.js';
 
   /* open: null, 'menu', or 'search' (the field takes the cursor at once) */
   let { lang, topics, formats, pages, open = $bindable(null) } = $props();
@@ -169,7 +168,7 @@
 
 {#snippet result(s, live)}
   {@const pic = photo(s)}
-  <a class="res" href={storyUrl(s)} onclick={live ? remember : undefined}>
+  <a class="res" href={deskStory(s)} onclick={live ? remember : undefined}>
     <span class="sq" style:--bg={s.tone?.bg}>{#if pic}<img src={pic.small} alt="" loading="lazy" />{/if}</span>
     <span class="mono when">{SHORT_DATE[lang].format(new Date(s.date))}</span>
     <span class="what">

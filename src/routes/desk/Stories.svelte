@@ -8,7 +8,7 @@
      side column): the card steps aside and every match is a row. */
   import { sectionLabel, kindLabel, formatNumber, KINDS } from '$lib/labels.js';
   import { photo, matches, SHORT_DATE, STR } from '$lib/site/reel.js';
-  import { storyUrl } from '../grid.js';
+  import { deskStory } from './urls.js';
 
   let { lang, stories, q = '', lead = true, topic = true } = $props();
   const L = $derived(STR[lang]);
@@ -39,7 +39,7 @@
 
 {#if first}
   {@const p = photo(first)}
-  <a class="first" href={storyUrl(first)} style:--bg={first.tone?.bg} style:--fg={first.tone?.fg} lang={first.lang}>
+  <a class="first" href={deskStory(first)} style:--bg={first.tone?.bg} style:--fg={first.tone?.fg} lang={first.lang}>
     {#if p}<img class="art" src={p.thumb} srcset={p.srcset} sizes="(max-width: 759px) 100vw, 40vw" alt="" />{/if}
     <span class="txt">
       <span class="mono tag"><i class="dot" aria-hidden="true"></i>{[topic && sectionLabel(first.section, first.lang), kind(first)].filter(Boolean).join(' / ') || mins(first)}</span>
@@ -57,7 +57,7 @@
         <h2 class="mono month"><span>{m.name}</span><span>{num(m.rows.length)}</span></h2>
         {#each m.rows as s (`${s.lang}/${s.ym}/${s.slug}`)}
           {@const p = photo(s)}
-          <a class="row" href={storyUrl(s)} lang={s.lang}>
+          <a class="row" href={deskStory(s)} lang={s.lang}>
             <span class="sq" style:--bg={s.tone?.bg}>{#if p}<img src={p.small} alt="" loading="lazy" />{/if}</span>
             <span class="mono when">{day(s)}</span>
             <span class="what">

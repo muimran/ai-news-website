@@ -12,3 +12,11 @@ export const deskAll = (lang) => `${at(lang)}/all`;
 export const deskAuthors = (lang) => `${at(lang)}/authors`;
 export const deskAuthor = (slug, lang) => `${at(lang)}/author/${slug}`;
 export const deskPage = (lang, slug) => `${at(lang)}/about${slug === 'about' ? '' : `/${slug}`}`;
+
+/* a story: its edition, the year and month it was filed, its slug */
+const ymOf = (s) => {
+  if (s.ym) return s.ym;
+  const d = new Date(s.date);
+  return `${d.getUTCFullYear()}/${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
+};
+export const deskStory = (s) => `${at(s.lang)}/${ymOf(s)}/${s.slug}`;

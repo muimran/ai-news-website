@@ -14,9 +14,8 @@
   import { onMount } from 'svelte';
   import { sectionLabel, sectionSlug, kindLabel, formatNumber, KINDS } from '$lib/labels.js';
   import { photo, two, SHORT_DATE, STR } from '$lib/site/reel.js';
-  import { storyUrl } from '../../grid.js';
   import { desk, isIt } from '../state.svelte.js';
-  import { deskTopic, deskAll } from '../urls.js';
+  import { deskTopic, deskAll, deskStory } from '../urls.js';
 
   let { data } = $props();
   const lang = $derived(data.lang);
@@ -108,7 +107,7 @@
       <section id="front" class="front" data-sec aria-label={W[lang].front}>
         {#if ed.lead}
           {@const p = photo(ed.lead)}
-          <a class="card lead" class:out={out(ed.lead)} href={storyUrl(ed.lead)} style:--bg={ed.lead.tone?.bg} style:--fg={ed.lead.tone?.fg}>
+          <a class="card lead" class:out={out(ed.lead)} href={deskStory(ed.lead)} style:--bg={ed.lead.tone?.bg} style:--fg={ed.lead.tone?.fg}>
             {#if p}<img class="art" src={p.thumb} srcset={p.srcset} sizes="(max-width: 759px) 100vw, 40vw" alt="" />{/if}
             <span class="txt">
               {@render tag(ed.lead, true)}
@@ -120,7 +119,7 @@
         {/if}
         <div class="seconds">
           {#each ed.seconds as s (s.slug)}
-            <a class="card second" class:out={out(s)} href={storyUrl(s)}>
+            <a class="card second" class:out={out(s)} href={deskStory(s)}>
               <span class="txt">
                 {@render tag(s, true)}
                 <span class="hl">{s.title}</span>
@@ -141,7 +140,7 @@
         <ol>
           {#each ed.inside.slice(0, 8) as s (s.slug)}
             <li class:out={out(s)}>
-              <a href={storyUrl(s)}><time>{day(s)}</time><span>{s.title}</span></a>
+              <a href={deskStory(s)}><time>{day(s)}</time><span>{s.title}</span></a>
             </li>
           {/each}
         </ol>
@@ -156,7 +155,7 @@
             <a class="more" href={d.href}>{L.count(num(d.total))} →</a>
           </header>
           <div class="tray" class:alone={!d.rest.length}>
-            <a class="card first" class:out={out(d.lead)} href={storyUrl(d.lead)} style:--bg={d.lead.tone?.bg} style:--fg={d.lead.tone?.fg}>
+            <a class="card first" class:out={out(d.lead)} href={deskStory(d.lead)} style:--bg={d.lead.tone?.bg} style:--fg={d.lead.tone?.fg}>
               {#if p}<img class="art" src={p.thumb} srcset={p.srcset} sizes="(max-width: 759px) 100vw, 30vw" alt="" loading="lazy" />{/if}
               <span class="txt">
                 {@render tag(d.lead)}
@@ -168,7 +167,7 @@
             {#if d.rest.length}
               <div class="rows">
                 {#each d.rest as s (s.slug)}
-                  <a class="row" class:out={out(s)} href={storyUrl(s)}>
+                  <a class="row" class:out={out(s)} href={deskStory(s)}>
                     <span class="txt">
                       <span class="hl">{s.title}</span>
                       <span class="by">{[kind(s), s.author, mins(s)].filter(Boolean).join(' · ')}{#if s.video}<i class="tri" aria-hidden="true"></i>{/if}</span>
