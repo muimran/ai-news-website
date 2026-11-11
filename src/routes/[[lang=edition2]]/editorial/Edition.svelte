@@ -24,8 +24,8 @@
   const num = (n) => formatNumber(n, lang);
 
   const W = {
-    en: { front: 'Front page' },
-    bn: { front: 'প্রথম পাতা' }
+    en: { front: 'Front page', video: 'Video' },
+    bn: { front: 'প্রথম পাতা', video: 'ভিডিও' }
   };
   /* the edition's date as a paper prints it under its name */
   const EDITION = {
@@ -53,6 +53,18 @@
     if (count === 2) return { cols: 'minmax(0, 2.4fr) minmax(0, 5fr) minmax(0, 4fr)', rows, areas: '"h a b" "h a b"' };
     return { cols: 'minmax(0, 2.4fr) minmax(0, 9fr)', rows, areas: '"h a" "h a"' };
   }
+  /* How much of a page's width its ink column takes, and how many rules
+     part its columns: the front page is cut to leave exactly the first
+     topic's ink column showing at the screen's edge, none of its lead. */
+  const peek = $derived.by(() => {
+    const p = ed.pages[0];
+    if (!p) return { share: 0, gaps: 0 };
+    const fr = [...shape(p.stories.length, false).cols.matchAll(/(?:repeat\((\d+), )?minmax\(0, ([\d.]+)fr\)/g)].flatMap((m) =>
+      Array(+m[1] || 1).fill(+m[2])
+    );
+    return { share: fr[0] / fr.reduce((x, y) => x + y), gaps: fr.length - 1 };
+  });
+
   /* a story's part on its page: the lead, then one with its picture, then
      words alone */
   const roleOf = (i) => (i === 0 ? 'lead' : i === 1 ? 'pic' : 'word');
@@ -151,10 +163,16 @@
   <title>Second Order — {L.tagline}</title>
 </svelte:head>
 
-{#snippet story(s, role, area, opts = {})}
+<!-- A video says so three ways: ▶, its type and how long it runs, in orange
+     where the type goes; its picture, always, even where the others are
+     words alone; and a square of ink with ▶ in the cell's corner. -->
+{#snippet story(s, slot, area, opts = {})}
+  {@const role = s.video && slot === 'word' ? 'pic' : slot}
   {@const pic = role === 'word' ? null : photo(s)}
+  {@const mins = `${num(s.video ? s.duration || s.readTime : s.readTime)} ${L.min}`}
   <a
     class="st {role}"
+    class:video={s.video}
     class:toned={pic}
     class:wide={opts.wide && pic}
     class:fill={!pic}
@@ -169,13 +187,18 @@
       <!-- always there, empty or not, so the headlines in a row start level -->
       <span class="kick">
         {#if opts.front}<Mark key={s.section} size={14} /><span class="sl">{sectionLabel(s.section, lang)}</span>{/if}
-        {#if KINDS.includes(s.kind)}<span class="kind">{kindLabel(s.kind, lang)}</span>{/if}
+        {#if s.video}
+          <span class="kind watch"
+            ><svg class="tri" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 0l9 5-9 5z" /></svg>{KINDS.includes(s.kind) ? kindLabel(s.kind, lang) : W[lang].video} · {mins}</span
+          >
+        {:else if KINDS.includes(s.kind)}<span class="kind">{kindLabel(s.kind, lang)}</span>{/if}
       </span>
       <span class="hl" class:serif={s.kind === 'Analysis'}>{s.title}</span>
     </span>
     <span class="more">
       {#if s.dek}<span class="dek" use:whole={s.dek}>{s.dek}</span>{/if}
-      <span class="by">{[s.author, SHORT_DATE[lang].format(new Date(s.date)), `${num(s.readTime)} ${L.min}`].filter(Boolean).join(' · ')}</span>
+      <!-- a video's length is in its label above: not said twice -->
+      <span class="by">{[s.author, SHORT_DATE[lang].format(new Date(s.date)), !s.video && mins].filter(Boolean).join(' · ')}</span>
       {#if opts.facts && (s.interviews || s.documents || s.reporting)}
         <span class="facts"
           >{L.method}: {[s.interviews && L.interviews(num(s.interviews), s.interviews), s.documents && L.documents(num(s.documents), s.documents), s.reporting]
@@ -192,6 +215,7 @@
         <img src={pic.src} srcset={pic.srcset} sizes={role === 'lead' ? '(max-width: 759px) 100vw, 40vw' : '(max-width: 759px) 100vw, 25vw'} alt="" draggable="false" />
       </span>
     {/if}
+    {#if s.video}<span class="play" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M1 0l9 5-9 5z" /></svg></span>{/if}
   </a>
 {/snippet}
 
@@ -202,7 +226,7 @@
       <div class="track" bind:this={track}>
         <!-- 01, the front page: the edition's line, the lead across most of
              the page, and two seconds -->
-        <section class="pg front" data-n="1" aria-label={W[lang].front}>
+        <section class="pg front" data-n="1" aria-label={W[lang].front} style:--share={peek.share} style:--gaps={peek.gaps}>
           <p class="folio">
             <span class="fl"
               ><b class="pn">{two(1, lang)}</b><span class="fc">{W[lang].front}</span><span class="fc date"
@@ -307,10 +331,10 @@
     border-right: var(--line) solid var(--rule);
     background: var(--rule);
   }
-  /* the front stops short of the screen's edge: the next page's ink column
-     stands in the space, saying there's more to the right */
+  /* the front stops short of the screen's edge by exactly the next page's
+     ink column, which stands in the space, saying there's more to the right */
   .front {
-    width: max(80cqw, 864px);
+    width: max(100cqw - (max(100cqw, 1080px) - var(--gaps) * var(--line)) * var(--share), 864px);
     grid-template-columns: minmax(0, 7.2fr) minmax(0, 3fr);
     grid-template-rows: var(--label) minmax(0, 1.15fr) minmax(0, 1fr);
     grid-template-areas: 'f f' 'lead sa' 'lead sb';
@@ -434,6 +458,39 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--i);
+  }
+  /* a video's label: orange, the one colour that says "new" and "now" */
+  .kind.watch,
+  .onfront .kind.watch {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    color: var(--o-text);
+    white-space: nowrap;
+  }
+  .toned .kind.watch {
+    color: inherit;
+  }
+  .tri {
+    width: 0.7em;
+    height: 0.7em;
+    fill: currentColor;
+  }
+  /* and a square of ink in the cell's corner, on its rules */
+  .play {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    place-items: center;
+    width: calc(4 * var(--u));
+    height: calc(4 * var(--u));
+    background: var(--ink);
+  }
+  .play svg {
+    width: calc(1.25 * var(--u));
+    height: calc(1.25 * var(--u));
+    fill: var(--paper);
   }
   .onfront .kind {
     margin-left: auto;

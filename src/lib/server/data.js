@@ -38,6 +38,9 @@ const summary = (s) => ({
   date: s.date,
   readTime: s.readTime,
   kind: s.kind,
+  // a video: watched, not read, for as long as it runs
+  video: !!s.video,
+  duration: s.duration,
   author: s.author,
   translationOf: s.translationOf,
   image: s.image,
