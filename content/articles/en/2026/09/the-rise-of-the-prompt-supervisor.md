@@ -9,7 +9,7 @@ location: "Chattogram"
 tags: ["jobs", "labour"]
 date: 2026-09-09
 readTime: 8
-video: "https://example.com/watch/prompt-supervisor"
+video: "https://www.youtube.com/watch?v=aircAruvnKk"
 duration: 14
 weight: 4
 featured: false
