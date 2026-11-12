@@ -451,8 +451,11 @@ undo it" log.
   most 60 stories (`desk/paging.js`), older ones on `/page/2`, `/page/3` …,
   with Newer / Older under the list. All stories is a month to a page
   (`/all` the newest, `/all/2026/09` any other), Newer / Older month under
-  it; its history down the side is drawn from per-day counts, this year's
-  months as grids (other months link to their page), other years as links.
+  it; its calendar down the side shows the page's month (a square to a day
+  with its number, darker the more stories, pressing one filters), under a
+  month picker and a year picker that open that month's page (months
+  without stories can't be picked; a new year opens the same month there,
+  or its newest). Drawn from per-day counts, not every story.
   Those routes have nothing to build until there are enough stories, which
   `svelte.config.js` allows (any other unbuilt route still fails the build).
 - **The map trial** gets its map from the server, without the stories'
