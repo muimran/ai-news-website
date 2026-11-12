@@ -1,8 +1,13 @@
 <script>
-  /* Desk's one panel: the menu, with search as its first line. It drops
-     from under the bar as a sheet of paper. Empty, it is the menu: the
-     topics, the formats, the newsroom's own pages. Typing turns it into
-     results.
+  /* Desk's two pages over the page: Search and the Menu, each opened by
+     its own button in the bar, each taking the whole page under it. Their
+     ground is the accent at its palest, the way the old menu's was that
+     design's own colour at its palest: plainly somewhere else, and quiet.
+
+     Search is the field, as large as a headline; until something is
+     typed, the last few searches and a line saying what it looks through
+     (nothing there that goes anywhere else); then the results. The Menu is the lists: the topics, the formats, the
+     newsroom's own pages.
 
      The search is the site's own, unchanged: every story read headline to
      last line, fetched the first time the panel opens, with MiniSearch
@@ -12,16 +17,24 @@
      mean" and the latest stories when nothing matches; the last few
      searches remembered in this browser. Only its look is Desk's. */
   import { tick } from 'svelte';
+  import { page } from '$app/state';
   import { cubicOut } from 'svelte/easing';
   import { base } from '$app/paths';
-  import { sectionLabel, formatLabel, formatNumber, kindLabel } from '$lib/labels.js';
+  import { sectionLabel, formatNumber, kindLabel } from '$lib/labels.js';
+  import { formatName } from './formats.js';
   import { STR, SHORT_DATE, snippet, marked, photo, closeTo, two } from '$lib/site/reel.js';
-  import { deskTopic, deskFormat, deskAuthor, deskAuthors, deskStory } from './urls.js';
+  import { deskTopic, deskFormat, deskAuthor, deskAuthors, deskStory, deskAll } from './urls.js';
 
-  /* open: null, 'menu', or 'search' (the field takes the cursor at once) */
-  let { lang, topics, formats, pages, open = $bindable(null) } = $props();
+  /* open: null, 'menu' or 'search' */
+  let { lang, topics, formats, pages, total, open = $bindable(null) } = $props();
+  // the page the reader is on, marked in the Menu's lists
+  const cur = (href) => (page.url.pathname.replace(/\/$/, '') === href.replace(/\/$/, '') ? 'page' : undefined);
   const L = $derived(STR[lang]);
   const num = (n) => formatNumber(n, lang);
+  const SCOPE = {
+    en: (n) => `Headlines, full text and writers · ${n} stories`,
+    bn: (n) => `শিরোনাম, পুরো লেখা ও লেখক · ${n}টি প্রতিবেদন`
+  };
   const topicNo = (key) => two(topics.findIndex((t) => t.key === key) + 1, lang);
 
   let q = $state('');
@@ -43,6 +56,53 @@
   });
   const found = $derived(results.list);
 
+  /* The full text: Pagefind's index, made from the built story pages. It
+     loads only the pieces a search needs, and gives each story an excerpt
+     with the words searched marked. It isn't there under the dev server
+     (only after a build); then the search reads headlines, standfirsts,
+     writers and places, as before. */
+  let pagefind = null;
+  const loadText = () =>
+    (pagefind ??= import(/* @vite-ignore */ `${base}/pagefind/pagefind.js`)
+      .then(async (m) => {
+        await m.options?.({ excerptLength: 26 });
+        await m.init?.();
+        return m;
+      })
+      .catch(() => null));
+  let deep = $state({ q: '', hits: [] });
+  $effect(() => {
+    const term = q.trim();
+    const l = lang;
+    if (open !== 'search' || !term) return void (deep = { q: '', hits: [] });
+    const wait = setTimeout(async () => {
+      const m = await loadText();
+      const res = m && (await m.search(term));
+      if (!res || q.trim() !== term) return;
+      const top = await Promise.all(res.results.slice(0, 30).map((r) => r.data()));
+      // a Desk story's address ends /desk/<edition>/<year>/<month>/<slug> (.html or / on some hosts)
+      const hits = top.flatMap((d) => {
+        const at = d.url.replace(/(\.html)?\/?$/, '').split('/');
+        const i = at.lastIndexOf('desk');
+        return i >= 0 && at[i + 1] === l && at.length === i + 5 ? [{ id: at.slice(i + 2).join('/'), excerpt: d.excerpt }] : [];
+      });
+      if (q.trim() === term) deep = { q: term, hits };
+    }, 180);
+    return () => clearTimeout(wait);
+  });
+  /* what the reader sees: the headline matches first, then the stories
+     found only in their text; an excerpt from the text wherever there is one */
+  const merged = $derived.by(() => {
+    const ex = deep.q === q.trim() ? deep.hits : [];
+    if (!index || !ex.length) return found;
+    // an excerpt only where it shows a word searched; otherwise the standfirst
+    const quote = new Map(ex.filter((h) => h.excerpt?.includes('<mark>')).map((h) => [h.id, h.excerpt]));
+    const list = found.map((r) => (quote.has(r.id) ? { ...r, excerpt: quote.get(r.id) } : r));
+    const seen = new Set(list.map((r) => r.id));
+    for (const h of ex) if (!seen.has(h.id) && index.byId.has(h.id)) list.push({ ...index.byId.get(h.id), terms: [], excerpt: quote.get(h.id) });
+    return list;
+  });
+
   /* the writers and topics a search names: every word searched starts a
      word of the name (words of two letters or fewer don't count) */
   const named = (label) => {
@@ -54,7 +114,7 @@
   const places = $derived(q.trim() ? topics.filter((t) => named(`${sectionLabel(t.key, lang)} ${t.key}`)) : []);
 
   /* nothing found: the nearest spelling, then the topics, then the newest */
-  const nothing = $derived(!!index && !!q.trim() && !found.length && !people.length && !places.length);
+  const nothing = $derived(!!index && !!q.trim() && !merged.length && !people.length && !places.length);
   const meant = $derived.by(() => {
     if (!nothing) return null;
     const want = q.trim().toLowerCase();
@@ -103,24 +163,24 @@
   });
   const tally = (key) => {
     const m = new Map();
-    for (const s of found) if (s[key]) m.set(s[key], (m.get(s[key]) ?? 0) + 1);
+    for (const s of merged) if (s[key]) m.set(s[key], (m.get(s[key]) ?? 0) + 1);
     return [...m].sort((a, b) => b[1] - a[1]);
   };
   const bySection = $derived(tally('section'));
   const byKind = $derived(tally('kind'));
-  const shown = $derived(found.filter((s) => (!only.section || s.section === only.section) && (!only.kind || s.kind === only.kind)));
+  const shown = $derived(merged.filter((s) => (!only.section || s.section === only.section) && (!only.kind || s.kind === only.kind)));
 
   $effect(() => {
-    if (!open) return void (q = '');
-    // asked for search, or a wide screen with a mouse: type straight away
-    if (open === 'search' || matchMedia('(hover: hover) and (min-width: 760px)').matches) tick().then(() => input?.focus());
+    if (open !== 'search') return void (q = '');
+    tick().then(() => input?.focus());
     if (indexes[lang]) return;
     const l = lang;
-    Promise.all([fetch(`${base}/search/${l}.json`).then((r) => r.json()), import('minisearch')]).then(
+    Promise.all([fetch(`${base}/desk/search/${l}.json`).then((r) => r.json()), import('minisearch')]).then(
       ([{ stories: rows, writers }, { default: MiniSearch }]) => {
         const ms = new MiniSearch({
           idField: 'id',
-          fields: ['title', 'dek', 'author', 'location', 'text'],
+          fields: ['title', 'dek', 'author', 'location', 'tags'],
+          extractField: (doc, f) => (Array.isArray(doc[f]) ? doc[f].join(' ') : doc[f]),
           searchOptions: {
             boost: { title: 4, dek: 2, author: 2, location: 1.5 },
             prefix: (term) => term.length >= 3,
@@ -150,7 +210,6 @@
     else if ((e.key === '/' && !/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) || (e.key === 'k' && (e.metaKey || e.ctrlKey))) {
       e.preventDefault();
       open = 'search';
-      tick().then(() => input?.focus());
     }
   }
   function blind() {
@@ -174,7 +233,7 @@
     <span class="what">
       <span class="hl">{#if live}{@render words(s.title, s.terms)}{:else}{s.title}{/if}</span>
       <span class="snip"
-        >{#if live}{@render words((s.byWriter ? `${s.author} · ` : '') + (s.byPlace && s.location ? `${s.location} · ` : '') + snippet(s, s.terms), s.terms)}{:else}{s.dek}{/if}</span
+        >{#if live && s.excerpt}{@html s.excerpt}{:else if live}{@render words((s.byWriter ? `${s.author} · ` : '') + (s.byPlace && s.location ? `${s.location} · ` : '') + snippet(s, s.terms), s.terms)}{:else}{s.dek}{/if}</span
       >
       <span class="mono where">{sectionLabel(s.section, lang)}</span>
     </span>
@@ -182,8 +241,9 @@
 {/snippet}
 
 {#if open}
-  <button type="button" class="veil" aria-label={L.close} onclick={() => (open = null)}></button>
   <div class="panel" id="desk-menu" transition:blind>
+    <div class="sheet">
+    {#if open === 'search'}
     <div class="find" role="search">
       <label>
         <span class="sr">{L.searchAll}</span>
@@ -198,14 +258,19 @@
           <button type="button" class="mono forget" onclick={forget}>{L.clear}</button>
         </div>
       {/if}
+      {#if !q.trim()}
+        <!-- nothing typed yet: what the search looks through -->
+        <p class="mono lbl scope">{SCOPE[lang](num(total))}</p>
+      {/if}
     </div>
+    {/if}
 
-    {#if q.trim()}
+    {#if open === 'search' && q.trim()}
       <div class="found">
         <p class="mono status" aria-live="polite">
-          {#if !index}{L.loading}{:else if found.length}{L.count(num(found.length))}{:else if !people.length && !places.length}{L.none}{/if}
+          {#if !index}{L.loading}{:else if merged.length}{L.count(num(merged.length))}{:else if !people.length && !places.length}{L.none}{/if}
         </p>
-        {#if index && results.some && found.length}<p class="note">{L.some}</p>{/if}
+        {#if index && results.some && merged.length}<p class="note">{L.some}</p>{/if}
 
         {#if nothing}
           {#if meant}<p class="meant">{L.meant} <button type="button" onclick={() => (q = meant)}>{meant}</button>?</p>{/if}
@@ -239,10 +304,10 @@
           </a>
         {/each}
 
-        {#if found.length > 1 && (bySection.length > 1 || byKind.length > 1)}
+        {#if merged.length > 1 && (bySection.length > 1 || byKind.length > 1)}
           <div class="chips" role="group" aria-label={L.topics}>
             <button type="button" class="mono chip" aria-pressed={!only.section && !only.kind} onclick={() => (only = { section: null, kind: null })}
-              >{L.any} <small>{num(found.length)}</small></button
+              >{L.any} <small>{num(merged.length)}</small></button
             >
             {#if bySection.length > 1}
               {#each bySection as [key, n] (key)}
@@ -262,12 +327,12 @@
         {/if}
         {#each shown.slice(0, 50) as s (s.id)}{@render result(s, true)}{/each}
       </div>
-    {:else}
+    {:else if open === 'menu'}
       <div class="menu">
         <nav class="col" aria-label={L.topics}>
           <p class="mono lbl">{L.topics}</p>
           {#each topics as t, i (t.key)}
-            <a class="row big" href={deskTopic(t.key, lang)}>
+            <a class="row big" href={deskTopic(t.key, lang)} aria-current={cur(deskTopic(t.key, lang))}>
               <b class="mono">{two(i + 1, lang)}</b>
               <span class="nm">{sectionLabel(t.key, lang)}</span>
               <span class="mono ct">{L.count(num(t.count))}</span>
@@ -278,20 +343,23 @@
           {#if formats.length}
             <p class="mono lbl">{L.formats}</p>
             {#each formats as f (f.key)}
-              <a class="row" href={deskFormat(f.key, lang)}><span class="nm">{formatLabel(f.key, lang)}</span><span class="mono ct">{num(f.count)}</span></a>
+              <a class="row" href={deskFormat(f.key, lang)} aria-current={cur(deskFormat(f.key, lang))}><span class="nm">{formatName(f.key, lang)}</span><span class="mono ct">{num(f.count)}</span></a>
             {/each}
           {/if}
+          <!-- and the archive: every story, by date -->
+          <a class="row" href={deskAll(lang)} aria-current={cur(deskAll(lang))}><span class="nm">{L.all}</span><span class="mono ct">{num(total)}</span></a>
         </nav>
         <nav class="col" aria-label={lang === 'bn' ? 'নিউজরুম' : 'The newsroom'}>
           <p class="mono lbl">{lang === 'bn' ? 'নিউজরুম' : 'The newsroom'}</p>
-          <a class="row" href={deskAuthors(lang)}><span class="nm">{L.reporters}</span></a>
+          <a class="row" href={deskAuthors(lang)} aria-current={cur(deskAuthors(lang))}><span class="nm">{L.reporters}</span></a>
           {#each pages as p (p.slug)}
-            <a class="row" href={p.href}><span class="nm">{p.title}</span></a>
+            <a class="row" href={p.href} aria-current={cur(p.href)}><span class="nm">{p.title}</span></a>
           {/each}
           <p class="blurb">{L.blurb}</p>
         </nav>
       </div>
     {/if}
+    </div>
   </div>
 {/if}
 
@@ -316,31 +384,20 @@
     text-transform: uppercase;
   }
 
-  /* the page behind goes back; a press there shuts the panel */
-  .veil {
-    position: fixed;
-    inset: var(--bar) 0 0 0;
-    z-index: 3;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    background: color-mix(in srgb, var(--ground) 78%, transparent);
-    cursor: default;
-  }
-  /* a sheet of paper under the bar */
+  /* The whole page under the bar, on the accent at its palest. */
   .panel {
     position: fixed;
-    top: var(--bar);
-    right: 0;
-    left: 0;
+    inset: var(--bar) 0 0 0;
     z-index: 4;
-    box-sizing: border-box;
-    max-height: calc(100dvh - var(--bar));
     overflow-y: auto;
     overscroll-behavior: contain;
-    padding: 1.25rem var(--pad) 2.25rem;
-    border-bottom: 1px solid var(--ink);
-    background: var(--card);
+    background: color-mix(in srgb, var(--accent) 13%, var(--card));
+  }
+  .sheet {
+    --hair: color-mix(in srgb, var(--ink) 16%, transparent);
+    box-sizing: border-box;
+    min-height: 100%;
+    padding: clamp(1.25rem, 3vh, 2.5rem) var(--pad) 3rem;
     color: var(--ink);
   }
 
@@ -388,6 +445,18 @@
   }
   .recent .lbl {
     margin-right: 0.5rem;
+  }
+  .recent .chip {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .recent .chip:hover,
+  .recent .chip:focus-visible {
+    background: var(--accent);
+    color: #fff;
+  }
+  .scope {
+    margin-top: 0.9rem;
   }
   .chip {
     display: inline-flex;
@@ -439,9 +508,9 @@
   /* ---- the menu: the topics large, the formats and the newsroom beside ---- */
   .menu {
     display: grid;
-    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr) minmax(0, 1fr);
-    gap: 0 clamp(1.5rem, 4vw, 4rem);
-    margin-top: 1.75rem;
+    grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0 clamp(1.5rem, 5vw, 5rem);
+    margin-top: clamp(0.25rem, 2vh, 1.5rem);
   }
   .col .lbl {
     padding-bottom: 0.7rem;
@@ -459,6 +528,11 @@
     line-height: 1.25;
     outline: none;
   }
+  /* the page the reader is on: a purple line under it */
+  .row[aria-current] {
+    border-bottom-color: var(--accent);
+    box-shadow: inset 0 -2px 0 var(--accent);
+  }
   .row .ct {
     flex: none;
     color: var(--mute);
@@ -474,7 +548,7 @@
     grid-template-columns: 1.75rem minmax(0, 1fr) auto;
     align-items: center;
     gap: 0.9rem;
-    padding: 0.75rem 0;
+    padding: 0.95rem 0;
   }
   .big b {
     display: grid;
@@ -491,7 +565,7 @@
   }
   .big .nm {
     font-family: var(--serif);
-    font-size: calc(clamp(1.35rem, 2vw, 1.85rem) * var(--hk));
+    font-size: calc(clamp(1.5rem, 2.7vw, 2.6rem) * var(--hk));
     font-weight: var(--hw);
     font-variation-settings: 'opsz' 72;
     letter-spacing: var(--hls);
@@ -607,20 +681,17 @@
     color: var(--mute);
   }
   /* the words searched, where they stand */
-  mark {
-    background: color-mix(in srgb, var(--accent) 26%, var(--card));
+  .res :global(mark) {
+    background: color-mix(in srgb, var(--accent) 42%, var(--card));
     color: var(--ink);
   }
 
   /* ---- a phone: one column; the date goes in with the words ---- */
   @media (max-width: 759px) {
-    .panel {
-      padding-top: 0.9rem;
-    }
     .menu {
       grid-template-columns: minmax(0, 1fr);
       row-gap: 1.75rem;
-      margin-top: 1.4rem;
+      margin-top: 0;
     }
     .res {
       grid-template-columns: 3.5rem minmax(0, 1fr);

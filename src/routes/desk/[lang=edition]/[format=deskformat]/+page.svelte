@@ -1,12 +1,12 @@
 <script>
   /* A format (Investigations, Interviews): every story of that kind,
      across the topics, so each row says which topic it's from. */
-  import { formatLabel } from '$lib/labels.js';
   import { matches, STR } from '$lib/site/reel.js';
   import Frame from '../../Frame.svelte';
   import Side from '../../Side.svelte';
   import Stories from '../../Stories.svelte';
   import { deskHome } from '../../urls.js';
+  import { formatName } from '../../formats.js';
 
   let { data } = $props();
   const lang = $derived(data.lang);
@@ -18,12 +18,12 @@
 </script>
 
 <svelte:head>
-  <title>{formatLabel(data.format, lang)} — Second Order</title>
+  <title>{formatName(data.format, lang)} — Second Order</title>
 </svelte:head>
 
 <Frame>
   {#snippet side()}
-    <Side {lang} label={FORMAT[lang]} title={formatLabel(data.format, lang)} total={data.stories.length} {shown} bind:q back={{ href: deskHome(lang), text: FRONT[lang] }} />
+    <Side {lang} label={FORMAT[lang]} title={formatName(data.format, lang)} total={data.stories.length} {shown} bind:q back={{ href: deskHome(lang), text: FRONT[lang] }} />
   {/snippet}
   {#key data.format}<Stories {lang} stories={data.stories} {q} />{/key}
 </Frame>

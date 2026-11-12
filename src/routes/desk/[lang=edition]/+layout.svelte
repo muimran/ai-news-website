@@ -4,15 +4,16 @@
      and a mono for what's about it) but not its layout.
 
      This is what every Desk page shares: the colours and the three voices,
-     the bar (the name; on the front, the formats; the day; search, the
-     other language, the menu), the one sheet that is menu and search
-     (Panel.svelte), and the foot. */
+     the bar (the name, which is the way home; the formats, each a link to
+     its own page, the one being read filled; the day; search, the other
+     language, the menu), the two pages that open over the page, Search
+     and the Menu (Panel.svelte), and the foot. While either is open the
+     bar keeps only the name and the buttons. */
   import { page } from '$app/state';
   import { afterNavigate } from '$app/navigation';
-  import { kindLabel, formatNumber } from '$lib/labels.js';
+  import { formatNumber } from '$lib/labels.js';
   import { STR } from '$lib/site/reel.js';
   import Panel from '../Panel.svelte';
-  import { desk } from '../state.svelte.js';
   import { deskHome, deskAll, deskAuthors, deskPage } from '../urls.js';
 
   let { data, children } = $props();
@@ -22,22 +23,17 @@
   const num = (n) => formatNumber(n, lang);
 
   const W = {
-    en: { every: 'All', video: 'Video', about: 'About', other: 'বাংলা', format: 'Format' },
-    bn: { every: 'সব', video: 'ভিডিও', about: 'আমাদের কথা', other: 'English', format: 'ধরন' }
+    en: { about: 'About', other: 'বাংলা', format: 'Formats' },
+    bn: { about: 'আমাদের কথা', other: 'English', format: 'ধরন' }
   };
   const DAY = {
     en: new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }),
     bn: new Intl.DateTimeFormat('bn-BD-u-nu-beng', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
   };
-  /* the front page hands the bar its formats */
-  const chips = $derived(page.data.chips ?? null);
-  const formatName = (f) => (f === 'Video' ? W[lang].video : kindLabel(f, lang));
-
   /* the menu-and-search sheet: null, 'menu' or 'search' */
   let panel = $state(null);
   afterNavigate(() => {
     panel = null;
-    desk.format = null;
   });
 </script>
 
@@ -50,27 +46,17 @@
   />
 </svelte:head>
 
-<div class="dk" {lang}>
+<div class="dk" class:open={!!panel} {lang}>
   <header class="bar">
     <a class="name" href={deskHome(lang)}>Second Order</a>
-    <div class="chips" role="group" aria-label={W[lang].format}>
-      {#if chips}
-        <button type="button" class="chip" aria-pressed={desk.format === null} onclick={() => (desk.format = null)}>{W[lang].every}<small>{num(chips.total)}</small></button>
-        {#each chips.list as x (x.f)}
-          <button type="button" class="chip" aria-pressed={desk.format === x.f} onclick={() => (desk.format = desk.format === x.f ? null : x.f)}
-            >{formatName(x.f)}<small>{num(x.n)}</small></button
-          >
-        {/each}
-      {/if}
-    </div>
     {#if data.day}<span class="date">{DAY[lang].format(new Date(data.day))}</span>{/if}
     <button type="button" class="tool seek" aria-expanded={panel === 'search'} aria-controls="desk-menu" onclick={() => (panel = panel === 'search' ? null : 'search')}
-      ><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.75" /><path d="M10 10l4.5 4.5" /></svg><span>{L.search}</span><kbd>/</kbd></button
+      ><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.75" /><path d="M10 10l4.5 4.5" /></svg><span>{panel === 'search' ? L.close : L.search}</span>{#if panel !== 'search'}<kbd>/</kbd>{/if}</button
     >
     <a class="tool lang" href={page.data.alt?.[other] ?? deskHome(other)} lang={other} hreflang={other}>{W[lang].other}</a>
-    <button type="button" class="tool" aria-expanded={!!panel} aria-controls="desk-menu" onclick={() => (panel = panel ? null : 'menu')}>{panel ? L.close : L.menu}</button>
+    <button type="button" class="tool" aria-expanded={panel === 'menu'} aria-controls="desk-menu" onclick={() => (panel = panel === 'menu' ? null : 'menu')}>{panel === 'menu' ? L.close : L.menu}</button>
   </header>
-  <Panel {lang} topics={data.topics} formats={data.formats} pages={data.pages} bind:open={panel} />
+  <Panel {lang} topics={data.topics} formats={data.formats} pages={data.pages} total={data.total} bind:open={panel} />
 
   {@render children()}
 
@@ -97,8 +83,10 @@
     --ink: #161615;
     --mute: color-mix(in srgb, var(--ink) 60%, var(--card));
     --hair: color-mix(in srgb, var(--ink) 14%, var(--card));
-    --accent: #ee4a1b;
-    --bar: 3.5rem;
+    --accent: #6a3fd1;
+    --bar: 4rem;
+    --side: 17rem; /* the column down the left of every page; the name stands over it */
+    --title: 1.625rem; /* a page's own name in that column: a clear step under the site's */
     --pad: clamp(1rem, 2vw, 1.75rem);
     --gap: 1rem;
     --serif: 'Fraunces', 'Noto Serif Bengali', Georgia, serif;
@@ -144,7 +132,6 @@
     text-decoration: none;
   }
   /* the mono voice */
-  .chip,
   .date,
   .tool,
   .end {
@@ -172,7 +159,8 @@
   .name {
     flex: none;
     margin-right: calc(var(--pad) - 0.4rem);
-    font-family: var(--serif);
+    /* the name is the same letters in both editions */
+    font-family: 'Fraunces', var(--serif);
     font-size: 1.375rem;
     font-weight: 650;
     font-variation-settings: 'opsz' 72;
@@ -180,41 +168,39 @@
     line-height: 1;
     white-space: nowrap;
   }
-  .chips {
-    flex: 1;
-    display: flex;
-    gap: 0.4rem;
-    min-width: 0;
-    overflow-x: auto;
-    scrollbar-width: none;
+  /* In the bar the name is the largest thing on it, plain ink on the
+     paper, and as wide as the side column under it: what follows it in the
+     bar starts on the left edge of the page's cards. */
+  .bar .name {
+    box-sizing: border-box;
+    width: calc(var(--side) + 1.75rem - var(--pad) - 0.4rem);
+    margin-right: 0;
+    font-size: 2.375rem;
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    outline: none;
   }
-  .chips::-webkit-scrollbar {
-    display: none;
+  .bar .name:hover,
+  .bar .name:focus-visible {
+    color: var(--accent);
   }
-  .chip,
   .tool {
     flex: none;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    /* one height for every box in the bar, whatever's in it */
+    box-sizing: border-box;
+    height: 2rem;
     margin: 0;
-    padding: 0.45rem 0.65rem 0.4rem;
+    padding: 0 0.65rem;
     border: 1px solid var(--ink);
     background: var(--card);
     color: var(--ink);
+    line-height: 1;
     white-space: nowrap;
     cursor: pointer;
   }
-  .chip small {
-    font-size: inherit;
-    color: var(--mute);
-  }
-  .chip:hover,
-  .chip:focus-visible {
-    background: var(--hair);
-    outline: none;
-  }
-  .chip[aria-pressed='true'],
   .tool:hover,
   .tool:focus-visible,
   .tool[aria-expanded='true'] {
@@ -222,13 +208,14 @@
     color: var(--card);
     outline: none;
   }
-  .chip[aria-pressed='true'] small {
-    color: inherit;
-    opacity: 0.6;
+  /* Search or the Menu is open: the day steps out (its room is kept, so
+     the buttons don't move) */
+  .open .date {
+    visibility: hidden;
   }
   .date {
     flex: none;
-    margin: 0 calc(var(--pad) - 0.4rem);
+    margin: 0 calc(var(--pad) - 0.4rem) 0 auto;
     color: var(--mute);
     white-space: nowrap;
   }
@@ -291,41 +278,28 @@
     .date {
       display: none;
     }
+    /* no side column here: the name takes its own width, the tools go right */
+    .bar .name {
+      width: auto;
+      margin-right: auto;
+      font-size: 1.875rem;
+    }
   }
-  /* a phone: the formats, when there are any, on a line of their own */
+  /* a phone: a shorter bar, a smaller name */
   @media (max-width: 759px) {
     .dk {
-      --bar: 3.25rem;
+      --bar: 3.5rem;
+      --title: 1.375rem;
     }
-    .dk:has(.chip) {
-      --bar: 5.75rem;
-    }
-    .bar {
-      flex-wrap: wrap;
-      align-content: center;
-      row-gap: 0.55rem;
-    }
-    .name {
-      margin-right: auto;
-      font-size: 1.25rem;
-    }
-    .chips {
-      order: 3;
-      flex: none;
-      box-sizing: border-box;
-      width: calc(100% + var(--pad));
-      margin-right: calc(-1 * var(--pad));
-      padding-right: var(--pad);
-    }
-    .chips:empty {
-      display: none;
+    .bar .name {
+      font-size: 1.625rem;
     }
     .seek span,
     .seek kbd {
       display: none;
     }
     .seek {
-      padding: 0.55rem 0.6rem;
+      padding: 0 0.6rem;
     }
     .motto {
       flex-basis: 100%;

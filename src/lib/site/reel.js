@@ -91,6 +91,13 @@ export function photo(s) {
   }
   // The seeded placeholder is artwork, not a photograph: treat it as none.
   if (s.image && !s.image.src.endsWith('/test-photo.svg')) {
+    // an editor's upload: its copies made at build (scripts/sizes.js), never
+    // the upload itself, which can be several megabytes
+    const up = s.image.src.match(/^(.*\/uploads)\/([^/]+)\.(?:jpe?g|png|webp|avif|tiff?)$/i);
+    if (up) {
+      const at = (w) => `${up[1]}/sized/${up[2]}-${w}.webp`;
+      return { thumb: at(800), small: at(240), src: at(1600), srcset: `${at(800)} 800w, ${at(1600)} 1600w` };
+    }
     return { thumb: s.image.src, small: s.image.src, src: s.image.src, srcset: null };
   }
   return null;

@@ -13,7 +13,7 @@
 <p class="mono kind">{#if no}<b>{no}</b>{/if}{label}</p>
 <h1 class="hl">{title}</h1>
 {#if children}{@render children()}{/if}
-<p class="mono count" aria-live="polite">{q.trim() ? L.shown(num(shown), num(total)) : L.count(num(total))}</p>
+<p class="mono count" aria-live="polite">{shown !== total ? L.shown(num(shown), num(total)) : L.count(num(total))}</p>
 <label class="filter">
   <span class="sr">{L.searchBy}</span>
   <input type="search" bind:value={q} placeholder={L.searchBy} autocomplete="off" />
@@ -57,7 +57,7 @@
   .hl {
     margin: 0;
     font-family: var(--serif);
-    font-size: calc(clamp(1.9rem, 2.4vw, 2.4rem) * var(--hk));
+    font-size: calc(var(--title) * var(--hk));
     font-weight: var(--hw);
     font-variation-settings: 'opsz' 72;
     letter-spacing: var(--hls);

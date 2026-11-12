@@ -234,6 +234,26 @@
   </a>
 {/snippet}
 
+{#snippet who()}
+{#if data.writer}
+  <a class="writer" href={deskAuthor(data.writer.slug, lang)}>
+    <span class="face">{#if data.writer.photo}<img src={data.writer.photo} alt="" />{/if}</span>
+    <span class="who"><b>{s.author}</b><span class="mono dim">{[data.writer.role, s.location].filter(Boolean).join(' · ')}</span></span>
+  </a>
+{:else if s.author}
+  <p class="writer"><span class="who"><b>{s.author}</b>{#if s.location}<span class="mono dim">{s.location}</span>{/if}</span></p>
+{/if}
+{/snippet}
+
+{#snippet ways(cls)}
+{#if howWe || data.translated}
+  <p class="ways {cls}">
+    {#if howWe}<a class="mono chip" href="#how" onclick={(e) => to(e, 'how')}>{L.method} ↓</a>{/if}
+    {#if data.translated}<a class="mono chip" href={data.alt[other]} hreflang={other} lang={other}>{L.readOther} →</a>{/if}
+  </p>
+{/if}
+{/snippet}
+
 {#if Special}
   <Special story={s} {lang} />
 {:else}
@@ -253,20 +273,8 @@
           </div>
         {/if}
       </dl>
-      {#if data.writer}
-        <a class="writer" href={deskAuthor(data.writer.slug, lang)}>
-          <span class="face">{#if data.writer.photo}<img src={data.writer.photo} alt="" />{/if}</span>
-          <span class="who"><b>{s.author}</b><span class="mono dim">{[data.writer.role, s.location].filter(Boolean).join(' · ')}</span></span>
-        </a>
-      {:else if s.author}
-        <p class="writer"><span class="who"><b>{s.author}</b>{#if s.location}<span class="mono dim">{s.location}</span>{/if}</span></p>
-      {/if}
-      {#if howWe || data.translated}
-        <p class="ways">
-          {#if howWe}<a class="mono chip" href="#how" onclick={(e) => to(e, 'how')}>{L.method} ↓</a>{/if}
-          {#if data.translated}<a class="mono chip" href={data.alt[other]} hreflang={other} lang={other}>{L.readOther} →</a>{/if}
-        </p>
-      {/if}
+      {@render who()}
+      {@render ways('')}
       {#if data.sections.length > 1}
         <nav class="map" aria-label={L.inStory}>
           <p class="mono dim">{L.inStory}</p>
@@ -293,15 +301,20 @@
         </div>
       </header>
       {#if credit}<p class="mono credit">{credit}</p>{/if}
+      <!-- narrower, the side column goes: its ways in sit under the head -->
+      {@render ways('narrow')}
 
       <!-- the column hears taps on source marks and on explained terms -->
       <div class="col" bind:this={col} onclick={tapped} onkeydown={keyed} onpointerover={hover} onpointerout={unhover} role="presentation">
         {#if resume}<button type="button" class="mono again" onclick={pickUp}>{L.pickUp} · {num(Math.round(resume.p * 100))}% ↓</button>{/if}
-        <div class="body">
+        <!-- the story's text is what Search reads in full (Pagefind, at build) -->
+        <div class="body" data-pagefind-body>
           {#each data.blocks as b, n (n)}
             {#if b.also}<div class="aside">{@render card(b.also, W[lang].also)}</div>{:else}{@html b.html}{/if}
           {/each}
         </div>
+        <!-- narrower: who wrote it, once it has been read -->
+        <div class="narrow byend">{@render who()}</div>
         {#if gloss}
           <div class="gloss" role="dialog" aria-label={gloss.term} style:top="{gloss.top}px" style:left="{gloss.left}px" onpointerover={() => clearTimeout(hoverTimer)} onpointerout={unhover}>
             <b>{gloss.term}</b>
@@ -964,6 +977,30 @@
   @media (min-width: 1380px) {
     .body :global(.nref) {
       cursor: default;
+    }
+  }
+  /* narrower: the story first. The side column steps out (the head
+     already names the topic, the kind, the writer, the date and the
+     length); its ways in sit under the head and the writer comes after
+     the text. */
+  .narrow {
+    display: none;
+  }
+  @media (max-width: 1099px) {
+    :global(.frame > .side:has(.facts)) {
+      display: none;
+    }
+    .narrow {
+      display: flex;
+    }
+    .ways.narrow {
+      margin: 0;
+      padding: 1rem var(--pad, 1rem) 0;
+    }
+    .byend {
+      margin-top: 2rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--ink);
     }
   }
   @media (max-width: 1099px) {

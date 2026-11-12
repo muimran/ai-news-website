@@ -6,3 +6,6 @@ build/
 !.env.example
 .DS_Store
 *.log
+
+# picture sizes made at build from uploads (scripts/sizes.js)
+static/uploads/sized/

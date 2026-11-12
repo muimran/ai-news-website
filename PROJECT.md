@@ -83,6 +83,144 @@ How the vertical one is built, and why:
   A subgrid silently fails on an element with `container-type`, which is why
   the lead has `container-type: normal`.
 
+### Desk (November 2026)
+
+A whole second version of the site, read down, built from nothing the
+panes site uses except the stories. It came out of going back to
+https://nucleo.jor.br, the site I started from: it feels like a tool, not
+a magazine (a grey ground, ruled paper cards, a serif for what's said, a
+mono for the facts about it, one accent, lots of small made things). Desk
+is in that family and not that layout. It sits beside the real site and
+doesn't touch it. Code in `src/routes/desk/`.
+
+- Local: `/desk/en`, `/desk/bn`. Live:
+  https://muimran.github.io/ai-news-website/desk/en
+
+The look, set once in `desk/[lang=edition]/+layout.svelte`:
+- **Ground, paper, ink, one accent.** Grey ground `#e7e5e0`, paper cards
+  `#fbfaf6`, ink `#161615`, purple `#6a3fd1` (orange until Nov 2026). Cards have one 1px ink rule
+  and no shadow; a card lifts off the ground (a hard 4px shadow) only under
+  the mouse. That is the only movement on a page.
+- **Three voices.** Fraunces for headlines, Anek Latin for the page's own
+  words, IBM Plex Mono for facts (type, date, length, counts). Bangla:
+  Noto Serif Bengali and Anek Bangla, sized and spaced by variables on
+  `.dk:lang(bn)`. The name is always Fraunces, in both editions.
+- **Ink means chosen.** A small ink square carries a topic's number; a
+  pressed chip or an open Search/Menu button fills with ink. Purple marks
+  where the reader is (the topic on screen, the section being read), and
+  a purple line means the same and nothing else: under the page the
+  reader is on in the Menu, along the tab of the topic being read on the
+  front, and the story map's progress. The last two follow the reader as they read.
+  No purple line is decoration.
+- **Purple also marks the present: what's happening now.** "Where you
+  are" and "what's new right now" are the same idea, in place and in time.
+  So the one section a page highlights gets a solid purple file tab on a
+  purple top edge, everything inside it staying ink. On the front that's
+  Latest ("Latest · 18 Sept", the newest story's day). Later the same box
+  can hold a new interview or video, its tab naming it ("New video ·
+  20 Sept"). One such tab per page; an older story being promoted doesn't
+  get it. Not a pale purple fill (that's Search and the Menu), not a
+  purple frame (reads as an ad), not an ink band (too heavy).
+
+The bar, the same on every page:
+- **The bar is only the name, the day and the tools** (Search, the other
+  edition, Menu), on every screen.
+- **The name is the largest thing in it** (38px, weight 700) and is as wide
+  as the side column under it. A page's own title in the side column is
+  a clear step smaller (26px) so it never competes with the name. Story
+  headlines may be bigger than the name; the news outranks it.
+- **The formats** (Investigations, Interviews, Explainers, Analysis,
+  Video) each have a page of every story of that kind. They're not in the
+  bar: they sit under the topics in the front page's index, and in the
+  Menu. The list is `desk/formats.js`. Video is a format here too, so it
+  has its page. (They were boxed chips with counts in the bar until Nov
+  2026: they read as filters, the small counts showed how young the outlet
+  is, they were cut off on mid-size screens, and they put formats above
+  the topics the site is built on.)
+- **Search and Menu are two different pages**, each opened by its own
+  button, each taking the whole page under the bar on the accent at its
+  palest. Search is the field (as large as a headline), the last few
+  searches and a line saying what it looks through; then results, with the
+  site's own search engine unchanged (`desk/Panel.svelte`). The Menu is the
+  lists: topics, formats and all stories, the newsroom's pages. While
+  either is open the bar keeps only the name and the buttons. `/` opens
+  Search from anywhere, Esc closes.
+- **Every box in the bar is one height** (32px), whatever is in it.
+
+The pages:
+- **Front.** The lead as a card in its picture's own colour with the
+  object standing in it, two seconds beside it; a Latest box of the eight
+  newest under its purple "now" tab, with the way to all of them; then a **dossier** to a topic: a
+  tray of paper with a file tab standing on its top edge (number, name),
+  its first story a colour card, the rest rows with a small square of
+  their picture. The column down the left is the index (topics, then
+  formats) and marks the dossier on screen.
+- **A video beside the lead.** When there's a video, the newest one takes
+  the second of the two cards beside the lead and plays there (its topic's
+  dossier then leaves it out). The card is the still across the top, in
+  black and white like the portraits, with a play box in its middle:
+  paper, one ink rule, "▶ Play · 14 min", the bar's own kind of box, so it
+  shows on a dark or a light picture; under the mouse it gets the cards'
+  hard shadow. Clicking loads the YouTube player in place, from
+  youtube-nocookie, so nothing of YouTube's runs before the reader asks.
+  The headline under it goes to the story's page. A first try with a small
+  ink box in the corner didn't read as playable: it vanished on a dark
+  still, and a reader looks for play in the middle. The video's address is
+  the story's `video:` (any YouTube link); the swap is Desk's own
+  (`desk/[lang=edition]/+page.server.js`), the other trials unchanged.
+  **For testing,** "The rise of the prompt supervisor" has a stand-in
+  video (3Blue1Brown's neural-network one) where it had a placeholder
+  address: replace it with the real one.
+- **Topic, format, writer, all stories.** One pattern (`Frame`, `Side`,
+  `Stories`): what the page is down the left, held there (name, count, a
+  field to filter its stories, the way back); beside it the newest as a
+  colour card and the rest a ledger by month.
+- **All stories** also draws its own history from the stories: a small
+  grid to each month there are stories in (a square to a day, darker the
+  more that day), and bars for how many each topic and format has. All
+  three are filters too. Only months with stories are drawn, so a young
+  outlet never shows empty time. It stays "All stories" in links;
+  "Archive" is only its small label.
+- **Reporters and a writer.** Portraits in black and white. Under Desk
+  these exist per language (Bangla names and roles on the Bangla side);
+  on the panes site they are English only.
+- **The newsroom's pages.** The list of them down the side, the page as a
+  sheet with a reading column.
+- **A story.** Facts, writer and the map of sections down the side; one
+  sheet whose head is the story's colour card; the text in a reading
+  column with a margin where source notes stand beside their sentences
+  (opened in place where there's no margin). Narrower than the side column
+  allows (tablet, phone) the story comes first: the side column goes, its
+  links (how we reported it, the other edition) sit under the head, and
+  the writer comes after the text. Glossary terms, story cards,
+  pull quotes, wide photos, method, changes and the way back to where the
+  reader stopped all carry over. A special is shown as it is, under the
+  bar.
+
+Tried on the way and dropped, so I don't go back to them:
+- **A fixed table that never scrolls**, topics opening in place: too
+  confusing for a news site.
+- **A single ranked list of headlines**: didn't look good.
+- **"Stage"**, a plain headline list with half the screen changing colour
+  and picture as each headline passed: not calm, and still basic. Adding
+  a ruler, a label strip and big numbers didn't fix "basic". (Its last
+  code is still in `src/routes/stage`, uncommitted; delete it.)
+- **Format chips that faded the other stories where they stood**: the
+  screen went grey and the matches were somewhere below.
+- **The name on a block of ink**, and **the menu on full black**: each the
+  only heavy thing on a quiet page.
+- **Topic links on the empty search page**: they read as search filters
+  and were links away.
+
+What I learned for next time: "too basic" isn't answered with gadgets or
+motion but with composition, pictures, mixed kinds of card and more than
+one voice of type; and anything that changes while the reader scrolls
+reads as not calm.
+
+Not done on Desk: dark mode has never been looked at; on a phone the All
+stories history sits above the list; the Bangla edition has no interviews
+or video, so those formats don't show there.
+
 Rules the grid and panes versions keep to:
 - **One spatial unit.** Every size is a multiple of `--u` (12px on a wide
   screen, 8px on a phone): label rows 3u, text 2u in from a cell's edge, and
@@ -276,9 +414,30 @@ undo it" log.
 
 ## Known gaps / not done
 
-- **Responsive images.** One image file currently serves both the 104px
-  mobile thumbnail and the full-width hero — no `srcset`. Real cost on
-  Bangladeshi mobile data. Not started.
+- **Responsive images: done for uploads (Nov 2026).** A photo an editor
+  uploads (to `static/uploads/`) is never served itself: before every build
+  and while the dev server runs, `scripts/sizes.js` makes WebP copies at
+  240, 800 and 1600px in `static/uploads/sized/` (not in git; only missing
+  or stale ones are made), and `photo()` in `src/lib/site/reel.js` points
+  at them. A 1.4 MB test upload became 0.9 / 6.9 / 35 KB. The hand-made
+  JPGs in `uploads/stories/` (the `PHOTOS` list) still work as before.
+- **Search at scale: done on Desk (Nov 2026).** Desk's search file
+  (`/desk/search/<edition>.json`) carries headlines, standfirsts, writers,
+  places and tags but no text (27 KB for 38 stories, was 80 KB). The text
+  is searched by Pagefind (`pagefind`, pinned 1.5.2), which `npm run build`
+  runs after `vite build` over the built pages: it indexes only what's
+  marked `data-pagefind-body` (a Desk story's text), one index per edition
+  (from `<html lang>`), and loads only the pieces a search needs. Headline
+  matches come first, then stories found only in their text; a story shows
+  Pagefind's excerpt, with the searched words marked, when the excerpt
+  marks one, else its standfirst. Under the dev server there's no Pagefind
+  index, so search reads headlines only; test full text on a build. The
+  panes site still uses its own full-text `/search/<edition>.json`.
+- **Growing to thousands of stories**, still to do, in order: All stories, topic and format pages list everything
+  (page them by year or month); GitHub Pages' ~1 GB limit (~1,500 stories
+  of pictures; put pictures on an image host, and delete the trials not
+  chosen, each of which builds every page again); `/map` ships every
+  story's text to the browser.
 - **Social links** in the footer point at placeholder `#about` — real URLs
   need to go into the `SOCIAL` array in `Footer.svelte`.
 - **Newsletter signup** fakes a 900ms delay — no real endpoint wired.

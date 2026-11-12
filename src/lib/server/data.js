@@ -28,7 +28,7 @@ for (const s of LANGS.flatMap(inLang)) {
 }
 
 /** What a frame needs, and nothing else — no body. */
-const summary = (s) => ({
+export const summary = (s) => ({
   slug: s.slug,
   ym: s.ym,
   lang: s.lang,

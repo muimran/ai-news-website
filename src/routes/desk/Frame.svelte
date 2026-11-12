@@ -13,7 +13,7 @@
 <style>
   .frame {
     display: grid;
-    grid-template-columns: 17rem minmax(0, 1fr);
+    grid-template-columns: var(--side) minmax(0, 1fr);
     align-items: start;
   }
   .side {

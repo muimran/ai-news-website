@@ -58,7 +58,7 @@
   }
   .hl {
     font-family: var(--serif);
-    font-size: calc(clamp(1.9rem, 2.4vw, 2.4rem) * var(--hk));
+    font-size: calc(var(--title) * var(--hk));
     font-weight: var(--hw);
     font-variation-settings: 'opsz' 72;
     letter-spacing: var(--hls);
