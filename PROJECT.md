@@ -146,18 +146,20 @@ The bar, the same on every page:
   either is open the bar keeps only the name and the buttons. `/` opens
   Search from anywhere, Esc closes.
 - **Every box in the bar is one height** (32px), whatever is in it.
-- **Donate** is the first of the tools and the one filled (ink) box in the
-  bar, on every page; under the mouse it turns to paper. It leads to
-  `/desk/<edition>/support`, which says why readers' money matters and
+- **Donate** sits apart from the tools, a rule after it, with
+  "Reader-supported" in the serif italic beside it (on phones the box and rule
+  only), on every page. The box is paper with one ink rule, standing lifted
+  off the bar (a hard 3px shadow, the look of a card under the mouse, kept
+  still), the word in the serif; under the mouse it settles flat. It leads
+  to `/desk/<edition>/support`, which says why readers' money matters and
   that ways to give are coming soon. Every story also ends with a ruled
-  line, "Reporting like this is paid for by readers", and an ink button to
-  the same page. One page, so changing how people give (card gateway,
-  bKash/Nagad, bank transfer, depending on where the outlet is registered)
-  never means changing the buttons. The words are in `desk/support.js`.
-  On phones the bar's boxes and name were tightened so all four fit on one
-  line down to 360px, in Bangla too.
-
-The pages:
+  line, "Readers’ support helps keep reporting like this free", and the same lifted
+  box. One page, so changing how people give (card gateway, bKash/Nagad,
+  bank transfer, depending on where the outlet is registered) never means
+  changing the buttons. The words are in `desk/support.js`. Tried first: a
+  filled ink box among the tools, which read as a pressed tool, not an
+  invitation. The phone bar's boxes and name are tightened so it all fits
+  on one line down to 360px, in Bangla too.
 - **Front.** The lead as a card in its picture's own colour with the
   object standing in it, two seconds beside it; a Latest box of the eight
   newest under its purple "now" tab, with the way to all of them; then a **dossier** to a topic: a

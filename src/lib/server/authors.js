@@ -37,7 +37,7 @@ const escape = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/
 function standIn(name, role) {
   if (role === 'Newsroom') return '<p>Stories reported and edited by the Second Order newsroom as a whole.</p>';
   const what = role ? `${/^[aeiou]/i.test(role) ? 'an' : 'a'} ${role.toLowerCase()}` : 'a reporter';
-  return `<p>${escape(name)} is ${escape(what)} at Second Order, the nonprofit newsroom reporting on AI in Bangladesh.</p>`;
+  return `<p>${escape(name)} is ${escape(what)} at Second Order, the independent newsroom reporting on AI in Bangladesh.</p>`;
 }
 
 const files = import.meta.glob('/content/authors/*.md', { query: '?raw', import: 'default', eager: true });

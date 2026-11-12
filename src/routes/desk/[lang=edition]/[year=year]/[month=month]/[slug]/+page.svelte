@@ -317,7 +317,7 @@
         <!-- narrower: who wrote it, once it has been read -->
         <div class="narrow byend">{@render who()}</div>
         <!-- right after the story: the moment a reader knows what it was worth -->
-        <p class="ask"><span>{GIVE[lang].end}</span><a class="mono" href={deskSupport(lang)}>{GIVE[lang].endCta} →</a></p>
+        <p class="ask"><span>{GIVE[lang].end}</span><a href={deskSupport(lang)}>{GIVE[lang].endCta} →</a></p>
         {#if gloss}
           <div class="gloss" role="dialog" aria-label={gloss.term} style:top="{gloss.top}px" style:left="{gloss.left}px" onpointerover={() => clearTimeout(hoverTimer)} onpointerout={unhover}>
             <b>{gloss.term}</b>
@@ -660,25 +660,29 @@
     font-size: 1.125rem;
     line-height: 1.35;
   }
+  /* the same box as Donate in the bar: paper, standing lifted, settling when pressed */
   .ask a {
     display: inline-flex;
     align-items: center;
     height: 2.25rem;
+    margin: 0 3px 3px 0;
     padding: 0 0.9rem;
     border: 1px solid var(--ink);
-    background: var(--ink);
-    color: var(--card);
-    font-family: var(--mono);
-    font-size: var(--ms);
-    font-weight: 500;
-    letter-spacing: var(--mt);
-    text-transform: uppercase;
+    background: var(--card);
+    color: var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-weight: 600;
     white-space: nowrap;
+    transition:
+      transform 0.12s ease-out,
+      box-shadow 0.12s ease-out;
   }
   .ask a:hover,
   .ask a:focus-visible {
-    background: var(--card);
-    color: var(--ink);
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 var(--ink);
     outline: none;
   }
   .again {

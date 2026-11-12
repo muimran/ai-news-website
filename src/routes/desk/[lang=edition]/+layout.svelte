@@ -51,8 +51,9 @@
   <header class="bar">
     <a class="name" href={deskHome(lang)}>Second Order</a>
     {#if data.day}<span class="date">{DAY[lang].format(new Date(data.day))}</span>{/if}
-    <!-- asking readers for money: on every page, first of the tools -->
-    <a class="tool give" href={deskSupport(lang)} aria-current={page.url.pathname.replace(/\/$/, '') === deskSupport(lang) ? 'page' : undefined}>{GIVE[lang].button}</a>
+    <!-- asking readers for money, on every page: set apart from the tools by
+         a rule, the reason in the newsroom's voice, a paper box already lifted -->
+    <span class="fund"><i>{GIVE[lang].funded}</i><a class="give" href={deskSupport(lang)} aria-current={page.url.pathname.replace(/\/$/, '') === deskSupport(lang) ? 'page' : undefined}>{GIVE[lang].button}</a></span>
     <button type="button" class="tool seek" aria-expanded={panel === 'search'} aria-controls="desk-menu" onclick={() => (panel = panel === 'search' ? null : 'search')}
       ><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.75" /><path d="M10 10l4.5 4.5" /></svg><span>{panel === 'search' ? L.close : L.search}</span>{#if panel !== 'search'}<kbd>/</kbd>{/if}</button
     >
@@ -222,17 +223,50 @@
     color: var(--mute);
     white-space: nowrap;
   }
-  /* Donate: the one filled box in the bar, so it's seen on every page;
-     under the mouse it turns to paper, the others' way round */
-  .tool.give {
-    background: var(--ink);
-    color: var(--card);
+  /* Donate: apart from the tools (a rule after it), "Reader-supported" in the
+     serif beside it, and a paper box standing lifted off the bar, the
+     look of a card under the mouse kept still: the one thing in the bar
+     asking to be pressed. Pressed (or under the mouse) it settles. */
+  .fund {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    height: 2rem;
+    margin-right: 0.5rem;
+    padding-right: 0.85rem;
+    border-right: 1px solid var(--ink);
   }
-  .tool.give:hover,
-  .tool.give:focus-visible,
-  .tool.give[aria-current] {
+  .fund i {
+    font-family: var(--serif);
+    font-size: 0.9375rem;
+    font-style: italic;
+    white-space: nowrap;
+  }
+  .give {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    height: 2rem;
+    padding: 0 0.8rem;
+    border: 1px solid var(--ink);
     background: var(--card);
-    color: var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+    font-family: var(--serif);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    transition:
+      transform 0.12s ease-out,
+      box-shadow 0.12s ease-out;
+  }
+  .give:hover,
+  .give:focus-visible,
+  .give[aria-current] {
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 var(--ink);
+    outline: none;
   }
   .tool svg {
     width: 0.8rem;
@@ -315,6 +349,18 @@
     }
     .tool {
       padding: 0 0.5rem;
+    }
+    /* no room for the reason: the lifted box and its rule only */
+    .fund {
+      gap: 0;
+      margin-right: 0.15rem;
+      padding-right: 0.55rem;
+    }
+    .fund i {
+      display: none;
+    }
+    .give {
+      padding: 0 0.55rem;
     }
     .seek span,
     .seek kbd {

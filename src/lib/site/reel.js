@@ -223,7 +223,7 @@ export const DAY_DATE = {
 export const STR = {
   en: {
     tagline: 'AI, reported from wherever it lands.',
-    blurb: 'A nonprofit newsroom reporting on AI and the technology around it in Bangladesh, and on the people it reaches first.',
+    blurb: 'An independent newsroom reporting on AI and the technology around it in Bangladesh, and on the people it reaches first.',
     read: 'Read',
     min: 'min',
     minRead: (n) => `${n} min read`,
@@ -280,7 +280,7 @@ export const STR = {
   },
   bn: {
     tagline: 'এআই যেখানেই পৌঁছায়, সেখান থেকেই প্রতিবেদন।',
-    blurb: 'একটি অলাভজনক সংবাদমাধ্যম, যা বাংলাদেশে কৃত্রিম বুদ্ধিমত্তা ও তাকে ঘিরে থাকা প্রযুক্তি, আর সবার আগে যাঁদের কাছে তা পৌঁছায় তাঁদের নিয়ে কাজ করে।',
+    blurb: 'একটি স্বাধীন সংবাদমাধ্যম, যা বাংলাদেশে কৃত্রিম বুদ্ধিমত্তা ও তাকে ঘিরে থাকা প্রযুক্তি, আর সবার আগে যাঁদের কাছে তা পৌঁছায় তাঁদের নিয়ে কাজ করে।',
     read: 'পড়ুন',
     min: 'মিনিট',
     minRead: (n) => `${n} মিনিটের পড়া`,
