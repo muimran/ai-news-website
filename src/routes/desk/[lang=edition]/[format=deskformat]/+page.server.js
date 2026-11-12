@@ -3,6 +3,7 @@ import { LANGS } from '$lib/content.js';
 import { listFor } from '$lib/server/data.js';
 import { DESK_FORMATS, formatBySlug, isIt } from '../../formats.js';
 import { deskFormat, deskHome } from '../../urls.js';
+import { pageOf, PER } from '../../paging.js';
 
 const of = (lang, key) => listFor(lang).filter((s) => isIt(s, key));
 
@@ -15,5 +16,6 @@ export function load({ params }) {
   if (!stories.length) error(404, 'Nothing here yet');
   // the other edition's page for this format, if it has any
   const alt = Object.fromEntries(LANGS.map((l) => [l, of(l, f.key).length ? deskFormat(f.key, l) : deskHome(l)]));
-  return { format: f.key, stories, alt };
+  if (params.n && Number(params.n) > Math.ceil(stories.length / PER)) error(404, 'No such page');
+  return { format: f.key, ...pageOf(stories, Number(params.n ?? 1)), href: deskFormat(f.key, params.lang), alt };
 }

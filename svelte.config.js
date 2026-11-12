@@ -20,7 +20,15 @@ export default {
     }),
     paths: { base },
     prerender: {
-      handleHttpError: 'warn'
+      handleHttpError: 'warn',
+      /* A list's later pages (/page/2 …) and All stories' earlier months
+         exist only once there are enough stories; until then those routes
+         have nothing to build, which is fine. Any other unbuilt route is
+         still an error. */
+      handleUnseenRoutes: ({ routes, message }) => {
+        const later = (r) => r.includes('/page/[n=pageno]') || r.endsWith('/all/[year=year]/[month=month]');
+        if (!routes.every(later)) throw new Error(message);
+      }
     }
   }
 };

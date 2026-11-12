@@ -5,6 +5,7 @@
   import Frame from '../../Frame.svelte';
   import Side from '../../Side.svelte';
   import Stories from '../../Stories.svelte';
+  import Pager from '../../Pager.svelte';
   import { deskHome } from '../../urls.js';
   import { formatName } from '../../formats.js';
 
@@ -14,7 +15,8 @@
   const FRONT = { en: 'Front page', bn: 'প্রথম পাতা' };
   const FORMAT = { en: 'Format', bn: 'ধরন' };
   let q = $state('');
-  const shown = $derived(data.stories.filter((s) => matches(s, q)).length);
+  // the whole count until the reader filters this page
+  const shown = $derived(q.trim() ? data.stories.filter((s) => matches(s, q)).length : data.total);
 </script>
 
 <svelte:head>
@@ -23,7 +25,8 @@
 
 <Frame>
   {#snippet side()}
-    <Side {lang} label={FORMAT[lang]} title={formatName(data.format, lang)} total={data.stories.length} {shown} bind:q back={{ href: deskHome(lang), text: FRONT[lang] }} />
+    <Side {lang} label={FORMAT[lang]} title={formatName(data.format, lang)} total={data.total} {shown} bind:q back={{ href: deskHome(lang), text: FRONT[lang] }} />
   {/snippet}
-  {#key data.format}<Stories {lang} stories={data.stories} {q} />{/key}
+  {#key data.format}<Stories {lang} stories={data.stories} {q} lead={data.page === 1} />{/key}
+  <Pager {lang} page={data.page} pages={data.pages} href={data.href} />
 </Frame>

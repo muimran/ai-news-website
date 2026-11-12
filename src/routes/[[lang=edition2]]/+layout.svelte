@@ -96,8 +96,9 @@
     q = '';
   };
 
-  /* Search reads the edition's every story, headline to last line, fetched
-     the first time the menu opens, with MiniSearch (loaded only then too):
+  /* Search reads the edition's every story's headline, standfirst, writer
+     and place (the text is Pagefind's, below), fetched the first time the
+     menu opens, with MiniSearch (loaded only then too):
      whole words, word beginnings (union finds unionised), small typos
      forgiven, and the best matches first, a headline counting most. Stories
      with every word searched; if none has them all, those with some, said
@@ -119,7 +120,55 @@
       some
     };
   });
-  const found = $derived(results.list);
+  const byHeadline = $derived(results.list);
+
+  /* The full text: Pagefind's index, made from the built story pages (run
+     after vite build). It loads only the pieces a search needs and gives an
+     excerpt with the words searched marked. Not there under the dev server;
+     then the search reads headlines, standfirsts, writers and places. */
+  let pagefind = null;
+  const loadText = () =>
+    (pagefind ??= import(/* @vite-ignore */ `${base}/pagefind/pagefind.js`)
+      .then(async (m) => {
+        await m.options?.({ excerptLength: 26 });
+        await m.init?.();
+        return m;
+      })
+      .catch(() => null));
+  let deep = $state({ q: '', hits: [] });
+  $effect(() => {
+    const term = q.trim();
+    const l = lang;
+    if (open !== 'menu' || !term) return void (deep = { q: '', hits: [] });
+    const wait = setTimeout(async () => {
+      const m = await loadText();
+      const res = m && (await m.search(term));
+      if (!res || q.trim() !== term) return;
+      const top = await Promise.all(res.results.slice(0, 30).map((r) => r.data()));
+      // this site's story addresses: [/bn]/<year>/<month>/<slug> (the
+      // index also holds the other trials' copies, which are left out)
+      const hits = top.flatMap((d) => {
+        const at = d.url.replace(/(\.html)?\/?$/, '').split('/');
+        const n = at.length;
+        const front = at.slice(0, n - 3);
+        const mine = /^\d{4}$/.test(at[n - 3]) && !front.some((x) => x === 'desk' || x === 'map') && (l === 'bn') === (front.at(-1) === 'bn');
+        return mine ? [{ id: at.slice(n - 3).join('/'), excerpt: d.excerpt }] : [];
+      });
+      if (q.trim() === term) deep = { q: term, hits };
+    }, 180);
+    return () => clearTimeout(wait);
+  });
+  /* the headline matches first, then the stories found only in their text;
+     Pagefind's excerpt wherever it shows a word searched */
+  const found = $derived.by(() => {
+    const ex = deep.q === q.trim() ? deep.hits : [];
+    if (!index || !ex.length) return byHeadline;
+    const quote = new Map(ex.filter((h) => h.excerpt?.includes('<mark>')).map((h) => [h.id, h.excerpt]));
+    const list = byHeadline.map((r) => (quote.has(r.id) ? { ...r, excerpt: quote.get(r.id) } : r));
+    const seen = new Set(list.map((r) => r.id));
+    for (const h of ex) if (!seen.has(h.id) && index.byId.has(h.id)) list.push({ ...index.byId.get(h.id), terms: [], excerpt: quote.get(h.id) });
+    return list;
+  });
 
   /* Above the stories, the writers and topics a search names: every word
      searched starts a word of the name. Words of two letters or fewer
@@ -206,7 +255,7 @@
             idField: 'id',
             // only what a result shows: a match always has a visible reason
             // (topic names and tags would let "ai" find nearly everything)
-            fields: ['title', 'dek', 'author', 'location', 'text'],
+            fields: ['title', 'dek', 'author', 'location'],
             searchOptions: {
               boost: { title: 4, dek: 2, author: 2, location: 1.5 },
               // a word's beginning finds the word from three letters on
@@ -428,7 +477,7 @@
               >
               <span class="ct"><Mark key={s.section} size={14} />{sectionLabel(s.section, lang)}</span>
               <span class="snip"
-                >{#each marked((s.byWriter ? `${s.author} · ` : '') + (s.byPlace && s.location ? `${s.location} · ` : '') + snippet(s, s.terms), s.terms) as p, i (i)}{#if p.hit}<mark>{p.t}</mark>{:else}{p.t}{/if}{/each}</span
+                >{#if s.excerpt}{@html s.excerpt}{:else}{#each marked((s.byWriter ? `${s.author} · ` : '') + (s.byPlace && s.location ? `${s.location} · ` : '') + snippet(s, s.terms), s.terms) as p, i (i)}{#if p.hit}<mark>{p.t}</mark>{:else}{p.t}{/if}{/each}{/if}</span
               >
             </a>
           {/each}
@@ -1236,7 +1285,7 @@
     line-height: 1.45;
     color: var(--mute);
   }
-  .res mark {
+  .res :global(mark) {
     background: none;
     color: var(--o-text);
     font-weight: 650;

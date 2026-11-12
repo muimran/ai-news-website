@@ -10,7 +10,8 @@ import { stories } from './content.js';
 
 /* A story's footprint in world units: dot, meta line, up to four lines of
    headline and four of dek. Cell spacing leaves a gutter around it. */
-export const CELL = { w: 330, h: 230 };
+import { CELL } from './map-cell.js';
+export { CELL };
 const COL = 400;
 const ROW = 280;
 

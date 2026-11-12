@@ -1,11 +1,10 @@
 <script>
   import { onMount } from 'svelte';
   import { fly } from 'svelte/transition';
-  import { marked } from 'marked';
   import { replaceState } from '$app/navigation';
   import { base } from '$app/paths';
-  import { getStory, sibling, kindLabel, sectionLabel, formatNumber } from '$lib/content.js';
-  import { mapFor, BOUNDS, CELL } from '$lib/map.js';
+  import { kindLabel, sectionLabel, formatNumber } from '$lib/labels.js';
+  import { CELL } from '$lib/map-cell.js';
 
   let { data } = $props();
 
@@ -54,7 +53,9 @@
   const lang = $derived(data.lang);
   const other = $derived(lang === 'en' ? 'bn' : 'en');
   const L = $derived(STR[lang]);
-  const map = $derived(mapFor(lang));
+  // the map comes from the server, without the stories' text
+  const map = $derived(data.map);
+  const BOUNDS = $derived(data.bounds);
   const order = $derived(
     [...map.items].sort((a, b) => b.story.date - a.story.date || a.story.weight - b.story.weight)
   );
@@ -105,7 +106,7 @@
   let cam = $state(firstCam());
 
   function firstCam() {
-    const item = data.slug && mapFor(data.lang).items.find((i) => i.story.slug === data.slug);
+    const item = data.slug && data.map.items.find((i) => i.story.slug === data.slug);
     return item ? storyCam(item, true) : overview();
   }
 
@@ -212,19 +213,23 @@
   }
 
   function hrefFor(l) {
-    const s = openSlug && getStory(openSlug, lang);
+    const s = openItem?.story;
     if (!s) return home(l);
-    if (l === lang) return url(s);
-    const sib = sibling(s, l);
-    return sib ? url(sib) : home(l);
+    return s.alt[l] ? url({ lang: l, slug: s.alt[l] }) : home(l);
   }
 
-  /* Most bodies open by repeating the dek, which the panel already shows. */
-  function bodyHtml(s) {
-    let b = s.body;
-    if (s.dek && b.startsWith(s.dek)) b = b.slice(s.dek.length).trimStart();
-    return marked.parse(b);
-  }
+  /* A story's text, fetched the first time it's opened (the page with a
+     story open already has that one's) */
+  let texts = $state({ ...data.text });
+  $effect(() => {
+    const slug = openSlug;
+    const l = lang;
+    if (!slug || texts[slug] !== undefined) return;
+    fetch(`${base}/map/${l}/text/${slug}.json`)
+      .then((r) => (r.ok ? r.json() : { html: '' }))
+      .then(({ html }) => (texts = { ...texts, [slug]: html }));
+  });
+  const bodyHtml = (s) => texts[s.slug] ?? '';
 
   /* ---------------- search ---------------- */
   let q = $state('');
@@ -501,7 +506,7 @@
 
   {#if openItem}
     {@const s = openItem.story}
-    {@const sib = sibling(s, other)}
+    {@const sib = s.alt[other] ? { lang: other, slug: s.alt[other] } : null}
     <aside
       class="panel"
       style={wide ? `width:${panelW}px` : ''}

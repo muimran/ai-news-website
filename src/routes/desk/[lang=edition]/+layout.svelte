@@ -14,7 +14,8 @@
   import { formatNumber } from '$lib/labels.js';
   import { STR } from '$lib/site/reel.js';
   import Panel from '../Panel.svelte';
-  import { deskHome, deskAll, deskAuthors, deskPage } from '../urls.js';
+  import { deskHome, deskAll, deskAuthors, deskPage, deskSupport } from '../urls.js';
+  import { GIVE } from '../support.js';
 
   let { data, children } = $props();
   const lang = $derived(data.lang);
@@ -50,6 +51,8 @@
   <header class="bar">
     <a class="name" href={deskHome(lang)}>Second Order</a>
     {#if data.day}<span class="date">{DAY[lang].format(new Date(data.day))}</span>{/if}
+    <!-- asking readers for money: on every page, first of the tools -->
+    <a class="tool give" href={deskSupport(lang)} aria-current={page.url.pathname.replace(/\/$/, '') === deskSupport(lang) ? 'page' : undefined}>{GIVE[lang].button}</a>
     <button type="button" class="tool seek" aria-expanded={panel === 'search'} aria-controls="desk-menu" onclick={() => (panel = panel === 'search' ? null : 'search')}
       ><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.75" /><path d="M10 10l4.5 4.5" /></svg><span>{panel === 'search' ? L.close : L.search}</span>{#if panel !== 'search'}<kbd>/</kbd>{/if}</button
     >
@@ -219,6 +222,18 @@
     color: var(--mute);
     white-space: nowrap;
   }
+  /* Donate: the one filled box in the bar, so it's seen on every page;
+     under the mouse it turns to paper, the others' way round */
+  .tool.give {
+    background: var(--ink);
+    color: var(--card);
+  }
+  .tool.give:hover,
+  .tool.give:focus-visible,
+  .tool.give[aria-current] {
+    background: var(--card);
+    color: var(--ink);
+  }
   .tool svg {
     width: 0.8rem;
     height: 0.8rem;
@@ -292,7 +307,14 @@
       --title: 1.375rem;
     }
     .bar .name {
-      font-size: 1.625rem;
+      font-size: 1.45rem;
+    }
+    /* four boxes and the name on one line, even in Bangla */
+    .bar {
+      gap: 0.3rem;
+    }
+    .tool {
+      padding: 0 0.5rem;
     }
     .seek span,
     .seek kbd {
@@ -303,6 +325,12 @@
     }
     .motto {
       flex-basis: 100%;
+    }
+  }
+  /* the narrowest phones (360px): the name a little smaller again */
+  @media (max-width: 379px) {
+    .bar .name {
+      font-size: 1.3rem;
     }
   }
 </style>

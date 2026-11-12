@@ -6,6 +6,7 @@
   import { matches, STR } from '$lib/site/reel.js';
   import Frame from '../../../Frame.svelte';
   import Stories from '../../../Stories.svelte';
+  import Pager from '../../../Pager.svelte';
   import { deskAuthors } from '../../../urls.js';
 
   let { data } = $props();
@@ -34,7 +35,7 @@
         {#each w.links as l (l.href)}<a class="mono chip" href={l.href} rel="me noopener">{l.label} ↗</a>{/each}
       </p>
     {/if}
-    <p class="mono count" aria-live="polite">{q.trim() ? L.shown(num(shown), num(data.stories.length)) : L.count(num(data.stories.length))}</p>
+    <p class="mono count" aria-live="polite">{q.trim() ? L.shown(num(shown), num(data.total)) : L.count(num(data.total))}</p>
     <label class="filter">
       <span class="sr">{L.searchBy}</span>
       <input type="search" bind:value={q} placeholder={L.searchBy} autocomplete="off" />
@@ -42,6 +43,7 @@
     <a class="mono back" href={deskAuthors(lang)}>← {L.reporters}</a>
   {/snippet}
   {#key w.slug}<Stories {lang} stories={data.stories} {q} lead={false} />{/key}
+  <Pager {lang} page={data.page} pages={data.pages} href={data.href} />
 </Frame>
 
 <style>

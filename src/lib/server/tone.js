@@ -4,7 +4,8 @@
    words go dark or white, whichever reads better on it. An editor can set
    the colour by hand instead ("Card colour" in the CMS). */
 
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import sharp from 'sharp';
 import { base } from '$app/paths';
 
@@ -44,6 +45,27 @@ export function toneFor(bg, { adjust = true } = {}) {
 
 const cache = new Map();
 
+/* Kept between builds in .cache/tones.json, by the picture's contents (not
+   its name or date: a fresh checkout dates every file anew), so a build
+   works out the colour only of pictures it hasn't seen. The deploy keeps
+   .cache between runs. */
+const DISK = '.cache/tones.json';
+let disk = {};
+try {
+  disk = JSON.parse(readFileSync(DISK, 'utf8'));
+} catch {
+  // none yet
+}
+function keep(key, value) {
+  disk[key] = value;
+  try {
+    mkdirSync('.cache', { recursive: true });
+    writeFileSync(DISK, JSON.stringify(disk));
+  } catch {
+    // can't write: worked out again next time
+  }
+}
+
 /** The dominant colour of a picture's upper half: its pixels sorted into
     coarse colour bins, the fullest bin's average. Null if the file can't be
     read. `src` is the address the page uses. */
@@ -52,7 +74,13 @@ export async function dominant(src) {
   let out = null;
   try {
     const path = 'static' + decodeURI(src.slice(base.length));
-    const img = sharp(readFileSync(path)).resize(80, null).removeAlpha();
+    const file = readFileSync(path);
+    const key = createHash('sha1').update(file).digest('hex');
+    if (key in disk) {
+      cache.set(src, disk[key]);
+      return disk[key];
+    }
+    const img = sharp(file).resize(80, null).removeAlpha();
     const { data, info } = await img.raw().toBuffer({ resolveWithObject: true });
     const end = Math.ceil(info.height / 2) * info.width * 3;
     const bins = new Map();
@@ -67,6 +95,7 @@ export async function dominant(src) {
     }
     const [r, g, b, n] = [...bins.values()].sort((x, y) => y[3] - x[3])[0];
     out = hex([r / n, g / n, b / n]);
+    keep(key, out);
   } catch {
     out = null;
   }

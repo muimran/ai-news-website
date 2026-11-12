@@ -23,7 +23,8 @@
   import { kindLabel, sectionLabel, formatNumber, KINDS } from '$lib/labels.js';
   import { photo, SHORT_DATE, FULL_DATE, STR } from '$lib/site/reel.js';
   import Frame from '../../../../Frame.svelte';
-  import { deskTopic, deskAuthor, deskStory } from '../../../../urls.js';
+  import { deskTopic, deskAuthor, deskStory, deskSupport } from '../../../../urls.js';
+  import { GIVE } from '../../../../support.js';
 
   let { data } = $props();
   const lang = $derived(data.lang);
@@ -315,6 +316,8 @@
         </div>
         <!-- narrower: who wrote it, once it has been read -->
         <div class="narrow byend">{@render who()}</div>
+        <!-- right after the story: the moment a reader knows what it was worth -->
+        <p class="ask"><span>{GIVE[lang].end}</span><a class="mono" href={deskSupport(lang)}>{GIVE[lang].endCta} →</a></p>
         {#if gloss}
           <div class="gloss" role="dialog" aria-label={gloss.term} style:top="{gloss.top}px" style:left="{gloss.left}px" onpointerover={() => clearTimeout(hoverTimer)} onpointerout={unhover}>
             <b>{gloss.term}</b>
@@ -640,6 +643,43 @@
     box-sizing: content-box;
     max-width: var(--read);
     padding: clamp(1.75rem, 3vw, 3rem) clamp(1.25rem, 3vw, 3rem) clamp(2rem, 4vw, 3.5rem);
+  }
+  /* the ask at the end of a story: a ruled line, the reason and the way */
+  .ask {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.25rem;
+    max-width: var(--read);
+    margin: 2.25rem 0 0;
+    padding: 1.1rem 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    font-family: var(--serif);
+    font-size: 1.125rem;
+    line-height: 1.35;
+  }
+  .ask a {
+    display: inline-flex;
+    align-items: center;
+    height: 2.25rem;
+    padding: 0 0.9rem;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--card);
+    font-family: var(--mono);
+    font-size: var(--ms);
+    font-weight: 500;
+    letter-spacing: var(--mt);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .ask a:hover,
+  .ask a:focus-visible {
+    background: var(--card);
+    color: var(--ink);
+    outline: none;
   }
   .again {
     margin: 0 0 1.5rem;

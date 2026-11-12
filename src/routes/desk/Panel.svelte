@@ -179,8 +179,8 @@
       ([{ stories: rows, writers }, { default: MiniSearch }]) => {
         const ms = new MiniSearch({
           idField: 'id',
-          fields: ['title', 'dek', 'author', 'location', 'tags'],
-          extractField: (doc, f) => (Array.isArray(doc[f]) ? doc[f].join(' ') : doc[f]),
+          // not topics or tags: they'd let "ai" find nearly everything
+          fields: ['title', 'dek', 'author', 'location'],
           searchOptions: {
             boost: { title: 4, dek: 2, author: 2, location: 1.5 },
             prefix: (term) => term.length >= 3,

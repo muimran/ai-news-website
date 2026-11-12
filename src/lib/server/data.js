@@ -191,23 +191,12 @@ export const storiesByWriter = (w) =>
     .map(row);
 
 /** The search list: headlines and summaries only, fetched when search opens. */
-/* A story's running text as plain words, for search to look through and
-   quote from: no headings, no markdown, no tags, one space between words. */
-const plain = (md = '') =>
-  md
-    .replace(/^\s{0,3}#{1,6}\s.*$/gm, ' ')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
-    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-    .replace(/^\s{0,3}(>|[-*+]|\d+\.)\s+/gm, '')
-    .replace(/[*_`~]+/g, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-
-/** Everything search needs for an edition: every story (its row plus its
-    running text) and every writer (to be found by name). */
+/** Everything search needs for an edition: every story's row (not its
+    text, which Pagefind searches) and every writer (to be found by name). */
 export const searchIndex = (lang) => ({
-  stories: order(lang).map((s) => ({ ...row(s), location: s.location, text: plain(s.body) })),
+  // no text: Pagefind searches that, from the built pages, so this file
+  // stays small however many stories there are
+  stories: order(lang).map((s) => ({ ...row(s), location: s.location })),
   writers: writers().map(({ slug, name, name_bn, role, role_bn, photo, count }) => ({
     slug,
     name,

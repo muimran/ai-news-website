@@ -13,7 +13,7 @@
   import Side from '../../Side.svelte';
   import Stories from '../../Stories.svelte';
   import { DESK_FORMATS, isIt, formatName } from '../../formats.js';
-  import { deskHome } from '../../urls.js';
+  import { deskHome, deskAll, deskAllMonth } from '../../urls.js';
 
   let { data } = $props();
   const lang = $derived(data.lang);
@@ -41,16 +41,20 @@
       (s) => (!only.day || dayOf(s) === only.day) && (!only.topic || s.section === only.topic) && (!only.format || isIt(s, only.format))
     )
   );
-  const shown = $derived(chosen.filter((s) => matches(s, q)).length);
+  const shown = $derived(q.trim() || any ? chosen.filter((s) => matches(s, q)).length : data.total);
+  // the months either side of this one
+  const at = $derived(data.months.indexOf(data.ym));
+  const newer = $derived(at > 0 ? data.months[at - 1] : null);
+  const older = $derived(at < data.months.length - 1 ? data.months[at + 1] : null);
+  /* the other years there are stories in, each to its newest month */
+  const years = $derived([...new Set(data.months.map((ym) => ym.slice(0, 4)))].filter((y) => y !== data.ym.slice(0, 4)).map((y) => ({ y, ym: data.months.find((m) => m.startsWith(y)) })));
+  const monthHref = (ym) => (ym === data.months[0] ? deskAll(lang) : deskAllMonth(lang, ym));
 
   /* the months there are stories in, oldest first, each as weeks of days */
-  const perDay = $derived.by(() => {
-    const m = new Map();
-    for (const s of data.stories) m.set(dayOf(s), (m.get(dayOf(s)) ?? 0) + 1);
-    return m;
-  });
+  const perDay = $derived(new Map(Object.entries(data.days)));
   const months = $derived.by(() => {
-    const keys = [...new Set([...perDay.keys()].map((d) => d.slice(0, 7)))].sort();
+    // this page's year only; the other years are links (below)
+    const keys = [...new Set([...perDay.keys()].map((d) => d.slice(0, 7)))].filter((ym) => ym.startsWith(data.ym.slice(0, 4))).sort();
     return keys.map((ym) => {
       const [y, mo] = ym.split('-').map(Number);
       const first = new Date(Date.UTC(y, mo - 1, 1));
@@ -61,7 +65,7 @@
         const key = `${ym}-${String(d).padStart(2, '0')}`;
         cells.push({ key, n: perDay.get(key) ?? 0, label: DAY.format(new Date(Date.UTC(y, mo - 1, d))) });
       }
-      return { ym, name: MONTH.format(first), cells };
+      return { ym, name: MONTH.format(first), cells, here: ym === data.ym };
     });
   });
 
@@ -80,18 +84,21 @@
 
 <Frame>
   {#snippet side()}
-    <Side {lang} label={W[lang].archive} title={L.all} total={data.stories.length} {shown} bind:q back={{ href: deskHome(lang), text: W[lang].front }} />
+    <Side {lang} label={W[lang].archive} title={L.all} total={data.total} {shown} bind:q back={{ href: deskHome(lang), text: W[lang].front }} />
 
     <section class="hist days">
       <h2 class="mono">{W[lang].days}{#if any}<button type="button" class="mono clear" onclick={clear}>{W[lang].clear} ×</button>{/if}</h2>
       <div class="cals">
         {#each months as m (m.ym)}
-          <div class="cal">
-            <p class="mono">{m.name}</p>
+          <div class="cal" class:here={m.here}>
+            <!-- this page's month is the one that filters; another is a way to its page -->
+            {#if m.here}<p class="mono">{m.name}</p>{:else}<a class="mono to" href={monthHref(m.ym)}>{m.name} →</a>{/if}
             <div class="grid">
               {#each m.cells as c, i (i)}
                 {#if !c}
                   <span></span>
+                {:else if c.n && !m.here}
+                  <span class="d n{Math.min(c.n, 3)}" title={W[lang].on(c.n, c.label)}></span>
                 {:else if c.n}
                   <button type="button" class="d n{Math.min(c.n, 3)}" aria-pressed={only.day === c.key} title={W[lang].on(c.n, c.label)} aria-label={W[lang].on(c.n, c.label)} onclick={() => pick('day', c.key)}
                   ></button>
@@ -103,6 +110,9 @@
           </div>
         {/each}
       </div>
+      {#if years.length}
+        <p class="mono years">{#each years as x (x.y)}<a class="to" href={monthHref(x.ym)}>{num(Number(x.y)).replace(/[,،]/g, '')} →</a>{/each}</p>
+      {/if}
     </section>
 
     {#snippet bars(title, list, key)}
@@ -119,6 +129,12 @@
     {@render bars(W[lang].formats, formats, 'format')}
   {/snippet}
   <Stories {lang} stories={chosen} {q} lead={false} />
+  {#if newer || older}
+    <nav class="months mono" aria-label={W[lang].archive}>
+      {#if newer}<a href={monthHref(newer)} rel="prev">← {MONTH.format(new Date(newer + '-01T00:00:00Z'))}</a>{:else}<span></span>{/if}
+      {#if older}<a href={monthHref(older)} rel="next">{MONTH.format(new Date(older + '-01T00:00:00Z'))} →</a>{/if}
+    </nav>
+  {/if}
 </Frame>
 
 <style>
@@ -132,6 +148,45 @@
   p,
   h2 {
     margin: 0;
+  }
+  /* the month nav under the ledger, and other months in the history */
+  .months {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem 0;
+    border-top: 1px solid var(--ink);
+  }
+  .months a {
+    display: inline-flex;
+    align-items: center;
+    height: 2rem;
+    padding: 0 0.75rem;
+    border: 1px solid var(--ink);
+    background: var(--card);
+    text-decoration: none;
+  }
+  .months a:hover,
+  .months a:focus-visible {
+    background: var(--ink);
+    color: var(--card);
+    outline: none;
+  }
+  .years {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    margin-top: 0.75rem;
+  }
+  .to {
+    color: var(--mute);
+    text-decoration: none;
+  }
+  .to:hover,
+  .to:focus-visible {
+    color: var(--ink);
+    text-decoration: underline;
+    outline: none;
   }
   .hist {
     padding-top: 0.9rem;

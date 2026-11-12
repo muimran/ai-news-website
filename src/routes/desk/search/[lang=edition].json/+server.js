@@ -9,6 +9,5 @@ export const prerender = true;
 export const entries = () => [{ lang: 'en' }, { lang: 'bn' }];
 
 export function GET({ params }) {
-  const { stories, writers } = searchIndex(params.lang);
-  return json({ stories: stories.map(({ text, ...row }) => row), writers });
+  return json(searchIndex(params.lang));
 }

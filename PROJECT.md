@@ -146,6 +146,16 @@ The bar, the same on every page:
   either is open the bar keeps only the name and the buttons. `/` opens
   Search from anywhere, Esc closes.
 - **Every box in the bar is one height** (32px), whatever is in it.
+- **Donate** is the first of the tools and the one filled (ink) box in the
+  bar, on every page; under the mouse it turns to paper. It leads to
+  `/desk/<edition>/support`, which says why readers' money matters and
+  that ways to give are coming soon. Every story also ends with a ruled
+  line, "Reporting like this is paid for by readers", and an ink button to
+  the same page. One page, so changing how people give (card gateway,
+  bKash/Nagad, bank transfer, depending on where the outlet is registered)
+  never means changing the buttons. The words are in `desk/support.js`.
+  On phones the bar's boxes and name were tightened so all four fit on one
+  line down to 360px, in Bangla too.
 
 The pages:
 - **Front.** The lead as a card in its picture's own colour with the
@@ -421,23 +431,37 @@ undo it" log.
   or stale ones are made), and `photo()` in `src/lib/site/reel.js` points
   at them. A 1.4 MB test upload became 0.9 / 6.9 / 35 KB. The hand-made
   JPGs in `uploads/stories/` (the `PHOTOS` list) still work as before.
-- **Search at scale: done on Desk (Nov 2026).** Desk's search file
-  (`/desk/search/<edition>.json`) carries headlines, standfirsts, writers,
-  places and tags but no text (27 KB for 38 stories, was 80 KB). The text
-  is searched by Pagefind (`pagefind`, pinned 1.5.2), which `npm run build`
-  runs after `vite build` over the built pages: it indexes only what's
-  marked `data-pagefind-body` (a Desk story's text), one index per edition
-  (from `<html lang>`), and loads only the pieces a search needs. Headline
-  matches come first, then stories found only in their text; a story shows
-  Pagefind's excerpt, with the searched words marked, when the excerpt
-  marks one, else its standfirst. Under the dev server there's no Pagefind
-  index, so search reads headlines only; test full text on a build. The
-  panes site still uses its own full-text `/search/<edition>.json`.
-- **Growing to thousands of stories**, still to do, in order: All stories, topic and format pages list everything
-  (page them by year or month); GitHub Pages' ~1 GB limit (~1,500 stories
-  of pictures; put pictures on an image host, and delete the trials not
-  chosen, each of which builds every page again); `/map` ships every
-  story's text to the browser.
+- **Search at scale: done on both sites (Nov 2026).** The search files
+  (`/search/<edition>.json` for the panes site, `/desk/search/<edition>.json`
+  for Desk) carry headlines, standfirsts, writers and places, no text (27 KB
+  for 38 stories, was 80 KB). The text is searched by Pagefind (`pagefind`,
+  pinned 1.5.2), which `npm run build` runs after `vite build` over the
+  built pages: it indexes only what's marked `data-pagefind-body` (the text
+  of a story on each site), one index per edition (from `<html lang>`),
+  and loads only the pieces a search needs. Each site keeps only its own
+  copies of a story from the results. Headline matches come first, then
+  stories found only in their text; a story shows Pagefind's excerpt, with
+  the searched words marked, when the excerpt marks one, else its
+  standfirst. Under the dev server there's no Pagefind index, so search
+  reads headlines only; test full text on a build. Topics and tags aren't
+  searched ("ai" would find everything).
+- **Long lists: paged (Nov 2026).** A topic, a format or a writer shows at
+  most 60 stories (`desk/paging.js`), older ones on `/page/2`, `/page/3` …,
+  with Newer / Older under the list. All stories is a month to a page
+  (`/all` the newest, `/all/2026/09` any other), Newer / Older month under
+  it; its history down the side is drawn from per-day counts, this year's
+  months as grids (other months link to their page), other years as links.
+  Those routes have nothing to build until there are enough stories, which
+  `svelte.config.js` allows (any other unbuilt route still fails the build).
+- **The map trial** gets its map from the server, without the stories'
+  text; a story's text is fetched when it's opened (`/map/<edition>/text/
+  <slug>.json`). Before, the browser loaded every story's full text.
+- **Picture colours and sizes are cached between builds** in `.cache/` (not
+  in git), by each picture's contents, so a build only works out what's new.
+  The deploy keeps `.cache` and `static/uploads/sized` with GitHub's cache.
+- **Still to do for thousands of stories:** GitHub Pages' ~1 GB limit (about
+  1,500 stories of pictures): put pictures on an image host, and delete the
+  trials not chosen, each of which builds every page again.
 - **Social links** in the footer point at placeholder `#about` — real URLs
   need to go into the `SOCIAL` array in `Footer.svelte`.
 - **Newsletter signup** fakes a 900ms delay — no real endpoint wired.

@@ -9,3 +9,6 @@ build/
 
 # picture sizes made at build from uploads (scripts/sizes.js)
 static/uploads/sized/
+
+# colours and picture sizes worked out by earlier builds
+.cache/

@@ -23,6 +23,14 @@ jobs:
         with:
           node-version: 20
       - run: npm ci
+      # picture colours and sizes worked out by earlier builds (by contents)
+      - uses: actions/cache@v4
+        with:
+          path: |
+            .cache
+            static/uploads/sized
+          key: pictures-${{ hashFiles('static/uploads/**', '!static/uploads/sized/**') }}
+          restore-keys: pictures-
       - run: npm run build
         env:
           BASE_PATH: /${{ github.event.repository.name }}

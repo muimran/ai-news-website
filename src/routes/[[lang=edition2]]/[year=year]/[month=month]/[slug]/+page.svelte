@@ -368,7 +368,8 @@
         {#if resume}<button type="button" class="again fill" onclick={pickUp}>{L.pickUp} · {formatNumber(Math.round(resume.p * 100), lang)}% ↓</button>{/if}
         <!-- a tap on a source mark opens its note in place (on a wide
              screen the notes already stand in the margin) -->
-        <div class="body">
+        <!-- the story's text is what Search reads in full (Pagefind, at build) -->
+        <div class="body" data-pagefind-body>
           {#each data.blocks as b, n (n)}
             {#if b.also}<AlsoCard story={b.also} {lang} />{:else}{@html b.html}{/if}
           {/each}
