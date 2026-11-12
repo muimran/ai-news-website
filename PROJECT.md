@@ -180,9 +180,9 @@ The bar, the same on every page:
   still, and a reader looks for play in the middle. The video's address is
   the story's `video:` (any YouTube link); the swap is Desk's own
   (`desk/[lang=edition]/+page.server.js`), the other trials unchanged.
-  **For testing,** "The rise of the prompt supervisor" has a stand-in
-  video (3Blue1Brown's neural-network one) where it had a placeholder
-  address: replace it with the real one.
+  **Live with a stand-in:** "The rise of the prompt supervisor" has
+  3Blue1Brown's neural-network video (pushed Nov 2026, on purpose, so the
+  card shows): replace it with the real one.
 - **Topic, format, writer, all stories.** One pattern (`Frame`, `Side`,
   `Stories`): what the page is down the left, held there (name, count, a
   field to filter its stories, the way back); beside it the newest as a
