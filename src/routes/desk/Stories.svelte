@@ -196,7 +196,7 @@
   }
   .row {
     display: grid;
-    grid-template-columns: 7.5rem 5.5rem minmax(0, 1fr);
+    grid-template-columns: 7.5rem 7rem minmax(0, 1fr);
     align-items: start;
     gap: 1.1rem;
     padding: 0.95rem 0;
@@ -206,12 +206,10 @@
   section:last-child .row:last-child {
     border-bottom: 0;
   }
-  /* the picture as tall as the row's words (the row doesn't grow for it),
-     never shorter than a squat landscape */
+  /* the picture: always 4:3, as on the front page */
   .sq {
     display: block;
-    align-self: stretch;
-    min-height: 5.25rem;
+    aspect-ratio: 4 / 3;
     overflow: hidden;
     border: 1px solid var(--ink);
     background: var(--bg, var(--hair));
@@ -305,12 +303,11 @@
       padding: 0 1rem 0.25rem;
     }
     .row {
-      grid-template-columns: 4.5rem minmax(0, 1fr);
+      grid-template-columns: 5.5rem minmax(0, 1fr);
       gap: 0.9rem;
     }
     .sq {
       grid-row: 1 / 3;
-      min-height: 4.5rem;
     }
     .when {
       grid-column: 2;

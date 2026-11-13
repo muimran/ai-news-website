@@ -25,6 +25,7 @@
   import Frame from '../../../../Frame.svelte';
   import { deskTopic, deskAuthor, deskStory, deskSupport } from '../../../../urls.js';
   import { GIVE } from '../../../../support.js';
+  import Screen from '../../../../Screen.svelte';
 
   let { data } = $props();
   const lang = $derived(data.lang);
@@ -36,13 +37,16 @@
   const topicNo = $derived(data.topics.findIndex((t) => t.key === s.section) + 1);
 
   const W = {
-    en: { video: 'Video', next: 'Read next', also: 'Also from Second Order', watch: (n) => `${n} min watch` },
-    bn: { video: 'ভিডিও', next: 'এরপর পড়ুন', also: 'সেকেন্ড অর্ডারে আরও', watch: (n) => `${n} মিনিটের ভিডিও` }
+    en: { video: 'Video', play: 'Play', min: 'min', next: 'Read next', also: 'Also from Second Order', watch: (n) => `${n} min watch` },
+    bn: { video: 'ভিডিও', play: 'চালান', min: 'মিনিট', next: 'এরপর পড়ুন', also: 'সেকেন্ড অর্ডারে আরও', watch: (n) => `${n} মিনিটের ভিডিও` }
   };
   const kind = (x) => (KINDS.includes(x.kind) ? kindLabel(x.kind, x.lang) : x.video ? W[x.lang].video : null);
   const length = $derived(s.video ? W[lang].watch(num(s.duration || s.readTime)) : L.minRead(num(s.readTime)));
+  // a video's page plays it under the head, in place of the picture
   const credit = $derived(
-    pic?.illustration
+    data.watch
+      ? null
+      : pic?.illustration
       ? lang === 'bn' ? 'অলংকরণ: সেকেন্ড অর্ডার / আনস্প্ল্যাশ' : 'Illustration: Second Order / Unsplash'
       : data.credit ? `${lang === 'bn' ? 'ছবি' : 'Photo'}: ${data.credit}` : null
   );
@@ -292,8 +296,8 @@
 
     <article class="sheet" {lang} bind:this={article}>
       <!-- the head: the story's card, as large as the page -->
-      <header class="head" style:--bg={s.tone?.bg} style:--fg={s.tone?.fg}>
-        {#if pic}<img class="art" src={pic.src} srcset={pic.srcset} sizes="(max-width: 759px) 100vw, 45vw" alt="" />{/if}
+      <header class="head" class:watching={data.watch} style:--bg={s.tone?.bg} style:--fg={s.tone?.fg}>
+        {#if pic && !data.watch}<img class="art" src={pic.src} srcset={pic.srcset} sizes="(max-width: 759px) 100vw, 45vw" alt="" />{/if}
         <div class="htxt">
           <p class="mono tag"><i class="dot" aria-hidden="true"></i>{[sectionLabel(s.section, lang), kind(s)].filter(Boolean).join(' / ')}</p>
           <h1>{s.title}</h1>
@@ -301,6 +305,9 @@
           <p class="mono by">{[s.author, FULL_DATE[lang].format(new Date(s.date)), length].filter(Boolean).join(' · ')}</p>
         </div>
       </header>
+      {#if data.watch}
+        <Screen id={data.watch.id} still={data.watch.still} title={s.title} label="{W[lang].play} · {num(s.duration || s.readTime)} {W[lang].min}" />
+      {/if}
       {#if credit}<p class="mono credit">{credit}</p>{/if}
       <!-- narrower, the side column goes: its ways in sit under the head -->
       {@render ways('narrow')}
@@ -631,6 +638,14 @@
     -webkit-mask-composite: source-in;
     mask-image: linear-gradient(to bottom, transparent, #000 36%), linear-gradient(to right, transparent, #000 30%);
     mask-composite: intersect;
+  }
+  /* a video's head: no picture in it (the video is right under it), so
+     only as tall as its words, which take more of the width */
+  .head.watching {
+    min-height: 0;
+  }
+  .head.watching .htxt {
+    max-width: 46rem;
   }
   .credit {
     padding: 0.6rem clamp(1.25rem, 3vw, 3rem) 0;
@@ -1065,6 +1080,9 @@
       max-width: none;
       gap: 0.9rem;
       padding-bottom: 0;
+    }
+    .head.watching .htxt {
+      padding-bottom: 1.5rem;
     }
     h1 {
       font-size: calc(clamp(2rem, 9vw, 2.6rem) * var(--hk));

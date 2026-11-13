@@ -165,7 +165,7 @@ The bar, the same on every page:
   object standing in it, two seconds beside it; a Latest box of the eight
   newest under its purple "now" notch, with the way to all of them; then
   a **dossier** to a topic: a tray of paper, its first story a colour
-  card, the rest rows with a small square of their picture. The column
+  card, the rest rows with a small picture of their own. The column
   down the left is the index (topics, then formats) and marks the dossier
   on screen.
 - **A box's name sits in a notch cut into its top-left corner** (number,
@@ -178,7 +178,10 @@ The bar, the same on every page:
   at the right. Until Nov 2026 it was a file tab standing on the box's top
   edge; also considered then: the name set into a rule across the box, a
   framed drawer label, a ticket stub down the left, a big numeral on the
-  edge (the most magazine-like).
+  edge (the most magazine-like). A dossier's notch takes a pale wash of
+  its first story's colour (24% of it on the page's grey), so the name and
+  the card under it read as one; the words stay ink. Purple stays only on
+  the number of the dossier being read and on Latest's "now" notch.
 - **A video beside the lead.** When there's a video, the newest one takes
   the second of the two cards beside the lead and plays there (its topic's
   dossier then leaves it out). The card is the still across the top, in
@@ -194,7 +197,33 @@ The bar, the same on every page:
   (`desk/[lang=edition]/+page.server.js`), the other trials unchanged.
   **Live with a stand-in:** "The rise of the prompt supervisor" has
   3Blue1Brown's neural-network video (pushed Nov 2026, on purpose, so the
-  card shows): replace it with the real one.
+  card shows): replace it with the real one. The player is one component,
+  `desk/Screen.svelte`.
+- **A video story's page plays it.** Under the head, in place of the
+  picture: the same still and play box, full width of the sheet; the head
+  is then only as tall as its words. The still there is the one made at
+  build (sharper than YouTube's small one).
+- **A video with no picture gets YouTube's still.** If the editor gave a
+  video story no picture, `scripts/stills.js` downloads YouTube's own
+  thumbnail once at build (into `.cache/yt/`, kept between deploys), cuts
+  off any letterbox bars and makes the usual three sizes as
+  `uploads/sized/yt-<id>-<w>.webp`. The story then has that picture
+  everywhere, and its card colour is worked out from it like any other.
+  An editor's own picture or "Card colour" always wins. Offline, nothing
+  is made and the story has no picture, as before.
+- **Thumbnails are always 4:3** (Nov 2026), on the front page and in every
+  list: one shape, so a column of them reads as one set. A fixed width per
+  screen (front rows 8rem, the card beside the lead 6.5rem, lists 7rem;
+  smaller on phones), the height following. Before this they stretched
+  to fill their row; a topic box with one story beside its lead then made
+  a tall sliver of it. Wider than 6.5rem, the card beside the lead wraps
+  its headline and grows, so it stays there.
+- **Standfirsts on the front page only where they earn it:** the main lead
+  and each topic's first card. Not the card beside the lead (it would
+  compete with the lead), not the rows (the headlines are full sentences;
+  standfirsts would halve how many fit and make it a contents page), not
+  Latest (dates and headlines, fast). Search, topic pages and All stories
+  show every standfirst.
 - **Topic, format, writer, all stories.** One pattern (`Frame`, `Side`,
   `Stories`): what the page is down the left, held there (name, count, a
   field to filter its stories, the way back); beside it the newest as a
@@ -437,6 +466,11 @@ is the bigger picture; `NOTES.md` is the itemized "what was cut and how to
 undo it" log.
 
 ## Known gaps / not done
+
+- **A topic box with one story beside its lead** (Nov 2026: Work After
+  Automation, since its video moved up beside the front's lead): that
+  story sits alone in the middle of a tall empty space. Considered: its
+  standfirst there, only in that case. Not done yet.
 
 - **Responsive images: done for uploads (Nov 2026).** A photo an editor
   uploads (to `static/uploads/`) is never served itself: before every build

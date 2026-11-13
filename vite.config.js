@@ -1,12 +1,15 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { makeSizes } from './scripts/sizes.js';
+import { makeStills } from './scripts/stills.js';
 
-/* Make the picture sizes for any new upload: before a build, when the dev
-   server starts, and when an editor adds a picture while it runs. */
+/* Make the picture sizes for any new upload, and the still for any new
+   video without a picture: before a build, when the dev server starts, and
+   when an editor adds a picture or a story while it runs. */
 const sizes = {
   name: 'picture-sizes',
   async buildStart() {
     await makeSizes();
+    await makeStills();
   },
   configureServer(server) {
     server.watcher.add('static/uploads');
@@ -15,6 +18,7 @@ const sizes = {
     });
     server.watcher.on('change', (file) => {
       if (/static[\\/]uploads[\\/][^\\/]+$/.test(file)) makeSizes();
+      if (/content[\\/]articles[\\/].*\.md$/.test(file)) makeStills();
     });
   }
 };

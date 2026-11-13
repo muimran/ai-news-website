@@ -6,14 +6,16 @@
        (a step-cut index, like a ledger's); nothing stands above the box. The rail down the left is the
        drawer's index; it marks the dossier on screen.
      - A dossier's first story is a card in its picture's own colour, the
-       object standing in it; the rest are rows with a small square of the
-       same.
+       object standing in it, and its notch takes a pale wash of the same;
+       the rest are rows with a small 4:3 picture of the same.
      Nothing moves unless the reader asks: a card lifts under the mouse. */
   import { onMount } from 'svelte';
   import { sectionLabel, sectionSlug, kindLabel, formatNumber, KINDS } from '$lib/labels.js';
   import { photo, two, SHORT_DATE, STR } from '$lib/site/reel.js';
+  import { ytId } from '$lib/youtube.js';
   import { deskTopic, deskAll, deskStory, deskFormat } from '../urls.js';
   import { formatName } from '../formats.js';
+  import Screen from '../Screen.svelte';
 
   let { data } = $props();
   const lang = $derived(data.lang);
@@ -43,12 +45,6 @@
   const mins = (s) => `${num(s.video ? s.duration || s.readTime : s.readTime)} ${L.min}`;
   const kind = (s) => (KINDS.includes(s.kind) ? kindLabel(s.kind, lang) : s.video ? W[lang].video : null);
   const day = (s) => SHORT_DATE[lang].format(new Date(s.date));
-
-  /* a YouTube video: its id from any of its addresses. It's only a still
-     and a play button until the reader asks; then the player loads (from
-     youtube-nocookie, so nothing of YouTube's runs before that). */
-  const ytId = (url) => url?.match(/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/))([\w-]{11})/)?.[1] ?? null;
-  let playing = $state(null);
 
   /* the rail marks the section the reader is in */
   let here = $state('front');
@@ -134,16 +130,7 @@
             {#if yt}
               <!-- a video: it plays here; the headline is the way to its page -->
               <div class="card second vid">
-                <div class="screen">
-                  {#if playing === s.slug}
-                    <iframe src="https://www.youtube-nocookie.com/embed/{yt}?autoplay=1&rel=0" title={s.title} allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
-                  {:else}
-                    <button type="button" class="play" onclick={() => (playing = s.slug)} aria-label="{W[lang].play}: {s.title}">
-                      <img src="https://i.ytimg.com/vi/{yt}/hqdefault.jpg" alt="" loading="lazy" />
-                      <span class="btn" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z" /></svg>{W[lang].play} · {mins(s)}</span>
-                    </button>
-                  {/if}
-                </div>
+                <Screen id={yt} title={s.title} label="{W[lang].play} · {mins(s)}" />
                 <span class="txt">
                   {@render tag(s, true)}
                   <a class="hl" href={deskStory(s)}>{s.title}</a>
@@ -187,7 +174,7 @@
         <section id={d.id} class="dossier" class:here={here === d.id} data-sec aria-labelledby="t-{d.id}">
           <div class="tray" class:alone={!d.rest.length}>
             <header class="tabs">
-              <h2 class="tab" id="t-{d.id}"><b>{d.n}</b>{d.label}</h2>
+              <h2 class="tab" id="t-{d.id}" style:--wash={d.lead.tone?.bg}><b>{d.n}</b>{d.label}</h2>
               <a class="more" href={d.href}>{L.count(num(d.total))}&nbsp;→</a>
             </header>
             <a class="card first" href={deskStory(d.lead)} style:--bg={d.lead.tone?.bg} style:--fg={d.lead.tone?.fg}>
@@ -404,14 +391,15 @@
   .dek:lang(bn) {
     line-height: 1.6;
   }
-  /* a small square of a story's picture, on its colour */
+  /* a small picture of a story, on its colour: always 4:3, the same shape
+     as in every list, so a row of them reads as one set */
   .sq {
     flex: none;
     display: block;
     overflow: hidden;
     border: 1px solid var(--ink);
     background: var(--bg, var(--hair));
-    aspect-ratio: 1;
+    aspect-ratio: 4 / 3;
   }
   .sq img {
     display: block;
@@ -464,7 +452,7 @@
   .second {
     flex: 1;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 5.5rem;
+    grid-template-columns: minmax(0, 1fr) 6.5rem;
     align-items: start;
     gap: 1rem;
     padding: 1.2rem 1.25rem;
@@ -487,67 +475,6 @@
   }
   .vid .txt {
     padding: 0 1.25rem 1.2rem;
-  }
-  .screen {
-    position: relative;
-    aspect-ratio: 16 / 9;
-    border-bottom: 1px solid var(--ink);
-    background: var(--ink);
-  }
-  .screen iframe,
-  .play,
-  .play img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
-  .play {
-    padding: 0;
-    background: none;
-    cursor: pointer;
-  }
-  .play img {
-    object-fit: cover;
-    filter: grayscale(1) contrast(1.05);
-  }
-  /* the play button: in the middle of the still, where a reader looks for
-     it; paper with one ink rule, the bar's own kind of box, so it shows on
-     any picture */
-  .play .btn {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    height: 2.5rem;
-    padding: 0 0.95rem;
-    border: 1px solid var(--ink);
-    background: var(--card);
-    color: var(--ink);
-    font-family: var(--mono);
-    font-size: var(--ms);
-    font-weight: 500;
-    letter-spacing: var(--mt);
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .play .btn svg {
-    width: 0.85rem;
-    height: 0.85rem;
-    fill: currentColor;
-  }
-  @media (hover: hover) {
-    .play:hover .btn {
-      box-shadow: 4px 4px 0 var(--ink);
-    }
-  }
-  .play:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: -2px;
   }
   .vid a.hl:hover,
   .vid a.hl:focus-visible {
@@ -646,6 +573,12 @@
     font-weight: 600;
     line-height: 1.2;
   }
+  /* A dossier's notch takes a pale wash of its first story's colour, so the
+     name and the card under it read as one; the words stay ink. With no
+     colour (no picture, none set) it stays the page's grey. */
+  .dossier .tab {
+    background: color-mix(in srgb, var(--wash, var(--ground)) 24%, var(--ground));
+  }
   /* the dossier being read: its number turns purple, as the rail's does */
   .dossier.here .tab b {
     background: var(--accent);
@@ -731,7 +664,7 @@
   .row {
     flex: 1;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 4.25rem;
+    grid-template-columns: minmax(0, 1fr) 8rem;
     align-items: center;
     gap: 1.25rem;
     padding: 0.9rem 0;
@@ -804,7 +737,7 @@
       mask-image: linear-gradient(to bottom, transparent, #000 40%);
     }
     .second {
-      grid-template-columns: minmax(0, 1fr) 4.5rem;
+      grid-template-columns: minmax(0, 1fr) 6rem;
       padding: 1rem 1.1rem;
     }
     .second.vid {
@@ -840,7 +773,7 @@
       padding: 1rem 1rem 0;
     }
     .row {
-      grid-template-columns: minmax(0, 1fr) 3.75rem;
+      grid-template-columns: minmax(0, 1fr) 6rem;
       gap: 1rem;
     }
     .row:first-child {

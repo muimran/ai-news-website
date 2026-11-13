@@ -10,15 +10,28 @@ import { photo, topicUrl, formatUrl } from '$lib/site/reel.js';
 import { writerFor, writerUrl } from './authors.js';
 import { toneFor, dominant } from './tone.js';
 import { smart, smartHtml } from '$lib/typo.js';
+import { existsSync } from 'node:fs';
+import { ytId } from '$lib/youtube.js';
 
 /* A section's reel runs its latest 12; everything older is in its index.
    The front reel is one story per section. */
 const REEL = { topic: 12 };
 
+/* A video story the editor gave no picture shows YouTube's own still for
+   it, made at build by scripts/stills.js. It's handed over as if it were an
+   upload named yt-<id>.jpg, so photo() finds its sized copies, and only when
+   they exist (offline, none are made, and the story has no picture). */
+function stillFor(s) {
+  const id = ytId(s.video);
+  if (!id || photo(s) || !existsSync(`static/uploads/sized/yt-${id}-800.webp`)) return;
+  s.image = { src: `${base}/uploads/yt-${id}.jpg`, alt: '', credit: 'YouTube' };
+}
+
 /* Every story's card colour, read once from its picture before any page is
    built (an editor's own colour wins). */
 const TONES = new Map();
 for (const s of LANGS.flatMap(inLang)) {
+  stillFor(s);
   const pic = photo(s);
   if (s.cardColour) TONES.set(`${s.lang}/${s.slug}`, toneFor(s.cardColour, { adjust: false }));
   else if (pic) {
