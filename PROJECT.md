@@ -109,17 +109,18 @@ The look, set once in `desk/[lang=edition]/+layout.svelte`:
   pressed chip or an open Search/Menu button fills with ink. Purple marks
   where the reader is (the topic on screen, the section being read), and
   a purple line means the same and nothing else: under the page the
-  reader is on in the Menu, along the tab of the topic being read on the
-  front, and the story map's progress. The last two follow the reader as they read.
-  No purple line is decoration.
+  reader is on in the Menu, and the story map's progress, which follows
+  the reader as they read. No purple line is decoration. On the front the
+  topic being read has its number turn purple, in its notch as in the
+  index down the left.
 - **Purple also marks the present: what's happening now.** "Where you
   are" and "what's new right now" are the same idea, in place and in time.
-  So the one section a page highlights gets a solid purple file tab on a
+  So the one section a page highlights gets its notch filled purple, on a
   purple top edge, everything inside it staying ink. On the front that's
   Latest ("Latest · 18 Sept", the newest story's day). Later the same box
-  can hold a new interview or video, its tab naming it ("New video ·
-  20 Sept"). One such tab per page; an older story being promoted doesn't
-  get it. Not a pale purple fill (that's Search and the Menu), not a
+  can hold a new interview or video, its notch naming it ("New video ·
+  20 Sept"). One such notch per page; an older story being promoted
+  doesn't get it. Not a pale purple fill (that's Search and the Menu), not a
   purple frame (reads as an ad), not an ink band (too heavy).
 
 The bar, the same on every page:
@@ -162,11 +163,22 @@ The bar, the same on every page:
   on one line down to 360px, in Bangla too.
 - **Front.** The lead as a card in its picture's own colour with the
   object standing in it, two seconds beside it; a Latest box of the eight
-  newest under its purple "now" tab, with the way to all of them; then a **dossier** to a topic: a
-  tray of paper with a file tab standing on its top edge (number, name),
-  its first story a colour card, the rest rows with a small square of
-  their picture. The column down the left is the index (topics, then
-  formats) and marks the dossier on screen.
+  newest under its purple "now" notch, with the way to all of them; then
+  a **dossier** to a topic: a tray of paper, its first story a colour
+  card, the rest rows with a small square of their picture. The column
+  down the left is the index (topics, then formats) and marks the dossier
+  on screen.
+- **A box's name sits in a notch cut into its top-left corner** (number,
+  name), the page's grey showing through, a black line along the notch's
+  right and bottom: a step-cut index, like a ledger's. Nothing stands
+  above the box. The notch reaches out over the box's padding to its
+  corner, so its words start where the box's words do; the way to all
+  its stories ("9 stories →") is at the right of the same row. On phones
+  a long name takes two lines in the notch and the way may take two lines
+  at the right. Until Nov 2026 it was a file tab standing on the box's top
+  edge; also considered then: the name set into a rule across the box, a
+  framed drawer label, a ticket stub down the left, a big numeral on the
+  edge (the most magazine-like).
 - **A video beside the lead.** When there's a video, the newest one takes
   the second of the two cards beside the lead and plays there (its topic's
   dossier then leaves it out). The card is the still across the top, in

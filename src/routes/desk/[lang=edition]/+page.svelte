@@ -1,8 +1,9 @@
 <script>
   /* Desk's front page (the look, the bar and the menu are the layout's).
 
-     - Each topic is a dossier: a tray of paper with a file tab standing on
-       its top edge (its number, its name). The rail down the left is the
+     - Each topic is a dossier: a tray of paper with its number and name in
+       a notch cut into its top-left corner, the page's grey showing through
+       (a step-cut index, like a ledger's); nothing stands above the box. The rail down the left is the
        drawer's index; it marks the dossier on screen.
      - A dossier's first story is a card in its picture's own colour, the
        object standing in it; the rest are rows with a small square of the
@@ -165,11 +166,11 @@
       <!-- the latest, by day. Purple marks the present: its tab is the one
            "now" on the page (later it may hold a new interview or video). -->
       <section class="now" aria-labelledby="wire-h">
-        <header class="tabs">
-          <h2 class="tab" id="wire-h">{W[lang].latest}{#if ed.inside[0]}<time class="when">{day(ed.inside[0])}</time>{/if}</h2>
-          <a class="more" href={deskAll(lang)}>{EVERY[lang](num(ed.total))} →</a>
-        </header>
         <div class="card wire">
+          <header class="tabs">
+            <h2 class="tab" id="wire-h">{W[lang].latest}{#if ed.inside[0]}<time class="when">{day(ed.inside[0])}</time>{/if}</h2>
+            <a class="more" href={deskAll(lang)}>{EVERY[lang](num(ed.total))}&nbsp;→</a>
+          </header>
           <ol>
             {#each ed.inside.slice(0, 8) as s (s.slug)}
               <li>
@@ -184,11 +185,11 @@
       {#each dossiers as d (d.id)}
         {@const p = photo(d.lead)}
         <section id={d.id} class="dossier" class:here={here === d.id} data-sec aria-labelledby="t-{d.id}">
-          <header class="tabs">
-            <h2 class="tab" id="t-{d.id}"><b>{d.n}</b>{d.label}</h2>
-            <a class="more" href={d.href}>{L.count(num(d.total))} →</a>
-          </header>
           <div class="tray" class:alone={!d.rest.length}>
+            <header class="tabs">
+              <h2 class="tab" id="t-{d.id}"><b>{d.n}</b>{d.label}</h2>
+              <a class="more" href={d.href}>{L.count(num(d.total))}&nbsp;→</a>
+            </header>
             <a class="card first" href={deskStory(d.lead)} style:--bg={d.lead.tone?.bg} style:--fg={d.lead.tone?.fg}>
               {#if p}<img class="art" src={p.thumb} srcset={p.srcset} sizes="(max-width: 759px) 100vw, 30vw" alt="" loading="lazy" />{/if}
               <span class="txt">
@@ -238,7 +239,6 @@
   .rail i,
   .tag,
   .by,
-  .wire header,
   .wire time,
   .tab b,
   .more {
@@ -559,14 +559,19 @@
 
   /* ---- the latest ---- */
   .wire {
+    /* how far its corner is from its words: padding and top edge (the notch reaches out to it) */
+    --edge-t: calc(0.5rem + 3px);
+    --edge-x: calc(1.25rem + 1px);
     padding: 0.5rem 1.25rem 0.5rem;
   }
-  /* the one "now" on the page: a purple tab standing on a purple edge */
+  .wire .tabs {
+    margin-bottom: 0.25rem;
+  }
+  /* the one "now" on the page: its notch filled purple, on a purple top edge */
   .now .tab {
     border-color: var(--accent);
     background: var(--accent);
     color: #fff;
-    padding-left: 1rem;
   }
   .now .when {
     white-space: nowrap;
@@ -612,36 +617,38 @@
     grid-template-columns: 6.5rem minmax(0, 1fr);
   }
 
-  /* ---- a dossier: a tab standing on a tray ---- */
+  /* ---- a dossier: a tray, its name in a notch cut into its corner ---- */
   .dossier {
     scroll-margin-top: calc(var(--bar) + 1.5rem);
   }
+  /* A box's first row: the notch at the left, the way to all its stories at
+     the right. It reaches out over the box's padding and edge to the corner,
+     so the notch takes the corner away and the page's grey shows through;
+     its words start where the box's words do. */
   .tabs {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
     gap: 1rem;
+    margin: calc(-1 * var(--edge-t)) 0 0 calc(-1 * var(--edge-x));
   }
   .tab {
-    position: relative;
-    top: 1px;
-    z-index: 1;
     display: inline-flex;
     align-items: center;
     gap: 0.65rem;
     margin: 0;
-    padding: 0.5rem 1rem 0.5rem 0.5rem;
-    border: 1px solid var(--ink);
-    border-bottom-color: var(--card);
-    background: var(--card);
+    padding: 0.55rem 1rem 0.55rem var(--edge-x);
+    border-right: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    background: var(--ground);
     font-family: var(--sans);
     font-size: 1.0625rem;
     font-weight: 600;
     line-height: 1.2;
   }
-  /* the dossier being read: a purple edge along its tab, as the rail marks it */
-  .dossier.here .tab {
-    box-shadow: inset 0 3px 0 var(--accent);
+  /* the dossier being read: its number turns purple, as the rail's does */
+  .dossier.here .tab b {
+    background: var(--accent);
   }
   .tab b {
     display: grid;
@@ -653,7 +660,6 @@
     letter-spacing: 0;
   }
   .more {
-    padding-bottom: 0.55rem;
     color: var(--mute);
     white-space: nowrap;
   }
@@ -663,12 +669,21 @@
     outline: none;
   }
   .tray {
+    --tp: 1rem; /* its padding */
+    --tg: 1.5rem; /* the gap between what's in it */
+    --edge-t: calc(var(--tp) + 1px);
+    --edge-x: calc(var(--tp) + 1px);
     display: grid;
     grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-    gap: 1.5rem;
-    padding: 1rem;
+    gap: var(--tg);
+    padding: var(--tp);
     border: 1px solid var(--ink);
     background: var(--card);
+  }
+  /* the notch's row across the whole tray, the stories 0.75rem under it */
+  .tray > .tabs {
+    grid-column: 1 / -1;
+    margin-bottom: calc(0.75rem - var(--tg));
   }
   .tray.alone {
     grid-template-columns: minmax(0, 1fr);
@@ -800,6 +815,8 @@
       padding: 0 1.1rem 1rem;
     }
     .wire {
+      --edge-t: calc(0.9rem + 3px);
+      --edge-x: calc(1.1rem + 1px);
       padding: 0.9rem 1.1rem 0.4rem;
     }
     .wire ol {
@@ -810,9 +827,9 @@
     }
     .tray,
     .tray.alone {
+      --tp: 0.75rem;
+      --tg: 0.5rem;
       grid-template-columns: minmax(0, 1fr);
-      gap: 0.5rem;
-      padding: 0.75rem;
     }
     .first {
       min-height: 0;
@@ -831,6 +848,13 @@
     }
     .tab {
       font-size: 1rem;
+    }
+    /* the notch and the way to all its stories share one row: the way may
+       take two lines, at the right, rather than leave the box */
+    .more {
+      min-width: 0;
+      white-space: normal;
+      text-align: right;
     }
   }
 </style>

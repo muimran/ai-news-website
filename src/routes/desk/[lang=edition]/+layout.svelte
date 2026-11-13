@@ -373,10 +373,18 @@
       flex-basis: 100%;
     }
   }
-  /* the narrowest phones (360px): the name a little smaller again */
+  /* the narrowest phones (360px): the name and Donate a little smaller again */
   @media (max-width: 379px) {
     .bar .name {
       font-size: 1.3rem;
+    }
+    .fund {
+      margin-right: 0;
+      padding-right: 0.4rem;
+    }
+    .give {
+      padding: 0 0.45rem;
+      font-size: 0.875rem;
     }
   }
 </style>
