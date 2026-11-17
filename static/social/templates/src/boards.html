@@ -193,7 +193,7 @@
 <pre id="out"></pre>
 <script>
 const IMG = 'img/';
-const DATE = '17 Nov 2026';
+const DATE = ''; /* no dates on the cards */
 const SHORT = 'AI’s next limit is electricity';
 const LONG = 'By 2030, the world’s data centres could use more electricity than Japan';
 const CREDIT = 'Illustrative image · Unsplash';
@@ -202,8 +202,8 @@ const arrow = `<svg viewBox="0 0 64 24" aria-hidden="true"><path d="M0 12H61M51 
 const logo = (cls = '') => `<div class="logo ${cls}">[LOGO]</div>`;
 const pager = (on, cls = '', more = false) => `<div class="pager ${cls}"><span class="dots">${[1, 2, 3, 4, 5, 6].map((i) => `<i${i === on ? ' class="on"' : ''}></i>`).join('')}</span>${more ? arrow : ''}</div>`;
 const foot = (on, cls = '', more = false) => `${logo(cls)}${pager(on, cls, more)}`;
-const notch = (n, label, after = '') => `<div class="tabrow"><span class="tab"><b>${n}</b><span class="t">${label}</span></span>${after ? `<span class="mono">${after}</span>` : ''}</div>`;
-const ptab = (n, label) => `<div class="ptab"><b>${n}</b><span class="t">${label}</span></div>`;
+const notch = (n, label, after = '') => `<div class="tabrow"><span class="tab"><b>${n}</b>${label ? `<span class="t">${label}</span>` : ''}</span>${after ? `<span class="mono">${after}</span>` : ''}</div>`;
+const ptab = (n, label) => `<div class="ptab"><b>${n}</b>${label ? `<span class="t">${label}</span>` : ''}</div>`;
 const img = (src, pos = '50% 50%') => `<img src="${IMG}${src}" alt="" style="object-position:${pos}">`;
 const credit = (text = CREDIT) => `<div class="cr mono s">${text}</div>`;
 const sticker = (cls = '') => `<div class="slot mono ${cls}" style="position:relative;left:0;right:0;width:600px;height:120px">[Link sticker]</div>`;
@@ -292,14 +292,14 @@ const P = [
   ['07-image', 'fullbleed-notch', '', () => `<div class="full">${img('col-pylons.jpg', '62% 50%')}</div><div class="scrim bot"></div>${ptab('06', 'Explainer')}
     <div class="main bot w" style="gap:28px"><span class="mono">${DATE}</span><h1 class="hl xl">${SHORT}</h1><span class="mono s" style="align-self:flex-end">${CREDIT}</span></div>${logo('w')}`],
 
-  ['08-quote-portrait', 'text-top', 't01', () => `${notch('01', 'Quote', DATE)}
-    <div class="main top"><blockquote class="hl q">${QUOTE}</blockquote></div>
+  ['08-quote-portrait', 'text-top', 't01', () => `
+    <div class="main top" style="top:132px"><blockquote class="hl q">${QUOTE}</blockquote></div>
     <div class="main bot" style="flex-direction:row;align-items:flex-end;gap:36px"><div class="portrait mono s">[Portrait]</div><div style="display:flex;flex-direction:column;gap:8px"><p class="att">[Speaker name]</p><p class="txt" style="font-size:34px;line-height:1.3">Engineer, two of the data-centre sites</p></div></div>${logo()}`],
-  ['08-quote-portrait', 'text-bottom', 't01 tint', () => `${notch('01', 'Quote', DATE)}
-    <div class="main top" style="flex-direction:row;align-items:flex-end;gap:36px"><div class="portrait mono s" style="background:var(--card)">[Portrait]</div><div style="display:flex;flex-direction:column;gap:8px"><p class="att">[Speaker name]</p><p class="txt" style="font-size:34px;line-height:1.3">Engineer, two of the data-centre sites</p></div></div>
+  ['08-quote-portrait', 'text-bottom', 't01 tint', () => `
+    <div class="main top" style="top:132px;flex-direction:row;align-items:flex-end;gap:36px"><div class="portrait mono s" style="background:var(--card)">[Portrait]</div><div style="display:flex;flex-direction:column;gap:8px"><p class="att">[Speaker name]</p><p class="txt" style="font-size:34px;line-height:1.3">Engineer, two of the data-centre sites</p></div></div>
     <div class="main bot"><blockquote class="hl q">${QUOTE}</blockquote></div>${logo()}`],
 
-  ['09-quote', '', 't01 deep', () => `${ptab('01', 'Quote')}
+  ['09-quote', '', 't01 deep', () => `
     <div class="main bot" style="gap:44px"><blockquote class="hl q" style="font-size:88px;font-variation-settings:'opsz' 32">${QUOTE}</blockquote>
     <p class="att">An engineer who has worked on two of the sites</p><span class="mono s">From our investigation, Sep 2026</span></div>${logo()}`],
 
@@ -351,7 +351,7 @@ const LP = [
 ];
 
 /* Bangla versions of every template: the same boards, Bangla words, the website's own Bangla labels */
-const BN_DATE = '১৭ নভেম্বর ২০২৬';
+const BN_DATE = '';
 const BN_SHORT = 'এআইয়ের পরের সীমা বিদ্যুৎ';
 const BN_LONG = '২০৩০ সালের মধ্যে বিশ্বের ডেটা সেন্টার জাপানের চেয়েও বেশি বিদ্যুৎ খরচ করতে পারে';
 const BN_CREDIT = 'প্রতীকী ছবি · আনস্প্ল্যাশ';
@@ -434,14 +434,14 @@ const BN = [
   ['07-image', 'fullbleed-notch-bn', '', () => `<div class="full">${img('col-pylons.jpg', '62% 50%')}</div><div class="scrim bot"></div>${ptab('০৬', 'ব্যাখ্যা')}
     <div class="main bot w" style="gap:28px"><span class="mono">${BN_DATE}</span><h1 class="hl xl">${BN_SHORT}</h1><span class="mono s" style="align-self:flex-end">${BN_CREDIT}</span></div>${logo('w')}`],
 
-  ['08-quote-portrait', 'text-top-bn', 't01', () => `${notch('০১', 'উদ্ধৃতি', BN_DATE)}
-    <div class="main top"><blockquote class="hl q">${BN_QUOTE}</blockquote></div>
+  ['08-quote-portrait', 'text-top-bn', 't01', () => `
+    <div class="main top" style="top:132px"><blockquote class="hl q">${BN_QUOTE}</blockquote></div>
     <div class="main bot" style="flex-direction:row;align-items:flex-end;gap:36px"><div class="portrait mono s">[ছবি]</div><div style="display:flex;flex-direction:column;gap:8px"><p class="att">[বক্তার নাম]</p><p class="txt" style="font-size:34px;line-height:1.4">প্রকৌশলী, ডেটা সেন্টারের দুটি সাইট</p></div></div>${logo()}`],
-  ['08-quote-portrait', 'text-bottom-bn', 't01 tint', () => `${notch('০১', 'উদ্ধৃতি', BN_DATE)}
-    <div class="main top" style="flex-direction:row;align-items:flex-end;gap:36px"><div class="portrait mono s" style="background:var(--card)">[ছবি]</div><div style="display:flex;flex-direction:column;gap:8px"><p class="att">[বক্তার নাম]</p><p class="txt" style="font-size:34px;line-height:1.4">প্রকৌশলী, ডেটা সেন্টারের দুটি সাইট</p></div></div>
+  ['08-quote-portrait', 'text-bottom-bn', 't01 tint', () => `
+    <div class="main top" style="top:132px;flex-direction:row;align-items:flex-end;gap:36px"><div class="portrait mono s" style="background:var(--card)">[ছবি]</div><div style="display:flex;flex-direction:column;gap:8px"><p class="att">[বক্তার নাম]</p><p class="txt" style="font-size:34px;line-height:1.4">প্রকৌশলী, ডেটা সেন্টারের দুটি সাইট</p></div></div>
     <div class="main bot"><blockquote class="hl q">${BN_QUOTE}</blockquote></div>${logo()}`],
 
-  ['09-quote', 'bn', 't01 deep', () => `${ptab('০১', 'উদ্ধৃতি')}
+  ['09-quote', 'bn', 't01 deep', () => `
     <div class="main bot" style="gap:44px"><blockquote class="hl q" style="font-size:72px">${BN_QUOTE}</blockquote>
     <p class="att">${BN_ATT}</p><span class="mono s">আমাদের অনুসন্ধান থেকে, সেপ্টেম্বর ২০২৬</span></div>${logo()}`],
 
@@ -545,19 +545,22 @@ for (const [id, cls, html] of SPEC) boards.push({ id, cls, html });
 for (const [id, cls, lang, html] of SZ) boards.push({ id, cls: `light t06 ${cls}`, html, bn: lang === 'bn' });
 
 const q = new URLSearchParams(location.search);
+const clean = (h) => h.replace(/\s*·\s*(<\/span>)/g, '$1').replace(/<span class="mono"( style="[^"]*")?>\s*<\/span>/g, '');
 /* English type options, to compare faces on the same boards: ?type=<key> */
 const GF = 'https://fonts.googleapis.com/css2?display=block&family=';
 const SANS = (f) => `.board:not([lang="bn"]) .txt, .board:not([lang="bn"]) .att, .board:not([lang="bn"]) .tab, .board:not([lang="bn"]) .ptab, .board:not([lang="bn"]) .num, .board:not([lang="bn"]) .unit, .board:not([lang="bn"]) .bars .lab, .board:not([lang="bn"]) .bars .val, .board:not([lang="bn"]) .tl .pt .ev { font-family: '${f}', sans-serif; }`;
-const CLEAN = (f, w = 650, ls = -0.03) => `.board:not([lang="bn"]) .hl { font-family: '${f}', sans-serif; font-weight: ${w}; letter-spacing: ${ls}em; line-height: 1.02; font-variation-settings: normal; } ` + SANS(f);
+const PLEXQ = `&family=IBM+Plex+Sans:ital,wght@1,400;1,500;1,600`;
+const CLEAN = (f, w = 650, ls = -0.03) => `.board:not([lang="bn"]) .hl { font-family: '${f}', sans-serif; font-weight: ${w}; letter-spacing: ${ls}em; line-height: 1.12; font-variation-settings: normal; } .board:not([lang="bn"]) .q { font-family: 'IBM Plex Sans', sans-serif; font-style: italic; font-weight: 500; letter-spacing: -0.015em; line-height: 1.18; } ` + SANS(f);
 const TYPE = {
-  intertight: [GF + 'Inter+Tight:wght@400..800', CLEAN('Inter Tight', 650, -0.03)],
-  geist: [GF + 'Geist:wght@400..800', CLEAN('Geist', 600, -0.035)],
-  plexsans: [GF + 'IBM+Plex+Sans:wght@400;500;600;700', CLEAN('IBM Plex Sans', 600, -0.02)],
-  dmsans: [GF + 'DM+Sans:opsz,wght@9..40,400..800', CLEAN('DM Sans', 650, -0.035)],
-  instrumentsans: [GF + 'Instrument+Sans:wght@400..700', CLEAN('Instrument Sans', 600, -0.025)],
-  figtree: [GF + 'Figtree:wght@400..800', CLEAN('Figtree', 650, -0.03)],
+  intertight: [GF + 'Inter+Tight:wght@400..800' + PLEXQ, CLEAN('Inter Tight', 650, -0.03)],
+  geist: [GF + 'Geist:wght@400..800' + PLEXQ, CLEAN('Geist', 600, -0.035)],
+  plexsans: [GF + 'IBM+Plex+Sans:wght@400;500;600;700' + PLEXQ, CLEAN('IBM Plex Sans', 600, -0.02)],
+  dmsans: [GF + 'DM+Sans:opsz,wght@9..40,400..800' + PLEXQ, CLEAN('DM Sans', 650, -0.035)],
+  instrumentsans: [GF + 'Instrument+Sans:wght@400..700' + PLEXQ, CLEAN('Instrument Sans', 600, -0.025)],
+  figtree: [GF + 'Figtree:wght@400..800' + PLEXQ, CLEAN('Figtree', 650, -0.03)],
   intertightitalic: [GF + 'Inter+Tight:ital,wght@0,400..800;1,400..800', CLEAN('Inter Tight', 650, -0.03) + ` .board:not([lang="bn"]) .q, .board:not([lang="bn"]) .tn { font-style: italic; } .board:not([lang="bn"]) .q { font-weight: 500; letter-spacing: -0.02em; }`],
   plexitalic: [GF + 'IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600', CLEAN('IBM Plex Sans', 600, -0.02) + ` .board:not([lang="bn"]) .hl { font-style: italic; }`],
+  plexitalicq: [GF + 'IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600', CLEAN('IBM Plex Sans', 600, -0.02)],
   serifitalic: [GF + 'Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1', CLEAN('Instrument Sans', 600, -0.025) + ` .board:not([lang="bn"]) .q { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; font-size: 100px; line-height: 1.02; letter-spacing: -0.01em; } .board:not([lang="bn"]) .hl .tn { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; font-size: 1.15em; letter-spacing: 0; }`],
 
   newsreader: [GF + 'Newsreader:ital,opsz,wght@0,6..72,400..800', `.board:not([lang="bn"]) .hl { font-family: 'Newsreader', serif; font-weight: 600; letter-spacing: -0.012em; line-height: 1.04; font-variation-settings: normal; font-optical-sizing: auto; }`],
@@ -581,7 +584,7 @@ for (const b of pdf ? pdf.map((id) => boards.find((x) => x.id === id)) : boards)
   if (q.get('list')) break;
   const w = document.createElement('div');
   w.className = 'wrap';
-  w.innerHTML = `<div class="id">${b.id}</div><div class="board ${b.cls}" id="${b.id}"${b.bn ? ' lang="bn"' : ''}>${b.html()}</div>`;
+  w.innerHTML = `<div class="id">${b.id}</div><div class="board ${b.cls}" id="${b.id}"${b.bn ? ' lang="bn"' : ''}>${clean(b.html())}</div>`;
   document.body.append(w);
 }
 
@@ -622,6 +625,7 @@ function fitAll() {
   });
 }
 document.fonts.ready.then(fitAll);
+setTimeout(() => document.fonts.ready.then(fitAll), 2500);
 if (q.get('fits')) document.fonts.ready.then(() => { fitAll(); document.getElementById('out').textContent = JSON.stringify([...document.querySelectorAll('[data-fit]')].map((h) => [h.closest('.board').id, +h.dataset.chosen, +h.dataset.lines])); });
 if (q.get('m')) {
   document.fonts.ready.then(() => {
