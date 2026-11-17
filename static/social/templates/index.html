@@ -134,6 +134,8 @@
   .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; }
   .tiles img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
   .tiles.fb img { aspect-ratio: 1 / 1; }
+  .tiles.desk { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .grid-phone.wide { max-width: none; grid-column: 1 / -1; }
   .phones { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: 1.5rem; align-items: start; }
   .gridrow { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 1.5rem; align-items: start; }
   .next ol { margin: 0; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.4rem; }
@@ -1231,7 +1233,7 @@
     <div class="head">
       <h2>The profile grids, mixed</h2>
       <p>Both apps show a post whole in the feed. Only the profile grids crop it, and they crop differently.</p>
-      <p><b>Instagram</b> keeps the middle 3:4, losing 34 px from each side. Every notch, headline and logo starts 72 px in, so all of it survives.</p>
+      <p><b>Instagram</b> keeps the middle 3:4, losing 34 px from each side, on phones and on computers. Signed in on a computer it shows four columns instead of three; the tiles are the same shape, just more of them in a row. Every notch, headline and logo starts 72 px in, so all of it survives.</p>
       <p><b>Facebook’s Photos tab</b> keeps the middle square, losing 135 px from the top and the bottom. Every headline, number, quote and photo survives, but the notch (0–132 px) and the logo row (1218–1278 px) fall outside it. That is a trade we chose: moving them inside the square would bring back the empty band above the notch. The page’s own name and picture sit right above that grid anyway.</p>
     </div>
     <div class="phones">
@@ -1247,6 +1249,23 @@
           <img src="img/01-cover-light-text-bottom-long.jpg?v=4c7ce7ca" alt="01-cover-light-text-bottom-long, cropped to 3:4" loading="lazy">
           <img src="img/08-quote-portrait-light-text-top.jpg?v=d619696e" alt="08-quote-portrait-light-text-top, cropped to 3:4" loading="lazy">
           <img src="img/07-image-dark-fullbleed-notch.jpg?v=5ac90e6a" alt="07-image-dark-fullbleed-notch, cropped to 3:4" loading="lazy">
+        </div>
+      </div>
+      <div class="grid-phone wide">
+        <header><h4>Instagram on a computer, signed in</h4><p class="label" style="color:var(--mute)">Four columns, 3:4 tiles</p></header>
+        <div class="tiles desk">
+          <img src="img/09-quote-light.jpg?v=1cddb085" alt="09-quote-light, cropped to 3:4" loading="lazy">
+          <img src="img/01-cover-light-fullbleed.jpg?v=35a25df2" alt="01-cover-light-fullbleed, cropped to 3:4" loading="lazy">
+          <img src="img/10-text-light-short.jpg?v=618944fb" alt="10-text-light-short, cropped to 3:4" loading="lazy">
+          <img src="img/07-image-light-fullbleed.jpg?v=3ad783c9" alt="07-image-light-fullbleed, cropped to 3:4" loading="lazy">
+          <img src="img/10-text-light-number.jpg?v=62f21cfd" alt="10-text-light-number, cropped to 3:4" loading="lazy">
+          <img src="img/01-cover-dark-text-top-short.jpg?v=b699cdf4" alt="01-cover-dark-text-top-short, cropped to 3:4" loading="lazy">
+          <img src="img/01-cover-light-text-bottom-long.jpg?v=4c7ce7ca" alt="01-cover-light-text-bottom-long, cropped to 3:4" loading="lazy">
+          <img src="img/08-quote-portrait-light-text-top.jpg?v=d619696e" alt="08-quote-portrait-light-text-top, cropped to 3:4" loading="lazy">
+          <img src="img/07-image-dark-fullbleed-notch.jpg?v=5ac90e6a" alt="07-image-dark-fullbleed-notch, cropped to 3:4" loading="lazy">
+          <img src="img/01-cover-dark-text-bottom-long.jpg?v=f06b50b8" alt="01-cover-dark-text-bottom-long, cropped to 3:4" loading="lazy">
+          <img src="img/06-closing-light-read.jpg?v=8c36c7c3" alt="06-closing-light-read, cropped to 3:4" loading="lazy">
+          <img src="img/10-text-dark-number.jpg?v=daba2055" alt="10-text-dark-number, cropped to 3:4" loading="lazy">
         </div>
       </div>
       <div class="grid-phone">
