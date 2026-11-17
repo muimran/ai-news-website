@@ -66,15 +66,17 @@
   .board.story { height: 1920px; --B: 250px; --foot: 250px; --top: 394px; }
 
   /* ---- the notch: the corner cut away, the wash showing through ---- */
-  .band { position: absolute; left: 0; right: 0; top: 0; height: var(--B); background: var(--wash); }
-  .edge { position: absolute; left: 0; right: 0; top: var(--B); height: var(--line); background: var(--ink); }
-  .tabrow { position: absolute; left: 0; top: var(--B); height: var(--row); display: flex; align-items: center; gap: 28px; }
-  .tab { align-self: stretch; display: flex; align-items: center; gap: 21px; padding: 0 32px 0 var(--M); background: var(--wash); border-right: var(--line) solid var(--ink); border-bottom: var(--line) solid var(--ink); font-size: 34px; font-weight: 600; line-height: 1; white-space: nowrap; }
-  .tint .band, .tint .tab { background: var(--ground); }
+  /* the notch: a solid tab cut into the top-left corner, from the top edge down; the date beside it.
+     On a story it hangs just under the 250 px the app covers. No line across, no strip. */
+  .tabrow { position: absolute; left: 0; top: 0; height: calc(var(--B) + var(--row)); display: flex; align-items: stretch; gap: 28px; z-index: 3; }
+  .tabrow > .mono { display: flex; align-items: center; padding-top: var(--B); }
+  .tab { display: flex; align-items: center; gap: 21px; padding: var(--B) 32px 0 var(--M); background: var(--wash); font-size: 34px; font-weight: 600; line-height: 1; white-space: nowrap; }
+  .story .tabrow { top: var(--B); height: var(--row); }
+  .story .tabrow > .mono, .story .tab { padding-top: 0; }
+  .tint .tab { background: var(--ground); }
   .tab b, .ptab b { display: grid; place-items: center; width: 56px; height: 48px; padding-top: 2px; background: var(--ink); color: var(--card); font-weight: 600; letter-spacing: 0; }
   .tab .t, .ptab .t { padding-top: 3px; }
-  .new .tab { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .new .edge { height: 6px; background: var(--accent); }
+  .new .tab { background: var(--accent); color: #fff; }
   /* on a photo that fills the slide, the notch is a solid tab cut into the corner */
   .ptab { position: absolute; left: 0; top: 0; z-index: 3; height: calc(var(--B) + var(--row)); padding: var(--B) 32px 0 var(--M); display: flex; align-items: center; gap: 21px; background: var(--wash); color: var(--ink); font-size: 34px; font-weight: 600; line-height: 1; white-space: nowrap; }
   .story .ptab { top: var(--B); height: var(--row); padding-top: 0; }
@@ -167,7 +169,7 @@ const arrow = `<svg viewBox="0 0 64 24" aria-hidden="true"><path d="M0 12H61M51 
 const logo = (cls = '') => `<div class="logo ${cls}">[LOGO]</div>`;
 const pager = (on, cls = '', more = false) => `<div class="pager ${cls}"><span class="dots">${[1, 2, 3, 4, 5, 6].map((i) => `<i${i === on ? ' class="on"' : ''}></i>`).join('')}</span>${more ? arrow : ''}</div>`;
 const foot = (on, cls = '', more = false) => `${logo(cls)}${pager(on, cls, more)}`;
-const notch = (n, label, after = '') => `<div class="band"></div><div class="edge"></div><div class="tabrow"><span class="tab"><b>${n}</b><span class="t">${label}</span></span>${after ? `<span class="mono">${after}</span>` : ''}</div>`;
+const notch = (n, label, after = '') => `<div class="tabrow"><span class="tab"><b>${n}</b><span class="t">${label}</span></span>${after ? `<span class="mono">${after}</span>` : ''}</div>`;
 const ptab = (n, label) => `<div class="ptab"><b>${n}</b><span class="t">${label}</span></div>`;
 const img = (src, pos = '50% 50%') => `<img src="${IMG}${src}" alt="" style="object-position:${pos}">`;
 const credit = (text = CREDIT) => `<div class="cr mono s">${text}</div>`;
