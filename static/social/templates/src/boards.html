@@ -6,8 +6,9 @@
 <!--
   The source for every template image. Each board is drawn at its real size.
   ?b=<file name>  shows one board alone (this is how the images are made)
-  ?guides=1       draws the 60 px safe zone and the 3:4 grid crop
+  ?guides=1       draws the safe zones and the 3:4 grid crop
   ?m=1            measures each board's empty space into #out
+  ?list=1         lists every board and its height into #out
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,41 +22,63 @@
   body.one .wrap > .id { display: none; }
   #out { display: none; }
 
-  /* ---- the brand, exactly as the website has it ---- */
+  /* ---- the brand, as the website has it ---- */
   .light { --ground: #e7e5e0; --card: #fbfaf6; --ink: #161615; }
   .dark { --ground: #0f0f0e; --card: #1b1b19; --ink: #ecebe5; }
+  /* each topic has one quiet tone: deep for marks, a pale wash for grounds (the website's dossier wash) */
+  .t01 { --t-deep: #3f5f86; --t-light: #8fb0d8; }
+  .t02 { --t-deep: #5f6f34; --t-light: #a9b97a; }
+  .t03 { --t-deep: #8a6418; --t-light: #d4ad5e; }
+  .t04 { --t-deep: #94402f; --t-light: #dc8c78; }
+  .t05 { --t-deep: #22695a; --t-light: #6fbfa9; }
+  .t06 { --t-deep: #9c5128; --t-light: #de9a6c; }
+  .light { --tone: var(--t-deep); --wash: color-mix(in srgb, var(--t-deep) 24%, var(--ground)); }
+  .dark { --tone: var(--t-light); --wash: color-mix(in srgb, var(--t-light) 16%, var(--ground)); }
   .board {
     --accent: #6a3fd1;
+    --paper: #fbfaf6;
     --mute: color-mix(in srgb, var(--ink) 60%, var(--card));
     --hair: color-mix(in srgb, var(--ink) 14%, var(--card));
+    --field: var(--card);
     --M: 72px;     /* margin: every word starts here */
-    --B: 48px;     /* the strip of grey above the card, notch posts only */
+    --B: 48px;     /* the strip above the card, notch posts only */
     --row: 84px;   /* the notch's row */
     --top: 192px;  /* where words start under the row, and where they end above the logo */
-    --line: 2px;   /* the notch's lines */
+    --foot: 72px;  /* the logo's distance from the bottom */
+    --line: 2px;
     position: relative; overflow: hidden; flex: none;
     width: 1080px; height: 1350px;
-    background: var(--card); color: var(--ink);
+    background: var(--field); color: var(--ink);
     font-family: 'Anek Latin', 'Anek Bangla', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
-  .board.story { height: 1920px; --B: 250px; }
-  .board.link { width: 1200px; height: 630px; --M: 56px; --B: 32px; --row: 74px; }
+  .board.tint { --field: var(--wash); }
+  /* a single post can take the tone itself as its field */
+  .light.deep { --field: var(--t-deep); --ink: #fbfaf6; --card: var(--t-deep); }
+  .dark.deep { --field: color-mix(in srgb, var(--t-light) 26%, #0f0f0e); }
+  .light.deep .ptab { --ink: #161615; --card: #fbfaf6; background: #fbfaf6; }
+  .light { --on-tone: #fbfaf6; } .dark { --on-tone: #161615; }
+  .tn { color: var(--tone); }
+  /* the big number on a block of the tone, as the FT sets its numbers */
+  .nblock { align-self: flex-start; display: flex; align-items: baseline; gap: 24px; padding: 56px 60px 44px; background: var(--tone); color: var(--on-tone); }
+  .nblock .num { color: inherit; }
+  .portrait { width: 300px; height: 360px; flex: none; background: var(--wash); display: grid; place-items: center; color: var(--mute); }
+  .board.story { height: 1920px; --B: 250px; --foot: 250px; --top: 394px; }
 
-  /* ---- the notch: the corner cut away, the grey showing through ---- */
-  .band { position: absolute; left: 0; right: 0; top: 0; height: var(--B); background: var(--ground); }
+  /* ---- the notch: the corner cut away, the wash showing through ---- */
+  .band { position: absolute; left: 0; right: 0; top: 0; height: var(--B); background: var(--wash); }
   .edge { position: absolute; left: 0; right: 0; top: var(--B); height: var(--line); background: var(--ink); }
   .tabrow { position: absolute; left: 0; top: var(--B); height: var(--row); display: flex; align-items: center; gap: 28px; }
-  .tab { align-self: stretch; display: flex; align-items: center; gap: 21px; padding: 0 32px 0 var(--M); background: var(--ground); border-right: var(--line) solid var(--ink); border-bottom: var(--line) solid var(--ink); font-size: 34px; font-weight: 600; line-height: 1; white-space: nowrap; }
-  .tab b { display: grid; place-items: center; width: 56px; height: 48px; padding-top: 2px; background: var(--ink); color: var(--card); font-weight: 600; letter-spacing: 0; }
-  .tab .t { padding-top: 3px; }
+  .tab { align-self: stretch; display: flex; align-items: center; gap: 21px; padding: 0 32px 0 var(--M); background: var(--wash); border-right: var(--line) solid var(--ink); border-bottom: var(--line) solid var(--ink); font-size: 34px; font-weight: 600; line-height: 1; white-space: nowrap; }
+  .tint .band, .tint .tab { background: var(--ground); }
+  .tab b, .ptab b { display: grid; place-items: center; width: 56px; height: 48px; padding-top: 2px; background: var(--ink); color: var(--card); font-weight: 600; letter-spacing: 0; }
+  .tab .t, .ptab .t { padding-top: 3px; }
   .new .tab { background: var(--accent); border-color: var(--accent); color: #fff; }
   .new .edge { height: 6px; background: var(--accent); }
-  .link .tab { font-size: 30px; gap: 18px; padding-right: 28px; }
-  .link .tab b { width: 49px; height: 42px; }
-  .link.new .edge { height: 5px; }
-  /* where a notch would be, a slide inside a carousel counts instead */
-  .counter { position: absolute; left: var(--M); top: var(--B); height: var(--row); display: flex; align-items: center; }
+  /* on a photo that fills the slide, the notch is a solid tab cut into the corner */
+  .ptab { position: absolute; left: 0; top: 0; z-index: 3; height: calc(var(--B) + var(--row)); padding: var(--B) 32px 0 var(--M); display: flex; align-items: center; gap: 21px; background: var(--wash); color: var(--ink); font-size: 34px; font-weight: 600; line-height: 1; white-space: nowrap; }
+  .story .ptab { top: var(--B); height: var(--row); padding-top: 0; }
+  .new .ptab { background: var(--accent); color: #fff; }
 
   /* ---- type ---- */
   .mono { font-family: 'IBM Plex Mono', 'Anek Bangla', monospace; font-weight: 500; font-size: 28px; line-height: 1.3; letter-spacing: 0.07em; text-transform: uppercase; }
@@ -65,50 +88,61 @@
   .l { font-size: 96px; font-variation-settings: 'opsz' 35; }
   .m { font-size: 64px; line-height: 1.06; font-variation-settings: 'opsz' 23; }
   .q { font-size: 80px; line-height: 1.1; font-variation-settings: 'opsz' 29; }
-  .num { font-size: 360px; line-height: 0.8; letter-spacing: -0.035em; font-variation-settings: 'opsz' 130; font-variant-numeric: lining-nums; }
-  .unit { font-size: 88px; font-variation-settings: 'opsz' 32; }
+  .num { font-size: 360px; line-height: 0.8; letter-spacing: -0.035em; font-variation-settings: 'opsz' 130; color: var(--tone); }
+  .unit { font-size: 96px; font-variation-settings: 'opsz' 35; }
   .txt { font-size: 40px; line-height: 1.4; font-weight: 400; text-wrap: pretty; }
   .att { font-size: 34px; line-height: 1.3; font-weight: 600; }
 
   /* ---- where things sit ---- */
-  .main { position: absolute; left: var(--M); right: var(--M); display: flex; flex-direction: column; gap: 36px; }
+  .main { position: absolute; left: var(--M); right: var(--M); display: flex; flex-direction: column; gap: 36px; z-index: 3; }
   .main.top { top: var(--top); }
   .main.bot { bottom: var(--top); }
+  .story .main.bot { bottom: 394px; }
   .meta { position: absolute; left: var(--M); right: var(--M); bottom: var(--top); }
-  .logo { position: absolute; left: var(--M); bottom: var(--M); width: 240px; height: 60px; border: 2px dashed currentColor; display: grid; place-items: center; font: 500 22px/1 'IBM Plex Mono', monospace; letter-spacing: 0.07em; }
-  .swipe { position: absolute; right: var(--M); bottom: calc(var(--M) + 18px); width: 100px; height: 24px; overflow: visible; }
-  .cue { position: absolute; right: var(--M); bottom: var(--M); height: 60px; display: flex; align-items: center; }
+  .logo { position: absolute; z-index: 3; left: var(--M); bottom: var(--foot); width: 240px; height: 60px; border: 2px dashed currentColor; display: grid; place-items: center; font: 500 22px/1 'IBM Plex Mono', monospace; letter-spacing: 0.07em; }
+  /* the carousel's dots: one per slide, the one you're on filled in the topic's tone */
+  .pager { position: absolute; z-index: 3; right: var(--M); bottom: var(--foot); height: 60px; display: flex; align-items: center; gap: 30px; }
+  .dots { display: flex; gap: 16px; }
+  .dots i { width: 24px; height: 24px; border-radius: 50%; border: 2.5px solid currentColor; }
+  .dots i.on { background: var(--tone); border-color: var(--tone); }
+  .new .dots i.on { background: var(--accent); border-color: var(--accent); }
+  .w .dots i.on { background: var(--t-light); border-color: var(--t-light); }
+  .pager svg { width: 64px; height: 24px; overflow: visible; }
+  .w { color: var(--paper); }
 
   /* ---- pictures ---- */
-  .pic { position: absolute; left: 0; right: 0; overflow: hidden; background: var(--ground); }
-  .pic img, .full img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .col { position: absolute; left: 0; right: 0; display: flex; flex-direction: column; }
+  .col > .pad { padding: 0 var(--M); display: flex; flex-direction: column; gap: 36px; }
+  .ph { position: relative; flex: 1 1 auto; min-height: 300px; overflow: hidden; background: var(--wash); }
+  .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ph.fit img { object-fit: contain; padding: 56px 72px; }
+  .cr { padding: 16px var(--M) 0; text-align: right; }
   .full { position: absolute; inset: 0; }
-  .credit { position: absolute; right: var(--M); }
-  .sheet { position: absolute; left: 0; right: 0; background: var(--card); padding: 0 var(--M); display: flex; flex-direction: column; gap: 28px; }
-  .sheet.top { top: 0; padding-top: var(--top); padding-bottom: 44px; }
-  .sheet.bot { bottom: 0; padding-top: 48px; padding-bottom: var(--top); }
-  .plate { position: absolute; background: var(--card); }
-  .cplate { left: 0; top: 0; height: calc(var(--B) + var(--row)); padding: var(--B) 28px 0 var(--M); display: flex; align-items: center; }
-  .lplate { left: 0; bottom: 0; width: 336px; height: 156px; }
-  .hole { position: absolute; left: 0; right: 0; background: var(--ground); display: grid; place-items: center; }
+  .full img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .scrim { position: absolute; left: 0; right: 0; z-index: 2; pointer-events: none; }
+  .scrim.bot { bottom: 0; height: 78%; background: linear-gradient(to top, rgba(14,12,10,0.88) 0%, rgba(14,12,10,0.76) 45%, rgba(14,12,10,0) 100%); }
+  .scrim.top { top: 0; height: 62%; background: linear-gradient(to bottom, rgba(14,12,10,0.84) 0%, rgba(14,12,10,0.66) 45%, rgba(14,12,10,0) 100%); }
+  .scrim.foot { bottom: 0; height: 22%; background: linear-gradient(to top, rgba(14,12,10,0.6), rgba(14,12,10,0)); }
+  .hole { position: relative; flex: 1 1 auto; min-height: 300px; background: var(--wash); display: grid; place-items: center; }
+  .slot { position: absolute; left: var(--M); right: var(--M); border: 3px dashed var(--mute); display: grid; place-items: center; color: var(--mute); }
+  .slot.w { border-color: rgba(251,250,246,0.7); color: rgba(251,250,246,0.85); }
 
   /* a screenshot: as captured, cropped clean, a thin ink line round it */
   .shot { position: absolute; left: var(--M); right: var(--M); border: 3px solid var(--ink); background: #fff; overflow: hidden; }
   .ui { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; color: #1d1d1f; padding: 44px 46px; display: flex; flex-direction: column; gap: 34px; font-size: 30px; line-height: 1.45; }
   .ui-q { align-self: flex-end; max-width: 76%; background: #ececec; padding: 16px 26px; border-radius: 26px; }
-  .ui-a { max-width: 96%; }
 
-  /* ---- charts: ink for the point, the muted grey for the rest ---- */
+  /* ---- charts: the topic's tone for the point, the muted grey for the rest ---- */
   .bars { display: flex; flex-direction: column; margin-top: 30px; }
   .bars .row { display: grid; grid-template-columns: 300px minmax(0, 1fr); }
   .bars .lab { align-self: center; font-size: 36px; font-weight: 600; line-height: 1.15; padding-right: 20px; }
   .bars .val { display: flex; align-items: center; gap: 20px; padding: 20px 0; border-left: 2px solid var(--ink); font-size: 40px; font-weight: 600; }
   .bars .bar { height: 76px; background: var(--mute); }
-  .bars .bar.key { background: var(--ink); }
+  .bars .bar.key { background: var(--tone); }
   .tl { position: relative; height: 540px; margin: 66px 0 0; }
-  .tl::before { content: ''; position: absolute; left: 7px; top: 0; height: 100%; width: 2px; background: var(--ink); }
+  .tl::before { content: ''; position: absolute; left: 8px; top: 0; height: 100%; width: 2px; background: var(--ink); }
   .tl .pt { position: absolute; left: 0; display: flex; align-items: center; gap: 30px; transform: translateY(-50%); }
-  .tl .pt i { width: 16px; height: 16px; background: var(--ink); flex: none; }
+  .tl .pt i { width: 18px; height: 18px; background: var(--tone); flex: none; }
   .tl .pt .mono { width: 196px; flex: none; }
   .tl .pt .ev { font-size: 40px; font-weight: 600; line-height: 1.2; }
   .numrow { display: flex; align-items: baseline; gap: 28px; }
@@ -117,6 +151,7 @@
   body.guides .board::after { content: ''; position: absolute; inset: 60px; border: 2px dashed #ff2d6f; pointer-events: none; z-index: 50; }
   body.guides .board::before { content: ''; position: absolute; top: 0; bottom: 0; left: 34px; right: 34px; border-left: 2px solid #00a2ff; border-right: 2px solid #00a2ff; pointer-events: none; z-index: 50; }
   body.guides .board.story::after { inset: 250px 60px; }
+  body.guides .board.story::before { display: none; }
 </style>
 </head>
 <body>
@@ -128,119 +163,178 @@ const SHORT = 'AI’s next limit is electricity';
 const LONG = 'By 2030, the world’s data centres could use more electricity than Japan';
 const CREDIT = 'Illustrative image · Unsplash';
 
-const logo = `<div class="logo">[LOGO]</div>`;
-const swipe = `<svg class="swipe" viewBox="0 0 100 24" aria-hidden="true"><path d="M0 12H97M86 1.5L97.5 12L86 22.5" fill="none" stroke="currentColor" stroke-width="3"/></svg>`;
+const arrow = `<svg viewBox="0 0 64 24" aria-hidden="true"><path d="M0 12H61M51 2L61.5 12L51 22" fill="none" stroke="currentColor" stroke-width="3"/></svg>`;
+const logo = (cls = '') => `<div class="logo ${cls}">[LOGO]</div>`;
+const pager = (on, cls = '', more = false) => `<div class="pager ${cls}"><span class="dots">${[1, 2, 3, 4, 5, 6].map((i) => `<i${i === on ? ' class="on"' : ''}></i>`).join('')}</span>${more ? arrow : ''}</div>`;
+const foot = (on, cls = '', more = false) => `${logo(cls)}${pager(on, cls, more)}`;
 const notch = (n, label, after = '') => `<div class="band"></div><div class="edge"></div><div class="tabrow"><span class="tab"><b>${n}</b><span class="t">${label}</span></span>${after ? `<span class="mono">${after}</span>` : ''}</div>`;
-const counter = (t) => `<div class="counter mono">${t}</div>`;
-const pic = (top, h, src, pos) => `<div class="pic" style="top:${top}px;height:${h}px"><img src="${IMG}${src}" alt="" style="object-position:${pos}"></div>`;
-const credit = (top, text = CREDIT) => `<div class="credit mono s" style="top:${top}px">${text}</div>`;
-
-const shot = (top) => `<div class="shot" style="top:${top}px"><div class="ui">
+const ptab = (n, label) => `<div class="ptab"><b>${n}</b><span class="t">${label}</span></div>`;
+const img = (src, pos = '50% 50%') => `<img src="${IMG}${src}" alt="" style="object-position:${pos}">`;
+const credit = (text = CREDIT) => `<div class="cr mono s">${text}</div>`;
+const sticker = (cls = '') => `<div class="slot mono ${cls}" style="position:relative;left:0;right:0;width:600px;height:120px">[Link sticker]</div>`;
+const shotUI = `<div class="ui">
   <div class="ui-q">How much electricity did this answer use?</div>
-  <div class="ui-a">There isn’t one exact figure. Estimates for a single text answer range from a fraction of a watt-hour to a few watt-hours, depending on the model, the hardware and the data centre that runs it.</div>
-</div></div>`;
-
+  <div>There isn’t one exact figure. Estimates for a single text answer range from a fraction of a watt-hour to a few watt-hours, depending on the model, the hardware and the data centre that runs it.</div>
+</div>`;
 const bars = (rows) => `<div class="bars">${rows.map(([lab, v, key]) => `<div class="row"><span class="lab">${lab}</span><span class="val"><span class="bar${key ? ' key' : ''}" style="width:${Math.round(v / 45 * 500)}px"></span>${v}%</span></div>`).join('')}</div>`;
 const timeline = (pts) => `<div class="tl">${pts.map(([at, when, what]) => `<div class="pt" style="top:${(at * 100).toFixed(2)}%"><i></i><span class="mono">${when}</span><span class="ev">${what}</span></div>`).join('')}</div>`;
 
-/* [template, variant, extra classes, html] */
+const CAP = {
+  office: 'The screens in an office use little power. The servers they talk to use a great deal more.',
+  cctv: 'Data centres are guarded like banks: cameras on every wall and very few visitors.',
+  dhaka: 'Dhaka’s grid already struggles in summer. New data centres would draw on it too.',
+  desks: 'Every question typed at a desk like this is answered by a machine in a data centre, often in another country.',
+  pylons: 'A data centre draws power every hour of the day, so where one can be built depends on the grid.',
+};
+
+/* [template, variant, extra classes, html] — feed posts are 1080 × 1350 */
 const D = [
   ['01-cover', 'text-top-short', '', () => `${notch('06', 'Explainer', DATE)}
-    <div class="main top"><h1 class="hl xl">${SHORT}</h1></div>
-    ${pic(726, 360, 'duo-pylons.jpg', '50% 78%')}${credit(1102)}${logo}${swipe}`],
+    <div class="col" style="top:192px;bottom:190px"><div class="pad"><h1 class="hl xl">${SHORT}</h1></div>
+    <div class="ph" style="margin-top:60px">${img('col-pylons.jpg', '50% 72%')}</div>${credit()}</div>${foot(1, '', true)}`],
   ['01-cover', 'text-bottom-short', '', () => `${notch('06', 'Explainer', DATE)}
-    ${pic(168, 360, 'duo-pylons.jpg', '50% 78%')}${credit(544)}
-    <div class="main bot"><h1 class="hl xl">${SHORT}</h1></div>${logo}${swipe}`],
-  ['01-cover', 'text-bottom-long', '', () => `${notch('06', 'Explainer', DATE)}
-    <div class="main bot"><h1 class="hl l">${LONG}</h1></div>${logo}${swipe}`],
+    <div class="col" style="top:132px;bottom:192px"><div class="ph">${img('col-pylons.jpg', '50% 72%')}</div>${credit()}
+    <div class="pad" style="margin-top:44px"><h1 class="hl xl">${SHORT}</h1></div></div>${foot(1, '', true)}`],
+  ['01-cover', 'fullbleed', '', () => `<div class="full">${img('col-pylons.jpg', '42% 50%')}</div><div class="scrim bot"></div>${ptab('06', 'Explainer')}
+    <div class="main bot w" style="gap:28px"><span class="mono">${DATE}</span><h1 class="hl xl">${SHORT}</h1><span class="mono s" style="align-self:flex-end">${CREDIT}</span></div>${foot(1, 'w', true)}`],
+  ['01-cover', 'text-bottom-long', 'tint', () => `${notch('06', 'Explainer', DATE)}
+    <div class="main bot"><h1 class="hl l">${LONG}</h1></div>${foot(1, '', true)}`],
   ['01-cover', 'new', 'new', () => `${notch('06', 'New', 'Explainer · ' + DATE)}
-    <div class="main top"><h1 class="hl l">${LONG}</h1></div>${logo}${swipe}`],
+    <div class="main top"><h1 class="hl l">${LONG}</h1></div>${foot(1, '', true)}`],
 
-  ['02-text', '', '', () => `${counter('02 / 06')}
-    <div class="main top"><h2 class="hl l">Every answer runs on a server</h2>
-    <p class="txt">Those servers sit in data centres, which used about 415 terawatt-hours of electricity in 2024, about 1.5% of the world’s total. The International Energy Agency expects that to more than double by 2030.</p></div>${logo}`],
+  ['02-text', '', '', () => `<div class="main top"><h2 class="hl l tn">Every answer runs on a server</h2>
+    <p class="txt">Those servers sit in data centres, which used about 415 terawatt-hours of electricity in 2024, about 1.5% of the world’s total. The International Energy Agency expects that to more than double by 2030.</p></div>${foot(2)}`],
 
-  ['03-image', 'split-text-top', '', () => `${counter('03 / 06')}
-    <div class="main top"><p class="txt">A data centre draws power every hour of the day, so where one can be built depends on the grid.</p></div>
-    ${pic(546, 540, 'duo-pylons.jpg', '50% 70%')}${credit(1102)}${logo}`],
-  ['03-image', 'split-text-bottom', '', () => `${counter('03 / 06')}
-    ${shot(168)}${credit(636, 'Screenshot · Chatbot answer, 12 Nov 2026')}
-    <div class="main bot"><p class="txt">Ask a chatbot what its answer cost in electricity and you get a range, not a number.</p></div>${logo}`],
-  ['03-image', 'fullbleed-text-top', '', () => `<div class="full"><img src="${IMG}duo-pylons.jpg" alt="" style="object-position:34% 50%"></div>
-    <div class="sheet top"><p class="txt">A data centre draws power every hour of the day, so where one can be built depends on the grid.</p><div class="mono s" style="align-self:flex-end">${CREDIT}</div></div>
-    ${counter('03 / 06')}<div class="plate lplate"></div>${logo}`],
-  ['03-image', 'fullbleed-text-bottom', '', () => `<div class="full"><img src="${IMG}duo-pylons.jpg" alt="" style="object-position:34% 50%"></div>
-    <div class="plate cplate"><span class="mono">03 / 06</span></div>
-    <div class="sheet bot"><p class="txt">A data centre draws power every hour of the day, so where one can be built depends on the grid.</p></div>
-    <div class="credit mono s" style="bottom:90px">${CREDIT}</div>${logo}`],
+  ['03-image', 'photo-text-top', '', () => `<div class="col" style="top:132px;bottom:190px"><div class="pad"><p class="txt">${CAP.office}</p></div>
+    <div class="ph" style="margin-top:56px">${img('col-office.jpg', '50% 60%')}</div>${credit()}</div>${foot(3)}`],
+  ['03-image', 'photo-text-bottom', '', () => `<div class="col" style="top:0;bottom:192px"><div class="ph">${img('col-cctv.jpg', '50% 40%')}</div>${credit()}
+    <div class="pad" style="margin-top:40px"><p class="txt">${CAP.cctv}</p></div></div>${foot(3)}`],
+  ['03-image', 'fit', '', () => `<div class="col" style="top:0;bottom:192px"><div class="ph fit">${img('col-dhaka.jpg')}</div>${credit()}
+    <div class="pad" style="margin-top:40px"><p class="txt">${CAP.dhaka}</p></div></div>${foot(3)}`],
+  ['03-image', 'screenshot', 'tint', () => `<div class="shot" style="top:132px">${shotUI}</div>
+    <div class="cr mono s" style="position:absolute;right:0;top:600px">Screenshot · Chatbot answer, 12 Nov 2026</div>
+    <div class="main bot"><p class="txt">Ask a chatbot what its answer cost in electricity and you get a range, not a number.</p></div>${foot(3)}`],
+  ['03-image', 'fullbleed-text-top', '', () => `<div class="full">${img('col-pylons.jpg', '30% 50%')}</div><div class="scrim top"></div><div class="scrim foot"></div>
+    <div class="main top w" style="top:132px;gap:24px"><p class="txt">${CAP.pylons}</p><span class="mono s" style="align-self:flex-end">${CREDIT}</span></div>${foot(3, 'w')}`],
+  ['03-image', 'fullbleed-text-bottom', '', () => `<div class="full">${img('col-desks.jpg', '40% 50%')}</div><div class="scrim bot"></div>
+    <div class="main bot w" style="gap:24px"><p class="txt">${CAP.desks}</p><span class="mono s" style="align-self:flex-end">${CREDIT}</span></div>${foot(3, 'w')}`],
 
-  ['04-data', 'number', '', () => `${counter('04 / 06')}
-    <div class="main top" style="gap:44px"><div class="numrow"><span class="hl num">945</span><span class="hl unit">TWh</span></div>
+  ['04-data', 'number', '', () => `<div class="main top" style="top:132px;gap:44px"><div class="numrow"><span class="hl num">945</span><span class="hl unit">TWh</span></div>
     <p class="txt">What the world’s data centres could use in 2030: slightly more electricity than Japan uses in a year today.</p></div>
-    <div class="meta mono">Source: IEA, Energy and AI (2025)</div>${logo}`],
-  ['04-data', 'chart', '', () => `${counter('04 / 06')}
-    <div class="main top"><h2 class="hl m">The US used almost half the world’s data-centre electricity in 2024</h2>
+    <div class="meta mono">Source: IEA, Energy and AI (2025)</div>${foot(4)}`],
+  ['04-data', 'number-block', '', () => `<div class="main top" style="top:132px;gap:48px"><div class="nblock"><span class="hl num">945</span><span class="hl unit">TWh</span></div>
+    <p class="txt">What the world’s data centres could use in 2030: slightly more electricity than Japan uses in a year today.</p></div>
+    <div class="meta mono">Source: IEA, Energy and AI (2025)</div>${foot(4)}`],
+  ['04-data', 'chart', '', () => `<div class="main top" style="top:132px"><h2 class="hl m">The US used almost half the world’s data-centre electricity in 2024</h2>
     ${bars([['United States', 45, true], ['China', 25], ['Europe', 15], ['Rest of the world', 15]])}</div>
-    <div class="meta mono">Source: IEA, Energy and AI (2025)</div>${logo}`],
-  ['04-data', 'timeline', '', () => `${counter('04 / 06')}
-    <div class="main top"><h2 class="hl m">ChatGPT went from launch to 800 million weekly users in under three years</h2>
+    <div class="meta mono">Source: IEA, Energy and AI (2025)</div>${foot(4)}`],
+  ['04-data', 'timeline', '', () => `<div class="main top" style="top:132px"><h2 class="hl m">ChatGPT went from launch to 800 million weekly users in under three years</h2>
     ${timeline([[0, 'Nov 2022', 'Launch'], [12 / 35, 'Nov 2023', '100 million a week'], [27 / 35, 'Feb 2025', '400 million a week'], [1, 'Oct 2025', '800 million a week']])}</div>
-    <div class="meta mono">Source: OpenAI</div>${logo}`],
+    <div class="meta mono">Source: OpenAI</div>${foot(4)}`],
 
-  ['05-quote', '', '', () => `${counter('05 / 06')}
-    <div class="main top"><blockquote class="hl q">“The building is ours on paper. Everything that makes it valuable belongs to someone else.”</blockquote>
+  ['05-quote', '', 'tint', () => `<div class="main top" style="top:132px"><blockquote class="hl q">“The building is ours on paper. Everything that makes it valuable belongs to someone else.”</blockquote>
     <p class="att">An engineer who has worked on two of the sites</p></div>
-    <div class="meta mono">Source: Second Order investigation, Sep 2026</div>${logo}`],
+    <div class="meta mono">Source: Second Order investigation, Sep 2026</div>${foot(5)}`],
 
   ['06-closing', 'read', '', () => `${notch('06', 'Explainer')}
-    <div class="main bot"><h2 class="hl xl">Read the full story</h2></div>
-    <div class="cue mono">Link in bio</div>${logo}`],
-  ['06-closing', 'question', '', () => `${counter('06 / 06')}
-    <div class="main bot"><h2 class="hl l">Should data centres pay more for the power they use?</h2></div>
-    <div class="cue mono">Tell us in the comments</div>${logo}`],
+    <div class="main bot"><h2 class="hl xl tn">Read the full story</h2><span class="mono">Link in bio</span></div>${foot(6)}`],
+  ['06-closing', 'question', 'tint', () => `<div class="main bot"><h2 class="hl l">Should data centres pay more for the power they use?</h2><span class="mono">Tell us in the comments</span></div>${foot(6)}`],
 ];
 
-/* one blank of each, with the placeholders a newsroom fills in */
+/* single posts, 1080 × 1350: no dots, bolder colour */
+const QUOTE = '“The building is ours on paper. Everything that makes it valuable belongs to someone else.”';
+const P = [
+  ['07-image', 'split-text-bottom-short', '', () => `${notch('06', 'Explainer', DATE)}
+    <div class="col" style="top:132px;bottom:192px"><div class="ph">${img('col-pylons.jpg', '50% 70%')}</div>${credit()}
+    <div class="pad" style="margin-top:44px"><h1 class="hl xl">${SHORT}</h1></div></div>${logo()}`],
+  ['07-image', 'split-text-top-long', '', () => `${notch('06', 'Explainer', DATE)}
+    <div class="col" style="top:192px;bottom:190px"><div class="pad"><h1 class="hl l">${LONG}</h1></div>
+    <div class="ph" style="margin-top:56px">${img('col-office.jpg', '50% 60%')}</div>${credit()}</div>${logo()}`],
+  ['07-image', 'fullbleed', 't05', () => `<div class="full">${img('col-dhaka.jpg', '50% 45%')}</div><div class="scrim bot"></div>
+    <div class="main bot w" style="gap:28px"><span class="mono" style="color:var(--t-light)">AI Across Bangladesh · ${DATE}</span><h1 class="hl l">Dhaka’s grid already struggles in summer. Data centres would draw on it too</h1><span class="mono s" style="align-self:flex-end">${CREDIT}</span></div>${logo('w')}`],
+  ['07-image', 'fullbleed-notch', '', () => `<div class="full">${img('col-pylons.jpg', '62% 50%')}</div><div class="scrim bot"></div>${ptab('06', 'Explainer')}
+    <div class="main bot w" style="gap:28px"><span class="mono">${DATE}</span><h1 class="hl xl">${SHORT}</h1><span class="mono s" style="align-self:flex-end">${CREDIT}</span></div>${logo('w')}`],
+
+  ['08-quote-portrait', 'text-top', '', () => `${notch('06', 'Quote', DATE)}
+    <div class="main top"><blockquote class="hl q">${QUOTE}</blockquote></div>
+    <div class="main bot" style="flex-direction:row;align-items:flex-end;gap:36px"><div class="portrait mono s">[Portrait]</div><div style="display:flex;flex-direction:column;gap:8px"><p class="att tn">[Speaker name]</p><p class="txt" style="font-size:34px;line-height:1.3">Engineer, two of the data-centre sites</p></div></div>${logo()}`],
+  ['08-quote-portrait', 'text-bottom', 'tint', () => `${notch('06', 'Quote', DATE)}
+    <div class="main top" style="flex-direction:row;align-items:flex-end;gap:36px"><div class="portrait mono s" style="background:var(--card)">[Portrait]</div><div style="display:flex;flex-direction:column;gap:8px"><p class="att">[Speaker name]</p><p class="txt" style="font-size:34px;line-height:1.3">Engineer, two of the data-centre sites</p></div></div>
+    <div class="main bot"><blockquote class="hl q">${QUOTE}</blockquote></div>${logo()}`],
+
+  ['09-quote', '', 'deep', () => `${ptab('06', 'Quote')}
+    <div class="main bot" style="gap:44px"><blockquote class="hl q" style="font-size:88px;font-variation-settings:'opsz' 32">${QUOTE}</blockquote>
+    <p class="att">An engineer who has worked on two of the sites</p><span class="mono s">From our investigation, Sep 2026</span></div>${logo()}`],
+
+  ['10-text', 'short', 'tint', () => `${notch('06', 'Explainer', DATE)}
+    <div class="main bot"><h1 class="hl xl">Electricity, not chips, is the limit</h1></div>${logo()}`],
+  ['10-text', 'long', '', () => `${notch('06', 'Correction', DATE)}
+    <div class="main top"><h1 class="hl l">An earlier post said data centres used 4% of the world’s electricity in 2024. The figure is about <span class="tn">1.5%</span>.</h1></div>
+    <div class="meta mono">Source: IEA, Energy and AI (2025)</div>${logo()}`],
+  ['10-text', 'new', 'new', () => `${notch('06', 'New', 'Explainer · ' + DATE)}
+    <div class="main top"><h1 class="hl l">${LONG}</h1></div><div class="meta mono">Full story: link in bio</div>${logo()}`],
+  ['10-text', 'number', '', () => `${notch('06', 'Data', DATE)}
+    <div class="main top" style="gap:48px"><div class="nblock"><span class="hl num">945</span><span class="hl unit">TWh</span></div>
+    <p class="txt" style="font-size:44px">What the world’s data centres could use in 2030: slightly more electricity than Japan uses in a year today.</p></div>
+    <div class="meta mono">Source: IEA, Energy and AI (2025)</div>${logo()}`],
+];
+
+/* stories, 1080 × 1920, the same file for Instagram and Facebook: the top and bottom 250 px stay clear */
+const S = [
+  ['11-new-story', 'text-top', 'new', () => `${notch('06', 'New', 'Explainer · ' + DATE)}
+    <div class="main top"><h1 class="hl xl">${SHORT}</h1>${sticker()}</div>
+    <div class="full" style="top:1060px">${img('col-pylons.jpg', '50% 72%')}</div><div class="scrim foot"></div>
+    <div class="cr mono s w" style="position:absolute;right:0;top:1076px;z-index:3;padding-top:0">${CREDIT}</div>${logo('w')}`],
+  ['11-new-story', 'text-bottom', 'new', () => `${notch('06', 'New', 'Explainer · ' + DATE)}
+    <div class="col" style="top:334px;bottom:394px"><div class="ph">${img('col-pylons.jpg', '50% 72%')}</div>${credit()}
+    <div class="pad" style="margin-top:44px"><h1 class="hl xl">${SHORT}</h1>${sticker()}</div></div>${logo()}`],
+  ['11-new-story', 'fullbleed', 'new', () => `<div class="full">${img('col-pylons.jpg', '38% 50%')}</div><div class="scrim bot"></div>${ptab('06', 'New')}
+    <div class="main bot w" style="gap:32px"><span class="mono">Explainer · ${DATE}</span><h1 class="hl xl">${SHORT}</h1>${sticker('w')}<span class="mono s" style="align-self:flex-end">${CREDIT}</span></div>${logo('w')}`],
+  ['12-reshare', '', 'tint', () => `<div class="main top" style="top:290px"><span class="mono">New on our feed · ${DATE}</span></div>
+    <div class="slot mono" style="top:400px;height:1060px;left:132px;right:132px">[Shared post]</div>
+    <div class="main top" style="top:1500px"><p class="txt">Tap the post to read the explainer.</p></div>${logo()}`],
+  ['13-text', '', '', () => `<div class="main top" style="top:290px"><span class="mono">Explainer · ${DATE}</span>
+    <h1 class="hl l">Data centres used about <span class="tn">1.5%</span> of the world’s electricity in 2024. By 2030 that share could double.</h1></div>
+    <div class="meta mono" style="bottom:394px">Source: IEA, Energy and AI (2025)</div>${logo()}`],
+  ['14-poll', '', 'tint', () => `<div class="main top" style="top:290px"><span class="mono">Your view · ${DATE}</span>
+    <h1 class="hl l">Should data centres pay more for the power they use?</h1></div>
+    <div class="slot mono" style="top:1040px;height:340px;left:180px;right:180px">[Poll sticker]</div>${logo()}`],
+];
+
 const BLANK = [
-  ['01-cover', () => `${notch('00', '[Notch label]', '[Label]')}
-    <div class="main top"><h1 class="hl xl">[HEADLINE]</h1></div>
-    <div class="hole" style="top:726px;height:360px"><span class="mono">[IMAGE] · optional</span></div>${credit(1102, 'Illustrative image · [Source]')}${logo}${swipe}`],
-  ['02-text', () => `${counter('02 / 06')}
-    <div class="main top"><h2 class="hl l">[HEADLINE]</h2><p class="txt">[TEXT] Up to about 40 words in all, heading included. One idea per slide.</p></div>${logo}`],
-  ['03-image', () => `${counter('03 / 06')}
-    <div class="main top"><p class="txt">[TEXT] A short caption, one or two lines.</p></div>
-    <div class="hole" style="top:546px;height:540px"><span class="mono">[IMAGE] or screenshot</span></div>${credit(1102, 'Illustrative image · [Source]')}${logo}`],
-  ['04-data', () => `${counter('04 / 06')}
-    <div class="main top" style="gap:44px"><div class="hl" style="font-size:200px;line-height:0.9;font-variation-settings:'opsz' 72">[NUMBER]</div><p class="txt">[TEXT] What the number means, in one sentence. Or a chart, or a timeline, in this space.</p></div>
-    <div class="meta mono">Source: [Source]</div>${logo}`],
-  ['05-quote', () => `${counter('05 / 06')}
-    <div class="main top"><blockquote class="hl q">“[QUOTE]”</blockquote><p class="att">[SPEAKER, ROLE]</p></div>
-    <div class="meta mono">Source: [Source]</div>${logo}`],
-  ['06-closing', () => `${notch('00', '[Notch label]')}
-    <div class="main bot"><h2 class="hl xl">Read the full story</h2></div><div class="cue mono">Link in bio</div>${logo}`],
+  ['01-cover', '', () => `${notch('00', '[Notch label]', '[Label]')}
+    <div class="col" style="top:192px;bottom:190px"><div class="pad"><h1 class="hl xl">[HEADLINE]</h1></div>
+    <div class="hole" style="margin-top:60px"><span class="mono">[IMAGE] · optional</span></div>${credit('Illustrative image · [Source]')}</div>${foot(1, '', true)}`],
+  ['02-text', '', () => `<div class="main top"><h2 class="hl l">[HEADLINE]</h2><p class="txt">[TEXT] Up to about 40 words in all, heading included. One idea per slide.</p></div>${foot(2)}`],
+  ['03-image', '', () => `<div class="col" style="top:0;bottom:192px"><div class="hole"><span class="mono">[IMAGE], any shape</span></div>${credit('Illustrative image · [Source]')}
+    <div class="pad" style="margin-top:40px"><p class="txt">[TEXT] A short caption, one or two lines.</p></div></div>${foot(3)}`],
+  ['04-data', '', () => `<div class="main top" style="top:132px;gap:44px"><div class="hl" style="font-size:200px;line-height:0.9;color:var(--tone);font-variation-settings:'opsz' 72">[NUMBER]</div><p class="txt">[TEXT] What the number means, in one sentence. Or a chart, or a timeline, in this space.</p></div>
+    <div class="meta mono">Source: [Source]</div>${foot(4)}`],
+  ['05-quote', 'tint', () => `<div class="main top" style="top:132px"><blockquote class="hl q">“[QUOTE]”</blockquote><p class="att">[SPEAKER, ROLE]</p></div>
+    <div class="meta mono">Source: [Source]</div>${foot(5)}`],
+  ['06-closing', '', () => `${notch('00', '[Notch label]')}
+    <div class="main bot"><h2 class="hl xl">Read the full story</h2><span class="mono">Link in bio</span></div>${foot(6)}`],
 ];
 
-/* two small boards that show the notch on the other formats, for the style sheet */
-const SPEC = [
-  ['spec-story', 'story light', () => `${notch('06', 'New story', DATE)}`],
-  ['spec-story-new', 'story light new', () => `${notch('06', 'New', DATE)}`],
-  ['spec-link', 'link light', () => `${notch('06', 'Explainer', DATE)}`],
-  ['spec-link-dark', 'link dark', () => `${notch('06', 'Explainer', DATE)}`],
-];
+const SPEC = [['spec-story', 'story light t06 new', () => `${notch('06', 'New', DATE)}`]];
 
 const boards = [];
-for (const mode of ['light', 'dark'])
-  for (const [t, v, cls, html] of D)
-    boards.push({ id: [t, mode, v].filter(Boolean).join('-'), cls: `${mode} ${cls}`, html });
-for (const [t, html] of BLANK) boards.push({ id: `${t}-light-blank`, cls: 'light', html });
+for (const mode of ['light', 'dark']) {
+  for (const [t, v, cls, html] of D) boards.push({ id: [t, mode, v].filter(Boolean).join('-'), cls: `${mode} t06 ${cls}`, html });
+  for (const [t, v, cls, html] of P) boards.push({ id: [t, mode, v].filter(Boolean).join('-'), cls: `${mode} ${cls.includes('t05') ? '' : 't06 '}${cls}`, html });
+  for (const [t, v, cls, html] of S) boards.push({ id: [t, mode, v].filter(Boolean).join('-'), cls: `${mode} t06 story ${cls}`, html });
+}
+for (const [t, cls, html] of BLANK) boards.push({ id: `${t}-light-blank`, cls: `light t06 ${cls}`, html });
 for (const [id, cls, html] of SPEC) boards.push({ id, cls, html });
 
 const q = new URLSearchParams(location.search);
 const only = q.get('b');
 if (q.get('guides')) document.body.classList.add('guides');
 if (only) document.body.classList.add('one');
+if (q.get('list')) document.getElementById('out').textContent = boards.map((b) => `${b.id} 1080 ${b.cls.includes('story') ? 1920 : 1350}`).join('\n');
 for (const b of boards) {
   if (only && b.id !== only) continue;
+  if (q.get('list')) break;
   const w = document.createElement('div');
   w.className = 'wrap';
   w.innerHTML = `<div class="id">${b.id}</div><div class="board ${b.cls}" id="${b.id}">${b.html()}</div>`;
@@ -265,7 +359,7 @@ function empty(board) {
     range.selectNodeContents(n);
     for (const r of range.getClientRects()) mark(r);
   }
-  board.querySelectorAll('img, svg, .tab, .logo, .bar, .shot, .hole, .tl i, .pic').forEach((e) => mark(e.getBoundingClientRect()));
+  board.querySelectorAll('img, svg, .tab, .ptab, .logo, .bar, .shot, .hole, .tl i, .ph, .dots, .slot').forEach((e) => mark(e.getBoundingClientRect()));
   let n = 0;
   for (const v of g) n += v;
   return Math.round(100 * (1 - n / g.length));

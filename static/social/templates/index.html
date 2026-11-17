@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Second Order social templates</title>
-<meta name="description" content="Style sheet and templates 1 to 6 for Second Order's Instagram, Facebook and LinkedIn posts, in light and dark.">
+<meta name="description" content="Style sheet, carousel kit and story templates for Second Order's Instagram, Facebook and LinkedIn posts, in light and dark.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anek+Latin:wght@400..700&family=Fraunces:opsz,wght@9..144,400..700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -29,7 +29,7 @@
   .bar nav a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
   .switch { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; white-space: nowrap; }
   .switch input { width: 1rem; height: 1rem; margin: 0; accent-color: var(--ink); }
-  @media (max-width: 760px) { .bar nav a { display: none; } }
+  @media (max-width: 860px) { .bar nav a { display: none; } }
 
   main { max-width: 78rem; margin: 0 auto; padding: 2.25rem var(--pad) 4rem; display: flex; flex-direction: column; gap: 2.5rem; }
   .intro { max-width: 46rem; display: flex; flex-direction: column; gap: 0.85rem; }
@@ -39,6 +39,7 @@
   h4 { margin: 0; font-family: var(--sans); font-weight: 600; font-size: 1rem; line-height: 1.3; }
   .lede { font-size: 1.1875rem; line-height: 1.45; }
   .status { display: inline-block; align-self: flex-start; padding: 0.35rem 0.6rem; border: 1px solid var(--ink); background: var(--card); }
+  .changes { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.3rem; }
 
   /* a section is a tray of paper with its name in a notch cut into its corner, as on the website */
   .tray { --tp: var(--pad); position: relative; border: 1px solid var(--ink); background: var(--card); padding: var(--tp); display: flex; flex-direction: column; gap: 1.75rem; }
@@ -53,7 +54,7 @@
   .ss > .blk { grid-column: span 6; }
   @media (min-width: 64rem) { .ss > .half { grid-column: span 3; } .ss > .third { grid-column: span 2; } }
   .blk { background: var(--card); padding: 1.25rem; display: flex; flex-direction: column; gap: 0.9rem; min-width: 0; }
-    .blk > .label { color: var(--ink); }
+  .blk > .label { color: var(--ink); }
   .blk p, .blk li { font-size: 0.9688rem; line-height: 1.45; }
   .blk ul { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.35rem; }
   .note { color: var(--mute); }
@@ -63,7 +64,12 @@
   .chip { grid-row: span 2; width: 2.1rem; height: 2.1rem; border: 1px solid var(--ink); }
   .sw b { font-weight: 600; font-size: 0.9688rem; }
   .sw b span { font-family: var(--mono); font-weight: 500; font-size: 0.75rem; letter-spacing: 0.04em; margin-left: 0.35rem; }
-  .sw small { font-size: 0.875rem; line-height: 1.35; color: var(--mute); }
+  .sw small, .tone small { font-size: 0.8125rem; line-height: 1.35; color: var(--mute); }
+  .tones { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: 0.6rem 1.25rem; }
+  .tone { display: grid; grid-template-columns: repeat(3, 1.6rem) minmax(0, 1fr); column-gap: 0.35rem; align-items: center; }
+  .tone .chip { width: 1.6rem; height: 1.6rem; grid-row: span 2; }
+  .tone b { font-weight: 600; font-size: 0.9375rem; padding-left: 0.4rem; }
+  .tone small { padding-left: 0.4rem; font-family: var(--mono); font-size: 0.6875rem; }
   table { width: 100%; border-collapse: collapse; font-size: 0.9063rem; }
   th, td { text-align: left; vertical-align: top; padding: 0.5rem 0.6rem 0.5rem 0; border-top: 1px solid var(--hair); }
   th { font-family: var(--mono); font-weight: 500; font-size: 0.6875rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--mute); border-top: 0; }
@@ -76,21 +82,14 @@
   .notches img { border: 1px solid var(--ink); width: 100%; }
   .notches figcaption { font-size: 0.8125rem; color: var(--mute); }
   .duo { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; }
-  .duo figure { margin: 0; display: flex; flex-direction: column; gap: 0.25rem; }
   .duo img { aspect-ratio: 4 / 3; object-fit: cover; width: 100%; }
-  .duo figcaption { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--mute); }
   .frames { display: flex; gap: 1.25rem; align-items: flex-end; flex-wrap: wrap; }
-  .frm { position: relative; border: 1px solid var(--ink); background: var(--ground); flex: none; }
+  .frm { position: relative; border: 1px solid var(--ink); background: var(--card); flex: none; }
   .frm i { position: absolute; border: 1px dashed var(--ink); background: var(--card); }
   .frm em { position: absolute; left: 0; right: 0; background: repeating-linear-gradient(135deg, transparent 0 4px, rgba(22,22,21,0.14) 4px 5px); }
-  .frm + span, .frames span { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.07em; text-transform: uppercase; }
+  .frames span { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.07em; text-transform: uppercase; }
   .frames > div { display: flex; flex-direction: column; gap: 0.35rem; }
-  .ruler { position: relative; width: 100%; max-width: 21rem; }
-  .ruler .frm { width: 9rem; height: 11.25rem; background: var(--card); }
-  .ruler .ln { position: absolute; left: 0; width: 9rem; border-top: 1px solid var(--ink); }
-  .ruler .ln.d { border-top-style: dashed; }
-  .ruler .ln span { position: absolute; left: 9.75rem; top: -0.55rem; white-space: nowrap; font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.05em; text-transform: uppercase; }
-  .ruler .strip { position: absolute; left: 0; top: 0; width: 9rem; height: 0.32rem; background: var(--ground); border-bottom: 1px solid var(--ink); }
+  .dotspec { border: 1px solid var(--ink); max-width: 20rem; }
 
   /* ---- templates ---- */
   .tpl { display: flex; flex-direction: column; gap: 1.25rem; padding-top: 1.75rem; border-top: 1px solid var(--ink); }
@@ -99,6 +98,7 @@
   .use { font-size: 1.0625rem; }
   .rule { font-size: 0.9688rem; color: var(--mute); }
   .pairs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 27rem), 1fr)); gap: 1.75rem 1.5rem; align-items: start; }
+  .pairs.story { grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); }
   .pair, .one { margin: 0; display: flex; flex-direction: column; gap: 0.6rem; }
   .imgs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
   .shot { position: relative; display: block; border: 1px solid var(--ink); background: var(--hair); }
@@ -107,9 +107,10 @@
   .e { font-size: 0.6875rem; color: var(--ink); }
   .blanks { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(46%, 13rem), 1fr)); gap: 1.25rem 1rem; }
 
-  /* safe zone (60 px) and the 3:4 grid crop, drawn over every feed image */
+  /* safe zones and the 3:4 grid crop, drawn over every image */
   .guides .shot.feed::after { content: ''; position: absolute; inset: 4.444% 5.556%; border: 1.5px dashed #e0306a; pointer-events: none; z-index: 2; }
   .guides .shot.feed::before { content: ''; position: absolute; top: 0; bottom: 0; left: 3.125%; right: 3.125%; border-left: 1.5px solid #1f8fff; border-right: 1.5px solid #1f8fff; pointer-events: none; z-index: 2; }
+  .guides .shot.story::after { content: ''; position: absolute; inset: 13.02% 5.556%; border: 1.5px dashed #e0306a; pointer-events: none; z-index: 2; }
   .legend { display: none; gap: 1rem; flex-wrap: wrap; font-size: 0.8125rem; }
   .guides .legend { display: flex; }
   .legend span::before { content: ''; display: inline-block; width: 1.4rem; margin-right: 0.4rem; vertical-align: middle; border-top: 2px dashed #e0306a; }
@@ -127,25 +128,35 @@
 <body>
 <div class="bar">
   <span class="name">Second Order</span>
-  <nav><a href="#style">Style sheet</a><a href="#templates">Templates 1–6</a><a href="#blanks">Blanks</a><a href="#grid">Grid</a></nav>
+  <nav><a href="#style">Style sheet</a><a href="#templates">Carousel 1–6</a><a href="#singles">Singles 7–10</a><a href="#stories">Stories 11–14</a><a href="#blanks">Blanks</a><a href="#grid">Grid</a></nav>
   <label class="switch"><input type="checkbox" id="guides"> Safe zones</label>
 </div>
 <main>
   <div class="intro">
     <p class="label">Social templates · Instagram, Facebook, LinkedIn</p>
     <h1>One calm system for every post</h1>
-    <p class="lede">Feed posts, carousels and stories for Second Order, in English and Bangla, light and dark. Each template works with no image at all; type, numbers, quotes and charts come first.</p>
-    <p>This page has the style sheet and templates 1 to 6, the carousel kit, for approval. Templates 7 to 15, the Bangla versions and the LinkedIn PDF follow once these are agreed. Select any image to open it at full size; every file is named number, template, mode, variant.</p>
-    <p class="status label">For approval · Style sheet and templates 1–6</p>
-    <p><a href="second-order-templates-1-6.zip">Download all 36 images (ZIP)</a></p>
-    <p class="legend"><span>60 px safe zone</span><span>Instagram's 3:4 grid crop</span></p>
+    <p class="lede">Feed posts, carousels and stories for Second Order, in English and Bangla, light and dark. Photos in full colour, each topic with one quiet tone, and a template for every shape of picture.</p>
+    <p>One file serves every platform: a 1080 × 1350 feed post goes to Instagram, Facebook and LinkedIn as it is, and a 1080 × 1920 story to Instagram and Facebook. Select any image to open it at full size; files are named number, template, mode, variant.</p>
+    <p class="label">Changed in this round</p>
+    <ul class="changes">
+      <li>Photos are in full colour, and each topic has one understated tone for washes, numbers, chart bars and dots.</li>
+      <li>Carousels carry a row of dots, one per slide, the current one filled in the topic’s tone (purple on a new story).</li>
+      <li>Pictures are bigger and come in more shapes: edge to edge at the top or bottom, kept whole at any shape, or filling the slide with the words on it.</li>
+      <li>Single posts, templates 7 to 10, are their own bolder family: quote cards, image posts, statements, corrections and big numbers.</li>
+      <li>Big numbers can sit on a solid block of the topic’s tone, the way the FT sets them.</li>
+      <li>No slide is only black and white or only grey and black: every one, light or dark, carries its topic’s tone.</li>
+      <li>The stories, templates 11 to 14, are added.</li>
+    </ul>
+    <p class="status label">For approval · Style sheet, templates 1–14</p>
+    <p><a href="second-order-templates.zip">Download all 78 images (ZIP)</a></p>
+    <p class="legend"><span>Safe zone: 60 px on feed posts, 250 px top and bottom on stories</span><span>Instagram's 3:4 grid crop</span></p>
   </div>
 
   <section class="tray" id="style">
     <div class="tabs"><span class="tab"><b>A</b>Style sheet</span><span class="label more">One page</span></div>
     <div class="head">
       <h2>The rules, on one page</h2>
-      <p>Everything here comes from the website: its colours, its three typefaces and its notch. Nothing new is added. Where the brief gives an approximate value, we use the website's exact one.</p>
+      <p>The colours, the three typefaces and the notch come from the website. The topic tones extend the website’s own idea: a dossier’s notch takes a pale wash of its picture’s colour.</p>
     </div>
     <div class="ss">
 
@@ -154,31 +165,44 @@
         <div class="modes">
           <div>
             <p class="label" style="margin-bottom:0.6rem">Light</p>
-            <div class="sw"><span class="chip" style="background:#e7e5e0"></span><b>Background<span>#E7E5E0</span></b><small>The strip above the card and the notch. Empty image slots.</small></div>
-            <div class="sw"><span class="chip" style="background:#fbfaf6"></span><b>Card<span>#FBFAF6</span></b><small>The field of every slide. Sheets and plates on full-bleed photos.</small></div>
-            <div class="sw"><span class="chip" style="background:#161615"></span><b>Ink<span>#161615</span></b><small>All words, the notch's lines and number box, the key bar in a chart. 17.3:1 on Card.</small></div>
-            <div class="sw"><span class="chip" style="background:#72716f"></span><b>Muted<span>#72716F</span></b><small>The other bars in a chart. 4.7:1 on Card.</small></div>
-            <div class="sw"><span class="chip" style="background:#dbdad6"></span><b>Hairline<span>#DBDAD6</span></b><small>Gridlines and rules, when a chart needs them.</small></div>
-            <div class="sw"><span class="chip" style="background:#6a3fd1"></span><b>Accent<span>#6A3FD1</span></b><small>The NEW notch and its top edge. Nothing else.</small></div>
+            <div class="sw"><span class="chip" style="background:#e7e5e0"></span><b>Background<span>#E7E5E0</span></b><small>Behind the notch on a slide that already takes the topic’s wash.</small></div>
+            <div class="sw"><span class="chip" style="background:#fbfaf6"></span><b>Card<span>#FBFAF6</span></b><small>The field of most slides.</small></div>
+            <div class="sw"><span class="chip" style="background:#161615"></span><b>Ink<span>#161615</span></b><small>All words, the notch’s lines and number box. 17.3:1 on Card.</small></div>
+            <div class="sw"><span class="chip" style="background:#72716f"></span><b>Muted<span>#72716F</span></b><small>The other bars in a chart, sticker spaces. 4.7:1 on Card.</small></div>
+            <div class="sw"><span class="chip" style="background:#6a3fd1"></span><b>Accent<span>#6A3FD1</span></b><small>The NEW notch, its top edge and its dot. Nothing else.</small></div>
           </div>
           <div>
             <p class="label" style="margin-bottom:0.6rem">Dark</p>
             <div class="sw"><span class="chip" style="background:#0f0f0e"></span><b>Background<span>#0F0F0E</span></b><small>Same roles as in light.</small></div>
-            <div class="sw"><span class="chip" style="background:#1b1b19"></span><b>Card<span>#1B1B19</span></b><small>The field of every slide.</small></div>
+            <div class="sw"><span class="chip" style="background:#1b1b19"></span><b>Card<span>#1B1B19</span></b><small>The field of most slides.</small></div>
             <div class="sw"><span class="chip" style="background:#ecebe5"></span><b>Ink<span>#ECEBE5</span></b><small>14.4:1 on Card.</small></div>
             <div class="sw"><span class="chip" style="background:#989893"></span><b>Muted<span>#989893</span></b><small>6.0:1 on Card.</small></div>
-            <div class="sw"><span class="chip" style="background:#383836"></span><b>Hairline<span>#383836</span></b><small>Gridlines and rules.</small></div>
-            <div class="sw"><span class="chip" style="background:#6a3fd1"></span><b>Accent<span>#6A3FD1</span></b><small>Only as a fill behind white words (6.5:1). As text on dark Card it would be 2.7:1, so never.</small></div>
+            <div class="sw"><span class="chip" style="background:#6a3fd1"></span><b>Accent<span>#6A3FD1</span></b><small>Only as a fill behind white words (6.5:1).</small></div>
           </div>
         </div>
-        <p class="note">Muted and Hairline are the website's own mixes: 60% and 14% Ink on Card. The brief's ≈#8E8D8A measures 3.2:1 on Card, below AA for small text; the website's #72716F passes.</p>
+        <p class="label" style="margin-top:0.4rem">Topic tones · deep, wash, dark</p>
+        <div class="tones">
+            <div class="tone"><span class="chip" style="background:#3f5f86"></span><span class="chip" style="background:#bfc5ca"></span><span class="chip" style="background:#8fb0d8"></span><b>01 · The AI Race</b><small>#3F5F86 · wash #BFC5CA · dark #8FB0D8</small></div>
+            <div class="tone"><span class="chip" style="background:#5f6f34"></span><span class="chip" style="background:#c6c9b7"></span><span class="chip" style="background:#a9b97a"></span><b>02 · AI & Everyday Life</b><small>#5F6F34 · wash #C6C9B7 · dark #A9B97A</small></div>
+            <div class="tone"><span class="chip" style="background:#8a6418"></span><span class="chip" style="background:#d1c6b0"></span><span class="chip" style="background:#d4ad5e"></span><b>03 · Work After Automation</b><small>#8A6418 · wash #D1C6B0 · dark #D4AD5E</small></div>
+            <div class="tone"><span class="chip" style="background:#94402f"></span><span class="chip" style="background:#d3bdb6"></span><span class="chip" style="background:#dc8c78"></span><b>04 · Machines and Power</b><small>#94402F · wash #D3BDB6 · dark #DC8C78</small></div>
+            <div class="tone"><span class="chip" style="background:#22695a"></span><span class="chip" style="background:#b8c7c0"></span><span class="chip" style="background:#6fbfa9"></span><b>05 · AI Across Bangladesh</b><small>#22695A · wash #B8C7C0 · dark #6FBFA9</small></div>
+            <div class="tone"><span class="chip" style="background:#9c5128"></span><span class="chip" style="background:#d5c1b4"></span><span class="chip" style="background:#de9a6c"></span><b>06 · Climate, Chips & Infrastructure</b><small>#9C5128 · wash #D5C1B4 · dark #DE9A6C</small></div>
+        </div>
+        <ul>
+          <li><b>Deep</b> colours marks on light slides: the big number, the chart’s key bar, timeline marks, the current dot. 5.1–6.6:1 on Card.</li>
+          <li><b>Wash</b> (24% of the tone on Background) is the notch and its strip, slides with no photo, quote slides, and the space round a photo kept whole. Ink on a wash stays above 10:1.</li>
+          <li><b>Dark</b> takes the deep tone’s place in dark mode (6.6–8.2:1 on dark Card); its wash is 16% on dark Background.</li>
+          <li>Only the post’s own topic tone appears on it, never two tones. Purple stays for new stories.</li>
+          <li>Every slide carries its tone somewhere: a wash, a number, a heading, a bar, a dot or a label. Black and white alone, or grey and black alone, is never enough.</li>
+        </ul>
       </div>
 
       <div class="blk half">
         <p class="label">2 · Type scale</p>
         <div class="scroll"><table>
           <tr><th>Role</th><th>Face</th><th>Feed, story</th><th>Link</th></tr>
-          <tr><td><span class="spec" style="font-size:1.6rem">945</span><br>Big number</td><td>Fraunces 560</td><td class="n">360 px</td><td class="n">–</td></tr>
+          <tr><td><span class="spec" style="font-size:1.6rem;color:#9c5128">945</span><br>Big number</td><td>Fraunces 560</td><td class="n">360 px</td><td class="n">–</td></tr>
           <tr><td><span class="spec" style="font-size:1.35rem">Short headline</span><br>Up to 6 words, 3 lines</td><td>Fraunces 560</td><td class="n">144 px</td><td class="n">64 px</td></tr>
           <tr><td><span class="spec" style="font-size:1.1rem">Long headline</span><br>Up to 14 words, 5 lines</td><td>Fraunces 560</td><td class="n">96 px</td><td class="n">52 px</td></tr>
           <tr><td>Quote</td><td>Fraunces 560</td><td class="n">80 px</td><td class="n">–</td></tr>
@@ -191,45 +215,46 @@
         <ul>
           <li>Fraunces: line height 1.04 (quotes 1.10), spacing −0.022em. Its optical size is set to the size the reader sees, about 0.36 × the pixel size, so 144 px uses opsz 52.</li>
           <li>Plex Mono: capitals, +0.07em. Labels and credits are the only words under 32 px, on purpose: capitals in a monospace read larger than they measure.</li>
-          <li>Bangla: headlines in Noto Serif Bengali 600 at 82% of the English size, line height 1.34. Labels and the mono's roles in Anek Bangla, no capitals, +0.01em.</li>
-          <li>The link-preview sizes are set here and get their first real test with template 15.</li>
+          <li>Words on a photo are Card white, over a darkening of the photo itself at the top or foot (up to 86%), never on a busy patch.</li>
+          <li>Bangla: headlines in Noto Serif Bengali 600 at 82% of the English size, line height 1.34. Labels and the mono’s roles in Anek Bangla, no capitals, +0.01em.</li>
         </ul>
       </div>
 
       <div class="blk">
-        <p class="label">3 · The notch, per format</p>
+        <p class="label">3 · The notch, the tab and the dots</p>
         <div class="notches">
-          <figure><img src="img/spec/notch-feed-light.png" alt="The notch on a light feed post: grey strip, tab with number box 06 and the label Explainer, the date beside it" loading="lazy" width="720" height="170"><figcaption>Feed, light: the default</figcaption></figure>
+          <figure><img src="img/spec/notch-feed-light.png" alt="The notch on a light feed post: a clay wash strip and tab with number box 06 and the label Explainer, the date beside it" loading="lazy" width="720" height="170"><figcaption>Feed, light: the topic’s wash shows through</figcaption></figure>
           <figure><img src="img/spec/notch-feed-dark.png" alt="The notch on a dark feed post" loading="lazy" width="720" height="170"><figcaption>Feed, dark</figcaption></figure>
-          <figure><img src="img/spec/notch-feed-new-light.png" alt="The NEW notch: purple tab, white label New, ink number box, purple top edge, the label line Explainer and the date" loading="lazy" width="960" height="170"><figcaption>New, light: the type moves into the label line</figcaption></figure>
-          <figure><img src="img/spec/notch-feed-new-dark.png" alt="The NEW notch in dark mode" loading="lazy" width="960" height="170"><figcaption>New, dark</figcaption></figure>
+          <figure><img src="img/spec/notch-feed-new-light.png" alt="The NEW notch: purple tab, white label New, ink number box, purple top edge, the label line Explainer and the date" loading="lazy" width="960" height="170"><figcaption>New: the type moves into the label line</figcaption></figure>
+          <figure><img src="img/spec/notch-photo.png" alt="On a photo that fills the slide, the notch is a solid clay tab cut into the corner" loading="lazy" width="720" height="240"><figcaption>On a full photo: a solid tab, no lines</figcaption></figure>
           <figure><img src="img/spec/notch-story.png" alt="The notch on a story, under the 250 px clear zone" loading="lazy" width="720" height="230"><figcaption>Story: the strip is the 250 px clear zone</figcaption></figure>
-          <figure><img src="img/spec/notch-link.png" alt="The smaller notch on the 1200 by 630 link preview" loading="lazy" width="640" height="140"><figcaption>Link preview, 1200 × 630</figcaption></figure>
+          <figure><img src="img/spec/dots.png" alt="The carousel dots: six outlined circles, the third filled in clay" loading="lazy" width="460" height="170"><figcaption>Dots: one per slide, the current one in the tone</figcaption></figure>
         </div>
         <div class="scroll"><table>
-          <tr><th>Format</th><th>Grey strip</th><th>Row</th><th>Number box</th><th>Label</th><th>Gap · right pad</th><th>Lines</th><th>New: top edge</th><th>Starts at</th></tr>
+          <tr><th>Format</th><th>Strip</th><th>Row</th><th>Number box</th><th>Label</th><th>Gap · right pad</th><th>Lines</th><th>New: top edge</th><th>Starts at</th></tr>
           <tr><td>Feed 1080 × 1350</td><td class="n">48 px</td><td class="n">84 px</td><td class="n">56 × 48</td><td class="n">34 px</td><td class="n">21 · 32</td><td class="n">2 px</td><td class="n">6 px</td><td class="n">72 px</td></tr>
           <tr><td>Story 1080 × 1920</td><td class="n">250 px</td><td class="n">84 px</td><td class="n">56 × 48</td><td class="n">34 px</td><td class="n">21 · 32</td><td class="n">2 px</td><td class="n">6 px</td><td class="n">72 px</td></tr>
           <tr><td>Link 1200 × 630</td><td class="n">32 px</td><td class="n">74 px</td><td class="n">49 × 42</td><td class="n">30 px</td><td class="n">18 · 28</td><td class="n">2 px</td><td class="n">5 px</td><td class="n">56 px</td></tr>
         </table></div>
         <ul>
-          <li>Built as on the website, at twice its size: the card's top-left corner is cut away so the grey shows through; the tab has Ink lines on its right and bottom only; the number box starts where the words start.</li>
-          <li>A thin strip of grey sits above the card, so the notch can be the website's size and still keep its words 60 px from the edge. On stories the strip is the 250 px that must stay clear anyway.</li>
-          <li>The notch names the type (Data, Quote, Explainer, Investigation, Correction), so the date sits beside it on its own. On a NEW post the notch says New and the type moves into the label line: Explainer · 17 Nov 2026.</li>
-          <li>Slides 2 to 5 of a carousel have no notch: the counter 02 / 06 sits in its place.</li>
+          <li>Built as on the website, at twice its size: the card’s top-left corner is cut away and the topic’s wash shows through, as a dossier’s notch does on the site; the tab has Ink lines on its right and bottom only; the number box starts where the words start.</li>
+          <li>The notch names the type (Data, Quote, Explainer, Investigation, Correction), so the date sits beside it. On a NEW post the notch says New and the type moves into the label line.</li>
+          <li>On a photo that fills the slide the notch becomes a solid tab in the wash, cut into the corner, with no lines.</li>
+          <li>Dots: 24 px circles, 16 px apart, bottom-right on every carousel slide, level with the logo. Open circles in Ink; the current slide filled in the topic’s deep tone, or purple on a new story. On a photo they turn white with the current one in the tone’s light shade. The cover adds an arrow after them. They replace the slide counter.</li>
         </ul>
       </div>
 
       <div class="blk third">
         <p class="label">4 · Images</p>
         <div class="duo">
-          <figure><img src="src/img/orig-pylons.jpg" alt="Original colour photo of power pylons at sunset" loading="lazy"><figcaption>Original</figcaption></figure>
-          <figure><img src="src/img/duo-pylons-small.jpg" alt="The same photo in the Ink and Background duotone" loading="lazy"><figcaption>Duotone</figcaption></figure>
-          <figure><img src="src/img/duo-dhaka-small.jpg" alt="A Dhaka street in the duotone" loading="lazy"><figcaption>Duotone</figcaption></figure>
+          <img src="src/img/col-pylons-small.jpg" alt="Colour photo of power pylons at sunset" loading="lazy">
+          <img src="src/img/col-dhaka-small.jpg" alt="Colour photo of a crowded Dhaka street" loading="lazy">
+          <img src="src/img/col-office-small.jpg" alt="Colour photo of an open-plan office" loading="lazy">
         </div>
         <ul>
-          <li><b>One treatment: duotone</b>, shadows Ink #161615, highlights Background #E7E5E0, the same in light and dark. Greyscale first, levels stretched, then mapped. In Canva: Edit photo, Effects, Duotone, custom colours. In Photoshop: a gradient map with those two stops.</li>
-          <li>Every stock or illustrative image carries the credit <span class="sp-mono" style="font-size:0.7rem">Illustrative image · [Source]</span>, 16 px under it, right-aligned. On a full-bleed photo the credit sits on the sheet.</li>
+          <li><b>Full colour, as shot.</b> Levels can be corrected; no filters, no tints, no duotone.</li>
+          <li><b>Any shape fits.</b> A photo can run edge to edge at the top or bottom and take the room the words leave; Fit keeps it whole, at its own shape, on the topic’s wash; or it fills the slide with the words on it.</li>
+          <li>Every stock or illustrative image carries the credit <span class="sp-mono" style="font-size:0.7rem">Illustrative image · [Source]</span>, 16 px under it, right-aligned, or with the words on a full photo.</li>
           <li>Screenshots stay as captured, because they are evidence: cropped to the part that matters, a 3 px Ink line round them, credited <span class="sp-mono" style="font-size:0.7rem">Screenshot · [Source], [Date]</span>.</li>
           <li>Never AI-made images, robots, circuits or glowing brains.</li>
         </ul>
@@ -238,15 +263,15 @@
       <div class="blk third">
         <p class="label">5 · Logo</p>
         <div class="frames">
-          <div><div class="frm" style="width:5.4rem;height:6.75rem;background:var(--card)"><i style="left:0.36rem;bottom:0.36rem;width:1.2rem;height:0.3rem"></i></div><span>Feed</span></div>
-          <div><div class="frm" style="width:5.4rem;height:9.6rem;background:var(--card)"><em style="top:0;height:1.25rem"></em><em style="bottom:0;height:1.25rem"></em><i style="left:0.36rem;bottom:1.25rem;width:1.2rem;height:0.3rem"></i></div><span>Story</span></div>
-          <div><div class="frm" style="width:6rem;height:3.15rem;background:var(--card)"><i style="left:0.28rem;bottom:0.28rem;width:1rem;height:0.25rem"></i></div><span>Link</span></div>
+          <div><div class="frm" style="width:5.4rem;height:6.75rem"><i style="left:0.36rem;bottom:0.36rem;width:1.2rem;height:0.3rem"></i></div><span>Feed</span></div>
+          <div><div class="frm" style="width:5.4rem;height:9.6rem"><em style="top:0;height:1.25rem"></em><em style="bottom:0;height:1.25rem"></em><i style="left:0.36rem;bottom:1.25rem;width:1.2rem;height:0.3rem"></i></div><span>Story</span></div>
+          <div><div class="frm" style="width:6rem;height:3.15rem"><i style="left:0.28rem;bottom:0.28rem;width:1rem;height:0.25rem"></i></div><span>Link</span></div>
         </div>
         <ul>
           <li>The <span class="sp-mono" style="font-size:0.7rem">[Logo]</span> placeholder is 240 × 60 (200 × 50 on the link preview) and sits bottom-left on every template.</li>
-          <li>Feed: 72 px from the left and bottom. Story: 72 px from the left, resting on the 250 px clear zone. Link preview: 56 px.</li>
-          <li>On a full-bleed photo it sits on a Card plate cut into the corner, never on the photo.</li>
-          <li>Never top-right: Instagram lays its own slide counter there on carousels.</li>
+          <li>Feed: 72 px from the left and bottom, with the dots level with it on the right. Story: 72 px from the left, resting on the 250 px clear zone. Link preview: 56 px.</li>
+          <li>On a full photo it turns white and sits on the darkened foot.</li>
+          <li>Never top-right: Instagram lays its own slide counter there.</li>
         </ul>
       </div>
 
@@ -254,80 +279,87 @@
         <p class="label">6 · Spacing</p>
         <table>
           <tr><th>Feed, from the top</th><th>Pixels</th></tr>
-          <tr><td>Grey strip, notch posts only</td><td class="n">0–48</td></tr>
-          <tr><td>Notch row, or the counter</td><td class="n">48–132</td></tr>
-          <tr><td>Words start</td><td class="n">192</td></tr>
+          <tr><td>Strip, notch posts only</td><td class="n">0–48</td></tr>
+          <tr><td>Notch row</td><td class="n">48–132</td></tr>
+          <tr><td>Words start (under a notch)</td><td class="n">192</td></tr>
           <tr><td>Words end, or the source line</td><td class="n">1158</td></tr>
-          <tr><td>Logo row</td><td class="n">1218–1278</td></tr>
+          <tr><td>Logo and dots</td><td class="n">1218–1278</td></tr>
           <tr><td>Margin on every side</td><td class="n">72</td></tr>
         </table>
         <ul>
-          <li>Feed margins are 72 px on every side: past the 60 px safe zone, and after Instagram's 3:4 crop takes 34 px from each side, words still keep 38 px.</li>
+          <li>72 px margins: past the 60 px safe zone, and after Instagram’s 3:4 crop takes 34 px from each side, words still keep 38 px.</li>
           <li>36 px between text elements, 60 px under the notch row, 16 px between a picture and its credit.</li>
-          <li>Stories: 72 px at the sides; the top and bottom 250 px stay clear.</li>
-          <li>Three text elements at most per slide. The notch, the counter and the logo are fixed furniture and don't count.</li>
-          <li>At least 40% empty, measured on every board: covers 50% or more, other slides 52–84%. Full-bleed photos are exempt.</li>
+          <li>Stories: 72 px at the sides; the top and bottom 250 px stay clear of words.</li>
+          <li>Three text elements at most per slide. The notch, the logo and the dots are fixed furniture and don’t count.</li>
+          <li>Slides without photos keep at least 40% empty (measured: 55–90%). Photo slides give that space to the picture.</li>
         </ul>
       </div>
     </div>
   </section>
 
   <section class="tray" id="templates">
-    <div class="tabs"><span class="tab"><b>B</b>Templates 1–6</span><span class="label more">The carousel kit</span></div>
+    <div class="tabs"><span class="tab"><b>B</b>Carousel 1–6</span><span class="label more">Feed · 1080 × 1350</span></div>
     <div class="head">
       <h2>The carousel kit, in light and dark</h2>
-      <p>The six slides tell one sample story from start to finish, so they can be read in order. Every slide is 1080 × 1350 and works on Instagram, Facebook and LinkedIn. Variants change only position and size; fonts, colours, margins and the logo's place stay the same.</p>
+      <p>The six slides tell one sample story, so they can be read in order; the topic is 06, Climate, Chips &amp; Infrastructure, in its clay tone. Each slide works on its own as a single post too. Variants change only position and size; fonts, colours, margins, the logo and the dots stay where they are.</p>
     </div>
     <article class="tpl" id="t1">
       <header class="tpl-head">
-        <p class="label">Template 1 · 1080 × 1350</p>
+        <p class="label">Template 1 · 1080 × 1350 · Instagram, Facebook, LinkedIn</p>
         <h3>Cover</h3>
         <p class="use"><b>Use it</b> the first slide of every carousel: the one line that makes people swipe.</p>
-        <p class="rule">Short headlines (up to 6 words) are 144 px and take up to 3 lines; long ones (up to 14 words) are 96 px and take up to 5. A photo is a 360 px band, edge to edge, on the side the words are not. The arrow at the foot is the swipe cue.</p>
+        <p class="rule">Short headlines (up to 6 words) are 144 px and take up to 3 lines; long ones (up to 14 words) are 96 px and take up to 5. A photo takes whatever room the headline leaves, edge to edge, or the whole slide. With no photo, the slide takes the topic’s wash. The dots and arrow at the foot say there is more.</p>
       </header>
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/01-cover-light-text-top-short.jpg"><img src="img/01-cover-light-text-top-short.jpg" alt="Cover: the notch 06 Explainer and the date, the headline “AI’s next limit is electricity” in large serif type, a duotone photo of power pylons below, the logo placeholder and a swipe arrow at the foot, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/01-cover-dark-text-top-short.jpg"><img src="img/01-cover-dark-text-top-short.jpg" alt="Cover: the notch 06 Explainer and the date, the headline “AI’s next limit is electricity” in large serif type, a duotone photo of power pylons below, the logo placeholder and a swipe arrow at the foot, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-light-text-top-short.jpg"><img src="img/01-cover-light-text-top-short.jpg" alt="Cover: notch 06 Explainer and the date, the headline “AI’s next limit is electricity”, a colour photo of pylons at sunset filling the rest, dots and an arrow at the foot, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-dark-text-top-short.jpg"><img src="img/01-cover-dark-text-top-short.jpg" alt="Cover: notch 06 Explainer and the date, the headline “AI’s next limit is electricity”, a colour photo of pylons at sunset filling the rest, dots and an arrow at the foot, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
-        <figcaption><h4>Text top · short headline · photo below</h4><p class="files">01-cover-light-text-top-short.jpg<br>01-cover-dark-text-top-short.jpg</p><p class="e">Empty space 50%</p></figcaption>
+        <figcaption><h4>Text top · photo below</h4><p class="files">01-cover-light-text-top-short.jpg<br>01-cover-dark-text-top-short.jpg</p><p class="e">Empty space 34%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/01-cover-light-text-bottom-short.jpg"><img src="img/01-cover-light-text-bottom-short.jpg" alt="Cover: the notch and date, a duotone photo of power pylons, then the headline “AI’s next limit is electricity” at the bottom, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/01-cover-dark-text-bottom-short.jpg"><img src="img/01-cover-dark-text-bottom-short.jpg" alt="Cover: the notch and date, a duotone photo of power pylons, then the headline “AI’s next limit is electricity” at the bottom, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-light-text-bottom-short.jpg"><img src="img/01-cover-light-text-bottom-short.jpg" alt="Cover: notch and date, a colour photo of pylons at sunset, then the headline at the bottom, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-dark-text-bottom-short.jpg"><img src="img/01-cover-dark-text-bottom-short.jpg" alt="Cover: notch and date, a colour photo of pylons at sunset, then the headline at the bottom, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
-        <figcaption><h4>Text bottom · short headline · photo above</h4><p class="files">01-cover-light-text-bottom-short.jpg<br>01-cover-dark-text-bottom-short.jpg</p><p class="e">Empty space 50%</p></figcaption>
+        <figcaption><h4>Text bottom · photo above</h4><p class="files">01-cover-light-text-bottom-short.jpg<br>01-cover-dark-text-bottom-short.jpg</p><p class="e">Empty space 29%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/01-cover-light-text-bottom-long.jpg"><img src="img/01-cover-light-text-bottom-long.jpg" alt="Cover with no image: the notch and date at the top, the long headline “By 2030, the world’s data centres could use more electricity than Japan” at the bottom, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/01-cover-dark-text-bottom-long.jpg"><img src="img/01-cover-dark-text-bottom-long.jpg" alt="Cover with no image: the notch and date at the top, the long headline “By 2030, the world’s data centres could use more electricity than Japan” at the bottom, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-light-fullbleed.jpg"><img src="img/01-cover-light-fullbleed.jpg" alt="Cover: a colour photo of pylons at sunset fills the slide, the notch as a solid tab in the corner, the date and headline in white over the darkened foot of the photo, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-dark-fullbleed.jpg"><img src="img/01-cover-dark-fullbleed.jpg" alt="Cover: a colour photo of pylons at sunset fills the slide, the notch as a solid tab in the corner, the date and headline in white over the darkened foot of the photo, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
-        <figcaption><h4>Text bottom · long headline · no image</h4><p class="files">01-cover-light-text-bottom-long.jpg<br>01-cover-dark-text-bottom-long.jpg</p><p class="e">Empty space 74%</p></figcaption>
+        <figcaption><h4>Photo fills the slide · words on it</h4><p class="files">01-cover-light-fullbleed.jpg<br>01-cover-dark-fullbleed.jpg</p><p class="e">Photo fills the slide</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/01-cover-light-new.jpg"><img src="img/01-cover-light-new.jpg" alt="Cover for a new story: a purple notch reading 06 New, the label line Explainer and the date, a purple top edge, and the long headline, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/01-cover-dark-new.jpg"><img src="img/01-cover-dark-new.jpg" alt="Cover for a new story: a purple notch reading 06 New, the label line Explainer and the date, a purple top edge, and the long headline, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-light-text-bottom-long.jpg"><img src="img/01-cover-light-text-bottom-long.jpg" alt="Cover with no photo on the topic’s pale clay wash: notch and date at the top, the long headline at the bottom, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-dark-text-bottom-long.jpg"><img src="img/01-cover-dark-text-bottom-long.jpg" alt="Cover with no photo on the topic’s pale clay wash: notch and date at the top, the long headline at the bottom, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
-        <figcaption><h4>New · purple notch · long headline</h4><p class="files">01-cover-light-new.jpg<br>01-cover-dark-new.jpg</p><p class="e">Empty space 74%</p></figcaption>
+        <figcaption><h4>No photo · topic wash · long headline</h4><p class="files">01-cover-light-text-bottom-long.jpg<br>01-cover-dark-text-bottom-long.jpg</p><p class="e">Empty space 73%</p></figcaption>
+      </figure>
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot feed" href="img/01-cover-light-new.jpg"><img src="img/01-cover-light-new.jpg" alt="Cover for a new story: a purple notch reading 06 New, the label line Explainer and the date, and the long headline; the first dot is purple, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-dark-new.jpg"><img src="img/01-cover-dark-new.jpg" alt="Cover for a new story: a purple notch reading 06 New, the label line Explainer and the date, and the long headline; the first dot is purple, dark" loading="lazy" width="1080" height="1350"></a>
+        </div>
+        <figcaption><h4>New · purple notch</h4><p class="files">01-cover-light-new.jpg<br>01-cover-dark-new.jpg</p><p class="e">Empty space 74%</p></figcaption>
       </figure>
       </div>
     </article>
     <article class="tpl" id="t2">
       <header class="tpl-head">
-        <p class="label">Template 2 · 1080 × 1350</p>
+        <p class="label">Template 2 · 1080 × 1350 · Instagram, Facebook, LinkedIn</p>
         <h3>Text body</h3>
         <p class="use"><b>Use it</b> one step of the argument, in up to 40 words.</p>
-        <p class="rule">A 96 px heading and 40 px text, about 40 words in all. The counter takes the notch’s place.</p>
+        <p class="rule">A 96 px heading and 40 px text, about 40 words in all.</p>
       </header>
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/02-text-light.jpg"><img src="img/02-text-light.jpg" alt="Text slide: the counter 02 / 06, the heading “Every answer runs on a server” and a short paragraph about data-centre electricity use, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/02-text-dark.jpg"><img src="img/02-text-dark.jpg" alt="Text slide: the counter 02 / 06, the heading “Every answer runs on a server” and a short paragraph about data-centre electricity use, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/02-text-light.jpg"><img src="img/02-text-light.jpg" alt="Text slide: the heading “Every answer runs on a server” and a short paragraph; the second dot filled, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/02-text-dark.jpg"><img src="img/02-text-dark.jpg" alt="Text slide: the heading “Every answer runs on a server” and a short paragraph; the second dot filled, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Heading and text</h4><p class="files">02-text-light.jpg<br>02-text-dark.jpg</p><p class="e">Empty space 78%</p></figcaption>
       </figure>
@@ -335,68 +367,89 @@
     </article>
     <article class="tpl" id="t3">
       <header class="tpl-head">
-        <p class="label">Template 3 · 1080 × 1350</p>
+        <p class="label">Template 3 · 1080 × 1350 · Instagram, Facebook, LinkedIn</p>
         <h3>Image body</h3>
         <p class="use"><b>Use it</b> when a photo or a screenshot shows the point better than words.</p>
-        <p class="rule">Split: the picture is a 540 px band, or a screenshot inside the margins with a 3 px Ink line, and never touches the words. Full-bleed: the photo fills the slide and the words sit on a solid Card sheet, never on the photo; the logo or the counter gets a Card plate in its corner.</p>
+        <p class="rule">Five ways in, so any photo fits. A photo can take the top or the bottom, edge to edge, and grow to fill what the caption leaves. Fit keeps a photo whole at its own shape, portrait, square or wide, on the topic’s wash. A screenshot stays inside the margins with a 3 px Ink line. Or the photo fills the slide and the words sit on it, over a darkened top or foot.</p>
       </header>
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/03-image-light-split-text-top.jpg"><img src="img/03-image-light-split-text-top.jpg" alt="Image slide: a one-sentence caption at the top, a duotone photo of pylons as a band across the bottom half, with its credit, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/03-image-dark-split-text-top.jpg"><img src="img/03-image-dark-split-text-top.jpg" alt="Image slide: a one-sentence caption at the top, a duotone photo of pylons as a band across the bottom half, with its credit, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-light-photo-text-top.jpg"><img src="img/03-image-light-photo-text-top.jpg" alt="Image slide: a caption at the top and a colour photo of an open office filling the rest, edge to edge, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-dark-photo-text-top.jpg"><img src="img/03-image-dark-photo-text-top.jpg" alt="Image slide: a caption at the top and a colour photo of an open office filling the rest, edge to edge, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
-        <figcaption><h4>Split · text top · photo</h4><p class="files">03-image-light-split-text-top.jpg<br>03-image-dark-split-text-top.jpg</p><p class="e">Empty space 52%</p></figcaption>
+        <figcaption><h4>Caption top · photo below</h4><p class="files">03-image-light-photo-text-top.jpg<br>03-image-dark-photo-text-top.jpg</p><p class="e">Empty space 32%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/03-image-light-split-text-bottom.jpg"><img src="img/03-image-light-split-text-bottom.jpg" alt="Image slide: a screenshot of a chatbot answer with a thin ink line round it at the top, its credit, and the caption at the bottom, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/03-image-dark-split-text-bottom.jpg"><img src="img/03-image-dark-split-text-bottom.jpg" alt="Image slide: a screenshot of a chatbot answer with a thin ink line round it at the top, its credit, and the caption at the bottom, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-light-photo-text-bottom.jpg"><img src="img/03-image-light-photo-text-bottom.jpg" alt="Image slide: a square photo of security cameras on a dark wall, cropped to fill the top, the caption below, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-dark-photo-text-bottom.jpg"><img src="img/03-image-dark-photo-text-bottom.jpg" alt="Image slide: a square photo of security cameras on a dark wall, cropped to fill the top, the caption below, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
-        <figcaption><h4>Split · text bottom · screenshot</h4><p class="files">03-image-light-split-text-bottom.jpg<br>03-image-dark-split-text-bottom.jpg</p><p class="e">Empty space 68%</p></figcaption>
+        <figcaption><h4>Photo above · caption below</h4><p class="files">03-image-light-photo-text-bottom.jpg<br>03-image-dark-photo-text-bottom.jpg</p><p class="e">Empty space 22%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/03-image-light-fullbleed-text-top.jpg"><img src="img/03-image-light-fullbleed-text-top.jpg" alt="Image slide: a duotone photo of pylons fills the slide, the caption and credit on a solid sheet across the top, the logo on a plate in the bottom-left corner, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/03-image-dark-fullbleed-text-top.jpg"><img src="img/03-image-dark-fullbleed-text-top.jpg" alt="Image slide: a duotone photo of pylons fills the slide, the caption and credit on a solid sheet across the top, the logo on a plate in the bottom-left corner, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-light-fit.jpg"><img src="img/03-image-light-fit.jpg" alt="Image slide: a tall photo of Dhaka traffic shown whole, at its own shape, on the topic’s clay wash, the caption below, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-dark-fit.jpg"><img src="img/03-image-dark-fit.jpg" alt="Image slide: a tall photo of Dhaka traffic shown whole, at its own shape, on the topic’s clay wash, the caption below, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
-        <figcaption><h4>Full-bleed · text top</h4><p class="files">03-image-light-fullbleed-text-top.jpg<br>03-image-dark-fullbleed-text-top.jpg</p><p class="e">Full-bleed: exempt from the 40% rule</p></figcaption>
+        <figcaption><h4>Fit · any shape, kept whole</h4><p class="files">03-image-light-fit.jpg<br>03-image-dark-fit.jpg</p><p class="e">Empty space 22%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/03-image-light-fullbleed-text-bottom.jpg"><img src="img/03-image-light-fullbleed-text-bottom.jpg" alt="Image slide: a duotone photo of pylons fills the slide, the counter on a plate in the top-left corner, the caption on a solid sheet across the bottom, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/03-image-dark-fullbleed-text-bottom.jpg"><img src="img/03-image-dark-fullbleed-text-bottom.jpg" alt="Image slide: a duotone photo of pylons fills the slide, the counter on a plate in the top-left corner, the caption on a solid sheet across the bottom, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-light-screenshot.jpg"><img src="img/03-image-light-screenshot.jpg" alt="Image slide: a screenshot of a chatbot answer with a thin ink line round it, its credit, and the caption at the bottom, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-dark-screenshot.jpg"><img src="img/03-image-dark-screenshot.jpg" alt="Image slide: a screenshot of a chatbot answer with a thin ink line round it, its credit, and the caption at the bottom, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
-        <figcaption><h4>Full-bleed · text bottom</h4><p class="files">03-image-light-fullbleed-text-bottom.jpg<br>03-image-dark-fullbleed-text-bottom.jpg</p><p class="e">Full-bleed: exempt from the 40% rule</p></figcaption>
+        <figcaption><h4>Screenshot</h4><p class="files">03-image-light-screenshot.jpg<br>03-image-dark-screenshot.jpg</p><p class="e">Empty space 68%</p></figcaption>
+      </figure>
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot feed" href="img/03-image-light-fullbleed-text-top.jpg"><img src="img/03-image-light-fullbleed-text-top.jpg" alt="Image slide: a sunset photo of pylons fills the slide, the caption in white over the darkened sky at the top, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-dark-fullbleed-text-top.jpg"><img src="img/03-image-dark-fullbleed-text-top.jpg" alt="Image slide: a sunset photo of pylons fills the slide, the caption in white over the darkened sky at the top, dark" loading="lazy" width="1080" height="1350"></a>
+        </div>
+        <figcaption><h4>Photo fills the slide · words at the top</h4><p class="files">03-image-light-fullbleed-text-top.jpg<br>03-image-dark-fullbleed-text-top.jpg</p><p class="e">Photo fills the slide</p></figcaption>
+      </figure>
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot feed" href="img/03-image-light-fullbleed-text-bottom.jpg"><img src="img/03-image-light-fullbleed-text-bottom.jpg" alt="Image slide: a photo of people at screens fills the slide, the caption in white over the darkened foot, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-dark-fullbleed-text-bottom.jpg"><img src="img/03-image-dark-fullbleed-text-bottom.jpg" alt="Image slide: a photo of people at screens fills the slide, the caption in white over the darkened foot, dark" loading="lazy" width="1080" height="1350"></a>
+        </div>
+        <figcaption><h4>Photo fills the slide · words at the foot</h4><p class="files">03-image-light-fullbleed-text-bottom.jpg<br>03-image-dark-fullbleed-text-bottom.jpg</p><p class="e">Photo fills the slide</p></figcaption>
       </figure>
       </div>
     </article>
     <article class="tpl" id="t4">
       <header class="tpl-head">
-        <p class="label">Template 4 · 1080 × 1350</p>
+        <p class="label">Template 4 · 1080 × 1350 · Instagram, Facebook, LinkedIn</p>
         <h3>Data</h3>
         <p class="use"><b>Use it</b> when one number, one comparison or one run of dates carries the story.</p>
-        <p class="rule">The number is 360 px with its unit at 96. In charts the bar that makes the point is Ink and the rest are Muted, with values written on the bars. The source always sits at the foot.</p>
+        <p class="rule">The number is 360 px, either in the topic’s tone or, as the FT sets its numbers, in white (black in dark mode) on a solid block of the tone. In charts the bar that makes the point takes the tone and the rest are Muted, with values written on the bars. The source always sits at the foot.</p>
       </header>
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/04-data-light-number.jpg"><img src="img/04-data-light-number.jpg" alt="Data slide: the number 945 TWh, very large, a sentence saying what it means, and the source line IEA, Energy and AI (2025), light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/04-data-dark-number.jpg"><img src="img/04-data-dark-number.jpg" alt="Data slide: the number 945 TWh, very large, a sentence saying what it means, and the source line IEA, Energy and AI (2025), dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-light-number.jpg"><img src="img/04-data-light-number.jpg" alt="Data slide: the number 945 in clay, TWh beside it, a sentence saying what it means, and the source line, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-dark-number.jpg"><img src="img/04-data-dark-number.jpg" alt="Data slide: the number 945 in clay, TWh beside it, a sentence saying what it means, and the source line, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>One big number</h4><p class="files">04-data-light-number.jpg<br>04-data-dark-number.jpg</p><p class="e">Empty space 73%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/04-data-light-chart.jpg"><img src="img/04-data-light-chart.jpg" alt="Data slide: the title “The US used almost half the world’s data-centre electricity in 2024” and a bar chart, United States 45% in ink, China 25%, Europe 15%, rest of the world 15% in grey, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/04-data-dark-chart.jpg"><img src="img/04-data-dark-chart.jpg" alt="Data slide: the title “The US used almost half the world’s data-centre electricity in 2024” and a bar chart, United States 45% in ink, China 25%, Europe 15%, rest of the world 15% in grey, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-light-number-block.jpg"><img src="img/04-data-light-number-block.jpg" alt="Data slide: the number 945 TWh in white on a solid clay block, a sentence under it and the source line, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-dark-number-block.jpg"><img src="img/04-data-dark-number-block.jpg" alt="Data slide: the number 945 TWh in white on a solid clay block, a sentence under it and the source line, dark" loading="lazy" width="1080" height="1350"></a>
+        </div>
+        <figcaption><h4>Number on a block of the tone, as the FT does</h4><p class="files">04-data-light-number-block.jpg<br>04-data-dark-number-block.jpg</p><p class="e">Empty space 71%</p></figcaption>
+      </figure>
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot feed" href="img/04-data-light-chart.jpg"><img src="img/04-data-light-chart.jpg" alt="Data slide: a title and a bar chart, the United States bar at 45% in clay, China, Europe and the rest of the world in grey, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-dark-chart.jpg"><img src="img/04-data-dark-chart.jpg" alt="Data slide: a title and a bar chart, the United States bar at 45% in clay, China, Europe and the rest of the world in grey, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>One chart</h4><p class="files">04-data-light-chart.jpg<br>04-data-dark-chart.jpg</p><p class="e">Empty space 78%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/04-data-light-timeline.jpg"><img src="img/04-data-light-timeline.jpg" alt="Data slide: the title about ChatGPT reaching 800 million weekly users, a vertical timeline spaced to scale: launch in Nov 2022, 100 million a week in Nov 2023, 400 million in Feb 2025, 800 million in Oct 2025, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/04-data-dark-timeline.jpg"><img src="img/04-data-dark-timeline.jpg" alt="Data slide: the title about ChatGPT reaching 800 million weekly users, a vertical timeline spaced to scale: launch in Nov 2022, 100 million a week in Nov 2023, 400 million in Feb 2025, 800 million in Oct 2025, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-light-timeline.jpg"><img src="img/04-data-light-timeline.jpg" alt="Data slide: a title and a vertical timeline spaced to scale, from launch in Nov 2022 to 800 million weekly users in Oct 2025, the marks in clay, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-dark-timeline.jpg"><img src="img/04-data-dark-timeline.jpg" alt="Data slide: a title and a vertical timeline spaced to scale, from launch in Nov 2022 to 800 million weekly users in Oct 2025, the marks in clay, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>A timeline</h4><p class="files">04-data-light-timeline.jpg<br>04-data-dark-timeline.jpg</p><p class="e">Empty space 81%</p></figcaption>
       </figure>
@@ -404,16 +457,16 @@
     </article>
     <article class="tpl" id="t5">
       <header class="tpl-head">
-        <p class="label">Template 5 · 1080 × 1350</p>
+        <p class="label">Template 5 · 1080 × 1350 · Instagram, Facebook, LinkedIn</p>
         <h3>Quote</h3>
         <p class="use"><b>Use it</b> when a source says it better than we can.</p>
-        <p class="rule">The quote is 80 px. Under it, the speaker’s name and role, or a description for a source we don’t name; the source line says where it comes from.</p>
+        <p class="rule">The quote is 80 px on the topic’s wash. Under it, the speaker’s name and role, or a description for a source we don’t name; the source line says where it comes from.</p>
       </header>
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/05-quote-light.jpg"><img src="img/05-quote-light.jpg" alt="Quote slide: “The building is ours on paper. Everything that makes it valuable belongs to someone else.” attributed to an engineer who has worked on two of the sites, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/05-quote-dark.jpg"><img src="img/05-quote-dark.jpg" alt="Quote slide: “The building is ours on paper. Everything that makes it valuable belongs to someone else.” attributed to an engineer who has worked on two of the sites, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/05-quote-light.jpg"><img src="img/05-quote-light.jpg" alt="Quote slide on the clay wash: “The building is ours on paper. Everything that makes it valuable belongs to someone else.”, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/05-quote-dark.jpg"><img src="img/05-quote-dark.jpg" alt="Quote slide on the clay wash: “The building is ours on paper. Everything that makes it valuable belongs to someone else.”, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Pull quote</h4><p class="files">05-quote-light.jpg<br>05-quote-dark.jpg</p><p class="e">Empty space 74%</p></figcaption>
       </figure>
@@ -421,35 +474,250 @@
     </article>
     <article class="tpl" id="t6">
       <header class="tpl-head">
-        <p class="label">Template 6 · 1080 × 1350</p>
+        <p class="label">Template 6 · 1080 × 1350 · Instagram, Facebook, LinkedIn</p>
         <h3>Closing</h3>
         <p class="use"><b>Use it</b> the last slide: send readers to the full story, or ask one question.</p>
-        <p class="rule">The notch is optional here. Use it to close the carousel the way it opened; leave it off for a question.</p>
+        <p class="rule">The notch is optional here: use it to close the carousel the way it opened. On Facebook and LinkedIn, “Link in bio” becomes “Link in the post”.</p>
       </header>
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/06-closing-light-read.jpg"><img src="img/06-closing-light-read.jpg" alt="Closing slide: the notch 06 Explainer, “Read the full story” in large serif type, and Link in bio at the foot, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/06-closing-dark-read.jpg"><img src="img/06-closing-dark-read.jpg" alt="Closing slide: the notch 06 Explainer, “Read the full story” in large serif type, and Link in bio at the foot, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/06-closing-light-read.jpg"><img src="img/06-closing-light-read.jpg" alt="Closing slide: the notch, “Read the full story” in large type and Link in bio under it; the last dot filled, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/06-closing-dark-read.jpg"><img src="img/06-closing-dark-read.jpg" alt="Closing slide: the notch, “Read the full story” in large type and Link in bio under it; the last dot filled, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
-        <figcaption><h4>Read the full story · with notch</h4><p class="files">06-closing-light-read.jpg<br>06-closing-dark-read.jpg</p><p class="e">Empty space 84%</p></figcaption>
+        <figcaption><h4>Read the full story · with notch</h4><p class="files">06-closing-light-read.jpg<br>06-closing-dark-read.jpg</p><p class="e">Empty space 83%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/06-closing-light-question.jpg"><img src="img/06-closing-light-question.jpg" alt="Closing slide: the counter 06 / 06, the question “Should data centres pay more for the power they use?” and Tell us in the comments at the foot, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/06-closing-dark-question.jpg"><img src="img/06-closing-dark-question.jpg" alt="Closing slide: the counter 06 / 06, the question “Should data centres pay more for the power they use?” and Tell us in the comments at the foot, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/06-closing-light-question.jpg"><img src="img/06-closing-light-question.jpg" alt="Closing slide on the clay wash: the question “Should data centres pay more for the power they use?” and Tell us in the comments, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/06-closing-dark-question.jpg"><img src="img/06-closing-dark-question.jpg" alt="Closing slide on the clay wash: the question “Should data centres pay more for the power they use?” and Tell us in the comments, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
-        <figcaption><h4>One open question · no notch</h4><p class="files">06-closing-light-question.jpg<br>06-closing-dark-question.jpg</p><p class="e">Empty space 80%</p></figcaption>
+        <figcaption><h4>One open question · topic wash</h4><p class="files">06-closing-light-question.jpg<br>06-closing-dark-question.jpg</p><p class="e">Empty space 80%</p></figcaption>
+      </figure>
+      </div>
+    </article>
+  </section>
+
+  <section class="tray" id="singles">
+    <div class="tabs"><span class="tab"><b>C</b>Single posts 7–10</span><span class="label more">Feed · 1080 × 1350</span></div>
+    <div class="head">
+      <h2>Single posts, a family of their own</h2>
+      <p>A single post has to stop the thumb on its own, so these are bolder than the carousel: whole fields of the topic’s colour, bigger type, the photo given the full post. They carry no dots. Each one has its tone somewhere, so nothing is only black and white.</p>
+    </div>
+    <article class="tpl" id="t7">
+      <header class="tpl-head">
+        <p class="label">Template 7 · 1080 × 1350 · Instagram, Facebook, LinkedIn</p>
+        <h3>Image with headline</h3>
+        <p class="use"><b>Use it</b> when one photo and one headline make the whole post.</p>
+        <p class="rule">Not a carousel, so no dots. Two with the notch, where the photo shares the post with the words; two without, where the photo fills it and the words sit on its darkened foot. Short headlines 144 px, long 96 px. A post takes its own topic’s tone: the Dhaka post is topic 05, so its label is teal.</p>
+      </header>
+      <div class="pairs">
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot feed" href="img/07-image-light-split-text-bottom-short.jpg"><img src="img/07-image-light-split-text-bottom-short.jpg" alt="Single post: notch and date, a sunset photo of pylons edge to edge, the short headline below, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-dark-split-text-bottom-short.jpg"><img src="img/07-image-dark-split-text-bottom-short.jpg" alt="Single post: notch and date, a sunset photo of pylons edge to edge, the short headline below, dark" loading="lazy" width="1080" height="1350"></a>
+        </div>
+        <figcaption><h4>Notch · photo above · short headline</h4><p class="files">07-image-light-split-text-bottom-short.jpg<br>07-image-dark-split-text-bottom-short.jpg</p><p class="e">Empty space 29%: the photo takes the rest</p></figcaption>
+      </figure>
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot feed" href="img/07-image-light-split-text-top-long.jpg"><img src="img/07-image-light-split-text-top-long.jpg" alt="Single post: notch and date, a long headline, and a photo of an open office filling the rest, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-dark-split-text-top-long.jpg"><img src="img/07-image-dark-split-text-top-long.jpg" alt="Single post: notch and date, a long headline, and a photo of an open office filling the rest, dark" loading="lazy" width="1080" height="1350"></a>
+        </div>
+        <figcaption><h4>Notch · long headline · photo below</h4><p class="files">07-image-light-split-text-top-long.jpg<br>07-image-dark-split-text-top-long.jpg</p><p class="e">Empty space 38%: the photo takes the rest</p></figcaption>
+      </figure>
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot feed" href="img/07-image-light-fullbleed.jpg"><img src="img/07-image-light-fullbleed.jpg" alt="Single post: a photo of Dhaka traffic fills the post, a teal label line for AI Across Bangladesh and a long headline in white over the darkened foot, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-dark-fullbleed.jpg"><img src="img/07-image-dark-fullbleed.jpg" alt="Single post: a photo of Dhaka traffic fills the post, a teal label line for AI Across Bangladesh and a long headline in white over the darkened foot, dark" loading="lazy" width="1080" height="1350"></a>
+        </div>
+        <figcaption><h4>Photo fills the post · no notch</h4><p class="files">07-image-light-fullbleed.jpg<br>07-image-dark-fullbleed.jpg</p><p class="e">Photo fills the slide</p></figcaption>
+      </figure>
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot feed" href="img/07-image-light-fullbleed-notch.jpg"><img src="img/07-image-light-fullbleed-notch.jpg" alt="Single post: a sunset photo of pylons fills the post, the notch as a solid tab, the headline in white, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-dark-fullbleed-notch.jpg"><img src="img/07-image-dark-fullbleed-notch.jpg" alt="Single post: a sunset photo of pylons fills the post, the notch as a solid tab, the headline in white, dark" loading="lazy" width="1080" height="1350"></a>
+        </div>
+        <figcaption><h4>Photo fills the post · with the notch</h4><p class="files">07-image-light-fullbleed-notch.jpg<br>07-image-dark-fullbleed-notch.jpg</p><p class="e">Photo fills the slide</p></figcaption>
+      </figure>
+      </div>
+    </article>
+    <article class="tpl" id="t8">
+      <header class="tpl-head">
+        <p class="label">Template 8 · 1080 × 1350 · Instagram, Facebook, LinkedIn</p>
+        <h3>Quote with portrait</h3>
+        <p class="use"><b>Use it</b> when a named person said it, and their face makes it count.</p>
+        <p class="rule">The portrait is 300 × 360, the speaker’s name in the topic’s tone. Sources we don’t name get no portrait: use template 9.</p>
+      </header>
+      <div class="pairs">
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot feed" href="img/08-quote-portrait-light-text-top.jpg"><img src="img/08-quote-portrait-light-text-top.jpg" alt="Quote card: notch Quote, the quote at the top, a portrait space and the speaker’s name in clay below, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/08-quote-portrait-dark-text-top.jpg"><img src="img/08-quote-portrait-dark-text-top.jpg" alt="Quote card: notch Quote, the quote at the top, a portrait space and the speaker’s name in clay below, dark" loading="lazy" width="1080" height="1350"></a>
+        </div>
+        <figcaption><h4>Quote top · portrait below</h4><p class="files">08-quote-portrait-light-text-top.jpg<br>08-quote-portrait-dark-text-top.jpg</p><p class="e">Empty space 74%</p></figcaption>
+      </figure>
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot feed" href="img/08-quote-portrait-light-text-bottom.jpg"><img src="img/08-quote-portrait-light-text-bottom.jpg" alt="Quote card on the clay wash: a portrait space and the speaker at the top, the quote below, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/08-quote-portrait-dark-text-bottom.jpg"><img src="img/08-quote-portrait-dark-text-bottom.jpg" alt="Quote card on the clay wash: a portrait space and the speaker at the top, the quote below, dark" loading="lazy" width="1080" height="1350"></a>
+        </div>
+        <figcaption><h4>Portrait top · quote below</h4><p class="files">08-quote-portrait-light-text-bottom.jpg<br>08-quote-portrait-dark-text-bottom.jpg</p><p class="e">Empty space 74%</p></figcaption>
+      </figure>
+      </div>
+    </article>
+    <article class="tpl" id="t9">
+      <header class="tpl-head">
+        <p class="label">Template 9 · 1080 × 1350 · Instagram, Facebook, LinkedIn</p>
+        <h3>Quote, text only</h3>
+        <p class="use"><b>Use it</b> when the words carry it on their own, or the source is unnamed.</p>
+        <p class="rule">The boldest card in the set: the whole post in the topic’s deep tone, the quote in white at 88 px. In dark mode the field is a deep shade of the tone.</p>
+      </header>
+      <div class="pairs">
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot feed" href="img/09-quote-light.jpg"><img src="img/09-quote-light.jpg" alt="Quote card filled in clay: the notch as a light tab, the quote in white, the attribution and source under it, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/09-quote-dark.jpg"><img src="img/09-quote-dark.jpg" alt="Quote card filled in clay: the notch as a light tab, the quote in white, the attribution and source under it, dark" loading="lazy" width="1080" height="1350"></a>
+        </div>
+        <figcaption><h4>Quote on the topic’s colour</h4><p class="files">09-quote-light.jpg<br>09-quote-dark.jpg</p><p class="e">Empty space 69%</p></figcaption>
+      </figure>
+      </div>
+    </article>
+    <article class="tpl" id="t10">
+      <header class="tpl-head">
+        <p class="label">Template 10 · 1080 × 1350 · Instagram, Facebook, LinkedIn</p>
+        <h3>Text card</h3>
+        <p class="use"><b>Use it</b> for one finding, a statement, a big number, or a correction.</p>
+        <p class="rule">Short (up to 6 words, 144 px) on the wash, long (up to 14 words, 96 px) on Card with the key figure in the tone, New with the purple notch, and the big number on a block of the tone. Corrections use the notch label Correction and say plainly what changed.</p>
+      </header>
+      <div class="pairs">
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot feed" href="img/10-text-light-short.jpg"><img src="img/10-text-light-short.jpg" alt="Text card on the clay wash: notch Explainer, the statement “Electricity, not chips, is the limit”, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-dark-short.jpg"><img src="img/10-text-dark-short.jpg" alt="Text card on the clay wash: notch Explainer, the statement “Electricity, not chips, is the limit”, dark" loading="lazy" width="1080" height="1350"></a>
+        </div>
+        <figcaption><h4>Short statement · on the wash</h4><p class="files">10-text-light-short.jpg<br>10-text-dark-short.jpg</p><p class="e">Empty space 75%</p></figcaption>
+      </figure>
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot feed" href="img/10-text-light-long.jpg"><img src="img/10-text-light-long.jpg" alt="Text card: notch Correction, “An earlier post said data centres used 4% of the world’s electricity in 2024. The figure is about 1.5%.” with 1.5% in clay, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-dark-long.jpg"><img src="img/10-text-dark-long.jpg" alt="Text card: notch Correction, “An earlier post said data centres used 4% of the world’s electricity in 2024. The figure is about 1.5%.” with 1.5% in clay, dark" loading="lazy" width="1080" height="1350"></a>
+        </div>
+        <figcaption><h4>Long · a correction</h4><p class="files">10-text-light-long.jpg<br>10-text-dark-long.jpg</p><p class="e">Empty space 65%</p></figcaption>
+      </figure>
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot feed" href="img/10-text-light-new.jpg"><img src="img/10-text-light-new.jpg" alt="Text card for a new story: purple notch New, the long headline, and Full story: link in bio, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-dark-new.jpg"><img src="img/10-text-dark-new.jpg" alt="Text card for a new story: purple notch New, the long headline, and Full story: link in bio, dark" loading="lazy" width="1080" height="1350"></a>
+        </div>
+        <figcaption><h4>New · purple notch</h4><p class="files">10-text-light-new.jpg<br>10-text-dark-new.jpg</p><p class="e">Empty space 73%</p></figcaption>
+      </figure>
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot feed" href="img/10-text-light-number.jpg"><img src="img/10-text-light-number.jpg" alt="Text card: notch Data, 945 TWh in white on a solid clay block, what it means, and the source, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-dark-number.jpg"><img src="img/10-text-dark-number.jpg" alt="Text card: notch Data, 945 TWh in white on a solid clay block, what it means, and the source, dark" loading="lazy" width="1080" height="1350"></a>
+        </div>
+        <figcaption><h4>Big number on a block of the tone</h4><p class="files">10-text-light-number.jpg<br>10-text-dark-number.jpg</p><p class="e">Empty space 68%</p></figcaption>
+      </figure>
+      </div>
+    </article>
+  </section>
+
+  <section class="tray" id="stories">
+    <div class="tabs"><span class="tab"><b>D</b>Stories 11–14</span><span class="label more">1080 × 1920</span></div>
+    <div class="head">
+      <h2>Stories, one file for Instagram and Facebook</h2>
+      <p>Both apps show stories at 1080 × 1920 and cover the top and bottom with their own controls, so one file serves both. Words stay out of the top and bottom 250 px; photos may run under them. The dashed boxes are where the app’s own stickers go.</p>
+    </div>
+    <article class="tpl" id="t11">
+      <header class="tpl-head">
+        <p class="label">Template 11 · 1080 × 1920 · Instagram and Facebook</p>
+        <h3>New story</h3>
+        <p class="use"><b>Use it</b> to say a new story is out, with the link sticker under the headline.</p>
+        <p class="rule">Always the purple notch. The top and bottom 250 px stay clear for the app; the photo may run into them, words never do. Leave the dashed space for the link sticker.</p>
+      </header>
+      <div class="pairs story">
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot story" href="img/11-new-story-light-text-top.jpg"><img src="img/11-new-story-light-text-top.jpg" alt="Story: purple notch 06 New under the clear top, the headline, a space for the link sticker, and a sunset photo of pylons filling the bottom, light" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/11-new-story-dark-text-top.jpg"><img src="img/11-new-story-dark-text-top.jpg" alt="Story: purple notch 06 New under the clear top, the headline, a space for the link sticker, and a sunset photo of pylons filling the bottom, dark" loading="lazy" width="1080" height="1920"></a>
+        </div>
+        <figcaption><h4>Text top · photo below</h4><p class="files">11-new-story-light-text-top.jpg<br>11-new-story-dark-text-top.jpg</p><p class="e">Empty space 36%: the photo takes the rest</p></figcaption>
+      </figure>
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot story" href="img/11-new-story-light-text-bottom.jpg"><img src="img/11-new-story-light-text-bottom.jpg" alt="Story: purple notch, a sunset photo of pylons, then the headline and the link sticker space, light" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/11-new-story-dark-text-bottom.jpg"><img src="img/11-new-story-dark-text-bottom.jpg" alt="Story: purple notch, a sunset photo of pylons, then the headline and the link sticker space, dark" loading="lazy" width="1080" height="1920"></a>
+        </div>
+        <figcaption><h4>Photo above · text below</h4><p class="files">11-new-story-light-text-bottom.jpg<br>11-new-story-dark-text-bottom.jpg</p><p class="e">Empty space 45%</p></figcaption>
+      </figure>
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot story" href="img/11-new-story-light-fullbleed.jpg"><img src="img/11-new-story-light-fullbleed.jpg" alt="Story: a sunset photo of pylons fills the screen, the purple tab under the clear top, the headline and link sticker space in white over the darkened foot, light" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/11-new-story-dark-fullbleed.jpg"><img src="img/11-new-story-dark-fullbleed.jpg" alt="Story: a sunset photo of pylons fills the screen, the purple tab under the clear top, the headline and link sticker space in white over the darkened foot, dark" loading="lazy" width="1080" height="1920"></a>
+        </div>
+        <figcaption><h4>Photo fills the story · words on it</h4><p class="files">11-new-story-light-fullbleed.jpg<br>11-new-story-dark-fullbleed.jpg</p><p class="e">Photo fills the slide</p></figcaption>
+      </figure>
+      </div>
+    </article>
+    <article class="tpl" id="t12">
+      <header class="tpl-head">
+        <p class="label">Template 12 · 1080 × 1920 · Instagram and Facebook</p>
+        <h3>Re-share frame</h3>
+        <p class="use"><b>Use it</b> when a feed post is shared to the story: the app drops the post into the dashed space.</p>
+        <p class="rule">One label line above, one line below. On the topic’s wash, so the shared post stands out.</p>
+      </header>
+      <div class="pairs story">
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot story" href="img/12-reshare-light.jpg"><img src="img/12-reshare-light.jpg" alt="Story frame on the clay wash: a label line, a large dashed space for the shared post, and Tap the post to read the explainer, light" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/12-reshare-dark.jpg"><img src="img/12-reshare-dark.jpg" alt="Story frame on the clay wash: a label line, a large dashed space for the shared post, and Tap the post to read the explainer, dark" loading="lazy" width="1080" height="1920"></a>
+        </div>
+        <figcaption><h4>Frame for a shared post</h4><p class="files">12-reshare-light.jpg<br>12-reshare-dark.jpg</p><p class="e">Empty space 55%</p></figcaption>
+      </figure>
+      </div>
+    </article>
+    <article class="tpl" id="t13">
+      <header class="tpl-head">
+        <p class="label">Template 13 · 1080 × 1920 · Instagram and Facebook</p>
+        <h3>Text only</h3>
+        <p class="use"><b>Use it</b> one finding or one statement, with its source.</p>
+        <p class="rule">The 96 px headline style, set as a statement. Label line above, source below.</p>
+      </header>
+      <div class="pairs story">
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot story" href="img/13-text-light.jpg"><img src="img/13-text-light.jpg" alt="Text story: a label line and the statement “Data centres used about 1.5% of the world’s electricity in 2024. By 2030 that share could double.” with its source, light" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/13-text-dark.jpg"><img src="img/13-text-dark.jpg" alt="Text story: a label line and the statement “Data centres used about 1.5% of the world’s electricity in 2024. By 2030 that share could double.” with its source, dark" loading="lazy" width="1080" height="1920"></a>
+        </div>
+        <figcaption><h4>Statement</h4><p class="files">13-text-light.jpg<br>13-text-dark.jpg</p><p class="e">Empty space 77%</p></figcaption>
+      </figure>
+      </div>
+    </article>
+    <article class="tpl" id="t14">
+      <header class="tpl-head">
+        <p class="label">Template 14 · 1080 × 1920 · Instagram and Facebook</p>
+        <h3>Poll or question</h3>
+        <p class="use"><b>Use it</b> to ask one question, with room for the app’s own poll or question sticker.</p>
+        <p class="rule">The question at the top, the sticker space in the middle, both inside the clear zones.</p>
+      </header>
+      <div class="pairs story">
+      <figure class="pair">
+        <div class="imgs">
+          <a class="shot story" href="img/14-poll-light.jpg"><img src="img/14-poll-light.jpg" alt="Poll story on the clay wash: “Should data centres pay more for the power they use?” and a dashed space for the poll sticker, light" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/14-poll-dark.jpg"><img src="img/14-poll-dark.jpg" alt="Poll story on the clay wash: “Should data centres pay more for the power they use?” and a dashed space for the poll sticker, dark" loading="lazy" width="1080" height="1920"></a>
+        </div>
+        <figcaption><h4>Question with sticker space</h4><p class="files">14-poll-light.jpg<br>14-poll-dark.jpg</p><p class="e">Empty space 75%</p></figcaption>
       </figure>
       </div>
     </article>
   </section>
 
   <section class="tray" id="blanks">
-    <div class="tabs"><span class="tab"><b>C</b>Blanks</span><span class="label more">To fill in</span></div>
+    <div class="tabs"><span class="tab"><b>E</b>Blanks</span><span class="label more">To fill in</span></div>
     <div class="head">
-      <h2>The same six, with placeholders</h2>
-      <p>The slots a newsroom fills in: [NOTCH LABEL], [LABEL], [HEADLINE], [TEXT], [IMAGE], [NUMBER], [QUOTE], [SPEAKER, ROLE], [SOURCE] and [LOGO]. [TEXT] is the one addition, for body copy and captions, which the list had no name for.</p>
+      <h2>The carousel, with placeholders</h2>
+      <p>The slots a newsroom fills in: [NOTCH LABEL], [LABEL], [HEADLINE], [TEXT], [IMAGE], [NUMBER], [QUOTE], [SPEAKER, ROLE], [SOURCE] and [LOGO]. [TEXT] is the one addition, for body copy and captions.</p>
     </div>
     <div class="blanks">
         <figure class="one">
@@ -480,40 +748,42 @@
   </section>
 
   <section class="tray" id="grid">
-    <div class="tabs"><span class="tab"><b>D</b>In the grid</span><span class="label more">3:4</span></div>
+    <div class="tabs"><span class="tab"><b>F</b>In the grid</span><span class="label more">3:4</span></div>
     <div class="gridrow">
       <div class="head">
-        <h2>The covers survive Instagram's crop</h2>
-        <p>Instagram's profile grid shows only the middle 3:4 of a 4:5 post, losing 34 px from each side. The notch and the headline start 72 px in, so both survive whole, light or dark. The grey strip and the notch make a carousel recognisable in the grid before anyone reads it.</p>
+        <h2>The profile grid, mixed</h2>
+        <p>Instagram’s profile grid shows only the middle 3:4 of a 4:5 post, losing 34 px from each side. Every notch and headline starts 72 px in, so all survive whole. Single posts and carousel covers side by side: full photos, washes, the tone’s own colour and dark posts still read as one family.</p>
       </div>
       <div class="grid-phone">
-        <header><h4>Instagram profile</h4><p class="label" style="color:var(--mute)">Covers, cropped to 3:4</p></header>
+        <header><h4>Instagram profile</h4><p class="label" style="color:var(--mute)">Covers and single posts, cropped to 3:4</p></header>
         <div class="tiles">
-          <img src="img/01-cover-light-text-top-short.jpg" alt="01-cover-light-text-top-short, cropped to 3:4" loading="lazy">
-          <img src="img/01-cover-dark-text-bottom-long.jpg" alt="01-cover-dark-text-bottom-long, cropped to 3:4" loading="lazy">
-          <img src="img/01-cover-light-new.jpg" alt="01-cover-light-new, cropped to 3:4" loading="lazy">
-          <img src="img/01-cover-dark-text-bottom-short.jpg" alt="01-cover-dark-text-bottom-short, cropped to 3:4" loading="lazy">
+          <img src="img/09-quote-light.jpg" alt="09-quote-light, cropped to 3:4" loading="lazy">
+          <img src="img/01-cover-light-fullbleed.jpg" alt="01-cover-light-fullbleed, cropped to 3:4" loading="lazy">
+          <img src="img/10-text-light-short.jpg" alt="10-text-light-short, cropped to 3:4" loading="lazy">
+          <img src="img/07-image-light-fullbleed.jpg" alt="07-image-light-fullbleed, cropped to 3:4" loading="lazy">
+          <img src="img/10-text-light-number.jpg" alt="10-text-light-number, cropped to 3:4" loading="lazy">
+          <img src="img/01-cover-dark-text-top-short.jpg" alt="01-cover-dark-text-top-short, cropped to 3:4" loading="lazy">
           <img src="img/01-cover-light-text-bottom-long.jpg" alt="01-cover-light-text-bottom-long, cropped to 3:4" loading="lazy">
-          <img src="img/01-cover-dark-new.jpg" alt="01-cover-dark-new, cropped to 3:4" loading="lazy">
+          <img src="img/08-quote-portrait-light-text-top.jpg" alt="08-quote-portrait-light-text-top, cropped to 3:4" loading="lazy">
+          <img src="img/07-image-dark-fullbleed-notch.jpg" alt="07-image-dark-fullbleed-notch, cropped to 3:4" loading="lazy">
         </div>
       </div>
     </div>
   </section>
 
   <section class="tray next" id="next">
-    <div class="tabs"><span class="tab"><b>E</b>Next</span><span class="label more">After approval</span></div>
+    <div class="tabs"><span class="tab"><b>G</b>Next</span><span class="label more">After approval</span></div>
     <div class="head">
-      <h2>What follows once 1 to 6 are agreed</h2>
+      <h2>What follows</h2>
       <ol>
-        <li>Templates 7 to 15: single-image posts, quote cards, the text card, the four stories and the link preview, with their variants, light and dark.</li>
+        <li>Template 15, the link preview for Facebook and LinkedIn.</li>
         <li>Bangla versions of templates 1, 7 and 11.</li>
-        <li>One line per template on when to use it.</li>
         <li>Slides 1 to 6 as one PDF document post for LinkedIn, at 1080 × 1350 throughout.</li>
       </ol>
     </div>
   </section>
 </main>
-<footer>Sample content: data-centre figures from the IEA's Energy and AI report (2025); ChatGPT user numbers from OpenAI's announcements; the quote from Second Order's investigation “The AI boom is reaching places investors forgot to look”. Photos from Unsplash, shown in the duotone. The chatbot screenshot is a mock-up of a generic interface.</footer>
+<footer>Sample content: data-centre figures from the IEA’s Energy and AI report (2025); ChatGPT user numbers from OpenAI’s announcements; the quote from Second Order’s investigation “The AI boom is reaching places investors forgot to look”. Photos from Unsplash. The chatbot screenshot is a mock-up of a generic interface.</footer>
 <script>
   const box = document.getElementById('guides');
   try { if (localStorage.getItem('so-guides') === '1') { box.checked = true; document.body.classList.add('guides'); } } catch (e) {}
