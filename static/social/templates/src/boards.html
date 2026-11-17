@@ -335,15 +335,15 @@ const P = [
 
 /* stories, 1080 × 1920, the same file for Instagram and Facebook: the top and bottom 250 px stay clear */
 const S = [
-  ['11-new-story', 'text-top', 'new', () => `${notch('06', 'New', 'Explainer · ' + DATE)}
+  ['11-new-story', 'text-top', 'new', () => `${slab('New · Explainer')}
     <div class="main top"><h1 class="hl xl">${SHORT}</h1>${sticker()}</div>
     <div class="full" style="top:1060px">${img('col-pylons.jpg', '50% 72%')}</div><div class="scrim foot"></div>
     <div class="cr mono s w" style="position:absolute;right:0;top:1076px;z-index:3;padding-top:0">${CREDIT}</div>${logo('w')}`],
-  ['11-new-story', 'text-bottom', 'new', () => `${notch('06', 'New', 'Explainer · ' + DATE)}
+  ['11-new-story', 'text-bottom', 'new', () => `${slab('New · Explainer')}
     <div class="col" style="top:334px;bottom:394px"><div class="ph">${img('col-pylons.jpg', '50% 72%')}</div>${credit()}
     <div class="pad" style="margin-top:44px"><h1 class="hl xl">${SHORT}</h1>${sticker()}</div></div>${logo()}`],
-  ['11-new-story', 'fullbleed', 'new', () => `<div class="full">${img('col-pylons.jpg', '38% 50%')}</div><div class="scrim bot"></div>${ptab('06', 'New')}
-    <div class="main bot w" style="gap:32px"><span class="mono">Explainer · ${DATE}</span><h1 class="hl xl">${SHORT}</h1>${sticker('w')}<span class="mono s" style="align-self:flex-end">${CREDIT}</span></div>${logo('w')}`],
+  ['11-new-story', 'fullbleed', 'new', () => `<div class="full">${img('col-pylons.jpg', '38% 50%')}</div><div class="scrim bot"></div>${slab('New · Explainer', true)}
+    <div class="main bot w" style="gap:32px"><h1 class="hl xl">${SHORT}</h1>${sticker('w')}<span class="mono s" style="align-self:flex-end">${CREDIT}</span></div>${logo('w')}`],
   ['12-reshare', '', 'tint', () => `<div class="main top" style="top:290px"><span class="mono">New on our feed · ${DATE}</span></div>
     <div class="slot mono" style="top:400px;height:1060px;left:132px;right:132px">[Shared post]</div>
     <div class="main top" style="top:1500px"><p class="txt">Tap the post to read the explainer.</p></div>${logo()}`],
@@ -474,15 +474,15 @@ const BN = [
     <p class="txt" style="font-size:44px">${BN_NUM_TXT}</p></div><div class="meta mono">${BN_SRC_IEA}</div>${logo()}`],
 
   /* stories 11–14 */
-  ['11-new-story', 'text-top-bn', 'new', () => `${notch('০৬', 'নতুন', 'ব্যাখ্যা · ' + BN_DATE)}
+  ['11-new-story', 'text-top-bn', 'new', () => `${slab('নতুন · ব্যাখ্যা')}
     <div class="main top"><h1 class="hl xl">${BN_SHORT}</h1>${bnSticker()}</div>
     <div class="full" style="top:1060px">${img('col-pylons.jpg', '50% 72%')}</div><div class="scrim foot"></div>
     <div class="cr mono s w" style="position:absolute;right:0;top:1076px;z-index:3;padding-top:0">${BN_CREDIT}</div>${logo('w')}`],
-  ['11-new-story', 'text-bottom-bn', 'new', () => `${notch('০৬', 'নতুন', 'ব্যাখ্যা · ' + BN_DATE)}
+  ['11-new-story', 'text-bottom-bn', 'new', () => `${slab('নতুন · ব্যাখ্যা')}
     <div class="col" style="top:334px;bottom:394px"><div class="ph">${img('col-pylons.jpg', '50% 72%')}</div>${bnCredit()}
     <div class="pad" style="margin-top:44px"><h1 class="hl xl">${BN_SHORT}</h1>${bnSticker()}</div></div>${logo()}`],
-  ['11-new-story', 'fullbleed-bn', 'new', () => `<div class="full">${img('col-pylons.jpg', '38% 50%')}</div><div class="scrim bot"></div>${ptab('০৬', 'নতুন')}
-    <div class="main bot w" style="gap:32px"><span class="mono">ব্যাখ্যা · ${BN_DATE}</span><h1 class="hl xl">${BN_SHORT}</h1>${bnSticker('w')}<span class="mono s" style="align-self:flex-end">${BN_CREDIT}</span></div>${logo('w')}`],
+  ['11-new-story', 'fullbleed-bn', 'new', () => `<div class="full">${img('col-pylons.jpg', '38% 50%')}</div><div class="scrim bot"></div>${slab('নতুন · ব্যাখ্যা', true)}
+    <div class="main bot w" style="gap:32px"><h1 class="hl xl">${BN_SHORT}</h1>${bnSticker('w')}<span class="mono s" style="align-self:flex-end">${BN_CREDIT}</span></div>${logo('w')}`],
   ['12-reshare', 'bn', 'tint', () => `<div class="main top" style="top:290px"><span class="mono">আমাদের ফিডে নতুন · ${BN_DATE}</span></div>
     <div class="slot mono" style="top:400px;height:1060px;left:132px;right:132px">[শেয়ার করা পোস্ট]</div>
     <div class="main top" style="top:1500px"><p class="txt">পুরো ব্যাখ্যা পড়তে পোস্টে ট্যাপ করুন।</p></div>${logo()}`],
@@ -527,7 +527,7 @@ for (const lang of ['en', 'bn']) for (const len of ['s', 'm', 'l', 'xl']) {
     <div class="ph" style="margin-top:56px;min-height:320px">${img('col-pylons.jpg', '50% 72%')}</div>${credit(cr)}</div>${foot(1, '', true)}`]);
   SZ.push([`sz-cover-plain-${len}-${lang}`, 'tint', lang, () => `${notch(...n)}
     <div class="main bot">${fitHl(lang, len, 700)}</div>${foot(1, '', true)}`]);
-  SZ.push([`sz-story-${len}-${lang}`, 'story new', lang, () => `${notch(lang === 'en' ? '06' : '০৬', lang === 'en' ? 'New' : 'নতুন', lang === 'en' ? 'Explainer · ' + DATE : 'ব্যাখ্যা · ' + BN_DATE)}
+  SZ.push([`sz-story-${len}-${lang}`, 'story new', lang, () => `${slab(lang === 'en' ? 'New · Explainer' : 'নতুন · ব্যাখ্যা')}
     <div class="col" style="top:334px;bottom:394px"><div class="ph" style="min-height:360px">${img('col-pylons.jpg', '50% 72%')}</div>${credit(cr)}
     <div class="pad" style="margin-top:44px">${fitHl(lang, len, 600)}${lang === 'en' ? sticker() : bnSticker()}</div></div>${logo()}`]);
 }
@@ -535,8 +535,8 @@ for (const lang of ['en', 'bn']) for (const len of ['s', 'm', 'l', 'xl']) {
 /* more story shapes for template 11: the photo whole at its own shape, framed, full with a solid band, full with words at the top */
 const storyMore = (lang) => {
   const en = lang === 'en';
-  const nb = en ? notch('06', 'New', 'Explainer') : notch('০৬', 'নতুন', 'ব্যাখ্যা');
-  const pt = en ? ptab('06', 'New') : ptab('০৬', 'নতুন');
+  const nb = slab(en ? 'New · Explainer' : 'নতুন · ব্যাখ্যা');
+  const pt = slab(en ? 'New · Explainer' : 'নতুন · ব্যাখ্যা', true);
   const hl = (max) => `<h1 class="hl xl" data-fit="${STEPS[lang]}" data-max="${max}">${en ? LONG : BN_LONG}</h1>`;
   const st = (c = '') => en ? sticker(c) : bnSticker(c);
   const cr = en ? CREDIT : BN_CREDIT;
@@ -548,12 +548,14 @@ const storyMore = (lang) => {
     ['11-new-story', 'framed' + suf, 'new tint', () => `${nb}
       <div class="col" style="top:394px;bottom:394px"><div class="pad" style="flex:1 1 auto;display:flex;flex-direction:column;gap:0"><div class="ph" style="min-height:420px">${img('col-cctv.jpg', '50% 40%')}</div></div>${credit(cr)}
       <div class="pad" style="margin-top:40px">${hl(420)}${st()}</div></div>${logo()}`],
-    ['11-new-story', 'fullbleed-band' + suf, 'new', () => `<div class="full">${img('col-desks.jpg', '40% 50%')}</div>${pt}
+    ['11-new-story', 'fullbleed-band' + suf, 'new', () => `<div class="full">${img('col-desks.jpg', '40% 50%')}</div><div class="scrim top" style="height:24%"></div>${pt}
       <div class="sheet bot" style="padding-bottom:394px;gap:32px"><span class="mono s" style="align-self:flex-end">${cr}</span>${hl(440)}${st()}</div>${logo()}`],
     ['11-new-story', 'fullbleed-text-top' + suf, 'new', () => `<div class="full">${img('col-pylons.jpg', '45% 50%')}</div><div class="scrim top" style="height:70%"></div><div class="scrim foot"></div>${pt}
       <div class="main top w" style="gap:32px">${hl(560)}${st('w')}<span class="mono s" style="align-self:flex-end">${cr}</span></div>${logo('w')}`],
   ];
 };
+
+const slab = (txt, w = false) => `<div class="mono${w ? ' w' : ''}" style="position:absolute;left:72px;top:272px;z-index:3">${txt}</div>`;
 
 const BLANK = [
   ['01-cover', '', () => `${notch('00', '[Notch label]', '[Label]')}
