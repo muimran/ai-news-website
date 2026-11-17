@@ -29,7 +29,8 @@
   .bar nav a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
   .switch { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; white-space: nowrap; }
   .switch input { width: 1rem; height: 1rem; margin: 0; accent-color: var(--ink); }
-  @media (max-width: 860px) { .bar nav a { display: none; } }
+  .bar nav a { white-space: nowrap; }
+  @media (max-width: 1040px) { .bar nav a { display: none; } }
 
   main { max-width: 78rem; margin: 0 auto; padding: 2.25rem var(--pad) 4rem; display: flex; flex-direction: column; gap: 2.5rem; }
   .intro { max-width: 46rem; display: flex; flex-direction: column; gap: 0.85rem; }
@@ -120,6 +121,8 @@
   .grid-phone header { padding: 0.8rem 1rem; border-bottom: 1px solid var(--ink); display: flex; flex-direction: column; gap: 0.2rem; }
   .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; }
   .tiles img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
+  .tiles.fb img { aspect-ratio: 1 / 1; }
+  .phones { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: 1.5rem; align-items: start; }
   .gridrow { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 1.5rem; align-items: start; }
   .next ol { margin: 0; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.4rem; }
   footer { max-width: 78rem; margin: 0 auto; padding: 0 var(--pad) 3rem; color: var(--mute); font-size: 0.875rem; }
@@ -754,14 +757,16 @@
   </section>
 
   <section class="tray" id="grid">
-    <div class="tabs"><span class="tab"><b>F</b>In the grid</span><span class="label more">3:4</span></div>
-    <div class="gridrow">
-      <div class="head">
-        <h2>The profile grid, mixed</h2>
-        <p>Instagram’s profile grid shows only the middle 3:4 of a 4:5 post, losing 34 px from each side. Every notch and headline starts 72 px in, so all survive whole. Single posts and carousel covers side by side: full photos, washes, the tone’s own colour and dark posts still read as one family.</p>
-      </div>
+    <div class="tabs"><span class="tab"><b>F</b>In the grid</span><span class="label more">Instagram 3:4 · Facebook 1:1</span></div>
+    <div class="head">
+      <h2>The profile grids, mixed</h2>
+      <p>Both apps show a post whole in the feed. Only the profile grids crop it, and they crop differently.</p>
+      <p><b>Instagram</b> keeps the middle 3:4, losing 34 px from each side. Every notch, headline and logo starts 72 px in, so all of it survives.</p>
+      <p><b>Facebook’s Photos tab</b> keeps the middle square, losing 135 px from the top and the bottom. Every headline, number, quote and photo survives, but the notch (0–132 px) and the logo row (1218–1278 px) fall outside it. That is a trade we chose: moving them inside the square would bring back the empty band above the notch. The page’s own name and picture sit right above that grid anyway.</p>
+    </div>
+    <div class="phones">
       <div class="grid-phone">
-        <header><h4>Instagram profile</h4><p class="label" style="color:var(--mute)">Covers and single posts, cropped to 3:4</p></header>
+        <header><h4>Instagram profile</h4><p class="label" style="color:var(--mute)">Cropped to 3:4</p></header>
         <div class="tiles">
           <img src="img/09-quote-light.jpg?v=efd9cf06" alt="09-quote-light, cropped to 3:4" loading="lazy">
           <img src="img/01-cover-light-fullbleed.jpg?v=0a59511c" alt="01-cover-light-fullbleed, cropped to 3:4" loading="lazy">
@@ -772,6 +777,20 @@
           <img src="img/01-cover-light-text-bottom-long.jpg?v=662b5e9c" alt="01-cover-light-text-bottom-long, cropped to 3:4" loading="lazy">
           <img src="img/08-quote-portrait-light-text-top.jpg?v=6bb0e038" alt="08-quote-portrait-light-text-top, cropped to 3:4" loading="lazy">
           <img src="img/07-image-dark-fullbleed-notch.jpg?v=b1a2bf53" alt="07-image-dark-fullbleed-notch, cropped to 3:4" loading="lazy">
+        </div>
+      </div>
+      <div class="grid-phone">
+        <header><h4>Facebook Page, Photos tab</h4><p class="label" style="color:var(--mute)">Cropped to a square</p></header>
+        <div class="tiles fb">
+          <img src="img/09-quote-light.jpg?v=efd9cf06" alt="09-quote-light, cropped to a square" loading="lazy">
+          <img src="img/01-cover-light-fullbleed.jpg?v=0a59511c" alt="01-cover-light-fullbleed, cropped to a square" loading="lazy">
+          <img src="img/10-text-light-short.jpg?v=19ee778d" alt="10-text-light-short, cropped to a square" loading="lazy">
+          <img src="img/07-image-light-fullbleed.jpg?v=a76c1833" alt="07-image-light-fullbleed, cropped to a square" loading="lazy">
+          <img src="img/10-text-light-number.jpg?v=ba366360" alt="10-text-light-number, cropped to a square" loading="lazy">
+          <img src="img/01-cover-dark-text-top-short.jpg?v=83b67b5b" alt="01-cover-dark-text-top-short, cropped to a square" loading="lazy">
+          <img src="img/01-cover-light-text-bottom-long.jpg?v=662b5e9c" alt="01-cover-light-text-bottom-long, cropped to a square" loading="lazy">
+          <img src="img/08-quote-portrait-light-text-top.jpg?v=6bb0e038" alt="08-quote-portrait-light-text-top, cropped to a square" loading="lazy">
+          <img src="img/07-image-dark-fullbleed-notch.jpg?v=b1a2bf53" alt="07-image-dark-fullbleed-notch, cropped to a square" loading="lazy">
         </div>
       </div>
     </div>
