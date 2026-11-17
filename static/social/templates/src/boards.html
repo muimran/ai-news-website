@@ -64,6 +64,29 @@
   .nblock .num { color: inherit; }
   .portrait { width: 300px; height: 360px; flex: none; background: var(--wash); display: grid; place-items: center; color: var(--mute); }
   .board.story { height: 1920px; --B: 250px; --foot: 250px; --top: 394px; }
+  /* the link preview, 1200 × 630, for Facebook and LinkedIn */
+  .board.link { width: 1200px; height: 630px; --M: 56px; --B: 32px; --row: 74px; --top: 150px; --foot: 56px; }
+  .link .tab { font-size: 30px; gap: 18px; padding-right: 28px; }
+  .link .tab b { width: 49px; height: 42px; }
+  .link .mono { font-size: 24px; }
+  .link .mono.s { font-size: 20px; }
+  .link .xl { font-size: 76px; font-variation-settings: 'opsz' 31; }
+  .link .l { font-size: 60px; line-height: 1.06; font-variation-settings: 'opsz' 25; }
+  .link .logo { width: 200px; height: 50px; font-size: 18px; }
+  .link .main { gap: 24px; }
+  /* Bangla: Noto Serif Bengali at 82% of the English size, taller lines; labels in Anek Bangla, no capitals */
+  .board[lang="bn"] { font-family: 'Anek Bangla', 'Anek Latin', sans-serif; }
+  [lang="bn"] .hl { font-family: 'Noto Serif Bengali', serif; font-weight: 600; line-height: 1.34; letter-spacing: 0; }
+  [lang="bn"] .xl { font-size: 118px; }
+  [lang="bn"] .l { font-size: 79px; }
+  [lang="bn"] .mono { font-family: 'Anek Bangla', sans-serif; font-size: 33px; letter-spacing: 0.01em; text-transform: none; }
+  [lang="bn"] .mono.s { font-size: 28px; }
+  [lang="bn"] .tab, [lang="bn"] .ptab { font-family: 'Anek Bangla', sans-serif; font-size: 36px; }
+  /* print: one board per page, for the LinkedIn document post */
+  @page { size: 1080px 1350px; margin: 0; }
+  body.pdf { padding: 0; gap: 0; display: block; background: none; }
+  body.pdf .wrap { display: block; break-after: page; }
+  body.pdf .wrap > .id { display: none; }
 
   /* ---- the notch: the corner cut away, the wash showing through ---- */
   /* the notch: a solid tab cut into the top-left corner, from the top edge down; the date beside it.
@@ -240,6 +263,8 @@ const D = [
 
   ['06-closing', 'read', '', () => `${notch('06', 'Explainer')}
     <div class="main bot"><h2 class="hl xl">Read the full story</h2><span class="mono tn" style="align-self:flex-start;padding:6px 12px">Link in bio</span></div>${foot(6)}`],
+  ['06-closing', 'read-post', '', () => `${notch('06', 'Explainer')}
+    <div class="main bot"><h2 class="hl xl">Read the full story</h2><span class="mono tn" style="align-self:flex-start;padding:6px 12px">Link in the post</span></div>${foot(6)}`],
   ['06-closing', 'question', 'tint', () => `<div class="main bot"><h2 class="hl l">Should data centres pay more for the power they use?</h2><span class="mono">Tell us in the comments</span></div>${foot(6)}`],
 ];
 
@@ -303,6 +328,44 @@ const S = [
     <div class="slot mono" style="top:1040px;height:340px;left:180px;right:180px">[Poll sticker]</div>${logo()}`],
 ];
 
+/* link previews, 1200 × 630 */
+const LP = [
+  ['15-link', 'photo', '', () => `${notch('06', 'Explainer', DATE)}
+    <div class="main top" style="right:600px"><h1 class="hl xl">${SHORT}</h1></div>
+    <div class="full" style="left:600px">${img('col-pylons.jpg', '50% 70%')}</div>
+    <div class="scrim foot" style="left:600px;height:30%"></div><div class="cr mono s w" style="position:absolute;right:0;bottom:24px;z-index:3">${CREDIT}</div>${logo()}`],
+  ['15-link', 'text', 'tint', () => `${notch('06', 'Explainer', DATE)}
+    <div class="main top" style="right:120px"><h1 class="hl l">${LONG}</h1></div>${logo()}`],
+  ['15-link', 'new', 'new', () => `${notch('06', 'New', 'Explainer · ' + DATE)}
+    <div class="main top" style="right:120px"><h1 class="hl l">${LONG}</h1></div>${logo()}`],
+];
+
+/* Bangla versions of templates 1, 7 and 11 */
+const BN_DATE = '১৭ নভেম্বর ২০২৬';
+const BN_SHORT = 'এআইয়ের পরের সীমা বিদ্যুৎ';
+const BN_LONG = '২০৩০ সালের মধ্যে বিশ্বের ডেটা সেন্টার জাপানের চেয়েও বেশি বিদ্যুৎ খরচ করতে পারে';
+const BN_CREDIT = 'প্রতীকী ছবি · আনস্প্ল্যাশ';
+const bnSticker = (cls = '') => `<div class="slot mono ${cls}" style="position:relative;left:0;right:0;width:600px;height:120px">[লিংক স্টিকার]</div>`;
+const BN = [
+  ['01-cover', 'text-top-short-bn', '', () => `${notch('০৬', 'ব্যাখ্যা', BN_DATE)}
+    <div class="col" style="top:192px;bottom:190px"><div class="pad"><h1 class="hl xl">${BN_SHORT}</h1></div>
+    <div class="ph" style="margin-top:60px">${img('col-pylons.jpg', '50% 72%')}</div>${credit(BN_CREDIT)}</div>${foot(1, '', true)}`],
+  ['01-cover', 'text-bottom-long-bn', 'tint', () => `${notch('০৬', 'ব্যাখ্যা', BN_DATE)}
+    <div class="main bot"><h1 class="hl l">${BN_LONG}</h1></div>${foot(1, '', true)}`],
+  ['01-cover', 'new-bn', 'new', () => `${notch('০৬', 'নতুন', 'ব্যাখ্যা · ' + BN_DATE)}
+    <div class="main top"><h1 class="hl l">${BN_LONG}</h1></div>${foot(1, '', true)}`],
+  ['07-image', 'split-text-bottom-short-bn', '', () => `${notch('০৬', 'ব্যাখ্যা', BN_DATE)}
+    <div class="col" style="top:132px;bottom:192px"><div class="ph">${img('col-pylons.jpg', '50% 70%')}</div>${credit(BN_CREDIT)}
+    <div class="pad" style="margin-top:44px"><h1 class="hl xl">${BN_SHORT}</h1></div></div>${logo()}`],
+  ['07-image', 'fullbleed-bn', 't05', () => `<div class="full">${img('col-dhaka.jpg', '50% 45%')}</div><div class="scrim bot"></div>
+    <div class="main bot w" style="gap:28px"><span class="mono" style="color:var(--acc-d)">সারা দেশে এআই · ${BN_DATE}</span><h1 class="hl l">গ্রীষ্মে ঢাকার গ্রিড এমনিতেই চাপে থাকে; ডেটা সেন্টারও সেখান থেকেই বিদ্যুৎ নেবে</h1><span class="mono s" style="align-self:flex-end">${BN_CREDIT}</span></div>${logo('w')}`],
+  ['11-new-story', 'text-bottom-bn', 'new', () => `${notch('০৬', 'নতুন', 'ব্যাখ্যা · ' + BN_DATE)}
+    <div class="col" style="top:334px;bottom:394px"><div class="ph">${img('col-pylons.jpg', '50% 72%')}</div>${credit(BN_CREDIT)}
+    <div class="pad" style="margin-top:44px"><h1 class="hl xl">${BN_SHORT}</h1>${bnSticker()}</div></div>${logo()}`],
+  ['11-new-story', 'fullbleed-bn', 'new', () => `<div class="full">${img('col-pylons.jpg', '38% 50%')}</div><div class="scrim bot"></div>${ptab('০৬', 'নতুন')}
+    <div class="main bot w" style="gap:32px"><span class="mono">ব্যাখ্যা · ${BN_DATE}</span><h1 class="hl xl">${BN_SHORT}</h1>${bnSticker('w')}<span class="mono s" style="align-self:flex-end">${BN_CREDIT}</span></div>${logo('w')}`],
+];
+
 const BLANK = [
   ['01-cover', '', () => `${notch('00', '[Notch label]', '[Label]')}
     <div class="col" style="top:192px;bottom:190px"><div class="pad"><h1 class="hl xl">[HEADLINE]</h1></div>
@@ -324,6 +387,8 @@ const boards = [];
 for (const mode of ['light', 'dark']) {
   for (const [t, v, cls, html] of D) boards.push({ id: [t, mode, v].filter(Boolean).join('-'), cls: `${mode} t06 ${cls}`, html });
   for (const [t, v, cls, html] of P) boards.push({ id: [t, mode, v].filter(Boolean).join('-'), cls: `${mode} ${/t0\d/.test(cls) ? '' : 't06 '}${cls}`, html });
+  for (const [t, v, cls, html] of LP) boards.push({ id: [t, mode, v].filter(Boolean).join('-'), cls: `${mode} t06 link ${cls}`, html });
+  for (const [t, v, cls, html] of BN) boards.push({ id: [t, mode, v].filter(Boolean).join('-'), cls: `${mode} ${/t0\d/.test(cls) ? '' : 't06 '}${t.startsWith('11') ? 'story ' : ''}${cls}`, html, bn: true });
   for (const [t, v, cls, html] of S) boards.push({ id: [t, mode, v].filter(Boolean).join('-'), cls: `${mode} t06 story ${cls}`, html });
 }
 for (const [t, cls, html] of BLANK) boards.push({ id: `${t}-light-blank`, cls: `light t06 ${cls}`, html });
@@ -333,13 +398,15 @@ const q = new URLSearchParams(location.search);
 const only = q.get('b');
 if (q.get('guides')) document.body.classList.add('guides');
 if (only) document.body.classList.add('one');
-if (q.get('list')) document.getElementById('out').textContent = boards.map((b) => `${b.id} 1080 ${b.cls.includes('story') ? 1920 : 1350}`).join('\n');
-for (const b of boards) {
+if (q.get('list')) document.getElementById('out').textContent = boards.map((b) => b.cls.includes('link') ? `${b.id} 1200 630` : `${b.id} 1080 ${b.cls.includes('story') ? 1920 : 1350}`).join('\n');
+const pdf = q.get('pdf') ? q.get('pdf').split(',') : null;
+if (pdf) document.body.classList.add('pdf');
+for (const b of pdf ? pdf.map((id) => boards.find((x) => x.id === id)) : boards) {
   if (only && b.id !== only) continue;
   if (q.get('list')) break;
   const w = document.createElement('div');
   w.className = 'wrap';
-  w.innerHTML = `<div class="id">${b.id}</div><div class="board ${b.cls}" id="${b.id}">${b.html()}</div>`;
+  w.innerHTML = `<div class="id">${b.id}</div><div class="board ${b.cls}" id="${b.id}"${b.bn ? ' lang="bn"' : ''}>${b.html()}</div>`;
   document.body.append(w);
 }
 
