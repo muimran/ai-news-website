@@ -186,12 +186,12 @@
   .board:not([lang="bn"]) .hl { font-family: 'Geist', sans-serif; font-weight: 600; letter-spacing: -0.035em; line-height: 1.12; font-variation-settings: normal; }
   .board:not([lang="bn"]) .txt, .board:not([lang="bn"]) .att, .board:not([lang="bn"]) .tab, .board:not([lang="bn"]) .ptab, .board:not([lang="bn"]) .num, .board:not([lang="bn"]) .unit, .board:not([lang="bn"]) .bars .lab, .board:not([lang="bn"]) .bars .val, .board:not([lang="bn"]) .tl .pt .ev { font-family: 'Geist', sans-serif; }
   .board:not([lang="bn"]) .q { font-family: 'IBM Plex Sans', sans-serif; font-style: italic; font-weight: 500; letter-spacing: -0.015em; line-height: 1.18; }
-  .board:not([lang="bn"]) .xl { font-size: 128px; }
-  .board:not([lang="bn"]) .l { font-size: 84px; }
-  .board:not([lang="bn"]) .m { font-size: 58px; line-height: 1.14; }
-  .board:not([lang="bn"]) .q { font-size: 72px; }
-  .board.link:not([lang="bn"]) .xl { font-size: 68px; }
-  .board.link:not([lang="bn"]) .l { font-size: 54px; }
+  .board:not([lang="bn"]) .xl { font-size: 112px; }
+  .board:not([lang="bn"]) .l { font-size: 72px; }
+  .board:not([lang="bn"]) .m { font-size: 54px; line-height: 1.14; }
+  .board:not([lang="bn"]) .q { font-size: 64px; }
+  .board.link:not([lang="bn"]) .xl { font-size: 60px; }
+  .board.link:not([lang="bn"]) .l { font-size: 48px; }
 
   /* ---- checks ---- */
   body.guides .board::after { content: ''; position: absolute; inset: 60px; border: 2px dashed #ff2d6f; pointer-events: none; z-index: 50; }
@@ -311,7 +311,7 @@ const P = [
     <div class="main bot"><blockquote class="hl q">${QUOTE}</blockquote></div>${logo()}`],
 
   ['09-quote', '', 't01 deep', () => `
-    <div class="main bot" style="gap:44px"><blockquote class="hl q" style="font-size:88px;font-variation-settings:'opsz' 32">${QUOTE}</blockquote>
+    <div class="main bot" style="gap:44px"><blockquote class="hl q" style="font-size:72px">${QUOTE}</blockquote>
     <p class="att">An engineer who has worked on two of the sites</p><span class="mono s">From our investigation, Sep 2026</span></div>${logo()}`],
 
   ['10-text', 'short', 'tint', () => `${notch('06', 'Explainer', DATE)}
@@ -510,7 +510,7 @@ const HL = {
         l: 'বাংলাদেশ এআই ডেটা সেন্টার চায়, কিন্তু গ্রীষ্মে তার গ্রিড এমনিতেই বাতি জ্বালিয়ে রাখতে হিমশিম খায়',
         xl: 'এআইয়ের জোয়ার পৌঁছে যাচ্ছে বিনিয়োগকারীদের ভুলে যাওয়া জায়গায়, আর ডেটা সেন্টারের আশপাশের শহরগুলোকেই গুনতে হচ্ছে বিদ্যুতের দাম' },
 };
-const STEPS = { en: '128,108,94,80,68,60', bn: '118,100,86,74,64,56' };
+const STEPS = { en: '112,96,84,74,66,60', bn: '118,100,86,74,64,56' };
 const fitHl = (lang, len, max) => `<h1 class="hl xl" data-fit="${STEPS[lang]}" data-max="${max}">${HL[lang][len]}</h1>`;
 const SZ = [];
 for (const lang of ['en', 'bn']) for (const len of ['s', 'm', 'l', 'xl']) {
@@ -624,6 +624,14 @@ function empty(board) {
 }
 function fitAll() {
   document.querySelectorAll('[data-fit]').forEach((h) => {
+    /* English: a fixed size by length, so long headlines are always smaller */
+    if (!h.closest('[lang="bn"]')) {
+      const n = h.textContent.length;
+      const px = n <= 35 ? 112 : n <= 65 ? 92 : n <= 100 ? 74 : n <= 130 ? 64 : 60;
+      h.style.fontSize = px + 'px'; h.dataset.chosen = px;
+      h.dataset.lines = Math.round(h.offsetHeight / parseFloat(getComputedStyle(h).lineHeight));
+      return;
+    }
     const steps = h.dataset.fit.split(',').map(Number), max = +h.dataset.max;
     for (const px of steps) {
       h.style.fontSize = px + 'px';
