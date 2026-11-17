@@ -12,7 +12,7 @@
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400..700&family=Anek+Latin:wght@400..700&family=Fraunces:opsz,wght@9..144,400..700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+Bengali:wght@500..700&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400..700&family=Anek+Latin:wght@400..700&family=Fraunces:opsz,wght@9..144,400..700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+Bengali:wght@500..700&family=Geist:wght@400..800&family=IBM+Plex+Sans:ital,wght@1,400;1,500;1,600&display=block" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #6d6d6a; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 48px; padding: 48px; }
@@ -181,6 +181,17 @@
   .tl .pt .mono { width: 196px; flex: none; }
   .tl .pt .ev { font-size: 40px; font-weight: 600; line-height: 1.2; }
   .numrow { display: flex; align-items: baseline; gap: 20px; }
+
+  /* ---- the English type: Geist for headlines, text and numbers; quotes in IBM Plex Sans Italic ---- */
+  .board:not([lang="bn"]) .hl { font-family: 'Geist', sans-serif; font-weight: 600; letter-spacing: -0.035em; line-height: 1.12; font-variation-settings: normal; }
+  .board:not([lang="bn"]) .txt, .board:not([lang="bn"]) .att, .board:not([lang="bn"]) .tab, .board:not([lang="bn"]) .ptab, .board:not([lang="bn"]) .num, .board:not([lang="bn"]) .unit, .board:not([lang="bn"]) .bars .lab, .board:not([lang="bn"]) .bars .val, .board:not([lang="bn"]) .tl .pt .ev { font-family: 'Geist', sans-serif; }
+  .board:not([lang="bn"]) .q { font-family: 'IBM Plex Sans', sans-serif; font-style: italic; font-weight: 500; letter-spacing: -0.015em; line-height: 1.18; }
+  .board:not([lang="bn"]) .xl { font-size: 128px; }
+  .board:not([lang="bn"]) .l { font-size: 84px; }
+  .board:not([lang="bn"]) .m { font-size: 58px; line-height: 1.14; }
+  .board:not([lang="bn"]) .q { font-size: 72px; }
+  .board.link:not([lang="bn"]) .xl { font-size: 68px; }
+  .board.link:not([lang="bn"]) .l { font-size: 54px; }
 
   /* ---- checks ---- */
   body.guides .board::after { content: ''; position: absolute; inset: 60px; border: 2px dashed #ff2d6f; pointer-events: none; z-index: 50; }
@@ -499,7 +510,7 @@ const HL = {
         l: 'বাংলাদেশ এআই ডেটা সেন্টার চায়, কিন্তু গ্রীষ্মে তার গ্রিড এমনিতেই বাতি জ্বালিয়ে রাখতে হিমশিম খায়',
         xl: 'এআইয়ের জোয়ার পৌঁছে যাচ্ছে বিনিয়োগকারীদের ভুলে যাওয়া জায়গায়, আর ডেটা সেন্টারের আশপাশের শহরগুলোকেই গুনতে হচ্ছে বিদ্যুতের দাম' },
 };
-const STEPS = { en: '144,120,104,88,76,64', bn: '118,100,86,74,64,56' };
+const STEPS = { en: '128,108,94,80,68,60', bn: '118,100,86,74,64,56' };
 const fitHl = (lang, len, max) => `<h1 class="hl xl" data-fit="${STEPS[lang]}" data-max="${max}">${HL[lang][len]}</h1>`;
 const SZ = [];
 for (const lang of ['en', 'bn']) for (const len of ['s', 'm', 'l', 'xl']) {
