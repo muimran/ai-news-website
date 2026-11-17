@@ -154,6 +154,8 @@
   .cr { padding: 16px var(--M) 0; text-align: right; }
   .full { position: absolute; inset: 0; }
   .full img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .sheet { position: absolute; left: 0; right: 0; z-index: 3; background: var(--card); padding: 0 var(--M); display: flex; flex-direction: column; }
+  .sheet.bot { bottom: 0; padding-top: 56px; }
   .scrim { position: absolute; left: 0; right: 0; z-index: 2; pointer-events: none; }
   .scrim.bot { bottom: 0; height: 78%; background: linear-gradient(to top, rgba(14,12,10,0.88) 0%, rgba(14,12,10,0.76) 45%, rgba(14,12,10,0) 100%); }
   .scrim.top { top: 0; height: 62%; background: linear-gradient(to bottom, rgba(14,12,10,0.84) 0%, rgba(14,12,10,0.66) 45%, rgba(14,12,10,0) 100%); }
@@ -530,6 +532,29 @@ for (const lang of ['en', 'bn']) for (const len of ['s', 'm', 'l', 'xl']) {
     <div class="pad" style="margin-top:44px">${fitHl(lang, len, 600)}${lang === 'en' ? sticker() : bnSticker()}</div></div>${logo()}`]);
 }
 
+/* more story shapes for template 11: the photo whole at its own shape, framed, full with a solid band, full with words at the top */
+const storyMore = (lang) => {
+  const en = lang === 'en';
+  const nb = en ? notch('06', 'New', 'Explainer') : notch('০৬', 'নতুন', 'ব্যাখ্যা');
+  const pt = en ? ptab('06', 'New') : ptab('০৬', 'নতুন');
+  const hl = (max) => `<h1 class="hl xl" data-fit="${STEPS[lang]}" data-max="${max}">${en ? LONG : BN_LONG}</h1>`;
+  const st = (c = '') => en ? sticker(c) : bnSticker(c);
+  const cr = en ? CREDIT : BN_CREDIT;
+  const suf = en ? '' : '-bn';
+  return [
+    ['11-new-story', 'fit' + suf, 'new', () => `${nb}
+      <div class="col" style="top:334px;bottom:394px"><div class="ph fit" style="min-height:480px">${img('col-dhaka.jpg')}</div>${credit(cr)}
+      <div class="pad" style="margin-top:40px">${hl(420)}${st()}</div></div>${logo()}`],
+    ['11-new-story', 'framed' + suf, 'new tint', () => `${nb}
+      <div class="col" style="top:394px;bottom:394px"><div class="pad" style="flex:1 1 auto;display:flex;flex-direction:column;gap:0"><div class="ph" style="min-height:420px">${img('col-cctv.jpg', '50% 40%')}</div></div>${credit(cr)}
+      <div class="pad" style="margin-top:40px">${hl(420)}${st()}</div></div>${logo()}`],
+    ['11-new-story', 'fullbleed-band' + suf, 'new', () => `<div class="full">${img('col-desks.jpg', '40% 50%')}</div>${pt}
+      <div class="sheet bot" style="padding-bottom:394px;gap:32px"><span class="mono s" style="align-self:flex-end">${cr}</span>${hl(440)}${st()}</div>${logo()}`],
+    ['11-new-story', 'fullbleed-text-top' + suf, 'new', () => `<div class="full">${img('col-pylons.jpg', '45% 50%')}</div><div class="scrim top" style="height:70%"></div><div class="scrim foot"></div>${pt}
+      <div class="main top w" style="gap:32px">${hl(560)}${st('w')}<span class="mono s" style="align-self:flex-end">${cr}</span></div>${logo('w')}`],
+  ];
+};
+
 const BLANK = [
   ['01-cover', '', () => `${notch('00', '[Notch label]', '[Label]')}
     <div class="col" style="top:192px;bottom:190px"><div class="pad"><h1 class="hl xl">[HEADLINE]</h1></div>
@@ -553,6 +578,7 @@ for (const mode of ['light', 'dark']) {
   for (const [t, v, cls, html] of P) boards.push({ id: [t, mode, v].filter(Boolean).join('-'), cls: `${mode} ${/t0\d/.test(cls) ? '' : 't06 '}${cls}`, html });
   for (const [t, v, cls, html] of LP) boards.push({ id: [t, mode, v].filter(Boolean).join('-'), cls: `${mode} t06 link ${cls}`, html });
   for (const [t, v, cls, html] of BN) boards.push({ id: [t, mode, v].filter(Boolean).join('-'), cls: `${mode} ${/t0\d/.test(cls) ? '' : 't06 '}${/^1[1-4]/.test(t) ? 'story ' : ''}${t.startsWith('15') ? 'link ' : ''}${cls}`, html, bn: true });
+  for (const [t, v, cls, html] of [...storyMore('en'), ...storyMore('bn')]) boards.push({ id: [t, mode, v].filter(Boolean).join('-'), cls: `${mode} t06 story ${cls}`, html, bn: v.endsWith('-bn') });
   for (const [t, v, cls, html] of S) boards.push({ id: [t, mode, v].filter(Boolean).join('-'), cls: `${mode} t06 story ${cls}`, html });
 }
 for (const [t, cls, html] of BLANK) boards.push({ id: `${t}-light-blank`, cls: `light t06 ${cls}`, html });
