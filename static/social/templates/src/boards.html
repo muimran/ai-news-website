@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Second Order template boards</title>
+<!--
+  The source for every template image. Each board is drawn at its real size.
+  ?b=<file name>  shows one board alone (this is how the images are made)
+  ?guides=1       draws the 60 px safe zone and the 3:4 grid crop
+  ?m=1            measures each board's empty space into #out
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400..700&family=Anek+Latin:wght@400..700&family=Fraunces:opsz,wght@9..144,400..700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+Bengali:wght@500..700&display=block" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #6d6d6a; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 48px; padding: 48px; }
+  body.one { padding: 0; gap: 0; background: transparent; }
+  .wrap { display: flex; flex-direction: column; gap: 10px; }
+  .wrap > .id { color: #fff; font: 500 20px/1.2 'IBM Plex Mono', monospace; }
+  body.one .wrap > .id { display: none; }
+  #out { display: none; }
+
+  /* ---- the brand, exactly as the website has it ---- */
+  .light { --ground: #e7e5e0; --card: #fbfaf6; --ink: #161615; }
+  .dark { --ground: #0f0f0e; --card: #1b1b19; --ink: #ecebe5; }
+  .board {
+    --accent: #6a3fd1;
+    --mute: color-mix(in srgb, var(--ink) 60%, var(--card));
+    --hair: color-mix(in srgb, var(--ink) 14%, var(--card));
+    --M: 72px;     /* margin: every word starts here */
+    --B: 48px;     /* the strip of grey above the card, notch posts only */
+    --row: 84px;   /* the notch's row */
+    --top: 192px;  /* where words start under the row, and where they end above the logo */
+    --line: 2px;   /* the notch's lines */
+    position: relative; overflow: hidden; flex: none;
+    width: 1080px; height: 1350px;
+    background: var(--card); color: var(--ink);
+    font-family: 'Anek Latin', 'Anek Bangla', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .board.story { height: 1920px; --B: 250px; }
+  .board.link { width: 1200px; height: 630px; --M: 56px; --B: 32px; --row: 74px; }
+
+  /* ---- the notch: the corner cut away, the grey showing through ---- */
+  .band { position: absolute; left: 0; right: 0; top: 0; height: var(--B); background: var(--ground); }
+  .edge { position: absolute; left: 0; right: 0; top: var(--B); height: var(--line); background: var(--ink); }
+  .tabrow { position: absolute; left: 0; top: var(--B); height: var(--row); display: flex; align-items: center; gap: 28px; }
+  .tab { align-self: stretch; display: flex; align-items: center; gap: 21px; padding: 0 32px 0 var(--M); background: var(--ground); border-right: var(--line) solid var(--ink); border-bottom: var(--line) solid var(--ink); font-size: 34px; font-weight: 600; line-height: 1; white-space: nowrap; }
+  .tab b { display: grid; place-items: center; width: 56px; height: 48px; padding-top: 2px; background: var(--ink); color: var(--card); font-weight: 600; letter-spacing: 0; }
+  .tab .t { padding-top: 3px; }
+  .new .tab { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .new .edge { height: 6px; background: var(--accent); }
+  .link .tab { font-size: 30px; gap: 18px; padding-right: 28px; }
+  .link .tab b { width: 49px; height: 42px; }
+  .link.new .edge { height: 5px; }
+  /* where a notch would be, a slide inside a carousel counts instead */
+  .counter { position: absolute; left: var(--M); top: var(--B); height: var(--row); display: flex; align-items: center; }
+
+  /* ---- type ---- */
+  .mono { font-family: 'IBM Plex Mono', 'Anek Bangla', monospace; font-weight: 500; font-size: 28px; line-height: 1.3; letter-spacing: 0.07em; text-transform: uppercase; }
+  .mono.s { font-size: 24px; }
+  .hl { font-family: 'Fraunces', 'Noto Serif Bengali', Georgia, serif; font-weight: 560; line-height: 1.04; letter-spacing: -0.022em; font-optical-sizing: none; text-wrap: balance; }
+  .xl { font-size: 144px; font-variation-settings: 'opsz' 52; }
+  .l { font-size: 96px; font-variation-settings: 'opsz' 35; }
+  .m { font-size: 64px; line-height: 1.06; font-variation-settings: 'opsz' 23; }
+  .q { font-size: 80px; line-height: 1.1; font-variation-settings: 'opsz' 29; }
+  .num { font-size: 360px; line-height: 0.8; letter-spacing: -0.035em; font-variation-settings: 'opsz' 130; font-variant-numeric: lining-nums; }
+  .unit { font-size: 88px; font-variation-settings: 'opsz' 32; }
+  .txt { font-size: 40px; line-height: 1.4; font-weight: 400; text-wrap: pretty; }
+  .att { font-size: 34px; line-height: 1.3; font-weight: 600; }
+
+  /* ---- where things sit ---- */
+  .main { position: absolute; left: var(--M); right: var(--M); display: flex; flex-direction: column; gap: 36px; }
+  .main.top { top: var(--top); }
+  .main.bot { bottom: var(--top); }
+  .meta { position: absolute; left: var(--M); right: var(--M); bottom: var(--top); }
+  .logo { position: absolute; left: var(--M); bottom: var(--M); width: 240px; height: 60px; border: 2px dashed currentColor; display: grid; place-items: center; font: 500 22px/1 'IBM Plex Mono', monospace; letter-spacing: 0.07em; }
+  .swipe { position: absolute; right: var(--M); bottom: calc(var(--M) + 18px); width: 100px; height: 24px; overflow: visible; }
+  .cue { position: absolute; right: var(--M); bottom: var(--M); height: 60px; display: flex; align-items: center; }
+
+  /* ---- pictures ---- */
+  .pic { position: absolute; left: 0; right: 0; overflow: hidden; background: var(--ground); }
+  .pic img, .full img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .full { position: absolute; inset: 0; }
+  .credit { position: absolute; right: var(--M); }
+  .sheet { position: absolute; left: 0; right: 0; background: var(--card); padding: 0 var(--M); display: flex; flex-direction: column; gap: 28px; }
+  .sheet.top { top: 0; padding-top: var(--top); padding-bottom: 44px; }
+  .sheet.bot { bottom: 0; padding-top: 48px; padding-bottom: var(--top); }
+  .plate { position: absolute; background: var(--card); }
+  .cplate { left: 0; top: 0; height: calc(var(--B) + var(--row)); padding: var(--B) 28px 0 var(--M); display: flex; align-items: center; }
+  .lplate { left: 0; bottom: 0; width: 336px; height: 156px; }
+  .hole { position: absolute; left: 0; right: 0; background: var(--ground); display: grid; place-items: center; }
+
+  /* a screenshot: as captured, cropped clean, a thin ink line round it */
+  .shot { position: absolute; left: var(--M); right: var(--M); border: 3px solid var(--ink); background: #fff; overflow: hidden; }
+  .ui { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; color: #1d1d1f; padding: 44px 46px; display: flex; flex-direction: column; gap: 34px; font-size: 30px; line-height: 1.45; }
+  .ui-q { align-self: flex-end; max-width: 76%; background: #ececec; padding: 16px 26px; border-radius: 26px; }
+  .ui-a { max-width: 96%; }
+
+  /* ---- charts: ink for the point, the muted grey for the rest ---- */
+  .bars { display: flex; flex-direction: column; margin-top: 30px; }
+  .bars .row { display: grid; grid-template-columns: 300px minmax(0, 1fr); }
+  .bars .lab { align-self: center; font-size: 36px; font-weight: 600; line-height: 1.15; padding-right: 20px; }
+  .bars .val { display: flex; align-items: center; gap: 20px; padding: 20px 0; border-left: 2px solid var(--ink); font-size: 40px; font-weight: 600; }
+  .bars .bar { height: 76px; background: var(--mute); }
+  .bars .bar.key { background: var(--ink); }
+  .tl { position: relative; height: 540px; margin: 66px 0 0; }
+  .tl::before { content: ''; position: absolute; left: 7px; top: 0; height: 100%; width: 2px; background: var(--ink); }
+  .tl .pt { position: absolute; left: 0; display: flex; align-items: center; gap: 30px; transform: translateY(-50%); }
+  .tl .pt i { width: 16px; height: 16px; background: var(--ink); flex: none; }
+  .tl .pt .mono { width: 196px; flex: none; }
+  .tl .pt .ev { font-size: 40px; font-weight: 600; line-height: 1.2; }
+  .numrow { display: flex; align-items: baseline; gap: 28px; }
+
+  /* ---- checks ---- */
+  body.guides .board::after { content: ''; position: absolute; inset: 60px; border: 2px dashed #ff2d6f; pointer-events: none; z-index: 50; }
+  body.guides .board::before { content: ''; position: absolute; top: 0; bottom: 0; left: 34px; right: 34px; border-left: 2px solid #00a2ff; border-right: 2px solid #00a2ff; pointer-events: none; z-index: 50; }
+  body.guides .board.story::after { inset: 250px 60px; }
+</style>
+</head>
+<body>
+<pre id="out"></pre>
+<script>
+const IMG = 'img/';
+const DATE = '17 Nov 2026';
+const SHORT = 'AI’s next limit is electricity';
+const LONG = 'By 2030, the world’s data centres could use more electricity than Japan';
+const CREDIT = 'Illustrative image · Unsplash';
+
+const logo = `<div class="logo">[LOGO]</div>`;
+const swipe = `<svg class="swipe" viewBox="0 0 100 24" aria-hidden="true"><path d="M0 12H97M86 1.5L97.5 12L86 22.5" fill="none" stroke="currentColor" stroke-width="3"/></svg>`;
+const notch = (n, label, after = '') => `<div class="band"></div><div class="edge"></div><div class="tabrow"><span class="tab"><b>${n}</b><span class="t">${label}</span></span>${after ? `<span class="mono">${after}</span>` : ''}</div>`;
+const counter = (t) => `<div class="counter mono">${t}</div>`;
+const pic = (top, h, src, pos) => `<div class="pic" style="top:${top}px;height:${h}px"><img src="${IMG}${src}" alt="" style="object-position:${pos}"></div>`;
+const credit = (top, text = CREDIT) => `<div class="credit mono s" style="top:${top}px">${text}</div>`;
+
+const shot = (top) => `<div class="shot" style="top:${top}px"><div class="ui">
+  <div class="ui-q">How much electricity did this answer use?</div>
+  <div class="ui-a">There isn’t one exact figure. Estimates for a single text answer range from a fraction of a watt-hour to a few watt-hours, depending on the model, the hardware and the data centre that runs it.</div>
+</div></div>`;
+
+const bars = (rows) => `<div class="bars">${rows.map(([lab, v, key]) => `<div class="row"><span class="lab">${lab}</span><span class="val"><span class="bar${key ? ' key' : ''}" style="width:${Math.round(v / 45 * 500)}px"></span>${v}%</span></div>`).join('')}</div>`;
+const timeline = (pts) => `<div class="tl">${pts.map(([at, when, what]) => `<div class="pt" style="top:${(at * 100).toFixed(2)}%"><i></i><span class="mono">${when}</span><span class="ev">${what}</span></div>`).join('')}</div>`;
+
+/* [template, variant, extra classes, html] */
+const D = [
+  ['01-cover', 'text-top-short', '', () => `${notch('06', 'Explainer', DATE)}
+    <div class="main top"><h1 class="hl xl">${SHORT}</h1></div>
+    ${pic(726, 360, 'duo-pylons.jpg', '50% 78%')}${credit(1102)}${logo}${swipe}`],
+  ['01-cover', 'text-bottom-short', '', () => `${notch('06', 'Explainer', DATE)}
+    ${pic(168, 360, 'duo-pylons.jpg', '50% 78%')}${credit(544)}
+    <div class="main bot"><h1 class="hl xl">${SHORT}</h1></div>${logo}${swipe}`],
+  ['01-cover', 'text-bottom-long', '', () => `${notch('06', 'Explainer', DATE)}
+    <div class="main bot"><h1 class="hl l">${LONG}</h1></div>${logo}${swipe}`],
+  ['01-cover', 'new', 'new', () => `${notch('06', 'New', 'Explainer · ' + DATE)}
+    <div class="main top"><h1 class="hl l">${LONG}</h1></div>${logo}${swipe}`],
+
+  ['02-text', '', '', () => `${counter('02 / 06')}
+    <div class="main top"><h2 class="hl l">Every answer runs on a server</h2>
+    <p class="txt">Those servers sit in data centres, which used about 415 terawatt-hours of electricity in 2024, about 1.5% of the world’s total. The International Energy Agency expects that to more than double by 2030.</p></div>${logo}`],
+
+  ['03-image', 'split-text-top', '', () => `${counter('03 / 06')}
+    <div class="main top"><p class="txt">A data centre draws power every hour of the day, so where one can be built depends on the grid.</p></div>
+    ${pic(546, 540, 'duo-pylons.jpg', '50% 70%')}${credit(1102)}${logo}`],
+  ['03-image', 'split-text-bottom', '', () => `${counter('03 / 06')}
+    ${shot(168)}${credit(636, 'Screenshot · Chatbot answer, 12 Nov 2026')}
+    <div class="main bot"><p class="txt">Ask a chatbot what its answer cost in electricity and you get a range, not a number.</p></div>${logo}`],
+  ['03-image', 'fullbleed-text-top', '', () => `<div class="full"><img src="${IMG}duo-pylons.jpg" alt="" style="object-position:34% 50%"></div>
+    <div class="sheet top"><p class="txt">A data centre draws power every hour of the day, so where one can be built depends on the grid.</p><div class="mono s" style="align-self:flex-end">${CREDIT}</div></div>
+    ${counter('03 / 06')}<div class="plate lplate"></div>${logo}`],
+  ['03-image', 'fullbleed-text-bottom', '', () => `<div class="full"><img src="${IMG}duo-pylons.jpg" alt="" style="object-position:34% 50%"></div>
+    <div class="plate cplate"><span class="mono">03 / 06</span></div>
+    <div class="sheet bot"><p class="txt">A data centre draws power every hour of the day, so where one can be built depends on the grid.</p></div>
+    <div class="credit mono s" style="bottom:90px">${CREDIT}</div>${logo}`],
+
+  ['04-data', 'number', '', () => `${counter('04 / 06')}
+    <div class="main top" style="gap:44px"><div class="numrow"><span class="hl num">945</span><span class="hl unit">TWh</span></div>
+    <p class="txt">What the world’s data centres could use in 2030: slightly more electricity than Japan uses in a year today.</p></div>
+    <div class="meta mono">Source: IEA, Energy and AI (2025)</div>${logo}`],
+  ['04-data', 'chart', '', () => `${counter('04 / 06')}
+    <div class="main top"><h2 class="hl m">The US used almost half the world’s data-centre electricity in 2024</h2>
+    ${bars([['United States', 45, true], ['China', 25], ['Europe', 15], ['Rest of the world', 15]])}</div>
+    <div class="meta mono">Source: IEA, Energy and AI (2025)</div>${logo}`],
+  ['04-data', 'timeline', '', () => `${counter('04 / 06')}
+    <div class="main top"><h2 class="hl m">ChatGPT went from launch to 800 million weekly users in under three years</h2>
+    ${timeline([[0, 'Nov 2022', 'Launch'], [12 / 35, 'Nov 2023', '100 million a week'], [27 / 35, 'Feb 2025', '400 million a week'], [1, 'Oct 2025', '800 million a week']])}</div>
+    <div class="meta mono">Source: OpenAI</div>${logo}`],
+
+  ['05-quote', '', '', () => `${counter('05 / 06')}
+    <div class="main top"><blockquote class="hl q">“The building is ours on paper. Everything that makes it valuable belongs to someone else.”</blockquote>
+    <p class="att">An engineer who has worked on two of the sites</p></div>
+    <div class="meta mono">Source: Second Order investigation, Sep 2026</div>${logo}`],
+
+  ['06-closing', 'read', '', () => `${notch('06', 'Explainer')}
+    <div class="main bot"><h2 class="hl xl">Read the full story</h2></div>
+    <div class="cue mono">Link in bio</div>${logo}`],
+  ['06-closing', 'question', '', () => `${counter('06 / 06')}
+    <div class="main bot"><h2 class="hl l">Should data centres pay more for the power they use?</h2></div>
+    <div class="cue mono">Tell us in the comments</div>${logo}`],
+];
+
+/* one blank of each, with the placeholders a newsroom fills in */
+const BLANK = [
+  ['01-cover', () => `${notch('00', '[Notch label]', '[Label]')}
+    <div class="main top"><h1 class="hl xl">[HEADLINE]</h1></div>
+    <div class="hole" style="top:726px;height:360px"><span class="mono">[IMAGE] · optional</span></div>${credit(1102, 'Illustrative image · [Source]')}${logo}${swipe}`],
+  ['02-text', () => `${counter('02 / 06')}
+    <div class="main top"><h2 class="hl l">[HEADLINE]</h2><p class="txt">[TEXT] Up to about 40 words in all, heading included. One idea per slide.</p></div>${logo}`],
+  ['03-image', () => `${counter('03 / 06')}
+    <div class="main top"><p class="txt">[TEXT] A short caption, one or two lines.</p></div>
+    <div class="hole" style="top:546px;height:540px"><span class="mono">[IMAGE] or screenshot</span></div>${credit(1102, 'Illustrative image · [Source]')}${logo}`],
+  ['04-data', () => `${counter('04 / 06')}
+    <div class="main top" style="gap:44px"><div class="hl" style="font-size:200px;line-height:0.9;font-variation-settings:'opsz' 72">[NUMBER]</div><p class="txt">[TEXT] What the number means, in one sentence. Or a chart, or a timeline, in this space.</p></div>
+    <div class="meta mono">Source: [Source]</div>${logo}`],
+  ['05-quote', () => `${counter('05 / 06')}
+    <div class="main top"><blockquote class="hl q">“[QUOTE]”</blockquote><p class="att">[SPEAKER, ROLE]</p></div>
+    <div class="meta mono">Source: [Source]</div>${logo}`],
+  ['06-closing', () => `${notch('00', '[Notch label]')}
+    <div class="main bot"><h2 class="hl xl">Read the full story</h2></div><div class="cue mono">Link in bio</div>${logo}`],
+];
+
+/* two small boards that show the notch on the other formats, for the style sheet */
+const SPEC = [
+  ['spec-story', 'story light', () => `${notch('06', 'New story', DATE)}`],
+  ['spec-story-new', 'story light new', () => `${notch('06', 'New', DATE)}`],
+  ['spec-link', 'link light', () => `${notch('06', 'Explainer', DATE)}`],
+  ['spec-link-dark', 'link dark', () => `${notch('06', 'Explainer', DATE)}`],
+];
+
+const boards = [];
+for (const mode of ['light', 'dark'])
+  for (const [t, v, cls, html] of D)
+    boards.push({ id: [t, mode, v].filter(Boolean).join('-'), cls: `${mode} ${cls}`, html });
+for (const [t, html] of BLANK) boards.push({ id: `${t}-light-blank`, cls: 'light', html });
+for (const [id, cls, html] of SPEC) boards.push({ id, cls, html });
+
+const q = new URLSearchParams(location.search);
+const only = q.get('b');
+if (q.get('guides')) document.body.classList.add('guides');
+if (only) document.body.classList.add('one');
+for (const b of boards) {
+  if (only && b.id !== only) continue;
+  const w = document.createElement('div');
+  w.className = 'wrap';
+  w.innerHTML = `<div class="id">${b.id}</div><div class="board ${b.cls}" id="${b.id}">${b.html()}</div>`;
+  document.body.append(w);
+}
+
+/* how much of a board is left empty: words by their lines, pictures and marks by their boxes */
+function empty(board) {
+  const r0 = board.getBoundingClientRect(), S = 6;
+  const cols = Math.ceil(r0.width / S), rows = Math.ceil(r0.height / S);
+  const g = new Uint8Array(cols * rows);
+  const mark = (r) => {
+    const x0 = Math.max(0, Math.floor((r.left - r0.left) / S)), x1 = Math.min(cols, Math.ceil((r.right - r0.left) / S));
+    const y0 = Math.max(0, Math.floor((r.top - r0.top) / S)), y1 = Math.min(rows, Math.ceil((r.bottom - r0.top) / S));
+    for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) g[y * cols + x] = 1;
+  };
+  const tw = document.createTreeWalker(board, NodeFilter.SHOW_TEXT);
+  while (tw.nextNode()) {
+    const n = tw.currentNode;
+    if (!n.textContent.trim()) continue;
+    const range = document.createRange();
+    range.selectNodeContents(n);
+    for (const r of range.getClientRects()) mark(r);
+  }
+  board.querySelectorAll('img, svg, .tab, .logo, .bar, .shot, .hole, .tl i, .pic').forEach((e) => mark(e.getBoundingClientRect()));
+  let n = 0;
+  for (const v of g) n += v;
+  return Math.round(100 * (1 - n / g.length));
+}
+if (q.get('m')) {
+  document.fonts.ready.then(() => {
+    const res = {};
+    document.querySelectorAll('.board').forEach((b) => (res[b.id] = empty(b)));
+    document.getElementById('out').textContent = JSON.stringify(res);
+  });
+}
+</script>
+</body>
+</html>
