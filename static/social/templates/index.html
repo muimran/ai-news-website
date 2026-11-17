@@ -108,6 +108,7 @@
   @media (max-width: 760px) { .typerow { grid-template-columns: minmax(0, 1fr); } }
   .typerow .imgs3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; }
   .typerow h4 { font-size: 1.1rem; }
+  .sizes { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(46%, 8.5rem), 1fr)); gap: 0.75rem 0.5rem; }
   .pdfs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 1rem; }
   .pdfs a { display: flex; flex-direction: column; gap: 0.3rem; padding: 1rem; border: 1px solid var(--ink); background: var(--ground); text-decoration: none; }
   .pdfs a:hover b { text-decoration: underline; }
@@ -142,7 +143,7 @@
 <body>
 <div class="bar">
   <span class="name">Second Order</span>
-  <nav><a href="#style">Style sheet</a><a href="#templates">Carousel 1–6</a><a href="#singles">Singles 7–10</a><a href="#stories">Stories 11–14</a><a href="#blanks">Blanks</a><a href="#link">Link 15</a><a href="#type">Type</a><a href="#bangla">Bangla</a><a href="#linkedin">PDF</a><a href="#grid">Grid</a></nav>
+  <nav><a href="#style">Style sheet</a><a href="#sizes">Lengths</a><a href="#templates">Carousel 1–6</a><a href="#singles">Singles 7–10</a><a href="#stories">Stories 11–14</a><a href="#blanks">Blanks</a><a href="#link">Link 15</a><a href="#type">Type</a><a href="#bangla">Bangla</a><a href="#linkedin">PDF</a><a href="#grid">Grid</a></nav>
   <label class="switch"><input type="checkbox" id="guides"> Safe zones</label>
 </div>
 <main>
@@ -156,28 +157,32 @@
       <li>Photos are in full colour. Colour comes only from the website’s two accent families, orange and indigo, paired per topic as the site’s illustrations pair them.</li>
       <li>Carousels carry a row of dots, one per slide, the current one filled in the topic’s tone (purple on a new story).</li>
       <li>Pictures are bigger and come in more shapes: edge to edge at the top or bottom, kept whole at any shape, or filling the slide with the words on it.</li>
-      <li>Single posts, templates 7 to 10, are their own bolder family: quote cards, image posts, statements, corrections and big numbers.</li>
+      <li>Single posts, templates 7 to 10, are their own bolder family: quote cards, image posts, statements and big numbers.</li>
       <li>Big numbers are smaller (220 px) and set in Anek Latin, not the serif; they can sit on a solid block of the colour, the way the FT sets them.</li>
       <li>No slide is only black and white or only grey and black: every one, light or dark, carries its topic’s tone.</li>
       <li>The stories, templates 11 to 14, are added.</li>
     </ul>
     <p class="status label">For approval · Style sheet, templates 1–15, Bangla, LinkedIn PDF</p>
-    <p><a href="second-order-templates.zip?v=a467876f">Download all 166 images, English and Bangla (ZIP)</a></p>
+    <p><a href="second-order-templates.zip?v=5075b172">Download all 166 images, English and Bangla (ZIP)</a></p>
     <p class="legend"><span>Safe zone: 60 px on feed posts, 250 px top and bottom on stories</span><span>Instagram's 3:4 grid crop</span></p>
   </div>
 
   <section class="tray" id="type">
     <div class="tabs"><span class="tab"><b>0</b>Type options</span><span class="label more">Choose one</span></div>
     <div class="head">
-      <h2>Six English typefaces, the same three posts</h2>
-      <p>Only the English type changes here; colours, layout and the Bangla fonts stay the same. All six are free on Google Fonts. Whichever you choose should also go on the website, so the brand keeps one voice. The two sans options also replace the text font; the serif options keep Anek Latin, which matches Anek Bangla.</p>
+      <h2>Clean typefaces and italics, the same three posts</h2>
+      <p>Only the English type changes here; colours, layout and the Bangla fonts stay the same. Six clean sans faces, each used for headlines, text and numbers, then three ways to bring in italics. All are free on Google Fonts. Whichever you choose should also go on the website, so the brand keeps one voice.</p>
     </div>
-      <div class="typerow"><div><p class="label">Now, and on the website</p><h4>Fraunces</h4><p class="rule">A soft, warm serif with round, ball-ended letters. Characterful, a little quirky; this is the website’s headline face today.</p></div><div class="imgs3"><a class="shot feed" href="img/type/01-cover-light-text-top-short-type-fraunces.jpg?v=d483a17f"><img src="img/type/01-cover-light-text-top-short-type-fraunces.jpg?v=d483a17f" alt="01-cover-light-text-top-short set in Fraunces" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/10-text-light-long-type-fraunces.jpg?v=9bf07bbc"><img src="img/type/10-text-light-long-type-fraunces.jpg?v=9bf07bbc" alt="10-text-light-long set in Fraunces" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/09-quote-light-type-fraunces.jpg?v=f0232505"><img src="img/type/09-quote-light-type-fraunces.jpg?v=f0232505" alt="09-quote-light set in Fraunces" loading="lazy" width="1080" height="1350"></a></div></div>
-      <div class="typerow"><div><p class="label">Classic news serif</p><h4>Newsreader</h4><p class="rule">Drawn by Production Type for reading news on screens. Sturdier and more traditional, less quirky: it reads like a newspaper.</p></div><div class="imgs3"><a class="shot feed" href="img/type/01-cover-light-text-top-short-type-newsreader.jpg?v=5ab110d2"><img src="img/type/01-cover-light-text-top-short-type-newsreader.jpg?v=5ab110d2" alt="01-cover-light-text-top-short set in Newsreader" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/10-text-light-long-type-newsreader.jpg?v=6656594c"><img src="img/type/10-text-light-long-type-newsreader.jpg?v=6656594c" alt="10-text-light-long set in Newsreader" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/09-quote-light-type-newsreader.jpg?v=9c193c85"><img src="img/type/09-quote-light-type-newsreader.jpg?v=9c193c85" alt="09-quote-light set in Newsreader" loading="lazy" width="1080" height="1350"></a></div></div>
-      <div class="typerow"><div><p class="label">Narrow and elegant</p><h4>Instrument Serif</h4><p class="rule">A condensed display serif with one weight. Fits more words per line and feels like a magazine cover; best at large sizes.</p></div><div class="imgs3"><a class="shot feed" href="img/type/01-cover-light-text-top-short-type-instrument.jpg?v=9f9af9cc"><img src="img/type/01-cover-light-text-top-short-type-instrument.jpg?v=9f9af9cc" alt="01-cover-light-text-top-short set in Instrument Serif" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/10-text-light-long-type-instrument.jpg?v=aaa76f3a"><img src="img/type/10-text-light-long-type-instrument.jpg?v=aaa76f3a" alt="10-text-light-long set in Instrument Serif" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/09-quote-light-type-instrument.jpg?v=08856b08"><img src="img/type/09-quote-light-type-instrument.jpg?v=08856b08" alt="09-quote-light set in Instrument Serif" loading="lazy" width="1080" height="1350"></a></div></div>
-      <div class="typerow"><div><p class="label">Plain and sturdy</p><h4>Source Serif 4</h4><p class="rule">Adobe’s open-source text serif. Very legible and neutral, quietly authoritative, with little personality of its own.</p></div><div class="imgs3"><a class="shot feed" href="img/type/01-cover-light-text-top-short-type-sourceserif.jpg?v=6c98dc26"><img src="img/type/01-cover-light-text-top-short-type-sourceserif.jpg?v=6c98dc26" alt="01-cover-light-text-top-short set in Source Serif 4" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/10-text-light-long-type-sourceserif.jpg?v=dc751d63"><img src="img/type/10-text-light-long-type-sourceserif.jpg?v=dc751d63" alt="10-text-light-long set in Source Serif 4" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/09-quote-light-type-sourceserif.jpg?v=d66c6c7c"><img src="img/type/09-quote-light-type-sourceserif.jpg?v=d66c6c7c" alt="09-quote-light set in Source Serif 4" loading="lazy" width="1080" height="1350"></a></div></div>
-      <div class="typerow"><div><p class="label">A newspaper sans</p><h4>Schibsted Grotesk</h4><p class="rule">Made for the Schibsted newspapers. Modern and direct; headlines, text and numbers all in one family, so the posts lose their serif voice.</p></div><div class="imgs3"><a class="shot feed" href="img/type/01-cover-light-text-top-short-type-schibsted.jpg?v=97464bd5"><img src="img/type/01-cover-light-text-top-short-type-schibsted.jpg?v=97464bd5" alt="01-cover-light-text-top-short set in Schibsted Grotesk" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/10-text-light-long-type-schibsted.jpg?v=7cd118a5"><img src="img/type/10-text-light-long-type-schibsted.jpg?v=7cd118a5" alt="10-text-light-long set in Schibsted Grotesk" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/09-quote-light-type-schibsted.jpg?v=dd475b9e"><img src="img/type/09-quote-light-type-schibsted.jpg?v=dd475b9e" alt="09-quote-light set in Schibsted Grotesk" loading="lazy" width="1080" height="1350"></a></div></div>
-      <div class="typerow"><div><p class="label">Bold, techy sans</p><h4>Bricolage Grotesque</h4><p class="rule">A condensed, characterful grotesque. Energetic and tech-flavoured; the most different from the website today.</p></div><div class="imgs3"><a class="shot feed" href="img/type/01-cover-light-text-top-short-type-bricolage.jpg?v=4ce92fe2"><img src="img/type/01-cover-light-text-top-short-type-bricolage.jpg?v=4ce92fe2" alt="01-cover-light-text-top-short set in Bricolage Grotesque" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/10-text-light-long-type-bricolage.jpg?v=540e0256"><img src="img/type/10-text-light-long-type-bricolage.jpg?v=540e0256" alt="10-text-light-long set in Bricolage Grotesque" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/09-quote-light-type-bricolage.jpg?v=f4ef5d74"><img src="img/type/09-quote-light-type-bricolage.jpg?v=f4ef5d74" alt="09-quote-light set in Bricolage Grotesque" loading="lazy" width="1080" height="1350"></a></div></div>
+      <div class="typerow"><div><p class="label">Now, for reference</p><h4>Fraunces</h4><p class="rule">The website’s serif today, kept here only to compare against.</p></div><div class="imgs3"><a class="shot feed" href="img/type/01-cover-light-text-top-short-type-fraunces.jpg?v=d483a17f"><img src="img/type/01-cover-light-text-top-short-type-fraunces.jpg?v=d483a17f" alt="01-cover-light-text-top-short set in Fraunces" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/10-text-light-long-type-fraunces.jpg?v=73f4ae91"><img src="img/type/10-text-light-long-type-fraunces.jpg?v=73f4ae91" alt="10-text-light-long set in Fraunces" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/09-quote-light-type-fraunces.jpg?v=f0232505"><img src="img/type/09-quote-light-type-fraunces.jpg?v=f0232505" alt="09-quote-light set in Fraunces" loading="lazy" width="1080" height="1350"></a></div></div>
+      <div class="typerow"><div><p class="label">Clean · neutral</p><h4>Inter Tight</h4><p class="rule">The tighter cut of Inter, the most used interface sans. Plain, even, very legible; nothing in it calls attention to itself.</p></div><div class="imgs3"><a class="shot feed" href="img/type/01-cover-light-text-top-short-type-intertight.jpg?v=8debaa75"><img src="img/type/01-cover-light-text-top-short-type-intertight.jpg?v=8debaa75" alt="01-cover-light-text-top-short set in Inter Tight" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/10-text-light-long-type-intertight.jpg?v=668edfad"><img src="img/type/10-text-light-long-type-intertight.jpg?v=668edfad" alt="10-text-light-long set in Inter Tight" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/09-quote-light-type-intertight.jpg?v=0d2c4f78"><img src="img/type/09-quote-light-type-intertight.jpg?v=0d2c4f78" alt="09-quote-light set in Inter Tight" loading="lazy" width="1080" height="1350"></a></div></div>
+      <div class="typerow"><div><p class="label">Clean · technical</p><h4>Geist</h4><p class="rule">Vercel’s sans: geometric, crisp, a little technical. Clean with a tech accent, which suits an AI newsroom.</p></div><div class="imgs3"><a class="shot feed" href="img/type/01-cover-light-text-top-short-type-geist.jpg?v=7b065e38"><img src="img/type/01-cover-light-text-top-short-type-geist.jpg?v=7b065e38" alt="01-cover-light-text-top-short set in Geist" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/10-text-light-long-type-geist.jpg?v=1e77744a"><img src="img/type/10-text-light-long-type-geist.jpg?v=1e77744a" alt="10-text-light-long set in Geist" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/09-quote-light-type-geist.jpg?v=d68e6ecc"><img src="img/type/09-quote-light-type-geist.jpg?v=d68e6ecc" alt="09-quote-light set in Geist" loading="lazy" width="1080" height="1350"></a></div></div>
+      <div class="typerow"><div><p class="label">Clean · engineered</p><h4>IBM Plex Sans</h4><p class="rule">The sans sister of the Plex Mono we already use for labels, so the two belong together. Slightly mechanical, very sturdy.</p></div><div class="imgs3"><a class="shot feed" href="img/type/01-cover-light-text-top-short-type-plexsans.jpg?v=b6dd4763"><img src="img/type/01-cover-light-text-top-short-type-plexsans.jpg?v=b6dd4763" alt="01-cover-light-text-top-short set in IBM Plex Sans" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/10-text-light-long-type-plexsans.jpg?v=d88063d2"><img src="img/type/10-text-light-long-type-plexsans.jpg?v=d88063d2" alt="10-text-light-long set in IBM Plex Sans" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/09-quote-light-type-plexsans.jpg?v=7167f705"><img src="img/type/09-quote-light-type-plexsans.jpg?v=7167f705" alt="09-quote-light set in IBM Plex Sans" loading="lazy" width="1080" height="1350"></a></div></div>
+      <div class="typerow"><div><p class="label">Clean · friendly</p><h4>DM Sans</h4><p class="rule">A low-contrast geometric sans with round shapes. Clean and warm, approachable rather than stern.</p></div><div class="imgs3"><a class="shot feed" href="img/type/01-cover-light-text-top-short-type-dmsans.jpg?v=6d532076"><img src="img/type/01-cover-light-text-top-short-type-dmsans.jpg?v=6d532076" alt="01-cover-light-text-top-short set in DM Sans" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/10-text-light-long-type-dmsans.jpg?v=a89a870d"><img src="img/type/10-text-light-long-type-dmsans.jpg?v=a89a870d" alt="10-text-light-long set in DM Sans" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/09-quote-light-type-dmsans.jpg?v=0364b385"><img src="img/type/09-quote-light-type-dmsans.jpg?v=0364b385" alt="09-quote-light set in DM Sans" loading="lazy" width="1080" height="1350"></a></div></div>
+      <div class="typerow"><div><p class="label">Clean · editorial</p><h4>Instrument Sans</h4><p class="rule">A refined grotesque with narrow shapes, made for editorial use. Clean, with a little more elegance than Inter.</p></div><div class="imgs3"><a class="shot feed" href="img/type/01-cover-light-text-top-short-type-instrumentsans.jpg?v=600cfd0a"><img src="img/type/01-cover-light-text-top-short-type-instrumentsans.jpg?v=600cfd0a" alt="01-cover-light-text-top-short set in Instrument Sans" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/10-text-light-long-type-instrumentsans.jpg?v=208eb91b"><img src="img/type/10-text-light-long-type-instrumentsans.jpg?v=208eb91b" alt="10-text-light-long set in Instrument Sans" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/09-quote-light-type-instrumentsans.jpg?v=5732f9fc"><img src="img/type/09-quote-light-type-instrumentsans.jpg?v=5732f9fc" alt="09-quote-light set in Instrument Sans" loading="lazy" width="1080" height="1350"></a></div></div>
+      <div class="typerow"><div><p class="label">Clean · open</p><h4>Figtree</h4><p class="rule">An open, rounded geometric sans. Very easy to read on a phone, light in tone.</p></div><div class="imgs3"><a class="shot feed" href="img/type/01-cover-light-text-top-short-type-figtree.jpg?v=99b764b6"><img src="img/type/01-cover-light-text-top-short-type-figtree.jpg?v=99b764b6" alt="01-cover-light-text-top-short set in Figtree" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/10-text-light-long-type-figtree.jpg?v=31f11eeb"><img src="img/type/10-text-light-long-type-figtree.jpg?v=31f11eeb" alt="10-text-light-long set in Figtree" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/09-quote-light-type-figtree.jpg?v=1169d3b7"><img src="img/type/09-quote-light-type-figtree.jpg?v=1169d3b7" alt="09-quote-light set in Figtree" loading="lazy" width="1080" height="1350"></a></div></div>
+      <div class="typerow"><div><p class="label">Italic · quotes</p><h4>Inter Tight, italic quotes</h4><p class="rule">Inter Tight for headlines, its italic for quotes and highlighted figures, so a quote reads as spoken.</p></div><div class="imgs3"><a class="shot feed" href="img/type/01-cover-light-text-top-short-type-intertightitalic.jpg?v=8debaa75"><img src="img/type/01-cover-light-text-top-short-type-intertightitalic.jpg?v=8debaa75" alt="01-cover-light-text-top-short set in Inter Tight, italic quotes" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/10-text-light-long-type-intertightitalic.jpg?v=50f9eaba"><img src="img/type/10-text-light-long-type-intertightitalic.jpg?v=50f9eaba" alt="10-text-light-long set in Inter Tight, italic quotes" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/09-quote-light-type-intertightitalic.jpg?v=f4e788a5"><img src="img/type/09-quote-light-type-intertightitalic.jpg?v=f4e788a5" alt="09-quote-light set in Inter Tight, italic quotes" loading="lazy" width="1080" height="1350"></a></div></div>
+      <div class="typerow"><div><p class="label">Italic · headlines</p><h4>IBM Plex Sans Italic</h4><p class="rule">Every headline in Plex Sans italic. Distinctive and energetic; it leans forward like a news ticker.</p></div><div class="imgs3"><a class="shot feed" href="img/type/01-cover-light-text-top-short-type-plexitalic.jpg?v=d34a18ee"><img src="img/type/01-cover-light-text-top-short-type-plexitalic.jpg?v=d34a18ee" alt="01-cover-light-text-top-short set in IBM Plex Sans Italic" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/10-text-light-long-type-plexitalic.jpg?v=91a25c64"><img src="img/type/10-text-light-long-type-plexitalic.jpg?v=91a25c64" alt="10-text-light-long set in IBM Plex Sans Italic" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/09-quote-light-type-plexitalic.jpg?v=327cc1c7"><img src="img/type/09-quote-light-type-plexitalic.jpg?v=327cc1c7" alt="09-quote-light set in IBM Plex Sans Italic" loading="lazy" width="1080" height="1350"></a></div></div>
+      <div class="typerow"><div><p class="label">Italic · serif accent</p><h4>Instrument Sans + Serif italic</h4><p class="rule">Clean Instrument Sans headlines, with quotes and key figures in Instrument Serif italic: clean overall, one elegant accent.</p></div><div class="imgs3"><a class="shot feed" href="img/type/01-cover-light-text-top-short-type-serifitalic.jpg?v=600cfd0a"><img src="img/type/01-cover-light-text-top-short-type-serifitalic.jpg?v=600cfd0a" alt="01-cover-light-text-top-short set in Instrument Sans + Serif italic" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/10-text-light-long-type-serifitalic.jpg?v=01bbf89e"><img src="img/type/10-text-light-long-type-serifitalic.jpg?v=01bbf89e" alt="10-text-light-long set in Instrument Sans + Serif italic" loading="lazy" width="1080" height="1350"></a><a class="shot feed" href="img/type/09-quote-light-type-serifitalic.jpg?v=36351a20"><img src="img/type/09-quote-light-type-serifitalic.jpg?v=36351a20" alt="09-quote-light set in Instrument Sans + Serif italic" loading="lazy" width="1080" height="1350"></a></div></div>
   </section>
 
   <section class="tray" id="style">
@@ -272,7 +277,7 @@
         </table></div>
         <ul>
           <li>The notch is a solid tab cut into the top-left corner, running from the top edge, with the date beside it: the website’s notch at twice its size, without the line across the top. It takes the topic’s wash; on a slide that is already the wash, the page’s grey. Its number box starts where the words start, 72 px in.</li>
-          <li>The notch names the type (Data, Quote, Explainer, Investigation, Correction), so the date sits beside it. On a NEW post the notch says New and the type moves into the label line.</li>
+          <li>The notch names the type (Data, Quote, Explainer, Investigation), so the date sits beside it. On a NEW post the notch says New and the type moves into the label line.</li>
           <li>The same tab on a photo that fills the slide, so the notch looks the same wherever it appears. On a NEW post it turns purple, with white words.</li>
           <li>Dots: 24 px circles, 16 px apart, bottom-right on every carousel slide, level with the logo. Open circles in Ink; the current slide filled in the topic’s accent, or purple on a new story. On a photo they turn white with the current one in the dark-mode accent. The cover adds an arrow after them. They replace the slide counter.</li>
         </ul>
@@ -331,6 +336,28 @@
     </div>
   </section>
 
+  <section class="tray" id="sizes">
+    <div class="tabs"><span class="tab"><b>A2</b>Headline lengths</span><span class="label more">Planned for long headlines</span></div>
+    <div class="head">
+      <h2>Real headlines are long, so the size steps down</h2>
+      <p>Headlines will often run to 10–16 words. Each headline steps down a fixed scale until it fits its space; where there is a photo, the photo gives up room first, down to a minimum. Tested here with four real lengths, English and Bangla.</p>
+    </div>
+    <div class="scroll"><table>
+      <tr><th>Headline length (characters, with spaces)</th><th>With photo</th><th>No photo</th><th>Bangla, with photo</th><th>Lines</th></tr>
+      <tr><td>Up to 35</td><td class="n">144 px</td><td class="n">144 px</td><td class="n">118 px</td><td class="n">2</td></tr>
+      <tr><td>36 to 65</td><td class="n">120 px</td><td class="n">120 px</td><td class="n">100 px</td><td class="n">3–4</td></tr>
+      <tr><td>66 to 100</td><td class="n">88 px</td><td class="n">104 px</td><td class="n">86 px</td><td class="n">4–6</td></tr>
+      <tr><td>101 to 130</td><td class="n">76 px</td><td class="n">88 px</td><td class="n">74 px</td><td class="n">5–7</td></tr>
+      <tr><td>Over 130</td><td colspan="4">Too long for a post: cut the headline. 64 px (56 in Bangla) is the last resort, never smaller.</td></tr>
+    </table></div>
+      <h3 style="margin-top:1rem">Cover with photo</h3><p class="rule">The photo shrinks first, down to 320 px; then the headline steps down.</p>
+      <div class="sizes"><figure class="one"><a class="shot feed" href="img/size/sz-cover-photo-s-en.jpg?v=5a55d129"><img src="img/size/sz-cover-photo-s-en.jpg?v=5a55d129" alt="Cover with photo, Short, 30 characters, English" loading="lazy" width="1080" height="1350"></a><figcaption><p class="files">EN · Short, 30 characters</p></figcaption></figure><figure class="one"><a class="shot feed" href="img/size/sz-cover-photo-m-en.jpg?v=db30dba2"><img src="img/size/sz-cover-photo-m-en.jpg?v=db30dba2" alt="Cover with photo, Medium, 62, English" loading="lazy" width="1080" height="1350"></a><figcaption><p class="files">EN · Medium, 62</p></figcaption></figure><figure class="one"><a class="shot feed" href="img/size/sz-cover-photo-l-en.jpg?v=e1654989"><img src="img/size/sz-cover-photo-l-en.jpg?v=e1654989" alt="Cover with photo, Long, 96, English" loading="lazy" width="1080" height="1350"></a><figcaption><p class="files">EN · Long, 96</p></figcaption></figure><figure class="one"><a class="shot feed" href="img/size/sz-cover-photo-xl-en.jpg?v=e266d1a5"><img src="img/size/sz-cover-photo-xl-en.jpg?v=e266d1a5" alt="Cover with photo, Very long, 121, English" loading="lazy" width="1080" height="1350"></a><figcaption><p class="files">EN · Very long, 121</p></figcaption></figure><figure class="one"><a class="shot feed" href="img/size/sz-cover-photo-s-bn.jpg?v=0b53617f"><img src="img/size/sz-cover-photo-s-bn.jpg?v=0b53617f" alt="Cover with photo, Short, 30 characters, Bangla" loading="lazy" width="1080" height="1350"></a><figcaption><p class="files">BN · Short, 30 characters</p></figcaption></figure><figure class="one"><a class="shot feed" href="img/size/sz-cover-photo-m-bn.jpg?v=7d69c360"><img src="img/size/sz-cover-photo-m-bn.jpg?v=7d69c360" alt="Cover with photo, Medium, 62, Bangla" loading="lazy" width="1080" height="1350"></a><figcaption><p class="files">BN · Medium, 62</p></figcaption></figure><figure class="one"><a class="shot feed" href="img/size/sz-cover-photo-l-bn.jpg?v=c0290c9c"><img src="img/size/sz-cover-photo-l-bn.jpg?v=c0290c9c" alt="Cover with photo, Long, 96, Bangla" loading="lazy" width="1080" height="1350"></a><figcaption><p class="files">BN · Long, 96</p></figcaption></figure><figure class="one"><a class="shot feed" href="img/size/sz-cover-photo-xl-bn.jpg?v=87245816"><img src="img/size/sz-cover-photo-xl-bn.jpg?v=87245816" alt="Cover with photo, Very long, 121, Bangla" loading="lazy" width="1080" height="1350"></a><figcaption><p class="files">BN · Very long, 121</p></figcaption></figure></div>
+      <h3 style="margin-top:1rem">Cover, no photo</h3><p class="rule">More room, so the headline stays a step larger at each length.</p>
+      <div class="sizes"><figure class="one"><a class="shot feed" href="img/size/sz-cover-plain-s-en.jpg?v=c004f87a"><img src="img/size/sz-cover-plain-s-en.jpg?v=c004f87a" alt="Cover, no photo, Short, 30 characters, English" loading="lazy" width="1080" height="1350"></a><figcaption><p class="files">EN · Short, 30 characters</p></figcaption></figure><figure class="one"><a class="shot feed" href="img/size/sz-cover-plain-m-en.jpg?v=9831057f"><img src="img/size/sz-cover-plain-m-en.jpg?v=9831057f" alt="Cover, no photo, Medium, 62, English" loading="lazy" width="1080" height="1350"></a><figcaption><p class="files">EN · Medium, 62</p></figcaption></figure><figure class="one"><a class="shot feed" href="img/size/sz-cover-plain-l-en.jpg?v=daa29930"><img src="img/size/sz-cover-plain-l-en.jpg?v=daa29930" alt="Cover, no photo, Long, 96, English" loading="lazy" width="1080" height="1350"></a><figcaption><p class="files">EN · Long, 96</p></figcaption></figure><figure class="one"><a class="shot feed" href="img/size/sz-cover-plain-xl-en.jpg?v=a895c458"><img src="img/size/sz-cover-plain-xl-en.jpg?v=a895c458" alt="Cover, no photo, Very long, 121, English" loading="lazy" width="1080" height="1350"></a><figcaption><p class="files">EN · Very long, 121</p></figcaption></figure><figure class="one"><a class="shot feed" href="img/size/sz-cover-plain-s-bn.jpg?v=6e004ee6"><img src="img/size/sz-cover-plain-s-bn.jpg?v=6e004ee6" alt="Cover, no photo, Short, 30 characters, Bangla" loading="lazy" width="1080" height="1350"></a><figcaption><p class="files">BN · Short, 30 characters</p></figcaption></figure><figure class="one"><a class="shot feed" href="img/size/sz-cover-plain-m-bn.jpg?v=ad622db5"><img src="img/size/sz-cover-plain-m-bn.jpg?v=ad622db5" alt="Cover, no photo, Medium, 62, Bangla" loading="lazy" width="1080" height="1350"></a><figcaption><p class="files">BN · Medium, 62</p></figcaption></figure><figure class="one"><a class="shot feed" href="img/size/sz-cover-plain-l-bn.jpg?v=bcf24b32"><img src="img/size/sz-cover-plain-l-bn.jpg?v=bcf24b32" alt="Cover, no photo, Long, 96, Bangla" loading="lazy" width="1080" height="1350"></a><figcaption><p class="files">BN · Long, 96</p></figcaption></figure><figure class="one"><a class="shot feed" href="img/size/sz-cover-plain-xl-bn.jpg?v=96dd510c"><img src="img/size/sz-cover-plain-xl-bn.jpg?v=96dd510c" alt="Cover, no photo, Very long, 121, Bangla" loading="lazy" width="1080" height="1350"></a><figcaption><p class="files">BN · Very long, 121</p></figcaption></figure></div>
+      <h3 style="margin-top:1rem">New story</h3><p class="rule">The photo shrinks first, down to 360 px; the sticker space stays.</p>
+      <div class="sizes"><figure class="one"><a class="shot story" href="img/size/sz-story-s-en.jpg?v=91cc8cb9"><img src="img/size/sz-story-s-en.jpg?v=91cc8cb9" alt="New story, Short, 30 characters, English" loading="lazy" width="1080" height="1920"></a><figcaption><p class="files">EN · Short, 30 characters</p></figcaption></figure><figure class="one"><a class="shot story" href="img/size/sz-story-m-en.jpg?v=c30e2098"><img src="img/size/sz-story-m-en.jpg?v=c30e2098" alt="New story, Medium, 62, English" loading="lazy" width="1080" height="1920"></a><figcaption><p class="files">EN · Medium, 62</p></figcaption></figure><figure class="one"><a class="shot story" href="img/size/sz-story-l-en.jpg?v=35e14d03"><img src="img/size/sz-story-l-en.jpg?v=35e14d03" alt="New story, Long, 96, English" loading="lazy" width="1080" height="1920"></a><figcaption><p class="files">EN · Long, 96</p></figcaption></figure><figure class="one"><a class="shot story" href="img/size/sz-story-xl-en.jpg?v=2c511ffa"><img src="img/size/sz-story-xl-en.jpg?v=2c511ffa" alt="New story, Very long, 121, English" loading="lazy" width="1080" height="1920"></a><figcaption><p class="files">EN · Very long, 121</p></figcaption></figure><figure class="one"><a class="shot story" href="img/size/sz-story-s-bn.jpg?v=cde3e5ad"><img src="img/size/sz-story-s-bn.jpg?v=cde3e5ad" alt="New story, Short, 30 characters, Bangla" loading="lazy" width="1080" height="1920"></a><figcaption><p class="files">BN · Short, 30 characters</p></figcaption></figure><figure class="one"><a class="shot story" href="img/size/sz-story-m-bn.jpg?v=ac2caa6c"><img src="img/size/sz-story-m-bn.jpg?v=ac2caa6c" alt="New story, Medium, 62, Bangla" loading="lazy" width="1080" height="1920"></a><figcaption><p class="files">BN · Medium, 62</p></figcaption></figure><figure class="one"><a class="shot story" href="img/size/sz-story-l-bn.jpg?v=dd33b87a"><img src="img/size/sz-story-l-bn.jpg?v=dd33b87a" alt="New story, Long, 96, Bangla" loading="lazy" width="1080" height="1920"></a><figcaption><p class="files">BN · Long, 96</p></figcaption></figure><figure class="one"><a class="shot story" href="img/size/sz-story-xl-bn.jpg?v=42a943aa"><img src="img/size/sz-story-xl-bn.jpg?v=42a943aa" alt="New story, Very long, 121, Bangla" loading="lazy" width="1080" height="1920"></a><figcaption><p class="files">BN · Very long, 121</p></figcaption></figure></div>
+  </section>
+
   <section class="tray" id="templates">
     <div class="tabs"><span class="tab"><b>B</b>Carousel 1–6</span><span class="label more">Feed · 1080 × 1350</span></div>
     <div class="head">
@@ -347,36 +374,36 @@
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/01-cover-light-text-top-short.jpg?v=894f8cfb"><img src="img/01-cover-light-text-top-short.jpg?v=894f8cfb" alt="Cover: notch 06 Explainer and the date, the headline “AI’s next limit is electricity”, a colour photo of pylons at sunset filling the rest, dots and an arrow at the foot, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/01-cover-dark-text-top-short.jpg?v=83b67b5b"><img src="img/01-cover-dark-text-top-short.jpg?v=83b67b5b" alt="Cover: notch 06 Explainer and the date, the headline “AI’s next limit is electricity”, a colour photo of pylons at sunset filling the rest, dots and an arrow at the foot, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-light-text-top-short.jpg?v=d483a17f"><img src="img/01-cover-light-text-top-short.jpg?v=d483a17f" alt="Cover: notch 06 Explainer and the date, the headline “AI’s next limit is electricity”, a colour photo of pylons at sunset filling the rest, dots and an arrow at the foot, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-dark-text-top-short.jpg?v=e75f6dd7"><img src="img/01-cover-dark-text-top-short.jpg?v=e75f6dd7" alt="Cover: notch 06 Explainer and the date, the headline “AI’s next limit is electricity”, a colour photo of pylons at sunset filling the rest, dots and an arrow at the foot, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Text top · photo below</h4><p class="files">01-cover-light-text-top-short.jpg<br>01-cover-dark-text-top-short.jpg</p><p class="e">Empty space 32%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/01-cover-light-text-bottom-short.jpg?v=5f132f2d"><img src="img/01-cover-light-text-bottom-short.jpg?v=5f132f2d" alt="Cover: notch and date, a colour photo of pylons at sunset, then the headline at the bottom, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/01-cover-dark-text-bottom-short.jpg?v=b7131b45"><img src="img/01-cover-dark-text-bottom-short.jpg?v=b7131b45" alt="Cover: notch and date, a colour photo of pylons at sunset, then the headline at the bottom, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-light-text-bottom-short.jpg?v=5c311951"><img src="img/01-cover-light-text-bottom-short.jpg?v=5c311951" alt="Cover: notch and date, a colour photo of pylons at sunset, then the headline at the bottom, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-dark-text-bottom-short.jpg?v=5fb0d050"><img src="img/01-cover-dark-text-bottom-short.jpg?v=5fb0d050" alt="Cover: notch and date, a colour photo of pylons at sunset, then the headline at the bottom, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Text bottom · photo above</h4><p class="files">01-cover-light-text-bottom-short.jpg<br>01-cover-dark-text-bottom-short.jpg</p><p class="e">Empty space 28%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/01-cover-light-fullbleed.jpg?v=0a59511c"><img src="img/01-cover-light-fullbleed.jpg?v=0a59511c" alt="Cover: a colour photo of pylons at sunset fills the slide, the notch as a solid tab in the corner, the date and headline in white over the darkened foot of the photo, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/01-cover-dark-fullbleed.jpg?v=f024f061"><img src="img/01-cover-dark-fullbleed.jpg?v=f024f061" alt="Cover: a colour photo of pylons at sunset fills the slide, the notch as a solid tab in the corner, the date and headline in white over the darkened foot of the photo, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-light-fullbleed.jpg?v=030b1d18"><img src="img/01-cover-light-fullbleed.jpg?v=030b1d18" alt="Cover: a colour photo of pylons at sunset fills the slide, the notch as a solid tab in the corner, the date and headline in white over the darkened foot of the photo, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-dark-fullbleed.jpg?v=a68ed835"><img src="img/01-cover-dark-fullbleed.jpg?v=a68ed835" alt="Cover: a colour photo of pylons at sunset fills the slide, the notch as a solid tab in the corner, the date and headline in white over the darkened foot of the photo, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Photo fills the slide · words on it</h4><p class="files">01-cover-light-fullbleed.jpg<br>01-cover-dark-fullbleed.jpg</p><p class="e">Photo fills the slide</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/01-cover-light-text-bottom-long.jpg?v=662b5e9c"><img src="img/01-cover-light-text-bottom-long.jpg?v=662b5e9c" alt="Cover with no photo on the topic’s pale orange-and-indigo wash: notch and date at the top, the long headline at the bottom, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/01-cover-dark-text-bottom-long.jpg?v=b66cdc54"><img src="img/01-cover-dark-text-bottom-long.jpg?v=b66cdc54" alt="Cover with no photo on the topic’s pale orange-and-indigo wash: notch and date at the top, the long headline at the bottom, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-light-text-bottom-long.jpg?v=ee97ab5f"><img src="img/01-cover-light-text-bottom-long.jpg?v=ee97ab5f" alt="Cover with no photo on the topic’s pale orange-and-indigo wash: notch and date at the top, the long headline at the bottom, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-dark-text-bottom-long.jpg?v=3205b89d"><img src="img/01-cover-dark-text-bottom-long.jpg?v=3205b89d" alt="Cover with no photo on the topic’s pale orange-and-indigo wash: notch and date at the top, the long headline at the bottom, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>No photo · topic wash · long headline</h4><p class="files">01-cover-light-text-bottom-long.jpg<br>01-cover-dark-text-bottom-long.jpg</p><p class="e">Empty space 72%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/01-cover-light-new.jpg?v=19a1e86d"><img src="img/01-cover-light-new.jpg?v=19a1e86d" alt="Cover for a new story: a purple notch reading 06 New, the label line Explainer and the date, and the long headline; the first dot is purple, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/01-cover-dark-new.jpg?v=2518f4f0"><img src="img/01-cover-dark-new.jpg?v=2518f4f0" alt="Cover for a new story: a purple notch reading 06 New, the label line Explainer and the date, and the long headline; the first dot is purple, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-light-new.jpg?v=9db4d869"><img src="img/01-cover-light-new.jpg?v=9db4d869" alt="Cover for a new story: a purple notch reading 06 New, the label line Explainer and the date, and the long headline; the first dot is purple, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-dark-new.jpg?v=92872e16"><img src="img/01-cover-dark-new.jpg?v=92872e16" alt="Cover for a new story: a purple notch reading 06 New, the label line Explainer and the date, and the long headline; the first dot is purple, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>New · purple notch</h4><p class="files">01-cover-light-new.jpg<br>01-cover-dark-new.jpg</p><p class="e">Empty space 73%</p></figcaption>
       </figure>
@@ -392,8 +419,8 @@
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/02-text-light.jpg?v=7ed04e91"><img src="img/02-text-light.jpg?v=7ed04e91" alt="Text slide: the heading “Every answer runs on a server” and a short paragraph; the second dot filled, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/02-text-dark.jpg?v=dbb68013"><img src="img/02-text-dark.jpg?v=dbb68013" alt="Text slide: the heading “Every answer runs on a server” and a short paragraph; the second dot filled, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/02-text-light.jpg?v=8c67d55e"><img src="img/02-text-light.jpg?v=8c67d55e" alt="Text slide: the heading “Every answer runs on a server” and a short paragraph; the second dot filled, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/02-text-dark.jpg?v=db41475c"><img src="img/02-text-dark.jpg?v=db41475c" alt="Text slide: the heading “Every answer runs on a server” and a short paragraph; the second dot filled, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Heading and text</h4><p class="files">02-text-light.jpg<br>02-text-dark.jpg</p><p class="e">Empty space 77%</p></figcaption>
       </figure>
@@ -409,43 +436,43 @@
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/03-image-light-photo-text-top.jpg?v=7ca4099b"><img src="img/03-image-light-photo-text-top.jpg?v=7ca4099b" alt="Image slide: a caption at the top and a colour photo of an open office filling the rest, edge to edge, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/03-image-dark-photo-text-top.jpg?v=06bee28e"><img src="img/03-image-dark-photo-text-top.jpg?v=06bee28e" alt="Image slide: a caption at the top and a colour photo of an open office filling the rest, edge to edge, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-light-photo-text-top.jpg?v=50a994b0"><img src="img/03-image-light-photo-text-top.jpg?v=50a994b0" alt="Image slide: a caption at the top and a colour photo of an open office filling the rest, edge to edge, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-dark-photo-text-top.jpg?v=ee8cc4eb"><img src="img/03-image-dark-photo-text-top.jpg?v=ee8cc4eb" alt="Image slide: a caption at the top and a colour photo of an open office filling the rest, edge to edge, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Caption top · photo below</h4><p class="files">03-image-light-photo-text-top.jpg<br>03-image-dark-photo-text-top.jpg</p><p class="e">Empty space 32%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/03-image-light-photo-text-bottom.jpg?v=8190f172"><img src="img/03-image-light-photo-text-bottom.jpg?v=8190f172" alt="Image slide: a square photo of security cameras on a dark wall, cropped to fill the top, the caption below, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/03-image-dark-photo-text-bottom.jpg?v=4d1499f4"><img src="img/03-image-dark-photo-text-bottom.jpg?v=4d1499f4" alt="Image slide: a square photo of security cameras on a dark wall, cropped to fill the top, the caption below, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-light-photo-text-bottom.jpg?v=5dae4972"><img src="img/03-image-light-photo-text-bottom.jpg?v=5dae4972" alt="Image slide: a square photo of security cameras on a dark wall, cropped to fill the top, the caption below, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-dark-photo-text-bottom.jpg?v=1ec28936"><img src="img/03-image-dark-photo-text-bottom.jpg?v=1ec28936" alt="Image slide: a square photo of security cameras on a dark wall, cropped to fill the top, the caption below, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Photo above · caption below</h4><p class="files">03-image-light-photo-text-bottom.jpg<br>03-image-dark-photo-text-bottom.jpg</p><p class="e">Empty space 22%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/03-image-light-fit.jpg?v=7c06b840"><img src="img/03-image-light-fit.jpg?v=7c06b840" alt="Image slide: a tall photo of Dhaka traffic shown whole, at its own shape, on the topic’s orange-and-indigo wash, the caption below, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/03-image-dark-fit.jpg?v=b43b1eee"><img src="img/03-image-dark-fit.jpg?v=b43b1eee" alt="Image slide: a tall photo of Dhaka traffic shown whole, at its own shape, on the topic’s orange-and-indigo wash, the caption below, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-light-fit.jpg?v=34bc3f0d"><img src="img/03-image-light-fit.jpg?v=34bc3f0d" alt="Image slide: a tall photo of Dhaka traffic shown whole, at its own shape, on the topic’s orange-and-indigo wash, the caption below, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-dark-fit.jpg?v=aef5a671"><img src="img/03-image-dark-fit.jpg?v=aef5a671" alt="Image slide: a tall photo of Dhaka traffic shown whole, at its own shape, on the topic’s orange-and-indigo wash, the caption below, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Fit · any shape, kept whole</h4><p class="files">03-image-light-fit.jpg<br>03-image-dark-fit.jpg</p><p class="e">Empty space 22%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/03-image-light-screenshot.jpg?v=e95e1ef3"><img src="img/03-image-light-screenshot.jpg?v=e95e1ef3" alt="Image slide: a screenshot of a chatbot answer with a thin ink line round it, its credit, and the caption at the bottom, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/03-image-dark-screenshot.jpg?v=08827502"><img src="img/03-image-dark-screenshot.jpg?v=08827502" alt="Image slide: a screenshot of a chatbot answer with a thin ink line round it, its credit, and the caption at the bottom, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-light-screenshot.jpg?v=b0cc1b95"><img src="img/03-image-light-screenshot.jpg?v=b0cc1b95" alt="Image slide: a screenshot of a chatbot answer with a thin ink line round it, its credit, and the caption at the bottom, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-dark-screenshot.jpg?v=317aafc8"><img src="img/03-image-dark-screenshot.jpg?v=317aafc8" alt="Image slide: a screenshot of a chatbot answer with a thin ink line round it, its credit, and the caption at the bottom, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Screenshot</h4><p class="files">03-image-light-screenshot.jpg<br>03-image-dark-screenshot.jpg</p><p class="e">Empty space 68%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/03-image-light-fullbleed-text-top.jpg?v=37a62392"><img src="img/03-image-light-fullbleed-text-top.jpg?v=37a62392" alt="Image slide: a sunset photo of pylons fills the slide, the caption in white over the darkened sky at the top, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/03-image-dark-fullbleed-text-top.jpg?v=37a62392"><img src="img/03-image-dark-fullbleed-text-top.jpg?v=37a62392" alt="Image slide: a sunset photo of pylons fills the slide, the caption in white over the darkened sky at the top, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-light-fullbleed-text-top.jpg?v=9da0b829"><img src="img/03-image-light-fullbleed-text-top.jpg?v=9da0b829" alt="Image slide: a sunset photo of pylons fills the slide, the caption in white over the darkened sky at the top, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-dark-fullbleed-text-top.jpg?v=9da0b829"><img src="img/03-image-dark-fullbleed-text-top.jpg?v=9da0b829" alt="Image slide: a sunset photo of pylons fills the slide, the caption in white over the darkened sky at the top, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Photo fills the slide · words at the top</h4><p class="files">03-image-light-fullbleed-text-top.jpg<br>03-image-dark-fullbleed-text-top.jpg</p><p class="e">Photo fills the slide</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/03-image-light-fullbleed-text-bottom.jpg?v=69b49113"><img src="img/03-image-light-fullbleed-text-bottom.jpg?v=69b49113" alt="Image slide: a photo of people at screens fills the slide, the caption in white over the darkened foot, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/03-image-dark-fullbleed-text-bottom.jpg?v=69b49113"><img src="img/03-image-dark-fullbleed-text-bottom.jpg?v=69b49113" alt="Image slide: a photo of people at screens fills the slide, the caption in white over the darkened foot, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-light-fullbleed-text-bottom.jpg?v=ae02e29d"><img src="img/03-image-light-fullbleed-text-bottom.jpg?v=ae02e29d" alt="Image slide: a photo of people at screens fills the slide, the caption in white over the darkened foot, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-dark-fullbleed-text-bottom.jpg?v=ae02e29d"><img src="img/03-image-dark-fullbleed-text-bottom.jpg?v=ae02e29d" alt="Image slide: a photo of people at screens fills the slide, the caption in white over the darkened foot, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Photo fills the slide · words at the foot</h4><p class="files">03-image-light-fullbleed-text-bottom.jpg<br>03-image-dark-fullbleed-text-bottom.jpg</p><p class="e">Photo fills the slide</p></figcaption>
       </figure>
@@ -461,29 +488,29 @@
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/04-data-light-number.jpg?v=56643f20"><img src="img/04-data-light-number.jpg?v=56643f20" alt="Data slide: the number 945 in ink, sans serif, TWh beside it, a sentence saying what it means, and the source line, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/04-data-dark-number.jpg?v=2691bd36"><img src="img/04-data-dark-number.jpg?v=2691bd36" alt="Data slide: the number 945 in ink, sans serif, TWh beside it, a sentence saying what it means, and the source line, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-light-number.jpg?v=f915e2e3"><img src="img/04-data-light-number.jpg?v=f915e2e3" alt="Data slide: the number 945 in ink, sans serif, TWh beside it, a sentence saying what it means, and the source line, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-dark-number.jpg?v=9a42ec02"><img src="img/04-data-dark-number.jpg?v=9a42ec02" alt="Data slide: the number 945 in ink, sans serif, TWh beside it, a sentence saying what it means, and the source line, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>One big number</h4><p class="files">04-data-light-number.jpg<br>04-data-dark-number.jpg</p><p class="e">Empty space 84%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/04-data-light-number-block.jpg?v=eaa4d317"><img src="img/04-data-light-number-block.jpg?v=eaa4d317" alt="Data slide: the number 945 TWh in white on a solid orange block, a sentence under it and the source line, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/04-data-dark-number-block.jpg?v=7690ca6b"><img src="img/04-data-dark-number-block.jpg?v=7690ca6b" alt="Data slide: the number 945 TWh in white on a solid orange block, a sentence under it and the source line, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-light-number-block.jpg?v=233faab0"><img src="img/04-data-light-number-block.jpg?v=233faab0" alt="Data slide: the number 945 TWh in white on a solid orange block, a sentence under it and the source line, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-dark-number-block.jpg?v=408dba13"><img src="img/04-data-dark-number-block.jpg?v=408dba13" alt="Data slide: the number 945 TWh in white on a solid orange block, a sentence under it and the source line, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Number on a block of the colour, as the FT does</h4><p class="files">04-data-light-number-block.jpg<br>04-data-dark-number-block.jpg</p><p class="e">Empty space 84%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/04-data-light-chart.jpg?v=2f071859"><img src="img/04-data-light-chart.jpg?v=2f071859" alt="Data slide: a title and a bar chart, the United States bar at 45% in orange, China, Europe and the rest of the world in grey, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/04-data-dark-chart.jpg?v=9cbf37e4"><img src="img/04-data-dark-chart.jpg?v=9cbf37e4" alt="Data slide: a title and a bar chart, the United States bar at 45% in orange, China, Europe and the rest of the world in grey, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-light-chart.jpg?v=9f19d570"><img src="img/04-data-light-chart.jpg?v=9f19d570" alt="Data slide: a title and a bar chart, the United States bar at 45% in orange, China, Europe and the rest of the world in grey, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-dark-chart.jpg?v=e876ecd4"><img src="img/04-data-dark-chart.jpg?v=e876ecd4" alt="Data slide: a title and a bar chart, the United States bar at 45% in orange, China, Europe and the rest of the world in grey, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>One chart</h4><p class="files">04-data-light-chart.jpg<br>04-data-dark-chart.jpg</p><p class="e">Empty space 78%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/04-data-light-timeline.jpg?v=aa053e04"><img src="img/04-data-light-timeline.jpg?v=aa053e04" alt="Data slide: a title and a vertical timeline spaced to scale, from launch in Nov 2022 to 800 million weekly users in Oct 2025, the marks in orange, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/04-data-dark-timeline.jpg?v=870c7e77"><img src="img/04-data-dark-timeline.jpg?v=870c7e77" alt="Data slide: a title and a vertical timeline spaced to scale, from launch in Nov 2022 to 800 million weekly users in Oct 2025, the marks in orange, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-light-timeline.jpg?v=82587398"><img src="img/04-data-light-timeline.jpg?v=82587398" alt="Data slide: a title and a vertical timeline spaced to scale, from launch in Nov 2022 to 800 million weekly users in Oct 2025, the marks in orange, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-dark-timeline.jpg?v=85579280"><img src="img/04-data-dark-timeline.jpg?v=85579280" alt="Data slide: a title and a vertical timeline spaced to scale, from launch in Nov 2022 to 800 million weekly users in Oct 2025, the marks in orange, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>A timeline</h4><p class="files">04-data-light-timeline.jpg<br>04-data-dark-timeline.jpg</p><p class="e">Empty space 81%</p></figcaption>
       </figure>
@@ -499,8 +526,8 @@
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/05-quote-light.jpg?v=5479baf7"><img src="img/05-quote-light.jpg?v=5479baf7" alt="Quote slide on the orange-and-indigo wash: “The building is ours on paper. Everything that makes it valuable belongs to someone else.”, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/05-quote-dark.jpg?v=8594180d"><img src="img/05-quote-dark.jpg?v=8594180d" alt="Quote slide on the orange-and-indigo wash: “The building is ours on paper. Everything that makes it valuable belongs to someone else.”, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/05-quote-light.jpg?v=45d575ca"><img src="img/05-quote-light.jpg?v=45d575ca" alt="Quote slide on the orange-and-indigo wash: “The building is ours on paper. Everything that makes it valuable belongs to someone else.”, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/05-quote-dark.jpg?v=ae7acd14"><img src="img/05-quote-dark.jpg?v=ae7acd14" alt="Quote slide on the orange-and-indigo wash: “The building is ours on paper. Everything that makes it valuable belongs to someone else.”, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Pull quote</h4><p class="files">05-quote-light.jpg<br>05-quote-dark.jpg</p><p class="e">Empty space 74%</p></figcaption>
       </figure>
@@ -516,22 +543,22 @@
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/06-closing-light-read.jpg?v=5dfc5c6a"><img src="img/06-closing-light-read.jpg?v=5dfc5c6a" alt="Closing slide: the notch, “Read the full story” in large type and Link in bio under it; the last dot filled, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/06-closing-dark-read.jpg?v=9c6860b1"><img src="img/06-closing-dark-read.jpg?v=9c6860b1" alt="Closing slide: the notch, “Read the full story” in large type and Link in bio under it; the last dot filled, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/06-closing-light-read.jpg?v=b8d874a9"><img src="img/06-closing-light-read.jpg?v=b8d874a9" alt="Closing slide: the notch, “Read the full story” in large type and Link in bio under it; the last dot filled, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/06-closing-dark-read.jpg?v=faced290"><img src="img/06-closing-dark-read.jpg?v=faced290" alt="Closing slide: the notch, “Read the full story” in large type and Link in bio under it; the last dot filled, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Read the full story · with notch</h4><p class="files">06-closing-light-read.jpg<br>06-closing-dark-read.jpg</p><p class="e">Empty space 82%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/06-closing-light-read-post.jpg?v=eaff9c44"><img src="img/06-closing-light-read-post.jpg?v=eaff9c44" alt="Closing slide: the notch, “Read the full story” and Link in the post on an orange block, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/06-closing-dark-read-post.jpg?v=e211c89c"><img src="img/06-closing-dark-read-post.jpg?v=e211c89c" alt="Closing slide: the notch, “Read the full story” and Link in the post on an orange block, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/06-closing-light-read-post.jpg?v=3a95e33b"><img src="img/06-closing-light-read-post.jpg?v=3a95e33b" alt="Closing slide: the notch, “Read the full story” and Link in the post on an orange block, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/06-closing-dark-read-post.jpg?v=6ac3c76e"><img src="img/06-closing-dark-read-post.jpg?v=6ac3c76e" alt="Closing slide: the notch, “Read the full story” and Link in the post on an orange block, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Read the full story · for Facebook and LinkedIn</h4><p class="files">06-closing-light-read-post.jpg<br>06-closing-dark-read-post.jpg</p><p class="e">Empty space 82%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/06-closing-light-question.jpg?v=4f4aab5b"><img src="img/06-closing-light-question.jpg?v=4f4aab5b" alt="Closing slide on the orange-and-indigo wash: the question “Should data centres pay more for the power they use?” and Tell us in the comments, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/06-closing-dark-question.jpg?v=47904159"><img src="img/06-closing-dark-question.jpg?v=47904159" alt="Closing slide on the orange-and-indigo wash: the question “Should data centres pay more for the power they use?” and Tell us in the comments, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/06-closing-light-question.jpg?v=03f0e8c2"><img src="img/06-closing-light-question.jpg?v=03f0e8c2" alt="Closing slide on the orange-and-indigo wash: the question “Should data centres pay more for the power they use?” and Tell us in the comments, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/06-closing-dark-question.jpg?v=5faa1cda"><img src="img/06-closing-dark-question.jpg?v=5faa1cda" alt="Closing slide on the orange-and-indigo wash: the question “Should data centres pay more for the power they use?” and Tell us in the comments, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>One open question · topic wash</h4><p class="files">06-closing-light-question.jpg<br>06-closing-dark-question.jpg</p><p class="e">Empty space 80%</p></figcaption>
       </figure>
@@ -555,29 +582,29 @@
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/07-image-light-split-text-bottom-short.jpg?v=a3c104de"><img src="img/07-image-light-split-text-bottom-short.jpg?v=a3c104de" alt="Single post: notch and date, a sunset photo of pylons edge to edge, the short headline below, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/07-image-dark-split-text-bottom-short.jpg?v=0c58e1d3"><img src="img/07-image-dark-split-text-bottom-short.jpg?v=0c58e1d3" alt="Single post: notch and date, a sunset photo of pylons edge to edge, the short headline below, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-light-split-text-bottom-short.jpg?v=2c2f10b6"><img src="img/07-image-light-split-text-bottom-short.jpg?v=2c2f10b6" alt="Single post: notch and date, a sunset photo of pylons edge to edge, the short headline below, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-dark-split-text-bottom-short.jpg?v=511eb5e3"><img src="img/07-image-dark-split-text-bottom-short.jpg?v=511eb5e3" alt="Single post: notch and date, a sunset photo of pylons edge to edge, the short headline below, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Notch · photo above · short headline</h4><p class="files">07-image-light-split-text-bottom-short.jpg<br>07-image-dark-split-text-bottom-short.jpg</p><p class="e">Empty space 28%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/07-image-light-split-text-top-long.jpg?v=b0fdd598"><img src="img/07-image-light-split-text-top-long.jpg?v=b0fdd598" alt="Single post: notch and date, a long headline, and a photo of an open office filling the rest, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/07-image-dark-split-text-top-long.jpg?v=5343f856"><img src="img/07-image-dark-split-text-top-long.jpg?v=5343f856" alt="Single post: notch and date, a long headline, and a photo of an open office filling the rest, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-light-split-text-top-long.jpg?v=083ddb5b"><img src="img/07-image-light-split-text-top-long.jpg?v=083ddb5b" alt="Single post: notch and date, a long headline, and a photo of an open office filling the rest, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-dark-split-text-top-long.jpg?v=b822828c"><img src="img/07-image-dark-split-text-top-long.jpg?v=b822828c" alt="Single post: notch and date, a long headline, and a photo of an open office filling the rest, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Notch · long headline · photo below</h4><p class="files">07-image-light-split-text-top-long.jpg<br>07-image-dark-split-text-top-long.jpg</p><p class="e">Empty space 37%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/07-image-light-fullbleed.jpg?v=a76c1833"><img src="img/07-image-light-fullbleed.jpg?v=a76c1833" alt="Single post: a photo of Dhaka traffic fills the post, an indigo label line for AI Across Bangladesh and a long headline in white over the darkened foot, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/07-image-dark-fullbleed.jpg?v=a76c1833"><img src="img/07-image-dark-fullbleed.jpg?v=a76c1833" alt="Single post: a photo of Dhaka traffic fills the post, an indigo label line for AI Across Bangladesh and a long headline in white over the darkened foot, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-light-fullbleed.jpg?v=696f7b8b"><img src="img/07-image-light-fullbleed.jpg?v=696f7b8b" alt="Single post: a photo of Dhaka traffic fills the post, an indigo label line for AI Across Bangladesh and a long headline in white over the darkened foot, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-dark-fullbleed.jpg?v=696f7b8b"><img src="img/07-image-dark-fullbleed.jpg?v=696f7b8b" alt="Single post: a photo of Dhaka traffic fills the post, an indigo label line for AI Across Bangladesh and a long headline in white over the darkened foot, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Photo fills the post · no notch</h4><p class="files">07-image-light-fullbleed.jpg<br>07-image-dark-fullbleed.jpg</p><p class="e">Photo fills the slide</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/07-image-light-fullbleed-notch.jpg?v=f6aa3604"><img src="img/07-image-light-fullbleed-notch.jpg?v=f6aa3604" alt="Single post: a sunset photo of pylons fills the post, the notch as a solid tab, the headline in white, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/07-image-dark-fullbleed-notch.jpg?v=b1a2bf53"><img src="img/07-image-dark-fullbleed-notch.jpg?v=b1a2bf53" alt="Single post: a sunset photo of pylons fills the post, the notch as a solid tab, the headline in white, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-light-fullbleed-notch.jpg?v=f45d9df7"><img src="img/07-image-light-fullbleed-notch.jpg?v=f45d9df7" alt="Single post: a sunset photo of pylons fills the post, the notch as a solid tab, the headline in white, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-dark-fullbleed-notch.jpg?v=ed1fee6e"><img src="img/07-image-dark-fullbleed-notch.jpg?v=ed1fee6e" alt="Single post: a sunset photo of pylons fills the post, the notch as a solid tab, the headline in white, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Photo fills the post · with the notch</h4><p class="files">07-image-light-fullbleed-notch.jpg<br>07-image-dark-fullbleed-notch.jpg</p><p class="e">Photo fills the slide</p></figcaption>
       </figure>
@@ -593,15 +620,15 @@
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/08-quote-portrait-light-text-top.jpg?v=6bb0e038"><img src="img/08-quote-portrait-light-text-top.jpg?v=6bb0e038" alt="Quote card: notch Quote, the quote at the top, a portrait space and the speaker’s name below, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/08-quote-portrait-dark-text-top.jpg?v=80fe07b0"><img src="img/08-quote-portrait-dark-text-top.jpg?v=80fe07b0" alt="Quote card: notch Quote, the quote at the top, a portrait space and the speaker’s name below, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/08-quote-portrait-light-text-top.jpg?v=2b35a82a"><img src="img/08-quote-portrait-light-text-top.jpg?v=2b35a82a" alt="Quote card: notch Quote, the quote at the top, a portrait space and the speaker’s name below, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/08-quote-portrait-dark-text-top.jpg?v=01139508"><img src="img/08-quote-portrait-dark-text-top.jpg?v=01139508" alt="Quote card: notch Quote, the quote at the top, a portrait space and the speaker’s name below, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Quote top · portrait below</h4><p class="files">08-quote-portrait-light-text-top.jpg<br>08-quote-portrait-dark-text-top.jpg</p><p class="e">Empty space 73%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/08-quote-portrait-light-text-bottom.jpg?v=ef26a3bf"><img src="img/08-quote-portrait-light-text-bottom.jpg?v=ef26a3bf" alt="Quote card on the orange-and-indigo wash: a portrait space and the speaker at the top, the quote below, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/08-quote-portrait-dark-text-bottom.jpg?v=d5f885f4"><img src="img/08-quote-portrait-dark-text-bottom.jpg?v=d5f885f4" alt="Quote card on the orange-and-indigo wash: a portrait space and the speaker at the top, the quote below, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/08-quote-portrait-light-text-bottom.jpg?v=6d66f81a"><img src="img/08-quote-portrait-light-text-bottom.jpg?v=6d66f81a" alt="Quote card on the orange-and-indigo wash: a portrait space and the speaker at the top, the quote below, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/08-quote-portrait-dark-text-bottom.jpg?v=ccfbf6c2"><img src="img/08-quote-portrait-dark-text-bottom.jpg?v=ccfbf6c2" alt="Quote card on the orange-and-indigo wash: a portrait space and the speaker at the top, the quote below, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Portrait top · quote below</h4><p class="files">08-quote-portrait-light-text-bottom.jpg<br>08-quote-portrait-dark-text-bottom.jpg</p><p class="e">Empty space 73%</p></figcaption>
       </figure>
@@ -617,8 +644,8 @@
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/09-quote-light.jpg?v=efd9cf06"><img src="img/09-quote-light.jpg?v=efd9cf06" alt="Quote card filled in orange: the notch as a light tab, the quote in black, the attribution and source under it, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/09-quote-dark.jpg?v=d0ca2aee"><img src="img/09-quote-dark.jpg?v=d0ca2aee" alt="Quote card filled in orange: the notch as a light tab, the quote in black, the attribution and source under it, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/09-quote-light.jpg?v=f0232505"><img src="img/09-quote-light.jpg?v=f0232505" alt="Quote card filled in orange: the notch as a light tab, the quote in black, the attribution and source under it, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/09-quote-dark.jpg?v=e97d0fcf"><img src="img/09-quote-dark.jpg?v=e97d0fcf" alt="Quote card filled in orange: the notch as a light tab, the quote in black, the attribution and source under it, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Quote on the topic’s colour</h4><p class="files">09-quote-light.jpg<br>09-quote-dark.jpg</p><p class="e">Empty space 69%</p></figcaption>
       </figure>
@@ -628,35 +655,35 @@
       <header class="tpl-head">
         <p class="label">Template 10 · 1080 × 1350 · Instagram, Facebook, LinkedIn</p>
         <h3>Text card</h3>
-        <p class="use"><b>Use it</b> for one finding, a statement, a big number, or a correction.</p>
-        <p class="rule">Short (up to 6 words, 144 px) on the wash, long (up to 14 words, 96 px) on Card with the key figure in the tone, New with the purple notch, and the big number on a block of the tone. Corrections use the notch label Correction and say plainly what changed.</p>
+        <p class="use"><b>Use it</b> for one finding, a statement or a big number.</p>
+        <p class="rule">Short (up to 6 words) on the wash, long (up to 14 words) on Card with the key figure on a block of the colour, New with the purple notch, and the big number on a block of the colour.</p>
       </header>
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/10-text-light-short.jpg?v=19ee778d"><img src="img/10-text-light-short.jpg?v=19ee778d" alt="Text card on the orange-and-indigo wash: notch Explainer, the statement “Electricity, not chips, is the limit”, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/10-text-dark-short.jpg?v=44d12a24"><img src="img/10-text-dark-short.jpg?v=44d12a24" alt="Text card on the orange-and-indigo wash: notch Explainer, the statement “Electricity, not chips, is the limit”, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-light-short.jpg?v=3a46e7f5"><img src="img/10-text-light-short.jpg?v=3a46e7f5" alt="Text card on the orange-and-indigo wash: notch Explainer, the statement “Electricity, not chips, is the limit”, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-dark-short.jpg?v=11840b8d"><img src="img/10-text-dark-short.jpg?v=11840b8d" alt="Text card on the orange-and-indigo wash: notch Explainer, the statement “Electricity, not chips, is the limit”, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Short statement · on the wash</h4><p class="files">10-text-light-short.jpg<br>10-text-dark-short.jpg</p><p class="e">Empty space 74%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/10-text-light-long.jpg?v=9ffb13db"><img src="img/10-text-light-long.jpg?v=9ffb13db" alt="Text card: notch Correction, “An earlier post said data centres used 4% of the world’s electricity in 2024. The figure is about 1.5%.” with 1.5% on an orange block, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/10-text-dark-long.jpg?v=de87ced2"><img src="img/10-text-dark-long.jpg?v=de87ced2" alt="Text card: notch Correction, “An earlier post said data centres used 4% of the world’s electricity in 2024. The figure is about 1.5%.” with 1.5% on an orange block, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-light-long.jpg?v=46b12d27"><img src="img/10-text-light-long.jpg?v=46b12d27" alt="Text card: notch Data, “Data centres used about 1.5% of the world’s electricity in 2024. By 2030 that share could double.” with 1.5% on an orange block, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-dark-long.jpg?v=a6178e75"><img src="img/10-text-dark-long.jpg?v=a6178e75" alt="Text card: notch Data, “Data centres used about 1.5% of the world’s electricity in 2024. By 2030 that share could double.” with 1.5% on an orange block, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
-        <figcaption><h4>Long · a correction</h4><p class="files">10-text-light-long.jpg<br>10-text-dark-long.jpg</p><p class="e">Empty space 64%</p></figcaption>
+        <figcaption><h4>Long · a finding</h4><p class="files">10-text-light-long.jpg<br>10-text-dark-long.jpg</p><p class="e">Empty space 65%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/10-text-light-new.jpg?v=56741b1e"><img src="img/10-text-light-new.jpg?v=56741b1e" alt="Text card for a new story: purple notch New, the long headline, and Full story: link in bio, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/10-text-dark-new.jpg?v=c40d351a"><img src="img/10-text-dark-new.jpg?v=c40d351a" alt="Text card for a new story: purple notch New, the long headline, and Full story: link in bio, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-light-new.jpg?v=121816e9"><img src="img/10-text-light-new.jpg?v=121816e9" alt="Text card for a new story: purple notch New, the long headline, and Full story: link in bio, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-dark-new.jpg?v=6eb3343d"><img src="img/10-text-dark-new.jpg?v=6eb3343d" alt="Text card for a new story: purple notch New, the long headline, and Full story: link in bio, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>New · purple notch</h4><p class="files">10-text-light-new.jpg<br>10-text-dark-new.jpg</p><p class="e">Empty space 72%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/10-text-light-number.jpg?v=ba366360"><img src="img/10-text-light-number.jpg?v=ba366360" alt="Text card: notch Data, 945 TWh in white on a solid orange block, what it means, and the source, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/10-text-dark-number.jpg?v=78909f58"><img src="img/10-text-dark-number.jpg?v=78909f58" alt="Text card: notch Data, 945 TWh in white on a solid orange block, what it means, and the source, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-light-number.jpg?v=317f111c"><img src="img/10-text-light-number.jpg?v=317f111c" alt="Text card: notch Data, 945 TWh in white on a solid orange block, what it means, and the source, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-dark-number.jpg?v=b2f04342"><img src="img/10-text-dark-number.jpg?v=b2f04342" alt="Text card: notch Data, 945 TWh in white on a solid orange block, what it means, and the source, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Big number on a block of the tone</h4><p class="files">10-text-light-number.jpg<br>10-text-dark-number.jpg</p><p class="e">Empty space 80%</p></figcaption>
       </figure>
@@ -680,22 +707,22 @@
       <div class="pairs story">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot story" href="img/11-new-story-light-text-top.jpg?v=c8dacb16"><img src="img/11-new-story-light-text-top.jpg?v=c8dacb16" alt="Story: purple notch 06 New under the clear top, the headline, a space for the link sticker, and a sunset photo of pylons filling the bottom, light" loading="lazy" width="1080" height="1920"></a>
-          <a class="shot story" href="img/11-new-story-dark-text-top.jpg?v=d2604f95"><img src="img/11-new-story-dark-text-top.jpg?v=d2604f95" alt="Story: purple notch 06 New under the clear top, the headline, a space for the link sticker, and a sunset photo of pylons filling the bottom, dark" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/11-new-story-light-text-top.jpg?v=48363221"><img src="img/11-new-story-light-text-top.jpg?v=48363221" alt="Story: purple notch 06 New under the clear top, the headline, a space for the link sticker, and a sunset photo of pylons filling the bottom, light" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/11-new-story-dark-text-top.jpg?v=880aa166"><img src="img/11-new-story-dark-text-top.jpg?v=880aa166" alt="Story: purple notch 06 New under the clear top, the headline, a space for the link sticker, and a sunset photo of pylons filling the bottom, dark" loading="lazy" width="1080" height="1920"></a>
         </div>
         <figcaption><h4>Text top · photo below</h4><p class="files">11-new-story-light-text-top.jpg<br>11-new-story-dark-text-top.jpg</p><p class="e">Empty space 36%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot story" href="img/11-new-story-light-text-bottom.jpg?v=b57de2ba"><img src="img/11-new-story-light-text-bottom.jpg?v=b57de2ba" alt="Story: purple notch, a sunset photo of pylons, then the headline and the link sticker space, light" loading="lazy" width="1080" height="1920"></a>
-          <a class="shot story" href="img/11-new-story-dark-text-bottom.jpg?v=ad8224eb"><img src="img/11-new-story-dark-text-bottom.jpg?v=ad8224eb" alt="Story: purple notch, a sunset photo of pylons, then the headline and the link sticker space, dark" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/11-new-story-light-text-bottom.jpg?v=91cc8cb9"><img src="img/11-new-story-light-text-bottom.jpg?v=91cc8cb9" alt="Story: purple notch, a sunset photo of pylons, then the headline and the link sticker space, light" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/11-new-story-dark-text-bottom.jpg?v=dfd36030"><img src="img/11-new-story-dark-text-bottom.jpg?v=dfd36030" alt="Story: purple notch, a sunset photo of pylons, then the headline and the link sticker space, dark" loading="lazy" width="1080" height="1920"></a>
         </div>
         <figcaption><h4>Photo above · text below</h4><p class="files">11-new-story-light-text-bottom.jpg<br>11-new-story-dark-text-bottom.jpg</p><p class="e">Empty space 45%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot story" href="img/11-new-story-light-fullbleed.jpg?v=0600e825"><img src="img/11-new-story-light-fullbleed.jpg?v=0600e825" alt="Story: a sunset photo of pylons fills the screen, the purple tab under the clear top, the headline and link sticker space in white over the darkened foot, light" loading="lazy" width="1080" height="1920"></a>
-          <a class="shot story" href="img/11-new-story-dark-fullbleed.jpg?v=7e5896c4"><img src="img/11-new-story-dark-fullbleed.jpg?v=7e5896c4" alt="Story: a sunset photo of pylons fills the screen, the purple tab under the clear top, the headline and link sticker space in white over the darkened foot, dark" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/11-new-story-light-fullbleed.jpg?v=5a91827d"><img src="img/11-new-story-light-fullbleed.jpg?v=5a91827d" alt="Story: a sunset photo of pylons fills the screen, the purple tab under the clear top, the headline and link sticker space in white over the darkened foot, light" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/11-new-story-dark-fullbleed.jpg?v=aaadec33"><img src="img/11-new-story-dark-fullbleed.jpg?v=aaadec33" alt="Story: a sunset photo of pylons fills the screen, the purple tab under the clear top, the headline and link sticker space in white over the darkened foot, dark" loading="lazy" width="1080" height="1920"></a>
         </div>
         <figcaption><h4>Photo fills the story · words on it</h4><p class="files">11-new-story-light-fullbleed.jpg<br>11-new-story-dark-fullbleed.jpg</p><p class="e">Photo fills the slide</p></figcaption>
       </figure>
@@ -711,8 +738,8 @@
       <div class="pairs story">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot story" href="img/12-reshare-light.jpg?v=d91c87f7"><img src="img/12-reshare-light.jpg?v=d91c87f7" alt="Story frame on the orange-and-indigo wash: a label line, a large dashed space for the shared post, and Tap the post to read the explainer, light" loading="lazy" width="1080" height="1920"></a>
-          <a class="shot story" href="img/12-reshare-dark.jpg?v=43ed3911"><img src="img/12-reshare-dark.jpg?v=43ed3911" alt="Story frame on the orange-and-indigo wash: a label line, a large dashed space for the shared post, and Tap the post to read the explainer, dark" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/12-reshare-light.jpg?v=0833f558"><img src="img/12-reshare-light.jpg?v=0833f558" alt="Story frame on the orange-and-indigo wash: a label line, a large dashed space for the shared post, and Tap the post to read the explainer, light" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/12-reshare-dark.jpg?v=4a519ff6"><img src="img/12-reshare-dark.jpg?v=4a519ff6" alt="Story frame on the orange-and-indigo wash: a label line, a large dashed space for the shared post, and Tap the post to read the explainer, dark" loading="lazy" width="1080" height="1920"></a>
         </div>
         <figcaption><h4>Frame for a shared post</h4><p class="files">12-reshare-light.jpg<br>12-reshare-dark.jpg</p><p class="e">Empty space 55%</p></figcaption>
       </figure>
@@ -728,8 +755,8 @@
       <div class="pairs story">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot story" href="img/13-text-light.jpg?v=20709408"><img src="img/13-text-light.jpg?v=20709408" alt="Text story: a label line and the statement “Data centres used about 1.5% of the world’s electricity in 2024. By 2030 that share could double.” with its source, light" loading="lazy" width="1080" height="1920"></a>
-          <a class="shot story" href="img/13-text-dark.jpg?v=9f9ec647"><img src="img/13-text-dark.jpg?v=9f9ec647" alt="Text story: a label line and the statement “Data centres used about 1.5% of the world’s electricity in 2024. By 2030 that share could double.” with its source, dark" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/13-text-light.jpg?v=1026c266"><img src="img/13-text-light.jpg?v=1026c266" alt="Text story: a label line and the statement “Data centres used about 1.5% of the world’s electricity in 2024. By 2030 that share could double.” with its source, light" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/13-text-dark.jpg?v=b2d2e6ab"><img src="img/13-text-dark.jpg?v=b2d2e6ab" alt="Text story: a label line and the statement “Data centres used about 1.5% of the world’s electricity in 2024. By 2030 that share could double.” with its source, dark" loading="lazy" width="1080" height="1920"></a>
         </div>
         <figcaption><h4>Statement</h4><p class="files">13-text-light.jpg<br>13-text-dark.jpg</p><p class="e">Empty space 77%</p></figcaption>
       </figure>
@@ -745,8 +772,8 @@
       <div class="pairs story">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot story" href="img/14-poll-light.jpg?v=f9e27a49"><img src="img/14-poll-light.jpg?v=f9e27a49" alt="Poll story on the orange-and-indigo wash: “Should data centres pay more for the power they use?” and a dashed space for the poll sticker, light" loading="lazy" width="1080" height="1920"></a>
-          <a class="shot story" href="img/14-poll-dark.jpg?v=dcaefa50"><img src="img/14-poll-dark.jpg?v=dcaefa50" alt="Poll story on the orange-and-indigo wash: “Should data centres pay more for the power they use?” and a dashed space for the poll sticker, dark" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/14-poll-light.jpg?v=6b6a6655"><img src="img/14-poll-light.jpg?v=6b6a6655" alt="Poll story on the orange-and-indigo wash: “Should data centres pay more for the power they use?” and a dashed space for the poll sticker, light" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/14-poll-dark.jpg?v=e30624f5"><img src="img/14-poll-dark.jpg?v=e30624f5" alt="Poll story on the orange-and-indigo wash: “Should data centres pay more for the power they use?” and a dashed space for the poll sticker, dark" loading="lazy" width="1080" height="1920"></a>
         </div>
         <figcaption><h4>Question with sticker space</h4><p class="files">14-poll-light.jpg<br>14-poll-dark.jpg</p><p class="e">Empty space 75%</p></figcaption>
       </figure>
@@ -770,22 +797,22 @@
       <div class="pairs link">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot link" href="img/15-link-light-photo.jpg?v=908c30d1"><img src="img/15-link-light-photo.jpg?v=908c30d1" alt="Link preview: notch and date, the headline on the left, a sunset photo of pylons on the right half, light" loading="lazy" width="1200" height="630"></a>
-          <a class="shot link" href="img/15-link-dark-photo.jpg?v=61e1f79a"><img src="img/15-link-dark-photo.jpg?v=61e1f79a" alt="Link preview: notch and date, the headline on the left, a sunset photo of pylons on the right half, dark" loading="lazy" width="1200" height="630"></a>
+          <a class="shot link" href="img/15-link-light-photo.jpg?v=04d95c31"><img src="img/15-link-light-photo.jpg?v=04d95c31" alt="Link preview: notch and date, the headline on the left, a sunset photo of pylons on the right half, light" loading="lazy" width="1200" height="630"></a>
+          <a class="shot link" href="img/15-link-dark-photo.jpg?v=29989ef0"><img src="img/15-link-dark-photo.jpg?v=29989ef0" alt="Link preview: notch and date, the headline on the left, a sunset photo of pylons on the right half, dark" loading="lazy" width="1200" height="630"></a>
         </div>
         <figcaption><h4>Notch · headline · photo on the right</h4><p class="files">15-link-light-photo.jpg<br>15-link-dark-photo.jpg</p><p class="e">Empty space 33%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot link" href="img/15-link-light-text.jpg?v=e78131e2"><img src="img/15-link-light-text.jpg?v=e78131e2" alt="Link preview on the indigo wash: notch, date and the long headline, light" loading="lazy" width="1200" height="630"></a>
-          <a class="shot link" href="img/15-link-dark-text.jpg?v=40d7dcec"><img src="img/15-link-dark-text.jpg?v=40d7dcec" alt="Link preview on the indigo wash: notch, date and the long headline, dark" loading="lazy" width="1200" height="630"></a>
+          <a class="shot link" href="img/15-link-light-text.jpg?v=9ad9b7be"><img src="img/15-link-light-text.jpg?v=9ad9b7be" alt="Link preview on the indigo wash: notch, date and the long headline, light" loading="lazy" width="1200" height="630"></a>
+          <a class="shot link" href="img/15-link-dark-text.jpg?v=5bef1940"><img src="img/15-link-dark-text.jpg?v=5bef1940" alt="Link preview on the indigo wash: notch, date and the long headline, dark" loading="lazy" width="1200" height="630"></a>
         </div>
         <figcaption><h4>No photo · on the wash</h4><p class="files">15-link-light-text.jpg<br>15-link-dark-text.jpg</p><p class="e">Empty space 76%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot link" href="img/15-link-light-new.jpg?v=f7c9a60d"><img src="img/15-link-light-new.jpg?v=f7c9a60d" alt="Link preview for a new story: the purple tab, the label line and the long headline, light" loading="lazy" width="1200" height="630"></a>
-          <a class="shot link" href="img/15-link-dark-new.jpg?v=1c43d176"><img src="img/15-link-dark-new.jpg?v=1c43d176" alt="Link preview for a new story: the purple tab, the label line and the long headline, dark" loading="lazy" width="1200" height="630"></a>
+          <a class="shot link" href="img/15-link-light-new.jpg?v=babfb3b2"><img src="img/15-link-light-new.jpg?v=babfb3b2" alt="Link preview for a new story: the purple tab, the label line and the long headline, light" loading="lazy" width="1200" height="630"></a>
+          <a class="shot link" href="img/15-link-dark-new.jpg?v=8dd8affe"><img src="img/15-link-dark-new.jpg?v=8dd8affe" alt="Link preview for a new story: the purple tab, the label line and the long headline, dark" loading="lazy" width="1200" height="630"></a>
         </div>
         <figcaption><h4>New · purple tab</h4><p class="files">15-link-light-new.jpg<br>15-link-dark-new.jpg</p><p class="e">Empty space 76%</p></figcaption>
       </figure>
@@ -797,43 +824,43 @@
     <div class="tabs"><span class="tab"><b>F</b>Bangla 1–15</span><span class="label more">বাংলা</span></div>
     <div class="head">
       <h2>The same templates in Bangla</h2>
-      <p>Every template and variant again in Bangla. Bangla stands taller and has no capitals, so the type changes and nothing else does: the notch, the logo, the dots and the colours stay put. Headlines are Noto Serif Bengali at 82% of the English size with taller lines; labels, numbers and text are Anek Bangla with Bangla digits. Topic and type names are the website’s own (ব্যাখ্যা, নতুন, উদ্ধৃতি, তথ্য, সংশোধনী). Open a template to see its variants.</p>
+      <p>Every template and variant again in Bangla. Bangla stands taller and has no capitals, so the type changes and nothing else does: the notch, the logo, the dots and the colours stay put. Headlines are Noto Serif Bengali at 82% of the English size with taller lines; labels, numbers and text are Anek Bangla with Bangla digits. Topic and type names are the website’s own (ব্যাখ্যা, নতুন, উদ্ধৃতি, তথ্য). Open a template to see its variants.</p>
     </div>
     <details class="tpl fold" id="bn1" open>
       <summary><span class="label">Template 1</span> Cover <span class="label n">5 variants</span></summary>
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/01-cover-light-text-top-short-bn.jpg?v=593d2713"><img src="img/01-cover-light-text-top-short-bn.jpg?v=593d2713" alt="Cover: notch 06 Explainer and the date, the headline “AI’s next limit is electricity”, a colour photo of pylons at sunset filling the rest, dots and an arrow at the foot, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/01-cover-dark-text-top-short-bn.jpg?v=1703ddb9"><img src="img/01-cover-dark-text-top-short-bn.jpg?v=1703ddb9" alt="Cover: notch 06 Explainer and the date, the headline “AI’s next limit is electricity”, a colour photo of pylons at sunset filling the rest, dots and an arrow at the foot, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-light-text-top-short-bn.jpg?v=e7808e13"><img src="img/01-cover-light-text-top-short-bn.jpg?v=e7808e13" alt="Cover: notch 06 Explainer and the date, the headline “AI’s next limit is electricity”, a colour photo of pylons at sunset filling the rest, dots and an arrow at the foot, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-dark-text-top-short-bn.jpg?v=7a97b34e"><img src="img/01-cover-dark-text-top-short-bn.jpg?v=7a97b34e" alt="Cover: notch 06 Explainer and the date, the headline “AI’s next limit is electricity”, a colour photo of pylons at sunset filling the rest, dots and an arrow at the foot, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Text top · photo below</h4><p class="files">01-cover-light-text-top-short-bn.jpg<br>01-cover-dark-text-top-short-bn.jpg</p><p class="e">Empty space 39%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/01-cover-light-text-bottom-short-bn.jpg?v=72e768a1"><img src="img/01-cover-light-text-bottom-short-bn.jpg?v=72e768a1" alt="Cover: notch and date, a colour photo of pylons at sunset, then the headline at the bottom, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/01-cover-dark-text-bottom-short-bn.jpg?v=ea20fde5"><img src="img/01-cover-dark-text-bottom-short-bn.jpg?v=ea20fde5" alt="Cover: notch and date, a colour photo of pylons at sunset, then the headline at the bottom, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-light-text-bottom-short-bn.jpg?v=c4738e66"><img src="img/01-cover-light-text-bottom-short-bn.jpg?v=c4738e66" alt="Cover: notch and date, a colour photo of pylons at sunset, then the headline at the bottom, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-dark-text-bottom-short-bn.jpg?v=b572a32e"><img src="img/01-cover-dark-text-bottom-short-bn.jpg?v=b572a32e" alt="Cover: notch and date, a colour photo of pylons at sunset, then the headline at the bottom, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Text bottom · photo above</h4><p class="files">01-cover-light-text-bottom-short-bn.jpg<br>01-cover-dark-text-bottom-short-bn.jpg</p><p class="e">Empty space 33%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/01-cover-light-fullbleed-bn.jpg?v=a90bbe22"><img src="img/01-cover-light-fullbleed-bn.jpg?v=a90bbe22" alt="Cover: a colour photo of pylons at sunset fills the slide, the notch as a solid tab in the corner, the date and headline in white over the darkened foot of the photo, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/01-cover-dark-fullbleed-bn.jpg?v=36c02ac2"><img src="img/01-cover-dark-fullbleed-bn.jpg?v=36c02ac2" alt="Cover: a colour photo of pylons at sunset fills the slide, the notch as a solid tab in the corner, the date and headline in white over the darkened foot of the photo, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-light-fullbleed-bn.jpg?v=ce4bb7de"><img src="img/01-cover-light-fullbleed-bn.jpg?v=ce4bb7de" alt="Cover: a colour photo of pylons at sunset fills the slide, the notch as a solid tab in the corner, the date and headline in white over the darkened foot of the photo, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-dark-fullbleed-bn.jpg?v=ad85a6bf"><img src="img/01-cover-dark-fullbleed-bn.jpg?v=ad85a6bf" alt="Cover: a colour photo of pylons at sunset fills the slide, the notch as a solid tab in the corner, the date and headline in white over the darkened foot of the photo, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Photo fills the slide · words on it</h4><p class="files">01-cover-light-fullbleed-bn.jpg<br>01-cover-dark-fullbleed-bn.jpg</p><p class="e">Photo fills the slide</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/01-cover-light-text-bottom-long-bn.jpg?v=af96b9da"><img src="img/01-cover-light-text-bottom-long-bn.jpg?v=af96b9da" alt="Cover with no photo on the topic’s pale orange-and-indigo wash: notch and date at the top, the long headline at the bottom, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/01-cover-dark-text-bottom-long-bn.jpg?v=2e7016b4"><img src="img/01-cover-dark-text-bottom-long-bn.jpg?v=2e7016b4" alt="Cover with no photo on the topic’s pale orange-and-indigo wash: notch and date at the top, the long headline at the bottom, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-light-text-bottom-long-bn.jpg?v=67e66a24"><img src="img/01-cover-light-text-bottom-long-bn.jpg?v=67e66a24" alt="Cover with no photo on the topic’s pale orange-and-indigo wash: notch and date at the top, the long headline at the bottom, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-dark-text-bottom-long-bn.jpg?v=4714b94e"><img src="img/01-cover-dark-text-bottom-long-bn.jpg?v=4714b94e" alt="Cover with no photo on the topic’s pale orange-and-indigo wash: notch and date at the top, the long headline at the bottom, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>No photo · topic wash · long headline</h4><p class="files">01-cover-light-text-bottom-long-bn.jpg<br>01-cover-dark-text-bottom-long-bn.jpg</p><p class="e">Empty space 75%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/01-cover-light-new-bn.jpg?v=bc0f2e2b"><img src="img/01-cover-light-new-bn.jpg?v=bc0f2e2b" alt="Cover for a new story: a purple notch reading 06 New, the label line Explainer and the date, and the long headline; the first dot is purple, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/01-cover-dark-new-bn.jpg?v=aa54249e"><img src="img/01-cover-dark-new-bn.jpg?v=aa54249e" alt="Cover for a new story: a purple notch reading 06 New, the label line Explainer and the date, and the long headline; the first dot is purple, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-light-new-bn.jpg?v=db8486c0"><img src="img/01-cover-light-new-bn.jpg?v=db8486c0" alt="Cover for a new story: a purple notch reading 06 New, the label line Explainer and the date, and the long headline; the first dot is purple, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-dark-new-bn.jpg?v=b0ec43c2"><img src="img/01-cover-dark-new-bn.jpg?v=b0ec43c2" alt="Cover for a new story: a purple notch reading 06 New, the label line Explainer and the date, and the long headline; the first dot is purple, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>New · purple notch</h4><p class="files">01-cover-light-new-bn.jpg<br>01-cover-dark-new-bn.jpg</p><p class="e">Empty space 75%</p></figcaption>
       </figure>
@@ -844,8 +871,8 @@
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/02-text-light-bn.jpg?v=dc987a4e"><img src="img/02-text-light-bn.jpg?v=dc987a4e" alt="Text slide: the heading “Every answer runs on a server” and a short paragraph; the second dot filled, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/02-text-dark-bn.jpg?v=9fe9f39b"><img src="img/02-text-dark-bn.jpg?v=9fe9f39b" alt="Text slide: the heading “Every answer runs on a server” and a short paragraph; the second dot filled, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/02-text-light-bn.jpg?v=5b17d01c"><img src="img/02-text-light-bn.jpg?v=5b17d01c" alt="Text slide: the heading “Every answer runs on a server” and a short paragraph; the second dot filled, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/02-text-dark-bn.jpg?v=8b2bba9b"><img src="img/02-text-dark-bn.jpg?v=8b2bba9b" alt="Text slide: the heading “Every answer runs on a server” and a short paragraph; the second dot filled, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Heading and text</h4><p class="files">02-text-light-bn.jpg<br>02-text-dark-bn.jpg</p><p class="e">Empty space 75%</p></figcaption>
       </figure>
@@ -856,43 +883,43 @@
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/03-image-light-photo-text-top-bn.jpg?v=49a5ccee"><img src="img/03-image-light-photo-text-top-bn.jpg?v=49a5ccee" alt="Image slide: a caption at the top and a colour photo of an open office filling the rest, edge to edge, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/03-image-dark-photo-text-top-bn.jpg?v=7de53ac5"><img src="img/03-image-dark-photo-text-top-bn.jpg?v=7de53ac5" alt="Image slide: a caption at the top and a colour photo of an open office filling the rest, edge to edge, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-light-photo-text-top-bn.jpg?v=d6dc6399"><img src="img/03-image-light-photo-text-top-bn.jpg?v=d6dc6399" alt="Image slide: a caption at the top and a colour photo of an open office filling the rest, edge to edge, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-dark-photo-text-top-bn.jpg?v=1f5b27e6"><img src="img/03-image-dark-photo-text-top-bn.jpg?v=1f5b27e6" alt="Image slide: a caption at the top and a colour photo of an open office filling the rest, edge to edge, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Caption top · photo below</h4><p class="files">03-image-light-photo-text-top-bn.jpg<br>03-image-dark-photo-text-top-bn.jpg</p><p class="e">Empty space 34%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/03-image-light-photo-text-bottom-bn.jpg?v=bc8619ca"><img src="img/03-image-light-photo-text-bottom-bn.jpg?v=bc8619ca" alt="Image slide: a square photo of security cameras on a dark wall, cropped to fill the top, the caption below, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/03-image-dark-photo-text-bottom-bn.jpg?v=236beff1"><img src="img/03-image-dark-photo-text-bottom-bn.jpg?v=236beff1" alt="Image slide: a square photo of security cameras on a dark wall, cropped to fill the top, the caption below, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-light-photo-text-bottom-bn.jpg?v=e7122a99"><img src="img/03-image-light-photo-text-bottom-bn.jpg?v=e7122a99" alt="Image slide: a square photo of security cameras on a dark wall, cropped to fill the top, the caption below, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-dark-photo-text-bottom-bn.jpg?v=86f2e073"><img src="img/03-image-dark-photo-text-bottom-bn.jpg?v=86f2e073" alt="Image slide: a square photo of security cameras on a dark wall, cropped to fill the top, the caption below, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Photo above · caption below</h4><p class="files">03-image-light-photo-text-bottom-bn.jpg<br>03-image-dark-photo-text-bottom-bn.jpg</p><p class="e">Empty space 21%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/03-image-light-fit-bn.jpg?v=aae7504d"><img src="img/03-image-light-fit-bn.jpg?v=aae7504d" alt="Image slide: a tall photo of Dhaka traffic shown whole, at its own shape, on the topic’s orange-and-indigo wash, the caption below, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/03-image-dark-fit-bn.jpg?v=a98d4667"><img src="img/03-image-dark-fit-bn.jpg?v=a98d4667" alt="Image slide: a tall photo of Dhaka traffic shown whole, at its own shape, on the topic’s orange-and-indigo wash, the caption below, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-light-fit-bn.jpg?v=55f59825"><img src="img/03-image-light-fit-bn.jpg?v=55f59825" alt="Image slide: a tall photo of Dhaka traffic shown whole, at its own shape, on the topic’s orange-and-indigo wash, the caption below, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-dark-fit-bn.jpg?v=54f3a0a3"><img src="img/03-image-dark-fit-bn.jpg?v=54f3a0a3" alt="Image slide: a tall photo of Dhaka traffic shown whole, at its own shape, on the topic’s orange-and-indigo wash, the caption below, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Fit · any shape, kept whole</h4><p class="files">03-image-light-fit-bn.jpg<br>03-image-dark-fit-bn.jpg</p><p class="e">Empty space 21%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/03-image-light-screenshot-bn.jpg?v=9a63e608"><img src="img/03-image-light-screenshot-bn.jpg?v=9a63e608" alt="Image slide: a screenshot of a chatbot answer with a thin ink line round it, its credit, and the caption at the bottom, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/03-image-dark-screenshot-bn.jpg?v=5f2cad5a"><img src="img/03-image-dark-screenshot-bn.jpg?v=5f2cad5a" alt="Image slide: a screenshot of a chatbot answer with a thin ink line round it, its credit, and the caption at the bottom, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-light-screenshot-bn.jpg?v=6ca1be46"><img src="img/03-image-light-screenshot-bn.jpg?v=6ca1be46" alt="Image slide: a screenshot of a chatbot answer with a thin ink line round it, its credit, and the caption at the bottom, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-dark-screenshot-bn.jpg?v=302cf293"><img src="img/03-image-dark-screenshot-bn.jpg?v=302cf293" alt="Image slide: a screenshot of a chatbot answer with a thin ink line round it, its credit, and the caption at the bottom, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Screenshot</h4><p class="files">03-image-light-screenshot-bn.jpg<br>03-image-dark-screenshot-bn.jpg</p><p class="e">Empty space 64%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/03-image-light-fullbleed-text-top-bn.jpg?v=c26a5f62"><img src="img/03-image-light-fullbleed-text-top-bn.jpg?v=c26a5f62" alt="Image slide: a sunset photo of pylons fills the slide, the caption in white over the darkened sky at the top, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/03-image-dark-fullbleed-text-top-bn.jpg?v=c26a5f62"><img src="img/03-image-dark-fullbleed-text-top-bn.jpg?v=c26a5f62" alt="Image slide: a sunset photo of pylons fills the slide, the caption in white over the darkened sky at the top, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-light-fullbleed-text-top-bn.jpg?v=70766a44"><img src="img/03-image-light-fullbleed-text-top-bn.jpg?v=70766a44" alt="Image slide: a sunset photo of pylons fills the slide, the caption in white over the darkened sky at the top, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-dark-fullbleed-text-top-bn.jpg?v=70766a44"><img src="img/03-image-dark-fullbleed-text-top-bn.jpg?v=70766a44" alt="Image slide: a sunset photo of pylons fills the slide, the caption in white over the darkened sky at the top, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Photo fills the slide · words at the top</h4><p class="files">03-image-light-fullbleed-text-top-bn.jpg<br>03-image-dark-fullbleed-text-top-bn.jpg</p><p class="e">Photo fills the slide</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/03-image-light-fullbleed-text-bottom-bn.jpg?v=bcf8bd8f"><img src="img/03-image-light-fullbleed-text-bottom-bn.jpg?v=bcf8bd8f" alt="Image slide: a photo of people at screens fills the slide, the caption in white over the darkened foot, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/03-image-dark-fullbleed-text-bottom-bn.jpg?v=bcf8bd8f"><img src="img/03-image-dark-fullbleed-text-bottom-bn.jpg?v=bcf8bd8f" alt="Image slide: a photo of people at screens fills the slide, the caption in white over the darkened foot, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-light-fullbleed-text-bottom-bn.jpg?v=a966e90d"><img src="img/03-image-light-fullbleed-text-bottom-bn.jpg?v=a966e90d" alt="Image slide: a photo of people at screens fills the slide, the caption in white over the darkened foot, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-dark-fullbleed-text-bottom-bn.jpg?v=a966e90d"><img src="img/03-image-dark-fullbleed-text-bottom-bn.jpg?v=a966e90d" alt="Image slide: a photo of people at screens fills the slide, the caption in white over the darkened foot, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Photo fills the slide · words at the foot</h4><p class="files">03-image-light-fullbleed-text-bottom-bn.jpg<br>03-image-dark-fullbleed-text-bottom-bn.jpg</p><p class="e">Photo fills the slide</p></figcaption>
       </figure>
@@ -903,29 +930,29 @@
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/04-data-light-number-bn.jpg?v=1e2e60a9"><img src="img/04-data-light-number-bn.jpg?v=1e2e60a9" alt="Data slide: the number 945 in ink, sans serif, TWh beside it, a sentence saying what it means, and the source line, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/04-data-dark-number-bn.jpg?v=b4577154"><img src="img/04-data-dark-number-bn.jpg?v=b4577154" alt="Data slide: the number 945 in ink, sans serif, TWh beside it, a sentence saying what it means, and the source line, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-light-number-bn.jpg?v=1c426c57"><img src="img/04-data-light-number-bn.jpg?v=1c426c57" alt="Data slide: the number 945 in ink, sans serif, TWh beside it, a sentence saying what it means, and the source line, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-dark-number-bn.jpg?v=ebd692ec"><img src="img/04-data-dark-number-bn.jpg?v=ebd692ec" alt="Data slide: the number 945 in ink, sans serif, TWh beside it, a sentence saying what it means, and the source line, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>One big number</h4><p class="files">04-data-light-number-bn.jpg<br>04-data-dark-number-bn.jpg</p><p class="e">Empty space 75%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/04-data-light-number-block-bn.jpg?v=4a712c7b"><img src="img/04-data-light-number-block-bn.jpg?v=4a712c7b" alt="Data slide: the number 945 TWh in white on a solid orange block, a sentence under it and the source line, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/04-data-dark-number-block-bn.jpg?v=fd2f95da"><img src="img/04-data-dark-number-block-bn.jpg?v=fd2f95da" alt="Data slide: the number 945 TWh in white on a solid orange block, a sentence under it and the source line, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-light-number-block-bn.jpg?v=bacbbe12"><img src="img/04-data-light-number-block-bn.jpg?v=bacbbe12" alt="Data slide: the number 945 TWh in white on a solid orange block, a sentence under it and the source line, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-dark-number-block-bn.jpg?v=89bde0e8"><img src="img/04-data-dark-number-block-bn.jpg?v=89bde0e8" alt="Data slide: the number 945 TWh in white on a solid orange block, a sentence under it and the source line, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Number on a block of the colour, as the FT does</h4><p class="files">04-data-light-number-block-bn.jpg<br>04-data-dark-number-block-bn.jpg</p><p class="e">Empty space 74%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/04-data-light-chart-bn.jpg?v=2e9f95e5"><img src="img/04-data-light-chart-bn.jpg?v=2e9f95e5" alt="Data slide: a title and a bar chart, the United States bar at 45% in orange, China, Europe and the rest of the world in grey, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/04-data-dark-chart-bn.jpg?v=f0d14363"><img src="img/04-data-dark-chart-bn.jpg?v=f0d14363" alt="Data slide: a title and a bar chart, the United States bar at 45% in orange, China, Europe and the rest of the world in grey, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-light-chart-bn.jpg?v=6d6fc7f1"><img src="img/04-data-light-chart-bn.jpg?v=6d6fc7f1" alt="Data slide: a title and a bar chart, the United States bar at 45% in orange, China, Europe and the rest of the world in grey, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-dark-chart-bn.jpg?v=36736585"><img src="img/04-data-dark-chart-bn.jpg?v=36736585" alt="Data slide: a title and a bar chart, the United States bar at 45% in orange, China, Europe and the rest of the world in grey, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>One chart</h4><p class="files">04-data-light-chart-bn.jpg<br>04-data-dark-chart-bn.jpg</p><p class="e">Empty space 76%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/04-data-light-timeline-bn.jpg?v=c871e7ea"><img src="img/04-data-light-timeline-bn.jpg?v=c871e7ea" alt="Data slide: a title and a vertical timeline spaced to scale, from launch in Nov 2022 to 800 million weekly users in Oct 2025, the marks in orange, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/04-data-dark-timeline-bn.jpg?v=f4d954f0"><img src="img/04-data-dark-timeline-bn.jpg?v=f4d954f0" alt="Data slide: a title and a vertical timeline spaced to scale, from launch in Nov 2022 to 800 million weekly users in Oct 2025, the marks in orange, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-light-timeline-bn.jpg?v=aa641078"><img src="img/04-data-light-timeline-bn.jpg?v=aa641078" alt="Data slide: a title and a vertical timeline spaced to scale, from launch in Nov 2022 to 800 million weekly users in Oct 2025, the marks in orange, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-dark-timeline-bn.jpg?v=0e949936"><img src="img/04-data-dark-timeline-bn.jpg?v=0e949936" alt="Data slide: a title and a vertical timeline spaced to scale, from launch in Nov 2022 to 800 million weekly users in Oct 2025, the marks in orange, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>A timeline</h4><p class="files">04-data-light-timeline-bn.jpg<br>04-data-dark-timeline-bn.jpg</p><p class="e">Empty space 79%</p></figcaption>
       </figure>
@@ -936,8 +963,8 @@
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/05-quote-light-bn.jpg?v=2172abe8"><img src="img/05-quote-light-bn.jpg?v=2172abe8" alt="Quote slide on the orange-and-indigo wash: “The building is ours on paper. Everything that makes it valuable belongs to someone else.”, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/05-quote-dark-bn.jpg?v=dc68973b"><img src="img/05-quote-dark-bn.jpg?v=dc68973b" alt="Quote slide on the orange-and-indigo wash: “The building is ours on paper. Everything that makes it valuable belongs to someone else.”, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/05-quote-light-bn.jpg?v=1bdf440a"><img src="img/05-quote-light-bn.jpg?v=1bdf440a" alt="Quote slide on the orange-and-indigo wash: “The building is ours on paper. Everything that makes it valuable belongs to someone else.”, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/05-quote-dark-bn.jpg?v=ffbc616f"><img src="img/05-quote-dark-bn.jpg?v=ffbc616f" alt="Quote slide on the orange-and-indigo wash: “The building is ours on paper. Everything that makes it valuable belongs to someone else.”, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Pull quote</h4><p class="files">05-quote-light-bn.jpg<br>05-quote-dark-bn.jpg</p><p class="e">Empty space 79%</p></figcaption>
       </figure>
@@ -948,22 +975,22 @@
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/06-closing-light-read-bn.jpg?v=63bc8724"><img src="img/06-closing-light-read-bn.jpg?v=63bc8724" alt="Closing slide: the notch, “Read the full story” in large type and Link in bio under it; the last dot filled, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/06-closing-dark-read-bn.jpg?v=52241f7b"><img src="img/06-closing-dark-read-bn.jpg?v=52241f7b" alt="Closing slide: the notch, “Read the full story” in large type and Link in bio under it; the last dot filled, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/06-closing-light-read-bn.jpg?v=af5dfc14"><img src="img/06-closing-light-read-bn.jpg?v=af5dfc14" alt="Closing slide: the notch, “Read the full story” in large type and Link in bio under it; the last dot filled, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/06-closing-dark-read-bn.jpg?v=ff7fbb72"><img src="img/06-closing-dark-read-bn.jpg?v=ff7fbb72" alt="Closing slide: the notch, “Read the full story” in large type and Link in bio under it; the last dot filled, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Read the full story · with notch</h4><p class="files">06-closing-light-read-bn.jpg<br>06-closing-dark-read-bn.jpg</p><p class="e">Empty space 83%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/06-closing-light-read-post-bn.jpg?v=5d9cfff2"><img src="img/06-closing-light-read-post-bn.jpg?v=5d9cfff2" alt="Closing slide: the notch, “Read the full story” and Link in the post on an orange block, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/06-closing-dark-read-post-bn.jpg?v=7b63ee8b"><img src="img/06-closing-dark-read-post-bn.jpg?v=7b63ee8b" alt="Closing slide: the notch, “Read the full story” and Link in the post on an orange block, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/06-closing-light-read-post-bn.jpg?v=002b584f"><img src="img/06-closing-light-read-post-bn.jpg?v=002b584f" alt="Closing slide: the notch, “Read the full story” and Link in the post on an orange block, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/06-closing-dark-read-post-bn.jpg?v=86eb0be0"><img src="img/06-closing-dark-read-post-bn.jpg?v=86eb0be0" alt="Closing slide: the notch, “Read the full story” and Link in the post on an orange block, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Read the full story · for Facebook and LinkedIn</h4><p class="files">06-closing-light-read-post-bn.jpg<br>06-closing-dark-read-post-bn.jpg</p><p class="e">Empty space 83%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/06-closing-light-question-bn.jpg?v=629d60d5"><img src="img/06-closing-light-question-bn.jpg?v=629d60d5" alt="Closing slide on the orange-and-indigo wash: the question “Should data centres pay more for the power they use?” and Tell us in the comments, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/06-closing-dark-question-bn.jpg?v=1786f183"><img src="img/06-closing-dark-question-bn.jpg?v=1786f183" alt="Closing slide on the orange-and-indigo wash: the question “Should data centres pay more for the power they use?” and Tell us in the comments, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/06-closing-light-question-bn.jpg?v=48d1b6de"><img src="img/06-closing-light-question-bn.jpg?v=48d1b6de" alt="Closing slide on the orange-and-indigo wash: the question “Should data centres pay more for the power they use?” and Tell us in the comments, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/06-closing-dark-question-bn.jpg?v=94f3f6cb"><img src="img/06-closing-dark-question-bn.jpg?v=94f3f6cb" alt="Closing slide on the orange-and-indigo wash: the question “Should data centres pay more for the power they use?” and Tell us in the comments, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>One open question · topic wash</h4><p class="files">06-closing-light-question-bn.jpg<br>06-closing-dark-question-bn.jpg</p><p class="e">Empty space 84%</p></figcaption>
       </figure>
@@ -974,29 +1001,29 @@
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/07-image-light-split-text-bottom-short-bn.jpg?v=4cb168f7"><img src="img/07-image-light-split-text-bottom-short-bn.jpg?v=4cb168f7" alt="Single post: notch and date, a sunset photo of pylons edge to edge, the short headline below, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/07-image-dark-split-text-bottom-short-bn.jpg?v=0b880932"><img src="img/07-image-dark-split-text-bottom-short-bn.jpg?v=0b880932" alt="Single post: notch and date, a sunset photo of pylons edge to edge, the short headline below, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-light-split-text-bottom-short-bn.jpg?v=98e69160"><img src="img/07-image-light-split-text-bottom-short-bn.jpg?v=98e69160" alt="Single post: notch and date, a sunset photo of pylons edge to edge, the short headline below, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-dark-split-text-bottom-short-bn.jpg?v=4c241c8e"><img src="img/07-image-dark-split-text-bottom-short-bn.jpg?v=4c241c8e" alt="Single post: notch and date, a sunset photo of pylons edge to edge, the short headline below, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Notch · photo above · short headline</h4><p class="files">07-image-light-split-text-bottom-short-bn.jpg<br>07-image-dark-split-text-bottom-short-bn.jpg</p><p class="e">Empty space 34%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/07-image-light-split-text-top-long-bn.jpg?v=93a7e239"><img src="img/07-image-light-split-text-top-long-bn.jpg?v=93a7e239" alt="Single post: notch and date, a long headline, and a photo of an open office filling the rest, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/07-image-dark-split-text-top-long-bn.jpg?v=08697864"><img src="img/07-image-dark-split-text-top-long-bn.jpg?v=08697864" alt="Single post: notch and date, a long headline, and a photo of an open office filling the rest, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-light-split-text-top-long-bn.jpg?v=877b5c2d"><img src="img/07-image-light-split-text-top-long-bn.jpg?v=877b5c2d" alt="Single post: notch and date, a long headline, and a photo of an open office filling the rest, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-dark-split-text-top-long-bn.jpg?v=f7caaa60"><img src="img/07-image-dark-split-text-top-long-bn.jpg?v=f7caaa60" alt="Single post: notch and date, a long headline, and a photo of an open office filling the rest, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Notch · long headline · photo below</h4><p class="files">07-image-light-split-text-top-long-bn.jpg<br>07-image-dark-split-text-top-long-bn.jpg</p><p class="e">Empty space 34%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/07-image-light-fullbleed-bn.jpg?v=d7c17482"><img src="img/07-image-light-fullbleed-bn.jpg?v=d7c17482" alt="Single post: a photo of Dhaka traffic fills the post, an indigo label line for AI Across Bangladesh and a long headline in white over the darkened foot, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/07-image-dark-fullbleed-bn.jpg?v=d7c17482"><img src="img/07-image-dark-fullbleed-bn.jpg?v=d7c17482" alt="Single post: a photo of Dhaka traffic fills the post, an indigo label line for AI Across Bangladesh and a long headline in white over the darkened foot, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-light-fullbleed-bn.jpg?v=1de8883c"><img src="img/07-image-light-fullbleed-bn.jpg?v=1de8883c" alt="Single post: a photo of Dhaka traffic fills the post, an indigo label line for AI Across Bangladesh and a long headline in white over the darkened foot, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-dark-fullbleed-bn.jpg?v=1de8883c"><img src="img/07-image-dark-fullbleed-bn.jpg?v=1de8883c" alt="Single post: a photo of Dhaka traffic fills the post, an indigo label line for AI Across Bangladesh and a long headline in white over the darkened foot, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Photo fills the post · no notch</h4><p class="files">07-image-light-fullbleed-bn.jpg<br>07-image-dark-fullbleed-bn.jpg</p><p class="e">Photo fills the slide</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/07-image-light-fullbleed-notch-bn.jpg?v=d3550235"><img src="img/07-image-light-fullbleed-notch-bn.jpg?v=d3550235" alt="Single post: a sunset photo of pylons fills the post, the notch as a solid tab, the headline in white, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/07-image-dark-fullbleed-notch-bn.jpg?v=95bfbacb"><img src="img/07-image-dark-fullbleed-notch-bn.jpg?v=95bfbacb" alt="Single post: a sunset photo of pylons fills the post, the notch as a solid tab, the headline in white, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-light-fullbleed-notch-bn.jpg?v=c317a2e6"><img src="img/07-image-light-fullbleed-notch-bn.jpg?v=c317a2e6" alt="Single post: a sunset photo of pylons fills the post, the notch as a solid tab, the headline in white, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/07-image-dark-fullbleed-notch-bn.jpg?v=ae48f7db"><img src="img/07-image-dark-fullbleed-notch-bn.jpg?v=ae48f7db" alt="Single post: a sunset photo of pylons fills the post, the notch as a solid tab, the headline in white, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Photo fills the post · with the notch</h4><p class="files">07-image-light-fullbleed-notch-bn.jpg<br>07-image-dark-fullbleed-notch-bn.jpg</p><p class="e">Photo fills the slide</p></figcaption>
       </figure>
@@ -1007,15 +1034,15 @@
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/08-quote-portrait-light-text-top-bn.jpg?v=57631587"><img src="img/08-quote-portrait-light-text-top-bn.jpg?v=57631587" alt="Quote card: notch Quote, the quote at the top, a portrait space and the speaker’s name below, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/08-quote-portrait-dark-text-top-bn.jpg?v=c7da919a"><img src="img/08-quote-portrait-dark-text-top-bn.jpg?v=c7da919a" alt="Quote card: notch Quote, the quote at the top, a portrait space and the speaker’s name below, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/08-quote-portrait-light-text-top-bn.jpg?v=f9fa8720"><img src="img/08-quote-portrait-light-text-top-bn.jpg?v=f9fa8720" alt="Quote card: notch Quote, the quote at the top, a portrait space and the speaker’s name below, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/08-quote-portrait-dark-text-top-bn.jpg?v=b7af6090"><img src="img/08-quote-portrait-dark-text-top-bn.jpg?v=b7af6090" alt="Quote card: notch Quote, the quote at the top, a portrait space and the speaker’s name below, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Quote top · portrait below</h4><p class="files">08-quote-portrait-light-text-top-bn.jpg<br>08-quote-portrait-dark-text-top-bn.jpg</p><p class="e">Empty space 79%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/08-quote-portrait-light-text-bottom-bn.jpg?v=c51aebac"><img src="img/08-quote-portrait-light-text-bottom-bn.jpg?v=c51aebac" alt="Quote card on the orange-and-indigo wash: a portrait space and the speaker at the top, the quote below, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/08-quote-portrait-dark-text-bottom-bn.jpg?v=f0a87f0a"><img src="img/08-quote-portrait-dark-text-bottom-bn.jpg?v=f0a87f0a" alt="Quote card on the orange-and-indigo wash: a portrait space and the speaker at the top, the quote below, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/08-quote-portrait-light-text-bottom-bn.jpg?v=f708b6b0"><img src="img/08-quote-portrait-light-text-bottom-bn.jpg?v=f708b6b0" alt="Quote card on the orange-and-indigo wash: a portrait space and the speaker at the top, the quote below, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/08-quote-portrait-dark-text-bottom-bn.jpg?v=ccce0f70"><img src="img/08-quote-portrait-dark-text-bottom-bn.jpg?v=ccce0f70" alt="Quote card on the orange-and-indigo wash: a portrait space and the speaker at the top, the quote below, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Portrait top · quote below</h4><p class="files">08-quote-portrait-light-text-bottom-bn.jpg<br>08-quote-portrait-dark-text-bottom-bn.jpg</p><p class="e">Empty space 79%</p></figcaption>
       </figure>
@@ -1026,8 +1053,8 @@
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/09-quote-light-bn.jpg?v=c5429f1b"><img src="img/09-quote-light-bn.jpg?v=c5429f1b" alt="Quote card filled in orange: the notch as a light tab, the quote in black, the attribution and source under it, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/09-quote-dark-bn.jpg?v=a3222f5f"><img src="img/09-quote-dark-bn.jpg?v=a3222f5f" alt="Quote card filled in orange: the notch as a light tab, the quote in black, the attribution and source under it, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/09-quote-light-bn.jpg?v=9648a32c"><img src="img/09-quote-light-bn.jpg?v=9648a32c" alt="Quote card filled in orange: the notch as a light tab, the quote in black, the attribution and source under it, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/09-quote-dark-bn.jpg?v=e51ab0db"><img src="img/09-quote-dark-bn.jpg?v=e51ab0db" alt="Quote card filled in orange: the notch as a light tab, the quote in black, the attribution and source under it, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Quote on the topic’s colour</h4><p class="files">09-quote-light-bn.jpg<br>09-quote-dark-bn.jpg</p><p class="e">Empty space 76%</p></figcaption>
       </figure>
@@ -1038,29 +1065,29 @@
       <div class="pairs">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/10-text-light-short-bn.jpg?v=ee56cafc"><img src="img/10-text-light-short-bn.jpg?v=ee56cafc" alt="Text card on the orange-and-indigo wash: notch Explainer, the statement “Electricity, not chips, is the limit”, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/10-text-dark-short-bn.jpg?v=15ede378"><img src="img/10-text-dark-short-bn.jpg?v=15ede378" alt="Text card on the orange-and-indigo wash: notch Explainer, the statement “Electricity, not chips, is the limit”, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-light-short-bn.jpg?v=e539590f"><img src="img/10-text-light-short-bn.jpg?v=e539590f" alt="Text card on the orange-and-indigo wash: notch Explainer, the statement “Electricity, not chips, is the limit”, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-dark-short-bn.jpg?v=f0da267a"><img src="img/10-text-dark-short-bn.jpg?v=f0da267a" alt="Text card on the orange-and-indigo wash: notch Explainer, the statement “Electricity, not chips, is the limit”, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Short statement · on the wash</h4><p class="files">10-text-light-short-bn.jpg<br>10-text-dark-short-bn.jpg</p><p class="e">Empty space 84%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/10-text-light-long-bn.jpg?v=bcbb02bd"><img src="img/10-text-light-long-bn.jpg?v=bcbb02bd" alt="Text card: notch Correction, “An earlier post said data centres used 4% of the world’s electricity in 2024. The figure is about 1.5%.” with 1.5% on an orange block, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/10-text-dark-long-bn.jpg?v=67ee3ff5"><img src="img/10-text-dark-long-bn.jpg?v=67ee3ff5" alt="Text card: notch Correction, “An earlier post said data centres used 4% of the world’s electricity in 2024. The figure is about 1.5%.” with 1.5% on an orange block, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-light-long-bn.jpg?v=66cef079"><img src="img/10-text-light-long-bn.jpg?v=66cef079" alt="Text card: notch Data, “Data centres used about 1.5% of the world’s electricity in 2024. By 2030 that share could double.” with 1.5% on an orange block, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-dark-long-bn.jpg?v=feb1ac12"><img src="img/10-text-dark-long-bn.jpg?v=feb1ac12" alt="Text card: notch Data, “Data centres used about 1.5% of the world’s electricity in 2024. By 2030 that share could double.” with 1.5% on an orange block, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
-        <figcaption><h4>Long · a correction</h4><p class="files">10-text-light-long-bn.jpg<br>10-text-dark-long-bn.jpg</p><p class="e">Empty space 65%</p></figcaption>
+        <figcaption><h4>Long · a finding</h4><p class="files">10-text-light-long-bn.jpg<br>10-text-dark-long-bn.jpg</p><p class="e">Empty space 67%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/10-text-light-new-bn.jpg?v=a946620d"><img src="img/10-text-light-new-bn.jpg?v=a946620d" alt="Text card for a new story: purple notch New, the long headline, and Full story: link in bio, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/10-text-dark-new-bn.jpg?v=524024f0"><img src="img/10-text-dark-new-bn.jpg?v=524024f0" alt="Text card for a new story: purple notch New, the long headline, and Full story: link in bio, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-light-new-bn.jpg?v=71fee23f"><img src="img/10-text-light-new-bn.jpg?v=71fee23f" alt="Text card for a new story: purple notch New, the long headline, and Full story: link in bio, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-dark-new-bn.jpg?v=b0259bb3"><img src="img/10-text-dark-new-bn.jpg?v=b0259bb3" alt="Text card for a new story: purple notch New, the long headline, and Full story: link in bio, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>New · purple notch</h4><p class="files">10-text-light-new-bn.jpg<br>10-text-dark-new-bn.jpg</p><p class="e">Empty space 74%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot feed" href="img/10-text-light-number-bn.jpg?v=66fa1a3a"><img src="img/10-text-light-number-bn.jpg?v=66fa1a3a" alt="Text card: notch Data, 945 TWh in white on a solid orange block, what it means, and the source, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
-          <a class="shot feed" href="img/10-text-dark-number-bn.jpg?v=b091b8ba"><img src="img/10-text-dark-number-bn.jpg?v=b091b8ba" alt="Text card: notch Data, 945 TWh in white on a solid orange block, what it means, and the source, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-light-number-bn.jpg?v=b3d60d0c"><img src="img/10-text-light-number-bn.jpg?v=b3d60d0c" alt="Text card: notch Data, 945 TWh in white on a solid orange block, what it means, and the source, in Bangla, light" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/10-text-dark-number-bn.jpg?v=1f3d5169"><img src="img/10-text-dark-number-bn.jpg?v=1f3d5169" alt="Text card: notch Data, 945 TWh in white on a solid orange block, what it means, and the source, in Bangla, dark" loading="lazy" width="1080" height="1350"></a>
         </div>
         <figcaption><h4>Big number on a block of the tone</h4><p class="files">10-text-light-number-bn.jpg<br>10-text-dark-number-bn.jpg</p><p class="e">Empty space 69%</p></figcaption>
       </figure>
@@ -1071,22 +1098,22 @@
       <div class="pairs story">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot story" href="img/11-new-story-light-text-top-bn.jpg?v=c61e9160"><img src="img/11-new-story-light-text-top-bn.jpg?v=c61e9160" alt="Story: purple notch 06 New under the clear top, the headline, a space for the link sticker, and a sunset photo of pylons filling the bottom, in Bangla, light" loading="lazy" width="1080" height="1920"></a>
-          <a class="shot story" href="img/11-new-story-dark-text-top-bn.jpg?v=ce9c9823"><img src="img/11-new-story-dark-text-top-bn.jpg?v=ce9c9823" alt="Story: purple notch 06 New under the clear top, the headline, a space for the link sticker, and a sunset photo of pylons filling the bottom, in Bangla, dark" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/11-new-story-light-text-top-bn.jpg?v=9da21512"><img src="img/11-new-story-light-text-top-bn.jpg?v=9da21512" alt="Story: purple notch 06 New under the clear top, the headline, a space for the link sticker, and a sunset photo of pylons filling the bottom, in Bangla, light" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/11-new-story-dark-text-top-bn.jpg?v=50839e73"><img src="img/11-new-story-dark-text-top-bn.jpg?v=50839e73" alt="Story: purple notch 06 New under the clear top, the headline, a space for the link sticker, and a sunset photo of pylons filling the bottom, in Bangla, dark" loading="lazy" width="1080" height="1920"></a>
         </div>
         <figcaption><h4>Text top · photo below</h4><p class="files">11-new-story-light-text-top-bn.jpg<br>11-new-story-dark-text-top-bn.jpg</p><p class="e">Empty space 39%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot story" href="img/11-new-story-light-text-bottom-bn.jpg?v=c924cec1"><img src="img/11-new-story-light-text-bottom-bn.jpg?v=c924cec1" alt="Story: purple notch, a sunset photo of pylons, then the headline and the link sticker space, in Bangla, light" loading="lazy" width="1080" height="1920"></a>
-          <a class="shot story" href="img/11-new-story-dark-text-bottom-bn.jpg?v=6bb31bcb"><img src="img/11-new-story-dark-text-bottom-bn.jpg?v=6bb31bcb" alt="Story: purple notch, a sunset photo of pylons, then the headline and the link sticker space, in Bangla, dark" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/11-new-story-light-text-bottom-bn.jpg?v=cde3e5ad"><img src="img/11-new-story-light-text-bottom-bn.jpg?v=cde3e5ad" alt="Story: purple notch, a sunset photo of pylons, then the headline and the link sticker space, in Bangla, light" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/11-new-story-dark-text-bottom-bn.jpg?v=5d44f9b7"><img src="img/11-new-story-dark-text-bottom-bn.jpg?v=5d44f9b7" alt="Story: purple notch, a sunset photo of pylons, then the headline and the link sticker space, in Bangla, dark" loading="lazy" width="1080" height="1920"></a>
         </div>
         <figcaption><h4>Photo above · text below</h4><p class="files">11-new-story-light-text-bottom-bn.jpg<br>11-new-story-dark-text-bottom-bn.jpg</p><p class="e">Empty space 50%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot story" href="img/11-new-story-light-fullbleed-bn.jpg?v=77557394"><img src="img/11-new-story-light-fullbleed-bn.jpg?v=77557394" alt="Story: a sunset photo of pylons fills the screen, the purple tab under the clear top, the headline and link sticker space in white over the darkened foot, in Bangla, light" loading="lazy" width="1080" height="1920"></a>
-          <a class="shot story" href="img/11-new-story-dark-fullbleed-bn.jpg?v=cf601a40"><img src="img/11-new-story-dark-fullbleed-bn.jpg?v=cf601a40" alt="Story: a sunset photo of pylons fills the screen, the purple tab under the clear top, the headline and link sticker space in white over the darkened foot, in Bangla, dark" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/11-new-story-light-fullbleed-bn.jpg?v=afd7a62c"><img src="img/11-new-story-light-fullbleed-bn.jpg?v=afd7a62c" alt="Story: a sunset photo of pylons fills the screen, the purple tab under the clear top, the headline and link sticker space in white over the darkened foot, in Bangla, light" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/11-new-story-dark-fullbleed-bn.jpg?v=745c8932"><img src="img/11-new-story-dark-fullbleed-bn.jpg?v=745c8932" alt="Story: a sunset photo of pylons fills the screen, the purple tab under the clear top, the headline and link sticker space in white over the darkened foot, in Bangla, dark" loading="lazy" width="1080" height="1920"></a>
         </div>
         <figcaption><h4>Photo fills the story · words on it</h4><p class="files">11-new-story-light-fullbleed-bn.jpg<br>11-new-story-dark-fullbleed-bn.jpg</p><p class="e">Photo fills the slide</p></figcaption>
       </figure>
@@ -1097,8 +1124,8 @@
       <div class="pairs story">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot story" href="img/12-reshare-light-bn.jpg?v=fe82a2c7"><img src="img/12-reshare-light-bn.jpg?v=fe82a2c7" alt="Story frame on the orange-and-indigo wash: a label line, a large dashed space for the shared post, and Tap the post to read the explainer, in Bangla, light" loading="lazy" width="1080" height="1920"></a>
-          <a class="shot story" href="img/12-reshare-dark-bn.jpg?v=135da15a"><img src="img/12-reshare-dark-bn.jpg?v=135da15a" alt="Story frame on the orange-and-indigo wash: a label line, a large dashed space for the shared post, and Tap the post to read the explainer, in Bangla, dark" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/12-reshare-light-bn.jpg?v=96bb31a9"><img src="img/12-reshare-light-bn.jpg?v=96bb31a9" alt="Story frame on the orange-and-indigo wash: a label line, a large dashed space for the shared post, and Tap the post to read the explainer, in Bangla, light" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/12-reshare-dark-bn.jpg?v=92c65fd8"><img src="img/12-reshare-dark-bn.jpg?v=92c65fd8" alt="Story frame on the orange-and-indigo wash: a label line, a large dashed space for the shared post, and Tap the post to read the explainer, in Bangla, dark" loading="lazy" width="1080" height="1920"></a>
         </div>
         <figcaption><h4>Frame for a shared post</h4><p class="files">12-reshare-light-bn.jpg<br>12-reshare-dark-bn.jpg</p><p class="e">Empty space 53%</p></figcaption>
       </figure>
@@ -1109,8 +1136,8 @@
       <div class="pairs story">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot story" href="img/13-text-light-bn.jpg?v=2789b3bc"><img src="img/13-text-light-bn.jpg?v=2789b3bc" alt="Text story: a label line and the statement “Data centres used about 1.5% of the world’s electricity in 2024. By 2030 that share could double.” with its source, in Bangla, light" loading="lazy" width="1080" height="1920"></a>
-          <a class="shot story" href="img/13-text-dark-bn.jpg?v=978f3126"><img src="img/13-text-dark-bn.jpg?v=978f3126" alt="Text story: a label line and the statement “Data centres used about 1.5% of the world’s electricity in 2024. By 2030 that share could double.” with its source, in Bangla, dark" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/13-text-light-bn.jpg?v=d510cdb8"><img src="img/13-text-light-bn.jpg?v=d510cdb8" alt="Text story: a label line and the statement “Data centres used about 1.5% of the world’s electricity in 2024. By 2030 that share could double.” with its source, in Bangla, light" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/13-text-dark-bn.jpg?v=85af121b"><img src="img/13-text-dark-bn.jpg?v=85af121b" alt="Text story: a label line and the statement “Data centres used about 1.5% of the world’s electricity in 2024. By 2030 that share could double.” with its source, in Bangla, dark" loading="lazy" width="1080" height="1920"></a>
         </div>
         <figcaption><h4>Statement</h4><p class="files">13-text-light-bn.jpg<br>13-text-dark-bn.jpg</p><p class="e">Empty space 78%</p></figcaption>
       </figure>
@@ -1121,8 +1148,8 @@
       <div class="pairs story">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot story" href="img/14-poll-light-bn.jpg?v=143651fa"><img src="img/14-poll-light-bn.jpg?v=143651fa" alt="Poll story on the orange-and-indigo wash: “Should data centres pay more for the power they use?” and a dashed space for the poll sticker, in Bangla, light" loading="lazy" width="1080" height="1920"></a>
-          <a class="shot story" href="img/14-poll-dark-bn.jpg?v=01378ba1"><img src="img/14-poll-dark-bn.jpg?v=01378ba1" alt="Poll story on the orange-and-indigo wash: “Should data centres pay more for the power they use?” and a dashed space for the poll sticker, in Bangla, dark" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/14-poll-light-bn.jpg?v=7a4a311c"><img src="img/14-poll-light-bn.jpg?v=7a4a311c" alt="Poll story on the orange-and-indigo wash: “Should data centres pay more for the power they use?” and a dashed space for the poll sticker, in Bangla, light" loading="lazy" width="1080" height="1920"></a>
+          <a class="shot story" href="img/14-poll-dark-bn.jpg?v=11cd4c68"><img src="img/14-poll-dark-bn.jpg?v=11cd4c68" alt="Poll story on the orange-and-indigo wash: “Should data centres pay more for the power they use?” and a dashed space for the poll sticker, in Bangla, dark" loading="lazy" width="1080" height="1920"></a>
         </div>
         <figcaption><h4>Question with sticker space</h4><p class="files">14-poll-light-bn.jpg<br>14-poll-dark-bn.jpg</p><p class="e">Empty space 76%</p></figcaption>
       </figure>
@@ -1133,22 +1160,22 @@
       <div class="pairs link">
       <figure class="pair">
         <div class="imgs">
-          <a class="shot link" href="img/15-link-light-photo-bn.jpg?v=ee9a96df"><img src="img/15-link-light-photo-bn.jpg?v=ee9a96df" alt="Link preview: notch and date, the headline on the left, a sunset photo of pylons on the right half, in Bangla, light" loading="lazy" width="1200" height="630"></a>
-          <a class="shot link" href="img/15-link-dark-photo-bn.jpg?v=a1e601ea"><img src="img/15-link-dark-photo-bn.jpg?v=a1e601ea" alt="Link preview: notch and date, the headline on the left, a sunset photo of pylons on the right half, in Bangla, dark" loading="lazy" width="1200" height="630"></a>
+          <a class="shot link" href="img/15-link-light-photo-bn.jpg?v=a5b0ae5a"><img src="img/15-link-light-photo-bn.jpg?v=a5b0ae5a" alt="Link preview: notch and date, the headline on the left, a sunset photo of pylons on the right half, in Bangla, light" loading="lazy" width="1200" height="630"></a>
+          <a class="shot link" href="img/15-link-dark-photo-bn.jpg?v=9fb377ed"><img src="img/15-link-dark-photo-bn.jpg?v=9fb377ed" alt="Link preview: notch and date, the headline on the left, a sunset photo of pylons on the right half, in Bangla, dark" loading="lazy" width="1200" height="630"></a>
         </div>
         <figcaption><h4>Notch · headline · photo on the right</h4><p class="files">15-link-light-photo-bn.jpg<br>15-link-dark-photo-bn.jpg</p><p class="e">Empty space 35%: the photo takes the rest</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot link" href="img/15-link-light-text-bn.jpg?v=4b7f9e09"><img src="img/15-link-light-text-bn.jpg?v=4b7f9e09" alt="Link preview on the indigo wash: notch, date and the long headline, in Bangla, light" loading="lazy" width="1200" height="630"></a>
-          <a class="shot link" href="img/15-link-dark-text-bn.jpg?v=42fa80e9"><img src="img/15-link-dark-text-bn.jpg?v=42fa80e9" alt="Link preview on the indigo wash: notch, date and the long headline, in Bangla, dark" loading="lazy" width="1200" height="630"></a>
+          <a class="shot link" href="img/15-link-light-text-bn.jpg?v=c3c47a40"><img src="img/15-link-light-text-bn.jpg?v=c3c47a40" alt="Link preview on the indigo wash: notch, date and the long headline, in Bangla, light" loading="lazy" width="1200" height="630"></a>
+          <a class="shot link" href="img/15-link-dark-text-bn.jpg?v=4d4c0a18"><img src="img/15-link-dark-text-bn.jpg?v=4d4c0a18" alt="Link preview on the indigo wash: notch, date and the long headline, in Bangla, dark" loading="lazy" width="1200" height="630"></a>
         </div>
         <figcaption><h4>No photo · on the wash</h4><p class="files">15-link-light-text-bn.jpg<br>15-link-dark-text-bn.jpg</p><p class="e">Empty space 77%</p></figcaption>
       </figure>
       <figure class="pair">
         <div class="imgs">
-          <a class="shot link" href="img/15-link-light-new-bn.jpg?v=e7082d29"><img src="img/15-link-light-new-bn.jpg?v=e7082d29" alt="Link preview for a new story: the purple tab, the label line and the long headline, in Bangla, light" loading="lazy" width="1200" height="630"></a>
-          <a class="shot link" href="img/15-link-dark-new-bn.jpg?v=1863a4b5"><img src="img/15-link-dark-new-bn.jpg?v=1863a4b5" alt="Link preview for a new story: the purple tab, the label line and the long headline, in Bangla, dark" loading="lazy" width="1200" height="630"></a>
+          <a class="shot link" href="img/15-link-light-new-bn.jpg?v=9d233916"><img src="img/15-link-light-new-bn.jpg?v=9d233916" alt="Link preview for a new story: the purple tab, the label line and the long headline, in Bangla, light" loading="lazy" width="1200" height="630"></a>
+          <a class="shot link" href="img/15-link-dark-new-bn.jpg?v=88cd25ed"><img src="img/15-link-dark-new-bn.jpg?v=88cd25ed" alt="Link preview for a new story: the purple tab, the label line and the long headline, in Bangla, dark" loading="lazy" width="1200" height="630"></a>
         </div>
         <figcaption><h4>New · purple tab</h4><p class="files">15-link-light-new-bn.jpg<br>15-link-dark-new-bn.jpg</p><p class="e">Empty space 77%</p></figcaption>
       </figure>
@@ -1176,27 +1203,27 @@
     </div>
     <div class="blanks">
         <figure class="one">
-          <a class="shot feed" href="img/01-cover-light-blank.jpg?v=de6554ba"><img src="img/01-cover-light-blank.jpg?v=de6554ba" alt="Cover template with placeholders" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/01-cover-light-blank.jpg?v=f1cb1053"><img src="img/01-cover-light-blank.jpg?v=f1cb1053" alt="Cover template with placeholders" loading="lazy" width="1080" height="1350"></a>
           <figcaption><h4>1. Cover</h4><p class="files">01-cover-light-blank.jpg</p></figcaption>
         </figure>
         <figure class="one">
-          <a class="shot feed" href="img/02-text-light-blank.jpg?v=d9bf6e40"><img src="img/02-text-light-blank.jpg?v=d9bf6e40" alt="Text body template with placeholders" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/02-text-light-blank.jpg?v=a9fe8826"><img src="img/02-text-light-blank.jpg?v=a9fe8826" alt="Text body template with placeholders" loading="lazy" width="1080" height="1350"></a>
           <figcaption><h4>2. Text body</h4><p class="files">02-text-light-blank.jpg</p></figcaption>
         </figure>
         <figure class="one">
-          <a class="shot feed" href="img/03-image-light-blank.jpg?v=944b0ea3"><img src="img/03-image-light-blank.jpg?v=944b0ea3" alt="Image body template with placeholders" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/03-image-light-blank.jpg?v=6fdd0782"><img src="img/03-image-light-blank.jpg?v=6fdd0782" alt="Image body template with placeholders" loading="lazy" width="1080" height="1350"></a>
           <figcaption><h4>3. Image body</h4><p class="files">03-image-light-blank.jpg</p></figcaption>
         </figure>
         <figure class="one">
-          <a class="shot feed" href="img/04-data-light-blank.jpg?v=644a26f3"><img src="img/04-data-light-blank.jpg?v=644a26f3" alt="Data template with placeholders" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/04-data-light-blank.jpg?v=748833c7"><img src="img/04-data-light-blank.jpg?v=748833c7" alt="Data template with placeholders" loading="lazy" width="1080" height="1350"></a>
           <figcaption><h4>4. Data</h4><p class="files">04-data-light-blank.jpg</p></figcaption>
         </figure>
         <figure class="one">
-          <a class="shot feed" href="img/05-quote-light-blank.jpg?v=044c7612"><img src="img/05-quote-light-blank.jpg?v=044c7612" alt="Quote template with placeholders" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/05-quote-light-blank.jpg?v=78781b1e"><img src="img/05-quote-light-blank.jpg?v=78781b1e" alt="Quote template with placeholders" loading="lazy" width="1080" height="1350"></a>
           <figcaption><h4>5. Quote</h4><p class="files">05-quote-light-blank.jpg</p></figcaption>
         </figure>
         <figure class="one">
-          <a class="shot feed" href="img/06-closing-light-blank.jpg?v=9e08f2b6"><img src="img/06-closing-light-blank.jpg?v=9e08f2b6" alt="Closing template with placeholders" loading="lazy" width="1080" height="1350"></a>
+          <a class="shot feed" href="img/06-closing-light-blank.jpg?v=bc188cc0"><img src="img/06-closing-light-blank.jpg?v=bc188cc0" alt="Closing template with placeholders" loading="lazy" width="1080" height="1350"></a>
           <figcaption><h4>6. Closing</h4><p class="files">06-closing-light-blank.jpg</p></figcaption>
         </figure>
     </div>
@@ -1214,29 +1241,29 @@
       <div class="grid-phone">
         <header><h4>Instagram profile</h4><p class="label" style="color:var(--mute)">Cropped to 3:4</p></header>
         <div class="tiles">
-          <img src="img/09-quote-light.jpg?v=efd9cf06" alt="09-quote-light, cropped to 3:4" loading="lazy">
-          <img src="img/01-cover-light-fullbleed.jpg?v=0a59511c" alt="01-cover-light-fullbleed, cropped to 3:4" loading="lazy">
-          <img src="img/10-text-light-short.jpg?v=19ee778d" alt="10-text-light-short, cropped to 3:4" loading="lazy">
-          <img src="img/07-image-light-fullbleed.jpg?v=a76c1833" alt="07-image-light-fullbleed, cropped to 3:4" loading="lazy">
-          <img src="img/10-text-light-number.jpg?v=ba366360" alt="10-text-light-number, cropped to 3:4" loading="lazy">
-          <img src="img/01-cover-dark-text-top-short.jpg?v=83b67b5b" alt="01-cover-dark-text-top-short, cropped to 3:4" loading="lazy">
-          <img src="img/01-cover-light-text-bottom-long.jpg?v=662b5e9c" alt="01-cover-light-text-bottom-long, cropped to 3:4" loading="lazy">
-          <img src="img/08-quote-portrait-light-text-top.jpg?v=6bb0e038" alt="08-quote-portrait-light-text-top, cropped to 3:4" loading="lazy">
-          <img src="img/07-image-dark-fullbleed-notch.jpg?v=b1a2bf53" alt="07-image-dark-fullbleed-notch, cropped to 3:4" loading="lazy">
+          <img src="img/09-quote-light.jpg?v=f0232505" alt="09-quote-light, cropped to 3:4" loading="lazy">
+          <img src="img/01-cover-light-fullbleed.jpg?v=030b1d18" alt="01-cover-light-fullbleed, cropped to 3:4" loading="lazy">
+          <img src="img/10-text-light-short.jpg?v=3a46e7f5" alt="10-text-light-short, cropped to 3:4" loading="lazy">
+          <img src="img/07-image-light-fullbleed.jpg?v=696f7b8b" alt="07-image-light-fullbleed, cropped to 3:4" loading="lazy">
+          <img src="img/10-text-light-number.jpg?v=317f111c" alt="10-text-light-number, cropped to 3:4" loading="lazy">
+          <img src="img/01-cover-dark-text-top-short.jpg?v=e75f6dd7" alt="01-cover-dark-text-top-short, cropped to 3:4" loading="lazy">
+          <img src="img/01-cover-light-text-bottom-long.jpg?v=ee97ab5f" alt="01-cover-light-text-bottom-long, cropped to 3:4" loading="lazy">
+          <img src="img/08-quote-portrait-light-text-top.jpg?v=2b35a82a" alt="08-quote-portrait-light-text-top, cropped to 3:4" loading="lazy">
+          <img src="img/07-image-dark-fullbleed-notch.jpg?v=ed1fee6e" alt="07-image-dark-fullbleed-notch, cropped to 3:4" loading="lazy">
         </div>
       </div>
       <div class="grid-phone">
         <header><h4>Facebook Page, Photos tab</h4><p class="label" style="color:var(--mute)">Cropped to a square</p></header>
         <div class="tiles fb">
-          <img src="img/09-quote-light.jpg?v=efd9cf06" alt="09-quote-light, cropped to a square" loading="lazy">
-          <img src="img/01-cover-light-fullbleed.jpg?v=0a59511c" alt="01-cover-light-fullbleed, cropped to a square" loading="lazy">
-          <img src="img/10-text-light-short.jpg?v=19ee778d" alt="10-text-light-short, cropped to a square" loading="lazy">
-          <img src="img/07-image-light-fullbleed.jpg?v=a76c1833" alt="07-image-light-fullbleed, cropped to a square" loading="lazy">
-          <img src="img/10-text-light-number.jpg?v=ba366360" alt="10-text-light-number, cropped to a square" loading="lazy">
-          <img src="img/01-cover-dark-text-top-short.jpg?v=83b67b5b" alt="01-cover-dark-text-top-short, cropped to a square" loading="lazy">
-          <img src="img/01-cover-light-text-bottom-long.jpg?v=662b5e9c" alt="01-cover-light-text-bottom-long, cropped to a square" loading="lazy">
-          <img src="img/08-quote-portrait-light-text-top.jpg?v=6bb0e038" alt="08-quote-portrait-light-text-top, cropped to a square" loading="lazy">
-          <img src="img/07-image-dark-fullbleed-notch.jpg?v=b1a2bf53" alt="07-image-dark-fullbleed-notch, cropped to a square" loading="lazy">
+          <img src="img/09-quote-light.jpg?v=f0232505" alt="09-quote-light, cropped to a square" loading="lazy">
+          <img src="img/01-cover-light-fullbleed.jpg?v=030b1d18" alt="01-cover-light-fullbleed, cropped to a square" loading="lazy">
+          <img src="img/10-text-light-short.jpg?v=3a46e7f5" alt="10-text-light-short, cropped to a square" loading="lazy">
+          <img src="img/07-image-light-fullbleed.jpg?v=696f7b8b" alt="07-image-light-fullbleed, cropped to a square" loading="lazy">
+          <img src="img/10-text-light-number.jpg?v=317f111c" alt="10-text-light-number, cropped to a square" loading="lazy">
+          <img src="img/01-cover-dark-text-top-short.jpg?v=e75f6dd7" alt="01-cover-dark-text-top-short, cropped to a square" loading="lazy">
+          <img src="img/01-cover-light-text-bottom-long.jpg?v=ee97ab5f" alt="01-cover-light-text-bottom-long, cropped to a square" loading="lazy">
+          <img src="img/08-quote-portrait-light-text-top.jpg?v=2b35a82a" alt="08-quote-portrait-light-text-top, cropped to a square" loading="lazy">
+          <img src="img/07-image-dark-fullbleed-notch.jpg?v=ed1fee6e" alt="07-image-dark-fullbleed-notch, cropped to a square" loading="lazy">
         </div>
       </div>
     </div>

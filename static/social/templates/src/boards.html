@@ -305,8 +305,8 @@ const P = [
 
   ['10-text', 'short', 'tint', () => `${notch('06', 'Explainer', DATE)}
     <div class="main bot"><h1 class="hl xl">Electricity, not chips, is the limit</h1></div>${logo()}`],
-  ['10-text', 'long', '', () => `${notch('06', 'Correction', DATE)}
-    <div class="main top"><h1 class="hl l">An earlier post said data centres used 4% of the world’s electricity in 2024. The figure is about <span class="tn">1.5%</span>.</h1></div>
+  ['10-text', 'long', '', () => `${notch('06', 'Data', DATE)}
+    <div class="main top"><h1 class="hl l">Data centres used about <span class="tn">1.5%</span> of the world’s electricity in 2024. By 2030 that share could double.</h1></div>
     <div class="meta mono">Source: IEA, Energy and AI (2025)</div>${logo()}`],
   ['10-text', 'new', 'new', () => `${notch('06', 'New', 'Explainer · ' + DATE)}
     <div class="main top"><h1 class="hl l">${LONG}</h1></div><div class="meta mono">Full story: link in bio</div>${logo()}`],
@@ -447,8 +447,8 @@ const BN = [
 
   ['10-text', 'short-bn', 'tint', () => `${notch('০৬', 'ব্যাখ্যা', BN_DATE)}
     <div class="main bot"><h1 class="hl xl">সীমা চিপ নয়, বিদ্যুৎ</h1></div>${logo()}`],
-  ['10-text', 'long-bn', '', () => `${notch('০৬', 'সংশোধনী', BN_DATE)}
-    <div class="main top"><h1 class="hl l">আগের এক পোস্টে বলা হয়েছিল, ২০২৪ সালে ডেটা সেন্টার বিশ্বের ৪ শতাংশ বিদ্যুৎ খরচ করেছে। প্রকৃত হার প্রায় <span class="tn">১.৫ শতাংশ</span>।</h1></div>
+  ['10-text', 'long-bn', '', () => `${notch('০৬', 'তথ্য', BN_DATE)}
+    <div class="main top"><h1 class="hl l">২০২৪ সালে বিশ্বের বিদ্যুতের প্রায় <span class="tn">১.৫ শতাংশ</span> খরচ করেছে ডেটা সেন্টার। ২০৩০ সালের মধ্যে এই হার দ্বিগুণ হতে পারে।</h1></div>
     <div class="meta mono">${BN_SRC_IEA}</div>${logo()}`],
   ['10-text', 'new-bn', 'new', () => `${notch('০৬', 'নতুন', 'ব্যাখ্যা · ' + BN_DATE)}
     <div class="main top"><h1 class="hl l">${BN_LONG}</h1></div><div class="meta mono">পুরো প্রতিবেদন: লিংক বায়োতে</div>${logo()}`],
@@ -487,6 +487,34 @@ const BN = [
     <div class="main top" style="right:120px"><h1 class="hl l">${BN_LONG}</h1></div>${logo()}`],
 ];
 
+/* headline length test: the same templates with four real lengths, English and Bangla.
+   The headline steps down a fixed scale until it fits its space; the photo gives way first, down to its minimum. */
+const HL = {
+  en: { s: 'AI’s next limit is electricity',
+        m: 'Data centres could soon use more electricity than all of Japan',
+        l: 'Bangladesh wants AI data centres, but its grid already struggles to keep the lights on in summer',
+        xl: 'The AI boom is reaching places investors forgot to look, and the towns hosting the data centres are paying for the power' },
+  bn: { s: 'এআইয়ের পরের সীমা বিদ্যুৎ',
+        m: 'ডেটা সেন্টার শিগগিরই পুরো জাপানের চেয়েও বেশি বিদ্যুৎ খরচ করতে পারে',
+        l: 'বাংলাদেশ এআই ডেটা সেন্টার চায়, কিন্তু গ্রীষ্মে তার গ্রিড এমনিতেই বাতি জ্বালিয়ে রাখতে হিমশিম খায়',
+        xl: 'এআইয়ের জোয়ার পৌঁছে যাচ্ছে বিনিয়োগকারীদের ভুলে যাওয়া জায়গায়, আর ডেটা সেন্টারের আশপাশের শহরগুলোকেই গুনতে হচ্ছে বিদ্যুতের দাম' },
+};
+const STEPS = { en: '144,120,104,88,76,64', bn: '118,100,86,74,64,56' };
+const fitHl = (lang, len, max) => `<h1 class="hl xl" data-fit="${STEPS[lang]}" data-max="${max}">${HL[lang][len]}</h1>`;
+const SZ = [];
+for (const lang of ['en', 'bn']) for (const len of ['s', 'm', 'l', 'xl']) {
+  const n = lang === 'en' ? ['06', 'Explainer', DATE] : ['০৬', 'ব্যাখ্যা', BN_DATE];
+  const cr = lang === 'en' ? CREDIT : BN_CREDIT;
+  SZ.push([`sz-cover-photo-${len}-${lang}`, '', lang, () => `${notch(...n)}
+    <div class="col" style="top:192px;bottom:190px"><div class="pad">${fitHl(lang, len, 560)}</div>
+    <div class="ph" style="margin-top:56px;min-height:320px">${img('col-pylons.jpg', '50% 72%')}</div>${credit(cr)}</div>${foot(1, '', true)}`]);
+  SZ.push([`sz-cover-plain-${len}-${lang}`, 'tint', lang, () => `${notch(...n)}
+    <div class="main bot">${fitHl(lang, len, 700)}</div>${foot(1, '', true)}`]);
+  SZ.push([`sz-story-${len}-${lang}`, 'story new', lang, () => `${notch(lang === 'en' ? '06' : '০৬', lang === 'en' ? 'New' : 'নতুন', lang === 'en' ? 'Explainer · ' + DATE : 'ব্যাখ্যা · ' + BN_DATE)}
+    <div class="col" style="top:334px;bottom:394px"><div class="ph" style="min-height:360px">${img('col-pylons.jpg', '50% 72%')}</div>${credit(cr)}
+    <div class="pad" style="margin-top:44px">${fitHl(lang, len, 600)}${lang === 'en' ? sticker() : bnSticker()}</div></div>${logo()}`]);
+}
+
 const BLANK = [
   ['01-cover', '', () => `${notch('00', '[Notch label]', '[Label]')}
     <div class="col" style="top:192px;bottom:190px"><div class="pad"><h1 class="hl xl">[HEADLINE]</h1></div>
@@ -514,12 +542,24 @@ for (const mode of ['light', 'dark']) {
 }
 for (const [t, cls, html] of BLANK) boards.push({ id: `${t}-light-blank`, cls: `light t06 ${cls}`, html });
 for (const [id, cls, html] of SPEC) boards.push({ id, cls, html });
+for (const [id, cls, lang, html] of SZ) boards.push({ id, cls: `light t06 ${cls}`, html, bn: lang === 'bn' });
 
 const q = new URLSearchParams(location.search);
 /* English type options, to compare faces on the same boards: ?type=<key> */
 const GF = 'https://fonts.googleapis.com/css2?display=block&family=';
 const SANS = (f) => `.board:not([lang="bn"]) .txt, .board:not([lang="bn"]) .att, .board:not([lang="bn"]) .tab, .board:not([lang="bn"]) .ptab, .board:not([lang="bn"]) .num, .board:not([lang="bn"]) .unit, .board:not([lang="bn"]) .bars .lab, .board:not([lang="bn"]) .bars .val, .board:not([lang="bn"]) .tl .pt .ev { font-family: '${f}', sans-serif; }`;
+const CLEAN = (f, w = 650, ls = -0.03) => `.board:not([lang="bn"]) .hl { font-family: '${f}', sans-serif; font-weight: ${w}; letter-spacing: ${ls}em; line-height: 1.02; font-variation-settings: normal; } ` + SANS(f);
 const TYPE = {
+  intertight: [GF + 'Inter+Tight:wght@400..800', CLEAN('Inter Tight', 650, -0.03)],
+  geist: [GF + 'Geist:wght@400..800', CLEAN('Geist', 600, -0.035)],
+  plexsans: [GF + 'IBM+Plex+Sans:wght@400;500;600;700', CLEAN('IBM Plex Sans', 600, -0.02)],
+  dmsans: [GF + 'DM+Sans:opsz,wght@9..40,400..800', CLEAN('DM Sans', 650, -0.035)],
+  instrumentsans: [GF + 'Instrument+Sans:wght@400..700', CLEAN('Instrument Sans', 600, -0.025)],
+  figtree: [GF + 'Figtree:wght@400..800', CLEAN('Figtree', 650, -0.03)],
+  intertightitalic: [GF + 'Inter+Tight:ital,wght@0,400..800;1,400..800', CLEAN('Inter Tight', 650, -0.03) + ` .board:not([lang="bn"]) .q, .board:not([lang="bn"]) .tn { font-style: italic; } .board:not([lang="bn"]) .q { font-weight: 500; letter-spacing: -0.02em; }`],
+  plexitalic: [GF + 'IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600', CLEAN('IBM Plex Sans', 600, -0.02) + ` .board:not([lang="bn"]) .hl { font-style: italic; }`],
+  serifitalic: [GF + 'Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1', CLEAN('Instrument Sans', 600, -0.025) + ` .board:not([lang="bn"]) .q { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; font-size: 100px; line-height: 1.02; letter-spacing: -0.01em; } .board:not([lang="bn"]) .hl .tn { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; font-size: 1.15em; letter-spacing: 0; }`],
+
   newsreader: [GF + 'Newsreader:ital,opsz,wght@0,6..72,400..800', `.board:not([lang="bn"]) .hl { font-family: 'Newsreader', serif; font-weight: 600; letter-spacing: -0.012em; line-height: 1.04; font-variation-settings: normal; font-optical-sizing: auto; }`],
   instrument: [GF + 'Instrument+Serif', `.board:not([lang="bn"]) .hl { font-family: 'Instrument Serif', serif; font-weight: 400; letter-spacing: -0.01em; line-height: 0.98; font-variation-settings: normal; } .board:not([lang="bn"]) .xl { font-size: 172px; } .board:not([lang="bn"]) .l { font-size: 114px; } .board:not([lang="bn"]) .q { font-size: 96px; line-height: 1.02; }`],
   sourceserif: [GF + 'Source+Serif+4:opsz,wght@8..60,400..800', `.board:not([lang="bn"]) .hl { font-family: 'Source Serif 4', serif; font-weight: 650; letter-spacing: -0.018em; line-height: 1.04; font-variation-settings: normal; font-optical-sizing: auto; }`],
@@ -568,6 +608,21 @@ function empty(board) {
   for (const v of g) n += v;
   return Math.round(100 * (1 - n / g.length));
 }
+function fitAll() {
+  document.querySelectorAll('[data-fit]').forEach((h) => {
+    const steps = h.dataset.fit.split(',').map(Number), max = +h.dataset.max;
+    for (const px of steps) {
+      h.style.fontSize = px + 'px';
+      if (!h.closest('[lang="bn"]')) h.style.fontVariationSettings = `'opsz' ${Math.round(px * 0.36)}`;
+      h.dataset.chosen = px;
+      if (h.offsetHeight <= max) break;
+    }
+    const lh = parseFloat(getComputedStyle(h).lineHeight);
+    h.dataset.lines = Math.round(h.offsetHeight / lh);
+  });
+}
+document.fonts.ready.then(fitAll);
+if (q.get('fits')) document.fonts.ready.then(() => { fitAll(); document.getElementById('out').textContent = JSON.stringify([...document.querySelectorAll('[data-fit]')].map((h) => [h.closest('.board').id, +h.dataset.chosen, +h.dataset.lines])); });
 if (q.get('m')) {
   document.fonts.ready.then(() => {
     const res = {};
