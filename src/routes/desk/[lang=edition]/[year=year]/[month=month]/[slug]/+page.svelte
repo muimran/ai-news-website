@@ -616,6 +616,10 @@
     line-height: var(--hlh);
     text-wrap: balance;
   }
+  /* English breaks before it reaches the picture on the right */
+  h1:lang(en) {
+    max-width: 10em;
+  }
   .dek {
     max-width: 26em;
     font-size: clamp(1.1rem, 1.4vw, 1.3rem);
