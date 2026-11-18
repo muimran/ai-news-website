@@ -559,12 +559,18 @@
     gap: 1rem;
     margin: calc(-1 * var(--edge-t)) 0 0 calc(-1 * var(--edge-x));
   }
+  /* Every notch is one width, the longest name's, its words centred in it. */
   .tab {
     display: inline-flex;
+    flex: none;
     align-items: center;
+    justify-content: center;
     gap: 0.65rem;
+    box-sizing: border-box;
+    width: 19.5rem;
     margin: 0;
-    padding: 0.55rem 1rem 0.55rem var(--edge-x);
+    padding: 0.55rem 1rem;
+    text-align: center;
     border-right: 1px solid var(--ink);
     border-bottom: 1px solid var(--ink);
     background: var(--ground);
@@ -779,7 +785,9 @@
     .row:first-child {
       border-top: 1px solid var(--hair);
     }
+    /* still one width for every notch, leaving room for the way to its stories */
     .tab {
+      width: min(19.5rem, 100% - 6rem);
       font-size: 1rem;
     }
     /* the notch and the way to all its stories share one row: the way may
