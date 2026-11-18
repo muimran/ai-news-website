@@ -573,15 +573,21 @@
     font-weight: 600;
     line-height: 1.2;
   }
-  /* A dossier's notch takes a pale wash of its first story's colour, so the
-     name and the card under it read as one; the words stay ink. With no
-     colour (no picture, none set) it stays the page's grey. */
+  /* A dossier's notch takes a deep shade of its first story's colour, so the
+     name and the card under it read as one; the words turn light, and its
+     number box flips to light with ink. With no colour it is deep ink. */
   .dossier .tab {
-    background: color-mix(in srgb, var(--wash, var(--ground)) 24%, var(--ground));
+    background: color-mix(in srgb, var(--wash, var(--ink)) 45%, #111);
+    color: #fff;
+  }
+  .dossier .tab b {
+    background: #fff;
+    color: #111;
   }
   /* the dossier being read: its number turns purple, as the rail's does */
   .dossier.here .tab b {
     background: var(--accent);
+    color: #fff;
   }
   .tab b {
     display: grid;
