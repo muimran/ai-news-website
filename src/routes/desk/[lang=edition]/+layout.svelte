@@ -43,7 +43,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
   <link
     rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400..700&family=Anek+Latin:wght@400..700&family=Fraunces:opsz,wght@9..144,400..700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+Bengali:wght@500..700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400..700&family=Geist:wght@400..700&family=IBM+Plex+Sans:ital,wght@1,500&family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+Bengali:wght@500..700&display=swap"
   />
 </svelte:head>
 
@@ -93,12 +93,13 @@
     --title: 1.625rem; /* a page's own name in that column: a clear step under the site's */
     --pad: clamp(1rem, 2vw, 1.75rem);
     --gap: 1rem;
-    --serif: 'Fraunces', 'Noto Serif Bengali', Georgia, serif;
-    --sans: 'Anek Latin', 'Anek Bangla', system-ui, sans-serif;
+    --serif: 'Geist', 'Noto Serif Bengali', system-ui, sans-serif;
+    --italic: 'IBM Plex Sans', 'Anek Bangla', system-ui, sans-serif;
+    --sans: 'Geist', 'Anek Bangla', system-ui, sans-serif;
     --mono: 'IBM Plex Mono', 'Anek Bangla', ui-monospace, monospace;
-    --hw: 560; /* a headline's weight, */
-    --hlh: 1.04; /* its leading, */
-    --hls: -0.022em; /* its spacing */
+    --hw: 600; /* a headline's weight, */
+    --hlh: 1.12; /* its leading, */
+    --hls: -0.035em; /* its spacing */
     --hk: 1; /* and its size against the English */
     --ms: 0.6875rem; /* the mono's size */
     --mt: 0.07em; /* and its spacing */
@@ -114,8 +115,8 @@
   /* Bangla stands taller, has no capitals to space out, and reads small
      at the mono's size */
   .dk:lang(bn) {
-    --serif: 'Noto Serif Bengali', 'Fraunces', Georgia, serif;
-    --sans: 'Anek Bangla', 'Anek Latin', system-ui, sans-serif;
+    --serif: 'Noto Serif Bengali', 'Geist', Georgia, serif;
+    --sans: 'Anek Bangla', 'Geist', system-ui, sans-serif;
     --mono: 'Anek Bangla', 'IBM Plex Mono', ui-monospace, monospace;
     --hw: 600;
     --hlh: 1.34;
@@ -164,7 +165,7 @@
     flex: none;
     margin-right: calc(var(--pad) - 0.4rem);
     /* the name is the same letters in both editions */
-    font-family: 'Fraunces', var(--serif);
+    font-family: 'Geist', var(--serif);
     font-size: 1.375rem;
     font-weight: 650;
     font-variation-settings: 'opsz' 72;
@@ -238,7 +239,7 @@
     border-right: 1px solid var(--ink);
   }
   .fund i {
-    font-family: var(--serif);
+    font-family: var(--italic);
     font-size: 0.9375rem;
     font-style: italic;
     white-space: nowrap;

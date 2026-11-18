@@ -877,8 +877,9 @@
     padding: 0;
     border: 0;
     font-size: calc(clamp(1.6rem, 2.4vw, 2.2rem) * var(--hk));
+    font-family: var(--italic);
     font-style: italic;
-    font-variation-settings: 'opsz' 60;
+    font-weight: 500;
     letter-spacing: var(--hls);
     line-height: 1.2;
     text-wrap: balance;
