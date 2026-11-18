@@ -1076,6 +1076,13 @@
     }
   }
   @media (max-width: 759px) {
+    /* on a phone the story is the page: no card around it, no grey
+       margins beside it */
+    .sheet {
+      margin: 0 calc(-1 * var(--pad));
+      border-left: 0;
+      border-right: 0;
+    }
     .head {
       display: flex;
       flex-direction: column;
