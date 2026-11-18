@@ -49,15 +49,32 @@
   /* the rail marks the section the reader is in */
   let here = $state('front');
   let main = $state();
+  /* It is the section under a line 30% down the screen, the same either way
+     the reader scrolls; above the first dossier (the latest included) it is
+     the front, and in the small gap between two dossiers the mark holds. */
   onMount(() => {
-    const seen = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) if (e.isIntersecting) here = e.target.id;
-      },
-      { rootMargin: '-25% 0px -65% 0px' }
-    );
-    for (const el of main.querySelectorAll('[data-sec]')) seen.observe(el);
-    return () => seen.disconnect();
+    const secs = [...main.querySelectorAll('[data-sec]')];
+    let queued = false;
+    const mark = () => {
+      queued = false;
+      const line = innerHeight * 0.3;
+      const on = secs.find((el) => {
+        const r = el.getBoundingClientRect();
+        return r.top <= line && r.bottom > line;
+      });
+      if (on) here = on.id;
+      else if (secs[1] && secs[1].getBoundingClientRect().top > line) here = 'front';
+    };
+    const ask = () => {
+      if (!queued) (queued = true), requestAnimationFrame(mark);
+    };
+    mark();
+    addEventListener('scroll', ask, { passive: true });
+    addEventListener('resize', ask);
+    return () => {
+      removeEventListener('scroll', ask);
+      removeEventListener('resize', ask);
+    };
   });
   function go(e, id) {
     const el = document.getElementById(id);
