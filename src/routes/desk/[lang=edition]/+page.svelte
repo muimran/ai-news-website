@@ -48,6 +48,75 @@
 
   /* the rail marks the section the reader is in */
   let here = $state('front');
+  /* trial: the feed box's colour, picked from four swatches in its corner */
+  const TONES = [
+    ['indigo', 'Pale indigo'],
+    ['orange', 'Pale orange'],
+    ['purple', 'Light purple'],
+    ['black', 'Near-black']
+  ];
+  let feedTone = $state('indigo');
+
+  /* Chart of the week. SAMPLE DATA: a placeholder until an editor sets the
+     week's chart; the page says so beside it. Three lines, one per division,
+     each named at its end; the fastest climber in the site's orange. */
+  const CHART = {
+    en: {
+      title: 'Data centres are pulling more power outside Dhaka',
+      dek: 'Electricity drawn by data centres on the national grid, by division, megawatts',
+      unit: 'MW',
+      note: 'Sample data, for layout only.',
+      since: (y) => `Chattogram since ${y}`,
+      event: 'Gazipur cluster opens',
+      names: { dhaka: 'Dhaka', ctg: 'Chattogram', khulna: 'Khulna' }
+    },
+    bn: {
+      title: 'ঢাকার বাইরে ডেটা সেন্টারের বিদ্যুৎ টান বাড়ছে',
+      dek: 'জাতীয় গ্রিডে ডেটা সেন্টারের বিদ্যুৎ ব্যবহার, বিভাগ অনুযায়ী, মেগাওয়াট',
+      unit: 'মেগাওয়াট',
+      note: 'নমুনা তথ্য, শুধু নকশার জন্য।',
+      since: (y) => `${y} থেকে চট্টগ্রামে`,
+      event: 'গাজীপুর ক্লাস্টার চালু',
+      names: { dhaka: 'ঢাকা', ctg: 'চট্টগ্রাম', khulna: 'খুলনা' }
+    }
+  };
+  const YEARS = [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026];
+  const SERIES = [
+    { key: 'dhaka', colour: '#5a52c4', v: [12, 14, 19, 26, 33, 41, 50, 58] },
+    { key: 'ctg', colour: '#c25418', v: [4, 5, 7, 10, 16, 26, 39, 56] },
+    { key: 'khulna', colour: '#3b8f5a', v: [2, 3, 4, 5, 8, 12, 17, 24] }
+  ];
+  const EVENT_AT = 4; // 2023
+  // between the last two topics, so it never trails after the final box;
+  // if the feed already sits there, one gap higher
+  const chartAt = $derived.by(() => {
+    const k = Math.max(0, dossiers.length - 2);
+    return k === ed.feed?.after ? k - 1 : k;
+  });
+  const chartMax = 60;
+  let chartHover = $state(null);
+  let chartW = $state(560);
+  const year = (y) => num(y).replace(/[,،]/g, '');
+  const chartTimes = Math.round(SERIES[1].v.at(-1) / SERIES[1].v[0]);
+  // the plot's frame: room at the left for the scale, at the right for names
+  const CH = 260;
+  const PAD = { l: 34, r: 92, t: 14, b: 26 };
+  const cx = (k) => PAD.l + (k / (YEARS.length - 1)) * (chartW - PAD.l - PAD.r);
+  const cy = (v) => PAD.t + (1 - v / chartMax) * (CH - PAD.t - PAD.b);
+  const path = (v) => v.map((n, k) => `${k ? 'L' : 'M'}${cx(k).toFixed(1)},${cy(n).toFixed(1)}`).join('');
+  // end names, nudged apart so they never sit on each other
+  const ends = $derived.by(() => {
+    const e = SERIES.map((s) => ({ ...s, y: cy(s.v.at(-1)) })).sort((a, b) => a.y - b.y);
+    for (let k = 1; k < e.length; k++) if (e[k].y - e[k - 1].y < 16) e[k].y = e[k - 1].y + 16;
+    return e;
+  });
+  function chartMove(e) {
+    const r = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - r.left;
+    const step = (chartW - PAD.l - PAD.r) / (YEARS.length - 1);
+    const k = Math.round((x - PAD.l) / step);
+    chartHover = k >= 0 && k < YEARS.length ? k : null;
+  }
   let main = $state();
   /* It is the section under a line 30% down the screen, the same either way
      the reader scrolls; above the first dossier (the latest included) it is
@@ -154,13 +223,15 @@
                 </span>
               </div>
             {:else}
-            <a class="card second" href={deskStory(s)}>
+            {@const sp = photo(s)}
+            <!-- a story: its picture across the top, as the video's screen is -->
+            <a class="card second pic" href={deskStory(s)}>
+              <span class="shot" style:--bg={s.tone?.bg}>{#if sp}<img src={sp.thumb} srcset={sp.srcset} sizes="(max-width: 759px) 100vw, 30vw" alt="" />{/if}</span>
               <span class="txt">
                 {@render tag(s, true)}
                 <span class="hl">{s.title}</span>
                 {@render by(s)}
               </span>
-              {@render square(s)}
             </a>
             {/if}
           {/each}
@@ -218,13 +289,73 @@
             {/if}
           </div>
         </section>
+        {#if i === chartAt}
+          {@const C = CHART[lang]}
+          <section class="chart" aria-labelledby="chart-h">
+            <div class="chart-t">
+              <p class="chart-k">{lang === 'bn' ? 'এই সপ্তাহের চার্ট' : 'Chart of the week'}</p>
+              <h2 id="chart-h">{C.title}</h2>
+              <p class="chart-d">{C.dek}</p>
+              <p class="chart-big"><b>{num(chartTimes)}×</b><span>{C.since(year(YEARS[0]))}</span></p>
+              <p class="chart-n">{C.note}</p>
+            </div>
+            <figure class="chart-f">
+              <p class="chart-key">
+                {#each SERIES as s (s.key)}<span><i style:background={s.colour}></i>{C.names[s.key]}</span>{/each}
+                <span class="u">{C.unit}</span>
+              </p>
+              <div class="lines" bind:clientWidth={chartW}>
+                <svg width={chartW} height={CH} role="img" aria-label="{C.title}. {SERIES.map((s) => `${C.names[s.key]}: ${s.v.map((n, k) => `${year(YEARS[k])} ${num(n)}`).join(', ')}`).join('. ')} {C.unit}" onpointermove={chartMove} onpointerleave={() => (chartHover = null)}>
+                  {#each [0, 20, 40, 60] as g (g)}
+                    <line class="g" class:base={g === 0} x1={PAD.l} x2={chartW - PAD.r} y1={cy(g)} y2={cy(g)} />
+                    <text class="gl" x={PAD.l - 8} y={cy(g)} dy="0.32em" text-anchor="end">{num(g)}</text>
+                  {/each}
+                  {#each YEARS as y, k (y)}
+                    {#if k % 2 === 1 || k === YEARS.length - 1 || chartW > 480}
+                      <text class="yl" class:on={chartHover === k} x={cx(k)} y={CH - 6} text-anchor="middle">{year(y)}</text>
+                    {/if}
+                  {/each}
+                  <!-- the week's marked moment -->
+                  <line class="ev" x1={cx(EVENT_AT)} x2={cx(EVENT_AT)} y1={PAD.t} y2={CH - PAD.b} />
+                  <text class="evl" x={cx(EVENT_AT) - 6} y={cy(52)} text-anchor="end">{C.event}</text>
+                  {#if chartHover !== null}
+                    <line class="xh" x1={cx(chartHover)} x2={cx(chartHover)} y1={PAD.t} y2={CH - PAD.b} />
+                  {/if}
+                  {#each SERIES as s (s.key)}
+                    <path class="ln" class:hi={s.key === 'ctg'} d={path(s.v)} stroke={s.colour} />
+                    <circle class="end" cx={cx(YEARS.length - 1)} cy={cy(s.v.at(-1))} r="4" fill={s.colour} />
+                    {#if chartHover !== null}
+                      <circle class="pt" cx={cx(chartHover)} cy={cy(s.v[chartHover])} r="4.5" fill={s.colour} />
+                    {/if}
+                  {/each}
+                  {#each ends as s (s.key)}
+                    <text class="nm" x={chartW - PAD.r + 10} y={s.y} dy="0.32em"><tspan class="v">{num(s.v.at(-1))}</tspan> {C.names[s.key]}</text>
+                  {/each}
+                </svg>
+                {#if chartHover !== null}
+                  <div class="tip" style:left="{cx(chartHover)}px" class:flip={cx(chartHover) > chartW / 2}>
+                    <b>{year(YEARS[chartHover])}</b>
+                    {#each SERIES as s (s.key)}
+                      <span><i style:background={s.colour}></i>{C.names[s.key]}<em>{num(s.v[chartHover])}</em></span>
+                    {/each}
+                  </div>
+                {/if}
+              </div>
+            </figure>
+          </section>
+        {/if}
         {#if ed.feed && ed.feed.after === i}
           <!-- halfway down, a breath between the boxes: our feed's newest
                posts, each the way to its story -->
-          <section class="feed" aria-labelledby="feed-h">
+          <section class="feed tone-{feedTone}" aria-labelledby="feed-h">
             <header class="feed-h">
               <h2 id="feed-h">{W[lang].feed}</h2>
               <p>Instagram · Facebook · LinkedIn</p>
+              <span class="tones" role="group" aria-label="Box colour (trial)">
+                {#each TONES as [key, name] (key)}
+                  <button type="button" class="tone-{key}" class:on={feedTone === key} aria-pressed={feedTone === key} title={name} aria-label={name} onclick={() => (feedTone = key)}></button>
+                {/each}
+              </span>
             </header>
             <ol>
               {#each ed.feed.posts as s, k (s.slug)}
@@ -509,6 +640,34 @@
   .second .by {
     margin-top: auto;
   }
+  /* a story card: its picture across the top on its own colour, as big as
+     the video's screen, the headline under it */
+  /* the words keep their room, the byline its padding; the picture takes
+     what height is left (at least 8rem) */
+  .second.pic {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(8rem, 1fr) auto;
+    gap: 0.9rem;
+    padding: 0;
+  }
+  .shot {
+    display: block;
+    min-height: 0;
+    overflow: hidden;
+    border-bottom: 1px solid var(--ink);
+    background: var(--bg, var(--hair));
+  }
+  .shot img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 65%;
+  }
+  .pic .txt {
+    height: auto;
+    padding: 0 1.25rem 1.2rem;
+  }
   /* a video card: the screen across the top, the headline under it */
   .vid {
     grid-template-columns: minmax(0, 1fr);
@@ -590,7 +749,240 @@
     grid-template-columns: 6.5rem minmax(0, 1fr);
   }
 
+  /* ---- chart of the week: on the open page, between two rules; its
+     point at the left, the chart at the right, on the trays' 5:6 grid ---- */
+  .chart {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: 1.5rem 2.5rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+  }
+  .chart-t {
+    display: flex;
+    flex-direction: column;
+    padding-right: 1rem;
+  }
+  .chart-k,
+  .chart-n,
+  .chart-u {
+    font-family: var(--mono);
+    font-size: var(--ms);
+    font-weight: 500;
+    letter-spacing: var(--mt);
+    text-transform: uppercase;
+    font-style: normal;
+  }
+  .chart-k {
+    margin: 0 0 0.75rem;
+    color: var(--accent);
+  }
+  .chart h2 {
+    margin: 0;
+    font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+  .chart-d {
+    margin: 0.6rem 0 0;
+    color: var(--mute);
+    line-height: 1.4;
+  }
+  /* the one number to take away */
+  .chart-big {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin: auto 0 0;
+    padding-top: 1.5rem;
+  }
+  .chart-big b {
+    font-size: clamp(3.5rem, 6vw, 5rem);
+    font-weight: 600;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    color: #e07a3f;
+  }
+  .chart-big span {
+    max-width: 8rem;
+    color: var(--mute);
+    line-height: 1.25;
+  }
+  .chart-n {
+    margin: 0.9rem 0 0;
+    color: var(--mute);
+  }
+  .chart-f {
+    margin: 0;
+    min-width: 0;
+  }
+  .chart-key {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem 1rem;
+    margin: 0 0 0.6rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  .chart-key span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .chart-key i {
+    width: 0.9rem;
+    height: 3px;
+    border-radius: 2px;
+  }
+  .chart-key .u {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: var(--ms);
+    letter-spacing: var(--mt);
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+  .lines {
+    position: relative;
+    width: 100%;
+  }
+  .lines svg {
+    display: block;
+    overflow: visible;
+    touch-action: pan-y;
+  }
+  .lines .g {
+    stroke: var(--hair);
+    stroke-width: 1;
+  }
+  .lines .g.base {
+    stroke: var(--ink);
+  }
+  .lines text {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    fill: var(--mute);
+  }
+  .lines .yl.on {
+    fill: var(--ink);
+  }
+  .lines .ev {
+    stroke: var(--ink);
+    stroke-width: 1;
+    stroke-dasharray: 2 3;
+  }
+  .lines .evl {
+    fill: var(--ink);
+    text-transform: uppercase;
+  }
+  .lines .xh {
+    stroke: var(--ink);
+    stroke-width: 1;
+    opacity: 0.35;
+  }
+  .lines .ln {
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .lines .ln.hi {
+    stroke-width: 3;
+  }
+  .lines .pt {
+    stroke: var(--ground);
+    stroke-width: 2;
+  }
+  .lines .nm {
+    font-family: var(--sans);
+    font-size: 13px;
+    letter-spacing: 0;
+    fill: var(--ink);
+  }
+  .lines .nm .v {
+    font-weight: 700;
+  }
+  /* the year under the pointer: all three values */
+  .tip {
+    position: absolute;
+    top: 0;
+    z-index: 2;
+    display: grid;
+    gap: 0.2rem;
+    min-width: 9.5rem;
+    margin-left: 0.75rem;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid var(--ink);
+    background: var(--card);
+    font-size: 0.8125rem;
+    pointer-events: none;
+  }
+  .tip.flip {
+    transform: translateX(calc(-100% - 1.5rem));
+  }
+  .tip b {
+    font-family: var(--mono);
+    font-weight: 500;
+    letter-spacing: var(--mt);
+  }
+  .tip span {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .tip i {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+  }
+  .tip em {
+    margin-left: auto;
+    padding-left: 0.75rem;
+    font-style: normal;
+    font-weight: 600;
+  }
+
   /* ---- the feed: posts on one topic, as square-ish tiles in a row ---- */
+  /* the feed sits in a box of its own, a shade darker than the page, so
+     its posts read as one set apart from the topics */
+  .feed {
+    --fp: 1rem;
+    padding: var(--fp);
+    background: color-mix(in srgb, var(--ink) 7%, var(--ground));
+  }
+  /* trial colours */
+  .feed.tone-indigo { background: color-mix(in srgb, #5f5e9c 12%, var(--ground)); }
+  .feed.tone-orange { background: color-mix(in srgb, #e07a3f 12%, var(--ground)); }
+  .feed.tone-purple { background: color-mix(in srgb, var(--accent) 9%, var(--ground)); }
+  .feed.tone-black { background: #161615; color: #fff; }
+  .feed.tone-black .feed-h p { color: rgba(255, 255, 255, 0.6); }
+  .feed.tone-black .post.dark { border-color: rgba(255, 255, 255, 0.35); }
+  .tones {
+    display: flex;
+    gap: 0.35rem;
+    margin-left: 0.75rem;
+  }
+  .tones button {
+    width: 0.9rem;
+    height: 0.9rem;
+    padding: 0;
+    border: 1px solid var(--ink);
+    cursor: pointer;
+  }
+  .tones button.on {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .tones .tone-indigo { background: #5f5e9c; }
+  .tones .tone-orange { background: #e07a3f; }
+  .tones .tone-purple { background: var(--accent); }
+  .tones .tone-black { background: #161615; }
+  .feed.tone-black .tones button { border-color: rgba(255, 255, 255, 0.6); }
   .feed-h {
     display: flex;
     align-items: baseline;
@@ -608,6 +1000,7 @@
     text-transform: uppercase;
   }
   .feed-h p {
+    margin-left: auto;
     color: var(--mute);
   }
   .feed ol {
@@ -770,13 +1163,12 @@
   .tray {
     --tp: 1rem; /* its padding */
     --tg: 1.5rem; /* the gap between what's in it */
-    --edge-t: calc(var(--tp) + 1px);
-    --edge-x: calc(var(--tp) + 1px);
+    --edge-t: var(--tp);
+    --edge-x: var(--tp);
     display: grid;
     grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
     gap: var(--tg);
     padding: var(--tp);
-    border: 1px solid var(--ink);
     background: var(--card);
   }
   /* the notch's row across the whole tray, the stories 0.75rem under it */
@@ -949,11 +1341,20 @@
       grid-template-columns: minmax(0, 1fr) 6rem;
       padding: 1rem 1.1rem;
     }
-    .second.vid {
+    .second.vid,
+    .second.pic {
       grid-template-columns: minmax(0, 1fr);
       padding: 0;
     }
-    .vid .txt {
+    /* stacked, the card has no set height: the picture keeps its shape */
+    .second.pic {
+      grid-template-rows: auto auto;
+    }
+    .shot {
+      aspect-ratio: 16 / 9;
+    }
+    .vid .txt,
+    .pic .txt {
       padding: 0 1.1rem 1rem;
     }
     .wire {
@@ -964,6 +1365,15 @@
     .wire ol {
       grid-template-columns: minmax(0, 1fr);
     }
+    .chart {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .chart-t {
+      padding-right: 0;
+    }
+    .chart-big {
+      padding-top: 1rem;
+    }
     /* the feed: a row the thumb swipes, a post and a bit of the next */
     .feed ol {
       grid-template-columns: none;
@@ -973,8 +1383,11 @@
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       scrollbar-width: none;
-      margin-right: calc(-1 * var(--pad, 1rem));
-      padding-right: var(--pad, 1rem);
+      margin-right: calc(-1 * var(--fp));
+      padding-right: var(--fp);
+    }
+    .feed {
+      --fp: 0.75rem;
     }
     .feed li {
       scroll-snap-align: start;

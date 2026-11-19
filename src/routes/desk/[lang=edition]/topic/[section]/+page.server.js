@@ -3,6 +3,7 @@ import { LANGS, sections, sectionSlug } from '$lib/content.js';
 import { listFor } from '$lib/server/data.js';
 import { deskTopic, deskHome } from '../../../urls.js';
 import { pageOf, PER } from '../../../paging.js';
+import { onDesk } from '../../../topics.js';
 
 export const entries = () => LANGS.flatMap((lang) => sections(lang).map((key) => ({ lang, section: sectionSlug(key) })));
 
@@ -14,5 +15,5 @@ export function load({ params }) {
   const alt = Object.fromEntries(LANGS.map((l) => [l, sections(l).includes(key) ? deskTopic(key, l) : deskHome(l)]));
   const list = listFor(params.lang, key);
   if (params.n && Number(params.n) > Math.ceil(list.length / PER)) error(404, 'No such page');
-  return { section: key, no: all.indexOf(key) + 1, ...pageOf(list, Number(params.n ?? 1)), href: deskTopic(key, params.lang), alt };
+  return { section: key, no: all.filter(onDesk).indexOf(key) + 1, ...pageOf(list, Number(params.n ?? 1)), href: deskTopic(key, params.lang), alt };
 }

@@ -1,5 +1,6 @@
 import { edition, summary } from '$lib/server/data.js';
 import { inLang } from '$lib/content.js';
+import { onDesk } from '../topics.js';
 
 export const entries = () => [{ lang: 'en' }, { lang: 'bn' }];
 
@@ -36,6 +37,8 @@ function front(lang) {
 }
 
 export function load({ params }) {
-  const ed = front(params.lang);
+  const all = front(params.lang);
+  // the topics Desk leaves out have no box on its front
+  const ed = { ...all, pages: all.pages.filter((p) => onDesk(p.key)) };
   return { edition: { ...ed, feed: feed(params.lang, ed) } };
 }
