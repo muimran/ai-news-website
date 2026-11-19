@@ -24,8 +24,8 @@
   const num = (n) => formatNumber(n, lang);
 
   const W = {
-    en: { front: 'Front page', latest: 'Latest', topics: 'Topics', formats: 'Formats', video: 'Video', play: 'Play' },
-    bn: { front: 'প্রথম পাতা', latest: 'সর্বশেষ', topics: 'বিষয়', formats: 'ধরন', video: 'ভিডিও', play: 'চালান' }
+    en: { front: 'Front page', latest: 'Latest', topics: 'Topics', formats: 'Formats', video: 'Video', play: 'Play', feed: 'On our feed', story: 'Story' },
+    bn: { front: 'প্রথম পাতা', latest: 'সর্বশেষ', topics: 'বিষয়', formats: 'ধরন', video: 'ভিডিও', play: 'চালান', feed: 'আমাদের ফিডে', story: 'প্রতিবেদন' }
   };
   /* the way from the newest few to all of them */
   const EVERY = { en: (n) => `See all ${n} stories, by date`, bn: (n) => `সব ${n}টি প্রতিবেদন, তারিখ অনুযায়ী` };
@@ -186,7 +186,7 @@
       </section>
 
       <!-- a dossier to a topic -->
-      {#each dossiers as d (d.id)}
+      {#each dossiers as d, i (d.id)}
         {@const p = photo(d.lead)}
         <section id={d.id} class="dossier" class:here={here === d.id} data-sec aria-labelledby="t-{d.id}">
           <div class="tray" class:alone={!d.rest.length}>
@@ -218,6 +218,31 @@
             {/if}
           </div>
         </section>
+        {#if ed.feed && ed.feed.after === i}
+          <!-- halfway down, a breath between the boxes: our feed's newest
+               posts, each the way to its story -->
+          <section class="feed" aria-labelledby="feed-h">
+            <header class="feed-h">
+              <h2 id="feed-h">{W[lang].feed}</h2>
+              <p>Instagram · Facebook · LinkedIn</p>
+            </header>
+            <ol>
+              {#each ed.feed.posts as s, k (s.slug)}
+                {@const p = photo(s)}
+                <li>
+                  <a class="post" class:dark={k % 2 === 1} href={deskStory(s)} style:--bg={s.tone?.bg} style:--fg={s.tone?.fg}>
+                    {#if k % 2 === 0 && p}<img src={p.thumb} alt="" loading="lazy" />{/if}
+                    <span class="post-txt">
+                      <span class="post-tag">{kind(s) ?? W[lang].story}</span>
+                      <span class="post-hl">{s.title}</span>
+                    </span>
+                    <span class="post-mark">Second Order</span>
+                  </a>
+                </li>
+              {/each}
+            </ol>
+          </section>
+        {/if}
       {/each}
 
     </main>
@@ -333,7 +358,7 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 2.25rem;
+    gap: 3.5rem;
     width: 100%;
     max-width: 76rem;
     padding: 1.5rem var(--pad) 0 1.75rem;
@@ -502,16 +527,18 @@
   }
 
   /* ---- the latest ---- */
+  /* the same box as a dossier's tray: the same edge, padding and room under
+     its notch, so the two read as one family down the page */
   .wire {
-    /* how far its corner is from its words: padding and top edge (the notch reaches out to it) */
-    --edge-t: calc(0.5rem + 3px);
-    --edge-x: calc(1.25rem + 1px);
-    padding: 0.5rem 1.25rem 0.5rem;
+    /* how far its corner is from its words: padding and edge (the notch reaches out to it) */
+    --edge-t: calc(1rem + 1px);
+    --edge-x: calc(1rem + 1px);
+    padding: 1rem 1rem 0.5rem;
   }
   .wire .tabs {
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.75rem;
   }
-  /* the one "now" on the page: its notch filled purple, on a purple top edge */
+  /* the one "now" on the page: its notch filled purple, its date light on it */
   .now .tab {
     border-color: var(--accent);
     background: var(--accent);
@@ -524,10 +551,8 @@
     font-weight: 500;
     letter-spacing: var(--mt);
     text-transform: uppercase;
-    opacity: 0.75;
-  }
-  .now .wire {
-    border-top: 3px solid var(--accent);
+    color: inherit;
+    opacity: 0.8;
   }
   .wire ol {
     display: grid;
@@ -548,7 +573,11 @@
     line-height: 1.25;
     outline: none;
   }
-  .wire time {
+  /* no rule straight under the notch: the first row of each column opens clean */
+  .wire li:nth-child(-n + 2) a {
+    border-top: 0;
+  }
+  .wire li time {
     color: var(--mute);
     white-space: nowrap;
   }
@@ -559,6 +588,120 @@
   }
   :global(.dk:lang(bn)) .wire li a {
     grid-template-columns: 6.5rem minmax(0, 1fr);
+  }
+
+  /* ---- the feed: posts on one topic, as square-ish tiles in a row ---- */
+  .feed-h {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  .feed-h h2,
+  .feed-h p {
+    margin: 0;
+    font-family: var(--mono);
+    font-size: var(--ms);
+    font-weight: 500;
+    letter-spacing: var(--mt);
+    text-transform: uppercase;
+  }
+  .feed-h p {
+    color: var(--mute);
+  }
+  .feed ol {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  /* a post, 4:5 as the feed crops it: a picture on its colour with the
+     words on a band of paper; every other one dark, words alone */
+  .post {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border: 1px solid var(--ink);
+    background: var(--bg, var(--card));
+    color: var(--ink);
+  }
+  .post img {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    object-fit: contain;
+    object-position: center bottom;
+  }
+  .post-txt {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.75rem 0.85rem 2rem;
+    background: var(--card);
+  }
+  .post-tag,
+  .post-mark {
+    font-family: var(--mono);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: var(--mt);
+    text-transform: uppercase;
+  }
+  .post-hl {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+    font-weight: 600;
+    font-size: 1.05rem;
+    line-height: 1.2;
+  }
+  .post-mark {
+    position: absolute;
+    left: 0.85rem;
+    bottom: 0.7rem;
+    color: var(--mute);
+  }
+  .post.dark {
+    justify-content: flex-start;
+    background: #161615;
+    color: #fff;
+  }
+  .post.dark .post-txt {
+    flex: 1;
+    gap: 0.75rem;
+    padding: 0.85rem;
+    background: none;
+  }
+  /* its label on a block of the story's colour */
+  .post.dark .post-tag {
+    align-self: flex-start;
+    padding: 0.2rem 0.4rem;
+    background: var(--bg, var(--accent));
+    color: var(--fg, #fff);
+  }
+  .post.dark .post-hl {
+    -webkit-line-clamp: 6;
+    font-size: 1.35rem;
+    line-height: 1.15;
+  }
+  .post.dark .post-mark {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  .post:hover .post-hl,
+  .post:focus-visible .post-hl {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.12em;
+  }
+  .post:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
   /* ---- a dossier: a tray, its name in a notch cut into its corner ---- */
@@ -641,15 +784,58 @@
     grid-column: 1 / -1;
     margin-bottom: calc(0.75rem - var(--tg));
   }
+  /* Two columns: the notch is as wide as the cover card under it, a header
+     on it with no empty paper beside it; the way to all its stories sits
+     over the list. */
+  @media (min-width: 760px) {
+    .tray:not(.alone) > .tabs {
+      display: grid;
+      grid-template-columns: subgrid;
+      column-gap: var(--tg);
+      margin-left: 0;
+    }
+    .tray:not(.alone) > .tabs .tab {
+      margin-left: calc(-1 * var(--edge-x));
+      width: calc(100% + var(--edge-x));
+      box-sizing: border-box;
+    }
+    .tray:not(.alone) > .tabs .more {
+      justify-self: end;
+    }
+  }
   .tray.alone {
     grid-template-columns: minmax(0, 1fr);
   }
   /* its first story: a card in the picture's colour, the words above it */
+  /* The cover card hangs straight from its notch and runs to the tray's
+     edge, so notch and card read as one folder and its tab: no strip of
+     paper between them, no second edge beside the tray's. It stays put
+     under the mouse (it is part of the tray); its headline underlines. */
   .first {
     display: flex;
     flex-direction: column;
     min-height: 25rem;
     overflow: hidden;
+    margin: -0.75rem 0 calc(-1 * var(--tp)) calc(-1 * var(--tp));
+    border-width: 0 1px 0 0;
+  }
+  .tray > .tabs .tab {
+    border-bottom: 0;
+  }
+  .alone .first {
+    margin-right: calc(-1 * var(--tp));
+    border-width: 0;
+  }
+  a.card.first:hover,
+  a.card.first:focus-visible {
+    transform: none;
+    box-shadow: none;
+  }
+  a.first:hover .hl,
+  a.first:focus-visible .hl {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.12em;
   }
   .first .txt {
     gap: 0.85rem;
@@ -731,7 +917,7 @@
   /* ---- a phone: one column ---- */
   @media (max-width: 759px) {
     .main {
-      gap: 1.75rem;
+      gap: 2.5rem;
       padding-top: 1rem;
     }
     .front {
@@ -771,12 +957,33 @@
       padding: 0 1.1rem 1rem;
     }
     .wire {
-      --edge-t: calc(0.9rem + 3px);
-      --edge-x: calc(1.1rem + 1px);
-      padding: 0.9rem 1.1rem 0.4rem;
+      --edge-t: calc(0.75rem + 1px);
+      --edge-x: calc(0.75rem + 1px);
+      padding: 0.75rem 0.75rem 0.4rem;
     }
     .wire ol {
       grid-template-columns: minmax(0, 1fr);
+    }
+    /* the feed: a row the thumb swipes, a post and a bit of the next */
+    .feed ol {
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: 68%;
+      gap: 0.75rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      margin-right: calc(-1 * var(--pad, 1rem));
+      padding-right: var(--pad, 1rem);
+    }
+    .feed li {
+      scroll-snap-align: start;
+    }
+    .feed-h p {
+      display: none;
+    }
+    .wire li:nth-child(2) a {
+      border-top: 1px solid var(--hair);
     }
     .wire li:nth-child(n + 6) {
       display: none;
@@ -789,6 +996,8 @@
     }
     .first {
       min-height: 0;
+      margin: -0.75rem calc(-1 * var(--tp)) 0;
+      border-width: 0 0 1px;
     }
     .first .txt,
     .alone .first .txt {
@@ -798,9 +1007,6 @@
     .row {
       grid-template-columns: minmax(0, 1fr) 6rem;
       gap: 1rem;
-    }
-    .row:first-child {
-      border-top: 1px solid var(--hair);
     }
     .tab {
       font-size: 1rem;

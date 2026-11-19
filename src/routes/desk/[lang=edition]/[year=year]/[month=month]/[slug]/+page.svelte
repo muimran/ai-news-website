@@ -267,17 +267,10 @@
   <Frame>
     {#snippet side()}
       <a class="mono topic" href={deskTopic(s.section, lang)}>{#if topicNo}<b>{formatNumber(topicNo, lang).padStart(2, lang === 'bn' ? '০' : '0')}</b>{/if}{sectionLabel(s.section, lang)}</a>
-      <dl class="mono facts">
-        {#if kind(s)}<div><dt>{lang === 'bn' ? 'ধরন' : 'Type'}</dt><dd class="hot">{kind(s)}</dd></div>{/if}
-        <div><dt>{lang === 'bn' ? 'প্রকাশ' : 'Filed'}</dt><dd>{FULL_DATE[lang].format(new Date(s.date))}</dd></div>
-        <div><dt>{lang === 'bn' ? 'সময়' : 'Length'}</dt><dd>{length}</dd></div>
-        {#if s.updates?.length}
-          <div>
-            <dt>{L[s.updates[0].kind]}</dt>
-            <dd><a href="#changes" onclick={(e) => to(e, 'changes')}>{FULL_DATE[lang].format(new Date(s.updates[0].date))} ↓</a></dd>
-          </div>
-        {/if}
-      </dl>
+      <!-- its facts on one line: what it is, when, how long -->
+      <p class="mono facts">
+        {#if kind(s)}<span class="hot">{kind(s)}</span>{/if}<span>{FULL_DATE[lang].format(new Date(s.date))}</span><span class="time"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25" /><path d="M8 4.5V8l2.5 1.5" /></svg>{num(s.video ? s.duration || s.readTime : s.readTime)} {W[lang].min}</span>
+      </p>
       {@render who()}
       {@render ways('')}
       {#if data.sections.length > 1}
@@ -286,7 +279,7 @@
           <ol>
             {#each data.sections as h, n (n)}
               <li class:past={n < at} class:on={n === at} style:--w={n === at ? within : null}>
-                <button type="button" aria-current={n === at ? 'location' : undefined} onclick={() => jump(n)}><i aria-hidden="true"></i><span>{@html h}</span></button>
+                <button type="button" aria-current={n === at ? 'location' : undefined} onclick={() => jump(n)}><span>{@html h}</span></button>
               </li>
             {/each}
           </ol>
@@ -324,7 +317,7 @@
         <!-- narrower: who wrote it, once it has been read -->
         <div class="narrow byend">{@render who()}</div>
         <!-- right after the story: the moment a reader knows what it was worth -->
-        <p class="ask"><span>{GIVE[lang].end}</span><a href={deskSupport(lang)}>{GIVE[lang].endCta} →</a></p>
+        <p class="ask"><a href={deskSupport(lang)}>{GIVE[lang].endCta} →</a></p>
         {#if gloss}
           <div class="gloss" role="dialog" aria-label={gloss.term} style:top="{gloss.top}px" style:left="{gloss.left}px" onpointerover={() => clearTimeout(hoverTimer)} onpointerout={unhover}>
             <b>{gloss.term}</b>
@@ -430,21 +423,29 @@
     text-underline-offset: 0.25em;
   }
   .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.9rem;
     margin: 0;
+    padding: 0.6rem 0;
     border-top: 1px solid var(--ink);
-  }
-  .facts div {
-    display: grid;
-    grid-template-columns: 4.75rem minmax(0, 1fr);
-    gap: 0.75rem;
-    padding: 0.55rem 0;
     border-bottom: 1px solid var(--hair);
+    line-height: 1.4;
   }
-  .facts dt {
-    color: var(--mute);
+  /* how long: a small clock, then the minutes */
+  .facts .time {
+    display: inline-flex;
+    align-items: center;
   }
-  .facts dd {
-    margin: 0;
+  .facts .time svg {
+    width: 0.95em;
+    height: 0.95em;
+    margin-right: 0.35em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
   .facts .hot {
     color: var(--accent);
@@ -524,10 +525,7 @@
   }
   .map button {
     position: relative;
-    display: grid;
-    grid-template-columns: 0.5rem minmax(0, 1fr);
-    align-items: baseline;
-    gap: 0.7rem;
+    display: block;
     width: 100%;
     margin: 0;
     padding: 0.45rem 0;
@@ -539,35 +537,19 @@
     cursor: pointer;
     outline: none;
   }
-  .map i {
-    width: 0.5rem;
-    height: 0.5rem;
-    box-sizing: border-box;
-    border: 1px solid var(--mute);
-  }
   .map .past button,
-  .map .on button,
   .map button:hover,
   .map button:focus-visible {
     color: var(--ink);
   }
-  .map .past i {
-    border-color: var(--ink);
-    background: var(--ink);
-  }
-  .map .on i {
-    border-color: var(--accent);
-    background: var(--accent);
-  }
-  .map .on button::after {
-    content: '';
-    position: absolute;
-    left: 1.2rem;
-    right: 0;
-    bottom: 0;
-    height: 1px;
-    background: linear-gradient(var(--accent), var(--accent)) no-repeat var(--hair);
-    background-size: calc(var(--w, 0) * 100%) 100%;
+  /* the section being read: its name fills from grey to ink, left to
+     right, as far through it as the reader is */
+  .map .on span {
+    --at: calc(var(--w, 0) * 100%);
+    background: linear-gradient(90deg, var(--ink) var(--at), var(--mute) calc(var(--at) + 12%));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
   /* ---- the sheet ---- */
@@ -575,15 +557,20 @@
     --read: 40rem; /* the reading column */
     --margin: 17rem; /* and the margin beside it, for notes */
     box-sizing: border-box;
-    border: 1px solid var(--ink);
-    background: var(--card);
+    /* no box round it: the story sits on the page, its head the one block,
+       hung straight from the bar (no strip of page above it) */
+    margin-top: -1.5rem;
+  }
+  @media (max-width: 1099px) {
+    .sheet {
+      margin-top: -1.25rem;
+    }
   }
   /* its head, in the picture's colour */
   .head {
     position: relative;
     min-height: 27rem;
     overflow: hidden;
-    border-bottom: 1px solid var(--ink);
     background: var(--bg, var(--card));
     color: var(--fg, var(--ink));
   }
@@ -672,9 +659,7 @@
     gap: 0.75rem 1.25rem;
     max-width: var(--read);
     margin: 2.25rem 0 0;
-    padding: 1.1rem 0;
-    border-top: 1px solid var(--ink);
-    border-bottom: 1px solid var(--ink);
+    padding: 0;
     font-family: var(--serif);
     font-size: 1.125rem;
     line-height: 1.35;
@@ -720,22 +705,20 @@
   }
   .body {
     font-family: var(--serif);
-    font-size: 1.1875rem;
+    font-size: 1.125rem;
     font-variation-settings: 'opsz' 14;
-    line-height: 1.62;
+    line-height: 1.5;
   }
   .body:lang(bn) {
-    font-size: 1.125rem;
+    font-size: 1.0625rem;
     font-weight: 500;
-    line-height: 1.85;
+    line-height: 1.7;
   }
   .body :global(p) {
-    margin: 0 0 1.15em;
+    margin: 0 0 0.95em;
   }
   .body :global(h2) {
-    margin: 2.2em 0 0.7em;
-    padding-top: 0.9em;
-    border-top: 1px solid var(--ink);
+    margin: 1.6em 0 0.6em;
     font-size: calc(1.7rem * var(--hk));
     font-weight: var(--hw);
     font-variation-settings: 'opsz' 48;
@@ -743,11 +726,10 @@
     line-height: calc(var(--hlh) + 0.1);
     text-wrap: balance;
   }
-  /* the first heading opens the text: no rule over it */
+  /* the first heading opens the text */
   .body > :global(h2:first-child) {
     margin-top: 0;
     padding-top: 0;
-    border-top: 0;
   }
   .body :global(a.also) {
     text-decoration: none;
@@ -967,6 +949,11 @@
     border-top: 1px solid var(--ink);
     scroll-margin-top: calc(var(--bar) + 1.5rem);
   }
+  /* the first box after the button: no rule, the button is break enough */
+  .ask ~ .box:not(.ask ~ .box ~ .box) {
+    border-top: 0;
+    padding-top: 0;
+  }
   .box h2 {
     margin: 0 0 0.9rem;
     color: var(--mute);
@@ -995,6 +982,10 @@
     border-top: 1px solid var(--hair);
     line-height: 1.45;
   }
+  .log li:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
   .log b {
     margin-right: 0.4em;
   }
@@ -1005,8 +996,6 @@
   /* ---- three more ---- */
   .next h2 {
     margin: 0 0 0.8rem;
-    padding-top: 0.9rem;
-    border-top: 1px solid var(--ink);
   }
   .strip {
     display: grid;
@@ -1079,9 +1068,8 @@
     /* on a phone the story is the page: no card around it, no grey
        margins beside it */
     .sheet {
-      margin: 0 calc(-1 * var(--pad));
-      border-left: 0;
-      border-right: 0;
+      margin: -1.25rem calc(-1 * var(--pad)) 0;
+      background: var(--card);
     }
     .head {
       display: flex;
@@ -1108,7 +1096,7 @@
       mask-image: linear-gradient(to bottom, transparent, #000 40%);
     }
     .body {
-      font-size: 1.125rem;
+      font-size: 1.0625rem;
     }
     .log li {
       grid-template-columns: minmax(0, 1fr);
